@@ -39,13 +39,12 @@ export default function Checkout() {
     try {
       // Update status for each company to "Sold"
       const updatePromises = items.map((item) =>
-        fetch("/api/companies", {
+        fetch(`/api/companies/${item.id}/status`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            recordId: item.id,
             status: "Sold",
           }),
         })
