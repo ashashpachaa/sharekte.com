@@ -40,7 +40,14 @@ export function CompanyTable() {
         year: selectedYear ? Number(selectedYear) : undefined,
       };
       const data = await fetchCompanies(filters);
-      setCompanies(data);
+
+      // Filter out sold companies - only show Active status
+      const activeCompanies = data.filter((company) => {
+        const status = company.fields["Statues "] || company.fields["Status"] || "Active";
+        return status === "Active";
+      });
+
+      setCompanies(activeCompanies);
       setLoading(false);
     }
 
