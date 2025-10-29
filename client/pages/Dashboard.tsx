@@ -1241,153 +1241,71 @@ Generated on: ${new Date().toLocaleDateString()}
                               </div>
                             </div>
 
-                      {/* Invoice Details */}
-                      <div className="p-6 space-y-6">
-                        {/* Info Grid */}
-                        <div className="grid md:grid-cols-2 gap-6">
-                          {/* Company Info */}
-                          <div>
-                            <h4 className="font-semibold text-foreground mb-3">
-                              Company Information
-                            </h4>
-                            <div className="space-y-2 text-sm">
-                              <div className="flex justify-between">
-                                <span className="text-muted-foreground">
-                                  Company Name:
-                                </span>
-                                <span className="font-medium text-foreground">
-                                  {invoice.companyName}
-                                </span>
+                            {/* Invoice Details */}
+                            <div className="p-4 space-y-3 flex-1 flex flex-col">
+                              {/* Company & Client Info */}
+                              <div className="space-y-2 text-xs">
+                                <div>
+                                  <p className="text-muted-foreground mb-0.5">
+                                    Company
+                                  </p>
+                                  <p className="font-semibold text-foreground">
+                                    {invoice.companyName}
+                                  </p>
+                                </div>
+                                <div>
+                                  <p className="text-muted-foreground mb-0.5">
+                                    Client
+                                  </p>
+                                  <p className="font-semibold text-foreground text-xs truncate">
+                                    {invoice.clientName}
+                                  </p>
+                                </div>
                               </div>
-                              <div className="flex justify-between">
-                                <span className="text-muted-foreground">
-                                  Company Number:
-                                </span>
-                                <span className="font-medium text-foreground">
-                                  {invoice.companyNumber}
-                                </span>
+
+                              {/* Dates */}
+                              <div className="space-y-2 text-xs border-t border-border/40 pt-3">
+                                <div className="flex justify-between">
+                                  <span className="text-muted-foreground">Invoice:</span>
+                                  <span className="font-medium text-foreground">{invoice.date}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-muted-foreground">Due:</span>
+                                  <span className="font-medium text-foreground">{invoice.dueDate}</span>
+                                </div>
+                              </div>
+
+                              {/* Total */}
+                              <div className="flex justify-end pt-3 border-t border-border/40 mt-auto">
+                                <div className="text-right">
+                                  <p className="text-xs text-muted-foreground mb-1">Amount</p>
+                                  <p className="text-lg font-bold text-primary">
+                                    £{invoice.amount.toLocaleString()}
+                                  </p>
+                                </div>
+                              </div>
+
+                              {/* Actions */}
+                              <div className="flex gap-2 pt-3 border-t border-border/40">
+                                <Button
+                                  onClick={() => handleDownloadInvoice(invoice)}
+                                  size="sm"
+                                  className="bg-primary hover:bg-primary-600 text-white gap-1 flex-1 text-xs h-8"
+                                >
+                                  <Download className="w-3 h-3" />
+                                  Download
+                                </Button>
+                                <Button
+                                  onClick={() => handlePrintInvoice(invoice)}
+                                  variant="outline"
+                                  size="sm"
+                                  className="flex-1 gap-1 text-xs h-8"
+                                >
+                                  <FileUp className="w-3 h-3" />
+                                  Print
+                                </Button>
                               </div>
                             </div>
-                          </div>
-
-                          {/* Client Info */}
-                          <div>
-                            <h4 className="font-semibold text-foreground mb-3">
-                              Client Information
-                            </h4>
-                            <div className="space-y-2 text-sm">
-                              <div className="flex justify-between">
-                                <span className="text-muted-foreground">
-                                  Name:
-                                </span>
-                                <span className="font-medium text-foreground">
-                                  {invoice.clientName}
-                                </span>
-                              </div>
-                              <div className="flex justify-between">
-                                <span className="text-muted-foreground">
-                                  Email:
-                                </span>
-                                <span className="font-medium text-foreground">
-                                  {invoice.clientEmail}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Dates */}
-                        <div className="grid md:grid-cols-2 gap-6 pb-6 border-b border-border/40">
-                          <div>
-                            <p className="text-sm text-muted-foreground mb-1">
-                              Invoice Date
-                            </p>
-                            <p className="font-semibold text-foreground">
-                              {invoice.date}
-                            </p>
-                          </div>
-                          <div>
-                            <p className="text-sm text-muted-foreground mb-1">
-                              Due Date
-                            </p>
-                            <p className="font-semibold text-foreground">
-                              {invoice.dueDate}
-                            </p>
-                          </div>
-                        </div>
-
-                        {/* Items Table */}
-                        <div>
-                          <h4 className="font-semibold text-foreground mb-4">
-                            Invoice Items
-                          </h4>
-                          <table className="w-full text-sm">
-                            <thead>
-                              <tr className="border-b border-border/40">
-                                <th className="text-left py-2 text-muted-foreground">
-                                  Description
-                                </th>
-                                <th className="text-right py-2 text-muted-foreground">
-                                  Qty
-                                </th>
-                                <th className="text-right py-2 text-muted-foreground">
-                                  Unit Price
-                                </th>
-                                <th className="text-right py-2 text-muted-foreground">
-                                  Total
-                                </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {invoice.items.map((item, idx) => (
-                                <tr key={idx} className="border-b border-border/40">
-                                  <td className="py-3 text-foreground">
-                                    {item.description}
-                                  </td>
-                                  <td className="text-right py-3 text-foreground">
-                                    {item.quantity}
-                                  </td>
-                                  <td className="text-right py-3 text-foreground">
-                                    £{item.unitPrice.toLocaleString()}
-                                  </td>
-                                  <td className="text-right py-3 font-semibold text-foreground">
-                                    £{item.total.toLocaleString()}
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-
-                        {/* Total */}
-                        <div className="flex justify-end">
-                          <div className="text-right">
-                            <p className="text-muted-foreground mb-1">Total Amount</p>
-                            <p className="text-3xl font-bold text-primary">
-                              £{invoice.amount.toLocaleString()}
-                            </p>
-                          </div>
-                        </div>
-
-                        {/* Actions */}
-                        <div className="flex gap-3 pt-4 border-t border-border/40">
-                          <Button
-                            onClick={() => handleDownloadInvoice(invoice)}
-                            className="bg-primary hover:bg-primary-600 text-white gap-2 flex-1"
-                          >
-                            <Download className="w-4 h-4" />
-                            Download
-                          </Button>
-                          <Button
-                            onClick={() => handlePrintInvoice(invoice)}
-                            variant="outline"
-                            className="flex-1 gap-2"
-                          >
-                            <FileUp className="w-4 h-4" />
-                            Print
-                          </Button>
-                        </div>
-                      </div>
                           </div>
                         ))}
                       </div>
