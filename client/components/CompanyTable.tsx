@@ -221,12 +221,12 @@ export function CompanyTable() {
             <div className="border-b border-border/40 px-6 py-4 flex items-center justify-between bg-muted/30">
               <div className="flex items-center gap-4">
                 <Checkbox
-                  checked={selectedCompanies.size === companies.slice(0, displayCount).length && companies.slice(0, displayCount).length > 0}
+                  checked={selectedCompanies.size === filteredCompanies.slice(0, displayCount).length && filteredCompanies.slice(0, displayCount).length > 0}
                   onCheckedChange={handleSelectAll}
                   aria-label="Select all companies"
                 />
                 <span className="text-sm text-muted-foreground">
-                  {selectedCompanies.size} of {companies.length} selected
+                  {selectedCompanies.size} of {filteredCompanies.length} selected
                 </span>
               </div>
               {selectedCompanies.size > 0 && (
