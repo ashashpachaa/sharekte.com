@@ -1689,6 +1689,58 @@ Generated on: ${new Date().toLocaleDateString()}
                                     />
                                   </div>
 
+                                  <div>
+                                    <label className="block text-sm font-medium text-foreground mb-2">
+                                      Attach Documents
+                                    </label>
+                                    <input
+                                      type="file"
+                                      multiple
+                                      onChange={handleAttachmentChange}
+                                      className="block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer"
+                                      accept="*/*"
+                                    />
+                                    <p className="text-xs text-muted-foreground mt-1">
+                                      Upload multiple files of any type
+                                    </p>
+                                  </div>
+
+                                  {formData.attachments.length > 0 && (
+                                    <div className="space-y-2">
+                                      <p className="text-sm font-medium text-foreground">
+                                        Selected Files ({formData.attachments.length})
+                                      </p>
+                                      <div className="space-y-2">
+                                        {formData.attachments.map((attachment) => (
+                                          <div
+                                            key={attachment.id}
+                                            className="flex items-center justify-between p-3 bg-muted/30 rounded-lg border border-border/40"
+                                          >
+                                            <div className="flex items-center gap-2 flex-1 min-w-0">
+                                              <FileText className="w-4 h-4 text-primary flex-shrink-0" />
+                                              <div className="min-w-0">
+                                                <p className="text-sm font-medium text-foreground truncate">
+                                                  {attachment.name}
+                                                </p>
+                                                <p className="text-xs text-muted-foreground">
+                                                  {(attachment.size / 1024).toFixed(2)} KB
+                                                </p>
+                                              </div>
+                                            </div>
+                                            <Button
+                                              variant="ghost"
+                                              size="sm"
+                                              onClick={() => removeAttachment(attachment.id)}
+                                              className="text-destructive hover:bg-destructive/10"
+                                            >
+                                              <X className="w-4 h-4" />
+                                            </Button>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  )}
+
                                   <div className="flex gap-3">
                                     <Button
                                       onClick={() =>
