@@ -482,12 +482,40 @@ export default function Support() {
         {/* Resources Section */}
         <section className="border-b border-border/40 py-12 md:py-16">
           <div className="container max-w-6xl mx-auto px-4">
-            <h2 className="text-3xl font-bold text-foreground mb-12">
-              Helpful Resources
-            </h2>
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-12">
+              <h2 className="text-3xl font-bold text-foreground">
+                Helpful Resources
+              </h2>
+              <div className="flex-1 md:flex-initial md:w-64 relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search resources..."
+                  value={resourceSearch}
+                  onChange={(e) => setResourceSearch(e.target.value)}
+                  className="pl-10 pr-4"
+                />
+                {resourceSearch && (
+                  <button
+                    onClick={() => setResourceSearch("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-muted rounded"
+                  >
+                    <CloseIcon className="w-4 h-4 text-muted-foreground" />
+                  </button>
+                )}
+              </div>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {resources.map((resource, idx) => (
+              {resources
+                .filter((resource) => {
+                  const query = resourceSearch.toLowerCase();
+                  return (
+                    resource.title.toLowerCase().includes(query) ||
+                    resource.description.toLowerCase().includes(query) ||
+                    resource.type.toLowerCase().includes(query)
+                  );
+                })
+                .map((resource, idx) => (
                 <a
                   key={idx}
                   href="#"
