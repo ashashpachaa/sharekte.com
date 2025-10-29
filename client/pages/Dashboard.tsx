@@ -1204,10 +1204,12 @@ Generated on: ${new Date().toLocaleDateString()}
                       );
                     }
 
-                    return filtered.map((invoice) => (
-                    <div
-                      key={invoice.id}
-                      className="bg-card border border-border/40 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+                    return (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {filtered.map((invoice) => (
+                          <div
+                            key={invoice.id}
+                            className="bg-card border border-border/40 rounded-lg overflow-hidden hover:shadow-lg transition-shadow flex flex-col h-full"
                     >
                       {/* Invoice Header */}
                       <div className="p-6 border-b border-border/40 bg-muted/30">
@@ -1389,8 +1391,10 @@ Generated on: ${new Date().toLocaleDateString()}
                           </Button>
                         </div>
                       </div>
-                    </div>
-                  ));
+                          </div>
+                        ))}
+                      </div>
+                    );
                   })()
                 }
                 </div>
