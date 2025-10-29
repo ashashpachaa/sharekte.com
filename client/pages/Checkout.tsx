@@ -113,13 +113,52 @@ export default function Checkout() {
               </p>
             </div>
             <p className="text-sm text-muted-foreground">
-              Redirecting you to home...
+              Redirecting you to your dashboard...
             </p>
           </div>
         </div>
         <Footer />
       </div>
     );
+  }
+
+  const handleSignUp = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!fullName || !signupEmail || !signupPassword || !confirmPassword || !company) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    if (signupPassword !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    if (signupPassword.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
+
+    toast.success("Account created successfully!");
+    setAuthMode("signin");
+  };
+
+  const handleSignIn = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!email || !password) {
+      toast.error("Please enter email and password");
+      return;
+    }
+
+    // Simple validation for demo
+    if (!email.includes("@")) {
+      toast.error("Please enter a valid email");
+      return;
+    }
+
+    toast.success("Signed in successfully!");
   }
 
   const taxAmount = Math.round(totalPrice * 0.2);
