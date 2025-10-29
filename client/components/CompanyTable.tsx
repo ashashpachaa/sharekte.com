@@ -176,7 +176,7 @@ export function CompanyTable() {
             <div className="border-b border-border/40 px-6 py-4 flex items-center justify-between bg-muted/30">
               <div className="flex items-center gap-4">
                 <Checkbox
-                  checked={selectedCompanies.size === companies.length && companies.length > 0}
+                  checked={selectedCompanies.size === companies.slice(0, displayCount).length && companies.slice(0, displayCount).length > 0}
                   onCheckedChange={handleSelectAll}
                   aria-label="Select all companies"
                 />
