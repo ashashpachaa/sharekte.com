@@ -249,8 +249,16 @@ export function CompanyTable() {
                         <td className="px-6 py-4">
                           <p className="text-foreground">
                             {(() => {
+                              const allFieldNames = Object.keys(company.fields);
+                              const allFieldsStr = JSON.stringify(company.fields);
+
+                              if (allFieldNames.includes("Country")) {
+                                console.log("✅ Found 'Country' field:", company.fields["Country"]);
+                              } else {
+                                console.log("❌ 'Country' not found. Available fields:", allFieldNames, "Full data:", allFieldsStr);
+                              }
+
                               const country = company.fields["Country"] || company.fields["country"];
-                              console.log("Country debug:", { id: company.id, country, allFields: Object.keys(company.fields) });
                               return country || "N/A";
                             })()}
                           </p>
