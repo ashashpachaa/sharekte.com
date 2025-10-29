@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { fetchCompanies, getCountries, getYears, type Company } from "@/lib/airtable";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ShoppingCart, Filter, Check } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { ShoppingCart, Filter, Check, Search, X } from "lucide-react";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart-context";
 
@@ -16,6 +17,7 @@ export function CompanyTable() {
   const [selectedCompanies, setSelectedCompanies] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [displayCount, setDisplayCount] = useState(10);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Load filter options on mount
   useEffect(() => {
