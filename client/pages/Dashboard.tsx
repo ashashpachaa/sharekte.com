@@ -1464,7 +1464,7 @@ Generated on: ${new Date().toLocaleDateString()}
                                       Country
                                     </p>
                                     <p className="font-semibold text-foreground text-sm">
-                                      {company.country}
+                                      {company.country || "-"}
                                     </p>
                                   </div>
                                   <div>
