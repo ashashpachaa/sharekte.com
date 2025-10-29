@@ -446,6 +446,44 @@ export default function Dashboard() {
     toast.success("Default payment method updated");
   };
 
+  // Handle file attachment for transfer form
+  const handleAttachmentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    const newAttachments = [...formData.attachments];
+
+    Array.from(files).forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const base64Data = event.target?.result as string;
+        newAttachments.push({
+          id: `attachment-${Date.now()}-${Math.random()}`,
+          name: file.name,
+          size: file.size,
+          type: file.type,
+          uploadedDate: new Date().toISOString().split("T")[0],
+          base64Data: base64Data,
+        });
+        setFormData({
+          ...formData,
+          attachments: newAttachments,
+        });
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Reset input
+    e.target.value = "";
+  };
+
+  const removeAttachment = (attachmentId: string) => {
+    setFormData({
+      ...formData,
+      attachments: formData.attachments.filter(a => a.id !== attachmentId),
+    });
+  };
+
   // Submit transfer form
   const handleSubmitTransferForm = (companyId: string) => {
     if (
