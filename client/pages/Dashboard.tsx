@@ -1182,7 +1182,25 @@ Generated on: ${new Date().toLocaleDateString()}
                 </div>
               ) : (
                 <div className="space-y-6">
-                  {invoices.map((invoice) => (
+                  {(() => {
+                    const filtered = invoices.filter((invoice) => {
+                      const query = invoicesSearch.toLowerCase();
+                      return (
+                        invoice.invoiceNumber.toLowerCase().includes(query) ||
+                        invoice.companyName.toLowerCase().includes(query) ||
+                        invoice.description.toLowerCase().includes(query)
+                      );
+                    });
+
+                    if (filtered.length === 0 && invoicesSearch) {
+                      return (
+                        <div className="bg-card border border-border/40 rounded-lg p-8 text-center text-muted-foreground">
+                          No invoices match your search
+                        </div>
+                      );
+                    }
+
+                    return filtered.map((invoice) => (
                     <div
                       key={invoice.id}
                       className="bg-card border border-border/40 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
@@ -1368,7 +1386,9 @@ Generated on: ${new Date().toLocaleDateString()}
                         </div>
                       </div>
                     </div>
-                  ))}
+                  ));
+                  })()
+                }
                 </div>
               )}
             </div>
