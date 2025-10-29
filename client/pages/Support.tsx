@@ -228,12 +228,41 @@ export default function Support() {
         {/* Support Categories Grid */}
         <section className="border-b border-border/40 py-12 md:py-16">
           <div className="container max-w-6xl mx-auto px-4">
-            <h2 className="text-3xl font-bold text-foreground mb-12">
-              Browse Help Topics
-            </h2>
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-12">
+              <h2 className="text-3xl font-bold text-foreground">
+                Browse Help Topics
+              </h2>
+              <div className="flex-1 md:flex-initial md:w-64 relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search categories..."
+                  value={categorySearch}
+                  onChange={(e) => setCategorySearch(e.target.value)}
+                  className="pl-10 pr-4"
+                />
+                {categorySearch && (
+                  <button
+                    onClick={() => setCategorySearch("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-muted rounded"
+                  >
+                    <CloseIcon className="w-4 h-4 text-muted-foreground" />
+                  </button>
+                )}
+              </div>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {categories.map((category) => (
+              {categories
+                .filter((category) => {
+                  const query = categorySearch.toLowerCase();
+                  return (
+                    category.title.toLowerCase().includes(query) ||
+                    category.topics.some((topic) =>
+                      topic.toLowerCase().includes(query)
+                    )
+                  );
+                })
+                .map((category) => (
                 <div
                   key={category.id}
                   className="group border border-border/40 rounded-lg p-6 hover:shadow-lg hover:border-primary/50 transition-all duration-200 cursor-pointer"
