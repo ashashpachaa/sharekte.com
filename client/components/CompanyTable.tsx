@@ -74,13 +74,25 @@ export function CompanyTable() {
     }
   };
 
+  const filteredCompanies = useMemo(() => {
+    return companies.filter((company) => {
+      if (!searchQuery.trim()) return true;
+
+      const companyName = (company.fields["Company name"] || "").toString().toLowerCase();
+      const companyNumber = (company.fields["Company number"] || "").toString().toLowerCase();
+      const query = searchQuery.toLowerCase();
+
+      return companyName.includes(query) || companyNumber.includes(query);
+    });
+  }, [companies, searchQuery]);
+
   const handleBuySelected = () => {
     if (selectedCompanies.size === 0) {
       toast.error("Please select at least one company");
       return;
     }
 
-    const selectedItems = companies.filter((c) => selectedCompanies.has(c.id));
+    const selectedItems = filteredCompanies.filter((c) => selectedCompanies.has(c.id));
 
     selectedItems.forEach((company) => {
       const companyName = company.fields["Company name"] || "Unknown";
