@@ -720,9 +720,13 @@ Generated on: ${new Date().toLocaleDateString()}
       ],
     }));
 
+    // Save each invoice to user-specific storage
+    newInvoices.forEach((inv) => {
+      addInvoice(inv);
+    });
+
     const updatedInvoices = [...invoices, ...newInvoices];
     setInvoices(updatedInvoices);
-    localStorage.setItem("invoices", JSON.stringify(updatedInvoices));
 
     setCartItems([]);
     localStorage.removeItem("serviceCart");
