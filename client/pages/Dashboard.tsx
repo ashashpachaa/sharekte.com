@@ -1313,7 +1313,7 @@ Generated on: ${new Date().toLocaleDateString()}
                                 <div className="text-right">
                                   <p className="text-xs text-muted-foreground mb-1">Amount</p>
                                   <p className="text-lg font-bold text-primary">
-                                    £{invoice.amount.toLocaleString()}
+                                    {formatPrice(invoice.amount)}
                                   </p>
                                 </div>
                               </div>
