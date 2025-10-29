@@ -738,6 +738,80 @@ Generated on: ${new Date().toLocaleDateString()}
     toast.success("Invoice sent to printer!");
   };
 
+  // Add service to cart
+  const handleAddToCart = (service: Service) => {
+    const newCartItem = {
+      id: service.id,
+      name: service.name,
+      fees: service.fees,
+    };
+
+    const updatedCart = [...cartItems, newCartItem];
+    setCartItems(updatedCart);
+    localStorage.setItem("serviceCart", JSON.stringify(updatedCart));
+    toast.success(`${service.name} added to cart!`);
+  };
+
+  // Remove service from cart
+  const handleRemoveFromCart = (serviceId: string) => {
+    const updatedCart = cartItems.filter((item) => item.id !== serviceId);
+    setCartItems(updatedCart);
+    localStorage.setItem("serviceCart", JSON.stringify(updatedCart));
+    toast.success("Service removed from cart");
+  };
+
+  // Calculate total
+  const cartTotal = cartItems.reduce((total, item) => total + item.fees, 0);
+
+  // Checkout with services
+  const handleCheckoutServices = () => {
+    if (cartItems.length === 0) {
+      toast.error("Your cart is empty");
+      return;
+    }
+
+    if (paymentMethods.length === 0) {
+      toast.error("Please add a payment method first");
+      return;
+    }
+
+    // Create invoices for each service
+    const newInvoices = cartItems.map((item, idx) => ({
+      id: `service-inv-${Date.now()}-${idx}`,
+      invoiceNumber: `INV-SVC-${Date.now()}-${idx}`,
+      date: new Date().toISOString().split("T")[0],
+      dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+        .toISOString()
+        .split("T")[0],
+      companyName: userData.company || "N/A",
+      companyNumber: "N/A",
+      clientName: userData.fullName,
+      clientEmail: userData.email,
+      amount: item.fees,
+      description: `Additional Service: ${item.name}`,
+      status: "paid" as const,
+      items: [
+        {
+          description: item.name,
+          quantity: 1,
+          unitPrice: item.fees,
+          total: item.fees,
+        },
+      ],
+    }));
+
+    const updatedInvoices = [...invoices, ...newInvoices];
+    setInvoices(updatedInvoices);
+    localStorage.setItem("invoices", JSON.stringify(updatedInvoices));
+
+    setCartItems([]);
+    localStorage.removeItem("serviceCart");
+
+    toast.success(
+      `Order completed! ${cartItems.length} service(s) added to your account.`
+    );
+  };
+
   // Get status color and icon
   const getStatusConfig = (status: string) => {
     switch (status) {
