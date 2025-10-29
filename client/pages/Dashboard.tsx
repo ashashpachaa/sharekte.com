@@ -292,7 +292,7 @@ export default function Dashboard() {
         number: uc.number,
         incorporationDate: uc.incorporationDate,
         incorporationYear: uc.incorporationYear,
-        country: uc.country || "Unknown",
+        country: uc.country,
         purchasedDate: uc.purchasedDate,
         renewalDate: uc.renewalDate,
         renewalFees: uc.renewalFees,
