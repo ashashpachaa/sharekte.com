@@ -28,6 +28,7 @@ export interface PurchasedCompanyData {
   price: number;
   incorporationDate: string;
   incorporationYear: string;
+  country: string;
   purchasedDate: string;
   renewalDate: string;
   renewalFees: number;
