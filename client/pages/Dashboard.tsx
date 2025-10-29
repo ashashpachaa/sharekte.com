@@ -232,23 +232,56 @@ export default function Dashboard() {
         ];
   });
 
+  // Utility function to calculate days remaining
+  const calculateDaysRemaining = (renewalDate: string): number => {
+    const renewal = new Date(renewalDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const diffMs = renewal.getTime() - today.getTime();
+    return Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+  };
+
   // Purchased companies state - fetch user-specific data
   const [purchasedCompanies, setPurchasedCompanies] = useState<PurchasedCompany[]>(() => {
     const userCompanies = getPurchasedCompanies();
-    return userCompanies.map(uc => ({
-      id: uc.id,
-      name: uc.name,
-      number: uc.number,
-      incorporationDate: uc.incorporationDate,
-      incorporationYear: uc.incorporationYear,
-      renewalDate: uc.renewalDate,
-      renewalFees: uc.renewalFees,
-      status: uc.status,
-      statusLabel: uc.statusLabel,
-      documents: uc.documents,
-      transferFormFilled: uc.transferFormFilled,
-      adminComments: uc.adminComments,
-    }));
+    return userCompanies.map(uc => {
+      // Ensure renewalStatus exists
+      if (!uc.renewalStatus) {
+        uc.renewalStatus = "active";
+        savePurchasedCompany(uc);
+      }
+
+      // Update renewal status based on days remaining
+      const daysRemaining = calculateDaysRemaining(uc.renewalDate);
+      let currentRenewalStatus = uc.renewalStatus;
+
+      if (currentRenewalStatus !== "cancelled" && daysRemaining <= -15) {
+        currentRenewalStatus = "cancelled";
+        updateCompanyRenewalStatus(uc.id, "cancelled");
+      } else if (currentRenewalStatus !== "cancelled" && daysRemaining <= 0 && daysRemaining > -15) {
+        currentRenewalStatus = "expired";
+        updateCompanyRenewalStatus(uc.id, "expired");
+      } else if (currentRenewalStatus === "expired" && daysRemaining > 0) {
+        currentRenewalStatus = "active";
+        updateCompanyRenewalStatus(uc.id, "active");
+      }
+
+      return {
+        id: uc.id,
+        name: uc.name,
+        number: uc.number,
+        incorporationDate: uc.incorporationDate,
+        incorporationYear: uc.incorporationYear,
+        renewalDate: uc.renewalDate,
+        renewalFees: uc.renewalFees,
+        status: uc.status,
+        statusLabel: uc.statusLabel,
+        documents: uc.documents,
+        transferFormFilled: uc.transferFormFilled,
+        adminComments: uc.adminComments,
+        renewalStatus: currentRenewalStatus,
+      };
+    });
   });
 
   const [showTransferForm, setShowTransferForm] = useState<string | null>(null);
