@@ -1,10 +1,217 @@
+import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { BarChart3, Plus, TrendingUp, Users, DollarSign, ArrowUpRight } from "lucide-react";
+import {
+  BarChart3,
+  Plus,
+  TrendingUp,
+  Users,
+  DollarSign,
+  ArrowUpRight,
+  User,
+  Lock,
+  CreditCard,
+  LogIn,
+  Edit2,
+  Save,
+  X,
+  Trash2,
+  Eye,
+  EyeOff,
+} from "lucide-react";
+import { toast } from "sonner";
+
+type DashboardTab = "portfolio" | "account" | "payments" | "security";
+
+interface UserData {
+  fullName: string;
+  email: string;
+  phone: string;
+  address: string;
+  city: string;
+  country: string;
+  company: string;
+}
+
+interface PaymentMethod {
+  id: string;
+  type: "card" | "wallet" | "stripe";
+  lastDigits?: string;
+  brand?: string;
+  expiryDate?: string;
+  isDefault: boolean;
+  addedDate: string;
+}
+
+interface LoginHistory {
+  id: string;
+  date: string;
+  time: string;
+  ip: string;
+  device: string;
+  location: string;
+}
 
 export default function Dashboard() {
+  const [activeTab, setActiveTab] = useState<DashboardTab>("portfolio");
+  const [isEditing, setIsEditing] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+
+  // User data state
+  const [userData, setUserData] = useState<UserData>(() => {
+    const saved = localStorage.getItem("user");
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      return {
+        fullName: parsed.fullName || "",
+        email: parsed.email || "",
+        phone: parsed.phone || "+1 (555) 123-4567",
+        address: parsed.address || "123 Business Street",
+        city: parsed.city || "New York",
+        country: parsed.country || "United States",
+        company: parsed.company || "",
+      };
+    }
+    return {
+      fullName: "John Doe",
+      email: "john@example.com",
+      phone: "+1 (555) 123-4567",
+      address: "123 Business Street",
+      city: "New York",
+      country: "United States",
+      company: "My Business Corp",
+    };
+  });
+
+  const [editedData, setEditedData] = useState<UserData>(userData);
+
+  // Password change state
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  // Payment methods state
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>(() => {
+    const saved = localStorage.getItem("paymentMethods");
+    return saved
+      ? JSON.parse(saved)
+      : [
+          {
+            id: "1",
+            type: "card",
+            brand: "Visa",
+            lastDigits: "4242",
+            expiryDate: "12/25",
+            isDefault: true,
+            addedDate: "2024-01-15",
+          },
+          {
+            id: "2",
+            type: "card",
+            brand: "Mastercard",
+            lastDigits: "5555",
+            expiryDate: "08/26",
+            isDefault: false,
+            addedDate: "2024-02-20",
+          },
+        ];
+  });
+
+  // Login history state
+  const [loginHistory, setLoginHistory] = useState<LoginHistory[]>(() => {
+    const saved = localStorage.getItem("loginHistory");
+    return saved
+      ? JSON.parse(saved)
+      : [
+          {
+            id: "1",
+            date: "2024-12-15",
+            time: "14:32:00",
+            ip: "192.168.1.100",
+            device: "Chrome on Windows 10",
+            location: "New York, US",
+          },
+          {
+            id: "2",
+            date: "2024-12-14",
+            time: "09:15:00",
+            ip: "192.168.1.101",
+            device: "Safari on iPhone 13",
+            location: "New York, US",
+          },
+          {
+            id: "3",
+            date: "2024-12-13",
+            time: "18:45:00",
+            ip: "192.168.1.100",
+            device: "Chrome on Windows 10",
+            location: "New York, US",
+          },
+        ];
+  });
+
+  // Save edited user data
+  const handleSaveProfile = () => {
+    if (!editedData.fullName || !editedData.email || !editedData.phone) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    setUserData(editedData);
+    localStorage.setItem("user", JSON.stringify(editedData));
+    setIsEditing(false);
+    toast.success("Profile updated successfully!");
+  };
+
+  // Handle password change
+  const handleChangePassword = () => {
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      toast.error("Please fill in all password fields");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      toast.error("New passwords do not match");
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
+
+    toast.success("Password changed successfully!");
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+  };
+
+  // Delete payment method
+  const handleDeletePayment = (id: string) => {
+    const filtered = paymentMethods.filter((p) => p.id !== id);
+    if (filtered.length === 0) {
+      toast.error("You must have at least one payment method");
+      return;
+    }
+    setPaymentMethods(filtered);
+    localStorage.setItem("paymentMethods", JSON.stringify(filtered));
+    toast.success("Payment method removed");
+  };
+
+  // Set default payment method
+  const handleSetDefault = (id: string) => {
+    const updated = paymentMethods.map((p) => ({
+      ...p,
+      isDefault: p.id === id,
+    }));
+    setPaymentMethods(updated);
+    localStorage.setItem("paymentMethods", JSON.stringify(updated));
+    toast.success("Default payment method updated");
+  };
+
   const ownedCompanies = [
     {
       id: 1,
@@ -13,7 +220,7 @@ export default function Dashboard() {
       monthlyRevenue: "$210K",
       growth: "+12%",
       employees: 12,
-      status: "Active"
+      status: "Active",
     },
     {
       id: 2,
@@ -22,8 +229,8 @@ export default function Dashboard() {
       monthlyRevenue: "$150K",
       growth: "+8%",
       employees: 18,
-      status: "Active"
-    }
+      status: "Active",
+    },
   ];
 
   const stats = [
@@ -31,26 +238,26 @@ export default function Dashboard() {
       label: "Total Portfolio Value",
       value: "$4.3M",
       icon: DollarSign,
-      change: "+18%"
+      change: "+18%",
     },
     {
       label: "Monthly Revenue",
       value: "$360K",
       icon: TrendingUp,
-      change: "+12%"
+      change: "+12%",
     },
     {
       label: "Total Employees",
       value: "30",
       icon: Users,
-      change: "+5"
+      change: "+5",
     },
     {
       label: "Companies Owned",
       value: "2",
       icon: BarChart3,
-      change: "In Portfolio"
-    }
+      change: "In Portfolio",
+    },
   ];
 
   return (
@@ -60,141 +267,591 @@ export default function Dashboard() {
       {/* Dashboard Header */}
       <section className="border-b border-border/40 py-8">
         <div className="container max-w-6xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-                Dashboard
-              </h1>
-              <p className="text-muted-foreground mt-2">
-                Manage your business portfolio and track performance
-              </p>
-            </div>
-            <Button
-              className="bg-primary hover:bg-primary-600 text-white flex items-center gap-2"
-              asChild
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground">
+            Dashboard
+          </h1>
+          <p className="text-muted-foreground mt-2">
+            Manage your account and portfolio
+          </p>
+        </div>
+      </section>
+
+      {/* Tabs */}
+      <section className="border-b border-border/40 bg-muted/30">
+        <div className="container max-w-6xl mx-auto px-4">
+          <div className="flex gap-8">
+            <button
+              onClick={() => setActiveTab("portfolio")}
+              className={`py-4 px-1 font-semibold transition-colors ${
+                activeTab === "portfolio"
+                  ? "text-primary border-b-2 border-primary"
+                  : "text-muted-foreground hover:text-foreground border-b-2 border-transparent"
+              }`}
             >
-              <Link to="/">
-                <Plus className="w-5 h-5" />
-                Browse More Companies
-              </Link>
-            </Button>
+              <BarChart3 className="w-4 h-4 inline mr-2" />
+              Portfolio
+            </button>
+            <button
+              onClick={() => setActiveTab("account")}
+              className={`py-4 px-1 font-semibold transition-colors ${
+                activeTab === "account"
+                  ? "text-primary border-b-2 border-primary"
+                  : "text-muted-foreground hover:text-foreground border-b-2 border-transparent"
+              }`}
+            >
+              <User className="w-4 h-4 inline mr-2" />
+              My Account
+            </button>
+            <button
+              onClick={() => setActiveTab("payments")}
+              className={`py-4 px-1 font-semibold transition-colors ${
+                activeTab === "payments"
+                  ? "text-primary border-b-2 border-primary"
+                  : "text-muted-foreground hover:text-foreground border-b-2 border-transparent"
+              }`}
+            >
+              <CreditCard className="w-4 h-4 inline mr-2" />
+              Payment Methods
+            </button>
+            <button
+              onClick={() => setActiveTab("security")}
+              className={`py-4 px-1 font-semibold transition-colors ${
+                activeTab === "security"
+                  ? "text-primary border-b-2 border-primary"
+                  : "text-muted-foreground hover:text-foreground border-b-2 border-transparent"
+              }`}
+            >
+              <Lock className="w-4 h-4 inline mr-2" />
+              Security
+            </button>
           </div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-8 border-b border-border/40">
+      {/* Content */}
+      <section className="flex-1 py-12">
         <div className="container max-w-6xl mx-auto px-4">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {stats.map((stat, index) => {
-              const Icon = stat.icon;
-              return (
-                <div key={index} className="bg-card border border-border/40 rounded-lg p-6 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-                      <Icon className="w-5 h-5 text-primary" />
+          {/* Portfolio Tab */}
+          {activeTab === "portfolio" && (
+            <div className="space-y-8">
+              {/* Stats Grid */}
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {stats.map((stat, index) => {
+                  const Icon = stat.icon;
+                  return (
+                    <div
+                      key={index}
+                      className="bg-card border border-border/40 rounded-lg p-6 space-y-4"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                          <Icon className="w-5 h-5 text-primary" />
+                        </div>
+                        <div className="text-sm font-semibold text-primary/60">
+                          {stat.change}
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">
+                          {stat.label}
+                        </p>
+                        <p className="text-2xl font-bold text-foreground mt-1">
+                          {stat.value}
+                        </p>
+                      </div>
                     </div>
-                    <div className="text-sm font-semibold text-primary/60">
-                      {stat.change}
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">{stat.label}</p>
-                    <p className="text-2xl font-bold text-foreground mt-1">{stat.value}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+                  );
+                })}
+              </div>
 
-      {/* Portfolio Section */}
-      <section className="py-12 flex-1">
-        <div className="container max-w-6xl mx-auto px-4">
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-foreground">Your Portfolio</h2>
-
-            {ownedCompanies.length > 0 ? (
-              <div className="space-y-4">
-                {ownedCompanies.map((company) => (
-                  <div
-                    key={company.id}
-                    className="bg-card border border-border/40 rounded-lg p-6 hover:border-primary/50 transition-colors"
-                  >
-                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                      <div className="flex-1">
-                        <div className="flex items-start gap-4">
-                          <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary-600 rounded-lg flex-shrink-0"></div>
-                          <div className="flex-1 space-y-2">
-                            <div className="flex items-center gap-2">
-                              <h3 className="text-lg font-bold text-foreground">
-                                {company.name}
-                              </h3>
-                              <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">
-                                {company.status}
-                              </span>
+              {/* Companies */}
+              <div>
+                <h2 className="text-2xl font-bold text-foreground mb-6">
+                  Your Companies
+                </h2>
+                {ownedCompanies.length > 0 ? (
+                  <div className="space-y-4">
+                    {ownedCompanies.map((company) => (
+                      <div
+                        key={company.id}
+                        className="bg-card border border-border/40 rounded-lg p-6 hover:border-primary/50 transition-colors"
+                      >
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                          <div className="flex items-start gap-4">
+                            <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary-600 rounded-lg flex-shrink-0"></div>
+                            <div className="flex-1 space-y-2">
+                              <div className="flex items-center gap-2">
+                                <h3 className="text-lg font-bold text-foreground">
+                                  {company.name}
+                                </h3>
+                                <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">
+                                  {company.status}
+                                </span>
+                              </div>
+                              <p className="text-sm text-muted-foreground">
+                                {company.employees} employees
+                              </p>
                             </div>
-                            <p className="text-sm text-muted-foreground">
-                              {company.employees} employees
-                            </p>
                           </div>
+
+                          <div className="grid grid-cols-3 gap-6">
+                            <div>
+                              <p className="text-xs text-muted-foreground uppercase tracking-wide">
+                                Annual Revenue
+                              </p>
+                              <p className="text-xl font-bold text-foreground mt-1">
+                                {company.revenue}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-xs text-muted-foreground uppercase tracking-wide">
+                                Monthly
+                              </p>
+                              <p className="text-xl font-bold text-foreground mt-1">
+                                {company.monthlyRevenue}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-xs text-muted-foreground uppercase tracking-wide">
+                                Growth
+                              </p>
+                              <p className="text-xl font-bold text-primary mt-1 flex items-center gap-1">
+                                <ArrowUpRight className="w-4 h-4" />
+                                {company.growth}
+                              </p>
+                            </div>
+                          </div>
+
+                          <Button variant="outline">View Details</Button>
                         </div>
                       </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="bg-card border border-border/40 rounded-lg p-12 text-center space-y-4">
+                    <BarChart3 className="w-12 h-12 text-muted-foreground/50 mx-auto" />
+                    <p className="text-muted-foreground">
+                      You haven't purchased any companies yet
+                    </p>
+                    <Button
+                      className="bg-primary hover:bg-primary-600 text-white"
+                      asChild
+                    >
+                      <Link to="/">Browse Marketplace</Link>
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
-                      <div className="grid grid-cols-3 gap-6">
-                        <div>
-                          <p className="text-xs text-muted-foreground uppercase tracking-wide">
-                            Annual Revenue
-                          </p>
-                          <p className="text-xl font-bold text-foreground mt-1">
-                            {company.revenue}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-muted-foreground uppercase tracking-wide">
-                            Monthly
-                          </p>
-                          <p className="text-xl font-bold text-foreground mt-1">
-                            {company.monthlyRevenue}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-muted-foreground uppercase tracking-wide">
-                            Growth
-                          </p>
-                          <p className="text-xl font-bold text-primary mt-1 flex items-center gap-1">
-                            <ArrowUpRight className="w-4 h-4" />
-                            {company.growth}
-                          </p>
-                        </div>
+          {/* My Account Tab */}
+          {activeTab === "account" && (
+            <div className="max-w-2xl space-y-6">
+              <div className="bg-card border border-border/40 rounded-lg p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-bold text-foreground">
+                    Profile Information
+                  </h2>
+                  {!isEditing && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setIsEditing(true);
+                        setEditedData(userData);
+                      }}
+                      className="gap-2"
+                    >
+                      <Edit2 className="w-4 h-4" />
+                      Edit
+                    </Button>
+                  )}
+                </div>
+
+                {isEditing ? (
+                  <form className="space-y-4">
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-foreground mb-2">
+                          Full Name *
+                        </label>
+                        <input
+                          type="text"
+                          value={editedData.fullName}
+                          onChange={(e) =>
+                            setEditedData({
+                              ...editedData,
+                              fullName: e.target.value,
+                            })
+                          }
+                          className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        />
                       </div>
+                      <div>
+                        <label className="block text-sm font-medium text-foreground mb-2">
+                          Email *
+                        </label>
+                        <input
+                          type="email"
+                          value={editedData.email}
+                          onChange={(e) =>
+                            setEditedData({
+                              ...editedData,
+                              email: e.target.value,
+                            })
+                          }
+                          className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        />
+                      </div>
+                    </div>
 
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-foreground mb-2">
+                          Phone *
+                        </label>
+                        <input
+                          type="tel"
+                          value={editedData.phone}
+                          onChange={(e) =>
+                            setEditedData({
+                              ...editedData,
+                              phone: e.target.value,
+                            })
+                          }
+                          className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-foreground mb-2">
+                          Company
+                        </label>
+                        <input
+                          type="text"
+                          value={editedData.company}
+                          onChange={(e) =>
+                            setEditedData({
+                              ...editedData,
+                              company: e.target.value,
+                            })
+                          }
+                          className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Address
+                      </label>
+                      <input
+                        type="text"
+                        value={editedData.address}
+                        onChange={(e) =>
+                          setEditedData({
+                            ...editedData,
+                            address: e.target.value,
+                          })
+                        }
+                        className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      />
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-foreground mb-2">
+                          City
+                        </label>
+                        <input
+                          type="text"
+                          value={editedData.city}
+                          onChange={(e) =>
+                            setEditedData({
+                              ...editedData,
+                              city: e.target.value,
+                            })
+                          }
+                          className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-foreground mb-2">
+                          Country
+                        </label>
+                        <input
+                          type="text"
+                          value={editedData.country}
+                          onChange={(e) =>
+                            setEditedData({
+                              ...editedData,
+                              country: e.target.value,
+                            })
+                          }
+                          className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex gap-3 pt-4">
+                      <Button
+                        onClick={handleSaveProfile}
+                        className="bg-primary hover:bg-primary-600 text-white gap-2"
+                      >
+                        <Save className="w-4 h-4" />
+                        Save Changes
+                      </Button>
                       <Button
                         variant="outline"
-                        className="whitespace-nowrap"
+                        onClick={() => setIsEditing(false)}
+                        className="gap-2"
                       >
-                        View Details
+                        <X className="w-4 h-4" />
+                        Cancel
+                      </Button>
+                    </div>
+                  </form>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div>
+                        <p className="text-sm text-muted-foreground">
+                          Full Name
+                        </p>
+                        <p className="text-lg font-semibold text-foreground">
+                          {userData.fullName}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Email</p>
+                        <p className="text-lg font-semibold text-foreground">
+                          {userData.email}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Phone</p>
+                        <p className="text-lg font-semibold text-foreground">
+                          {userData.phone}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Company</p>
+                        <p className="text-lg font-semibold text-foreground">
+                          {userData.company}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <p className="text-sm text-muted-foreground">Address</p>
+                      <p className="text-lg font-semibold text-foreground">
+                        {userData.address}
+                      </p>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div>
+                        <p className="text-sm text-muted-foreground">City</p>
+                        <p className="text-lg font-semibold text-foreground">
+                          {userData.city}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Country</p>
+                        <p className="text-lg font-semibold text-foreground">
+                          {userData.country}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Payment Methods Tab */}
+          {activeTab === "payments" && (
+            <div className="max-w-3xl space-y-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-foreground">
+                  Payment Methods
+                </h2>
+                <Button className="bg-primary hover:bg-primary-600 text-white gap-2">
+                  <Plus className="w-4 h-4" />
+                  Add Payment Method
+                </Button>
+              </div>
+
+              <div className="space-y-4">
+                {paymentMethods.map((method) => (
+                  <div
+                    key={method.id}
+                    className="bg-card border border-border/40 rounded-lg p-6 flex items-center justify-between"
+                  >
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <CreditCard className="w-5 h-5 text-primary" />
+                        <p className="font-semibold text-foreground">
+                          {method.brand} •••• {method.lastDigits}
+                        </p>
+                        {method.isDefault && (
+                          <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">
+                            Default
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex gap-6 text-sm text-muted-foreground">
+                        <span>Expires {method.expiryDate}</span>
+                        <span>Added {method.addedDate}</span>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-3">
+                      {!method.isDefault && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleSetDefault(method.id)}
+                        >
+                          Set Default
+                        </Button>
+                      )}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-destructive hover:bg-destructive/10"
+                        onClick={() => handleDeletePayment(method.id)}
+                      >
+                        <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>
                   </div>
                 ))}
               </div>
-            ) : (
-              <div className="bg-card border border-border/40 rounded-lg p-12 text-center space-y-4">
-                <BarChart3 className="w-12 h-12 text-muted-foreground/50 mx-auto" />
-                <p className="text-muted-foreground">
-                  You haven't purchased any companies yet
-                </p>
-                <Button
-                  className="bg-primary hover:bg-primary-600 text-white"
-                  asChild
-                >
-                  <Link to="/">Browse Marketplace</Link>
-                </Button>
+            </div>
+          )}
+
+          {/* Security Tab */}
+          {activeTab === "security" && (
+            <div className="space-y-6">
+              {/* Change Password */}
+              <div className="max-w-2xl bg-card border border-border/40 rounded-lg p-6">
+                <h2 className="text-2xl font-bold text-foreground mb-6">
+                  Change Password
+                </h2>
+
+                <form className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">
+                      Current Password
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        value={currentPassword}
+                        onChange={(e) => setCurrentPassword(e.target.value)}
+                        className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                      >
+                        {showPassword ? (
+                          <EyeOff className="w-4 h-4" />
+                        ) : (
+                          <Eye className="w-4 h-4" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">
+                      New Password
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showNewPassword ? "text" : "password"}
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowNewPassword(!showNewPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                      >
+                        {showNewPassword ? (
+                          <EyeOff className="w-4 h-4" />
+                        ) : (
+                          <Eye className="w-4 h-4" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">
+                      Confirm New Password
+                    </label>
+                    <input
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    />
+                  </div>
+
+                  <Button
+                    onClick={handleChangePassword}
+                    className="bg-primary hover:bg-primary-600 text-white gap-2"
+                  >
+                    <Lock className="w-4 h-4" />
+                    Change Password
+                  </Button>
+                </form>
               </div>
-            )}
-          </div>
+
+              {/* Login History */}
+              <div className="bg-card border border-border/40 rounded-lg p-6">
+                <h2 className="text-2xl font-bold text-foreground mb-6">
+                  Login History
+                </h2>
+
+                <div className="space-y-4">
+                  {loginHistory.map((login) => (
+                    <div
+                      key={login.id}
+                      className="flex items-start justify-between pb-4 border-b border-border/40 last:border-0 last:pb-0"
+                    >
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <LogIn className="w-5 h-5 text-primary flex-shrink-0" />
+                          <div>
+                            <p className="font-semibold text-foreground">
+                              {login.device}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              {login.location}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-right text-sm text-muted-foreground">
+                        <p>{login.date}</p>
+                        <p>{login.time}</p>
+                        <p className="text-xs">IP: {login.ip}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
