@@ -290,6 +290,7 @@ export default function Dashboard() {
         number: uc.number,
         incorporationDate: uc.incorporationDate,
         incorporationYear: uc.incorporationYear,
+        country: uc.country || "Unknown",
         purchasedDate: uc.purchasedDate,
         renewalDate: uc.renewalDate,
         renewalFees: uc.renewalFees,
@@ -2269,7 +2270,7 @@ Generated on: ${new Date().toLocaleDateString()}
                       <div className="flex items-center gap-3 mb-2">
                         <CreditCard className="w-5 h-5 text-primary" />
                         <p className="font-semibold text-foreground">
-                          {method.brand} •••• {method.lastDigits}
+                          {method.brand} ��••• {method.lastDigits}
                         </p>
                         {method.isDefault && (
                           <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">
