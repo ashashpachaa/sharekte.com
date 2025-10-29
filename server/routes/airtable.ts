@@ -33,7 +33,7 @@ interface AirtableResponse {
 
 export const getCompanies: RequestHandler = async (req, res) => {
   if (!AIRTABLE_API_TOKEN) {
-    console.error("Airtable API token not configured");
+    console.error("❌ Airtable API token not configured");
     return res.status(500).json({ error: "Airtable API token not configured" });
   }
 
@@ -58,17 +58,22 @@ export const getCompanies: RequestHandler = async (req, res) => {
     }
 
     const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_ID}?${params.toString()}`;
+    console.log("📋 Fetching from Airtable:", url.substring(0, 100) + "...");
+    console.log("🔑 Token preview:", AIRTABLE_API_TOKEN.substring(0, 20) + "...");
 
     const response = await fetch(url, {
       headers: {
         Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
+        "Content-Type": "application/json",
       },
     });
+
+    console.log("📊 Airtable response status:", response.status);
 
     if (!response.ok) {
       const errorText = await response.text();
       console.error(
-        `Airtable API error [${response.status}]:`,
+        `❌ Airtable API error [${response.status}]:`,
         errorText
       );
       return res.status(response.status).json({
@@ -78,9 +83,10 @@ export const getCompanies: RequestHandler = async (req, res) => {
     }
 
     const data: AirtableResponse = await response.json();
+    console.log("✅ Fetched", data.records.length, "companies");
     res.json(data.records);
   } catch (error) {
-    console.error("Failed to fetch companies from Airtable:", error);
+    console.error("❌ Failed to fetch companies from Airtable:", error);
     res.status(500).json({ error: "Failed to fetch companies" });
   }
 };
