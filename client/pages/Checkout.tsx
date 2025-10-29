@@ -154,8 +154,7 @@ export default function Checkout() {
       return;
     }
 
-    toast.success("Account created successfully!");
-    setAuthMode("signin");
+    toast.success("Account created successfully! Ready to checkout.");
   };
 
   const handleSignIn = (e: React.FormEvent) => {
@@ -172,7 +171,9 @@ export default function Checkout() {
       return;
     }
 
-    toast.success("Signed in successfully!");
+    toast.success("Signed in successfully! Ready to checkout.");
+    setEmail("");
+    setPassword("");
   }
 
   const taxAmount = Math.round(totalPrice * 0.2);
