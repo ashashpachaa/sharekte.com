@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/cart-context";
 import { ArrowLeft, CheckCircle, Loader, Mail, Lock, User } from "lucide-react";
 import { toast } from "sonner";
+import { savePurchasedCompany, addInvoice, type PurchasedCompanyData, type InvoiceData } from "@/lib/user-data";
 
 export default function Checkout() {
   const navigate = useNavigate();
