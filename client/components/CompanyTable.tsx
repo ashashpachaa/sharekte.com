@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { ShoppingCart, Filter, Check, Search, X } from "lucide-react";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart-context";
+import { useCurrency } from "@/lib/currency-context";
 
 export function CompanyTable() {
   const { addItem } = useCart();
