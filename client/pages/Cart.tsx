@@ -125,8 +125,11 @@ export default function CartPage() {
               <Button
                 size="lg"
                 className="w-full bg-primary hover:bg-primary-600 text-white mb-3"
+                asChild
               >
-                Proceed to Checkout
+                <Link to="/checkout">
+                  Proceed to Checkout
+                </Link>
               </Button>
 
               <Button
