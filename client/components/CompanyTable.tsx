@@ -371,14 +371,14 @@ export function CompanyTable() {
             </div>
 
             {/* Show More Button */}
-            {companies.length > displayCount && (
+            {filteredCompanies.length > displayCount && (
               <div className="mt-6 text-center">
                 <Button
                   onClick={() => setDisplayCount((prev) => prev + 5)}
                   variant="outline"
                   className="px-8"
                 >
-                  Show More
+                  Show More ({filteredCompanies.length - displayCount} remaining)
                 </Button>
               </div>
             )}
