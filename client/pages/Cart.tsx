@@ -9,6 +9,7 @@ import { useCurrency } from "@/lib/currency-context";
 import { Trash2, ArrowLeft, ShoppingCart, Search, X } from "lucide-react";
 
 export default function CartPage() {
+  const { formatPrice } = useCurrency();
   const { items, removeItem, clearCart, totalPrice } = useCart();
   const [searchQuery, setSearchQuery] = useState("");
 
