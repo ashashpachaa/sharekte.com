@@ -192,10 +192,47 @@ export function renewCompany(companyId: string): void {
   const company = userData.purchasedCompanies.find(c => c.id === companyId);
 
   if (company) {
-    // Set new renewal date to 1 year from today
-    const newRenewalDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
-      .toISOString()
-      .split("T")[0];
+    // Calculate next renewal date based on original purchase date
+    // The renewal date should always be on the anniversary of the purchase date
+    const purchaseDate = new Date(company.purchasedDate);
+    const today = new Date();
+
+    // Calculate years between purchase and today
+    let yearsToAdd = purchaseDate.getFullYear() - purchaseDate.getFullYear();
+    const nextRenewalDate = new Date(purchaseDate);
+
+    // If today is past the purchase anniversary this year, next renewal is next year
+    if (today >= new Date(today.getFullYear(), purchaseDate.getMonth(), purchaseDate.getDate())) {
+      yearsToAdd = today.getFullYear() - purchaseDate.getFullYear() + 1;
+    } else {
+      yearsToAdd = today.getFullYear() - purchaseDate.getFullYear();
+    }
+
+    nextRenewalDate.setFullYear(purchaseDate.getFullYear() + yearsToAdd + 1);
+
+    const newRenewalDate = nextRenewalDate.toISOString().split("T")[0];
+    const todayStr = today.toISOString().split("T")[0];
+
+    // Calculate if renewal was late
+    const currentRenewalDate = new Date(company.renewalDate);
+    const renewalTime = today.getTime();
+    const dueTime = currentRenewalDate.getTime();
+    const daysLate = Math.max(0, Math.ceil((renewalTime - dueTime) / (1000 * 60 * 60 * 24)));
+    const isLate = renewalTime > dueTime;
+
+    // Add to renewal history
+    if (!company.renewalHistory) {
+      company.renewalHistory = [];
+    }
+
+    company.renewalHistory.push({
+      id: `renewal-${Date.now()}`,
+      renewalDate: company.renewalDate,
+      renewedDate: todayStr,
+      isLate: isLate,
+      daysLate: daysLate,
+      status: isLate ? "late" : "on-time",
+    });
 
     company.renewalDate = newRenewalDate;
     company.renewalStatus = "active";
