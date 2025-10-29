@@ -1185,7 +1185,7 @@ Generated on: ${new Date().toLocaleDateString()}
                   </p>
                 </div>
               ) : (
-                <div className="space-y-6">
+                <div>
                   {(() => {
                     const filtered = invoices.filter((invoice) => {
                       const query = invoicesSearch.toLowerCase();
