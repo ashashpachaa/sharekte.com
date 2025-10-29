@@ -98,12 +98,18 @@ export function CompanyTable() {
       const companyName = company.fields["Company name"] || "Unknown";
       const companyNumber = company.fields["Company number"] || "N/A";
       const price = (company.fields["Price"] as number) || 0;
+      const country = company.fields["Country"] || "Unknown";
+      const incorporationDate = company.fields["Incorporate Date"] || "";
+      const incorporationYear = company.fields["Incorporate Year"] || "";
 
       addItem({
         id: company.id,
         name: companyName as string,
         price,
         companyNumber: companyNumber as string,
+        country: country as string,
+        incorporationDate: incorporationDate as string,
+        incorporationYear: incorporationYear as string,
       });
     });
 
