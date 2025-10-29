@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/cart-context";
+import { useCurrency } from "@/lib/currency-context";
 import { ArrowLeft, CheckCircle, Loader, Mail, Lock, User } from "lucide-react";
 import { toast } from "sonner";
 import { savePurchasedCompany, addInvoice, type PurchasedCompanyData, type InvoiceData } from "@/lib/user-data";
