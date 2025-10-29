@@ -168,10 +168,42 @@ export function updatePurchasedCompanyStatus(
 ): void {
   const userData = getUserData();
   const company = userData.purchasedCompanies.find(c => c.id === companyId);
-  
+
   if (company) {
     company.status = status;
     company.statusLabel = statusLabel;
+    const key = getUserDataKey();
+    localStorage.setItem(key, JSON.stringify(userData));
+  }
+}
+
+export function renewCompany(companyId: string): void {
+  const userData = getUserData();
+  const company = userData.purchasedCompanies.find(c => c.id === companyId);
+
+  if (company) {
+    // Set new renewal date to 1 year from today
+    const newRenewalDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
+      .toISOString()
+      .split("T")[0];
+
+    company.renewalDate = newRenewalDate;
+    company.renewalStatus = "active";
+
+    const key = getUserDataKey();
+    localStorage.setItem(key, JSON.stringify(userData));
+  }
+}
+
+export function updateCompanyRenewalStatus(
+  companyId: string,
+  renewalStatus: "active" | "expired" | "cancelled"
+): void {
+  const userData = getUserData();
+  const company = userData.purchasedCompanies.find(c => c.id === companyId);
+
+  if (company) {
+    company.renewalStatus = renewalStatus;
     const key = getUserDataKey();
     localStorage.setItem(key, JSON.stringify(userData));
   }
