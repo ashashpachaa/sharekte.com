@@ -320,6 +320,19 @@ export function CompanyTable() {
                 </tbody>
               </table>
             </div>
+
+            {/* Show More Button */}
+            {companies.length > displayCount && (
+              <div className="mt-6 text-center">
+                <Button
+                  onClick={() => setDisplayCount((prev) => prev + 5)}
+                  variant="outline"
+                  className="px-8"
+                >
+                  Show More ({displayCount} of {companies.length})
+                </Button>
+              </div>
+            )}
           </>
         )}
       </div>
