@@ -1468,90 +1468,68 @@ Generated on: ${new Date().toLocaleDateString()}
                               key={company.id}
                               className="bg-card border border-border/40 rounded-lg overflow-hidden hover:shadow-lg transition-shadow flex flex-col h-full"
                             >
-                        {/* Company Header */}
-                        <div className={`${statusConfig.bgLight} p-6 border-b border-border/40`}>
-                          <div className="flex items-start justify-between gap-4">
-                            <div className="flex-1">
-                              <h3 className="text-2xl font-bold text-foreground mb-2">
-                                {company.name}
-                              </h3>
-                              <div className="grid md:grid-cols-2 gap-4 text-sm">
-                                <div>
-                                  <p className="text-muted-foreground">
-                                    Company Number
-                                  </p>
-                                  <p className="font-semibold text-foreground">
+                              {/* Company Header */}
+                              <div className={`${statusConfig.bgLight} p-4 border-b border-border/40`}>
+                                <div className="space-y-3">
+                                  <h3 className="text-lg font-bold text-foreground">
+                                    {company.name}
+                                  </h3>
+                                  <p className="text-xs text-muted-foreground">
                                     {company.number}
                                   </p>
-                                </div>
-                                <div>
-                                  <p className="text-muted-foreground">
-                                    Incorporation Date
-                                  </p>
-                                  <p className="font-semibold text-foreground">
-                                    {company.incorporationDate}
-                                  </p>
+                                  <div className={`${statusConfig.color} inline-flex items-center gap-1 px-2 py-1 rounded-full font-semibold text-xs`}>
+                                    <StatusIcon className="w-3 h-3" />
+                                    {company.statusLabel}
+                                  </div>
                                 </div>
                               </div>
-                            </div>
 
-                            <div className="flex flex-col items-end gap-3">
-                              <div
-                                className={`${statusConfig.color} px-4 py-2 rounded-full flex items-center gap-2 font-semibold text-sm`}
-                              >
-                                <StatusIcon className="w-4 h-4" />
-                                {company.statusLabel}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                              {/* Company Details */}
+                              <div className="p-4 space-y-4 flex-1">
+                                {/* Renewal Info */}
+                                <div className="space-y-3">
+                                  <div>
+                                    <p className="text-xs text-muted-foreground mb-1">
+                                      Renewal Date
+                                    </p>
+                                    <p className="font-semibold text-foreground text-sm">
+                                      {company.renewalDate}
+                                    </p>
+                                  </div>
+                                  <div>
+                                    <p className="text-xs text-muted-foreground mb-1">
+                                      Annual Renewal Fees
+                                    </p>
+                                    <p className="font-semibold text-foreground text-sm">
+                                      £{company.renewalFees}
+                                    </p>
+                                  </div>
+                                </div>
 
-                        {/* Company Details */}
-                        <div className="p-6 space-y-6">
-                          {/* Renewal Info */}
-                          <div className="grid md:grid-cols-2 gap-6 pb-6 border-b border-border/40">
-                            <div>
-                              <p className="text-sm text-muted-foreground mb-1">
-                                Renewal Date
-                              </p>
-                              <p className="text-lg font-semibold text-foreground">
-                                {company.renewalDate}
-                              </p>
-                            </div>
-                            <div>
-                              <p className="text-sm text-muted-foreground mb-1">
-                                Annual Renewal Fees
-                              </p>
-                              <p className="text-lg font-semibold text-foreground">
-                                £{company.renewalFees}
-                              </p>
-                            </div>
-                          </div>
-
-                          {/* Renewal Countdown Section */}
-                          {(() => {
+                                {/* Renewal Countdown Section */}
+                                {(() => {
                             const daysRemaining = calculateDaysRemaining(company.renewalDate);
                             const isRenewalNeeded = daysRemaining <= 15 && daysRemaining > -15 && company.renewalStatus === "active";
                             const isExpired = daysRemaining <= 0 && daysRemaining > -15;
                             const isCancelled = daysRemaining <= -15;
 
-                            return (
-                              <>
-                                {/* Renewal Alert - 15 days before */}
-                                {isRenewalNeeded && (
-                                  <div className="p-4 bg-red-50 border border-red-200 rounded-lg space-y-3">
-                                    <div className="flex items-start gap-3">
-                                      <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                                      <div className="flex-1">
-                                        <p className="text-sm font-semibold text-red-900 mb-1">
-                                          Renewal Required in {daysRemaining} days
-                                        </p>
-                                        <p className="text-sm text-red-800">
-                                          You should renew your company before it's cancelled or you lose it
-                                        </p>
-                                      </div>
-                                    </div>
-                                    <Button
+                                  return (
+                                    <>
+                                      {/* Renewal Alert - 15 days before */}
+                                      {isRenewalNeeded && (
+                                        <div className="p-3 bg-red-50 border border-red-200 rounded-lg space-y-2">
+                                          <div className="flex items-start gap-2">
+                                            <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+                                            <div className="flex-1">
+                                              <p className="text-xs font-semibold text-red-900 mb-1">
+                                                {daysRemaining} days to renew
+                                              </p>
+                                              <p className="text-xs text-red-800 leading-tight">
+                                                Renew now to prevent cancellation
+                                              </p>
+                                            </div>
+                                          </div>
+                                          <Button
                                       onClick={() => {
                                         renewCompany(company.id);
                                         setPurchasedCompanies(prev => prev.map(c =>
