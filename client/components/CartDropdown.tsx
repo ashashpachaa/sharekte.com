@@ -38,7 +38,6 @@ export function CartDropdown() {
                 size="sm"
                 variant="outline"
                 className="w-full"
-                onClick={() => setOpen(false)}
                 asChild
               >
                 <Link to="/">Continue Shopping</Link>
@@ -87,7 +86,6 @@ export function CartDropdown() {
                 <Button
                   size="sm"
                   className="w-full bg-primary hover:bg-primary-600 text-white gap-2"
-                  onClick={() => setOpen(false)}
                   asChild
                 >
                   <Link to="/cart">
@@ -100,7 +98,6 @@ export function CartDropdown() {
                   size="sm"
                   variant="outline"
                   className="w-full"
-                  onClick={() => setOpen(false)}
                   asChild
                 >
                   <Link to="/">Continue Shopping</Link>
