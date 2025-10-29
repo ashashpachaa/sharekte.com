@@ -263,6 +263,11 @@ export default function Dashboard() {
         savePurchasedCompany(uc);
       }
 
+      // Ensure renewalHistory exists
+      if (!uc.renewalHistory) {
+        uc.renewalHistory = [];
+      }
+
       // Update renewal status based on days remaining
       const daysRemaining = calculateDaysRemaining(uc.renewalDate);
       let currentRenewalStatus = uc.renewalStatus;
@@ -284,6 +289,7 @@ export default function Dashboard() {
         number: uc.number,
         incorporationDate: uc.incorporationDate,
         incorporationYear: uc.incorporationYear,
+        purchasedDate: uc.purchasedDate,
         renewalDate: uc.renewalDate,
         renewalFees: uc.renewalFees,
         status: uc.status,
@@ -292,6 +298,7 @@ export default function Dashboard() {
         transferFormFilled: uc.transferFormFilled,
         adminComments: uc.adminComments,
         renewalStatus: currentRenewalStatus,
+        renewalHistory: uc.renewalHistory || [],
       };
     });
   });
