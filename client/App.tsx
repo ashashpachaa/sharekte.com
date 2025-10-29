@@ -7,6 +7,7 @@ import { CartProvider } from "@/lib/cart-context";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
