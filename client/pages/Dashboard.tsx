@@ -516,6 +516,330 @@ export default function Dashboard() {
       {/* Content */}
       <section className="flex-1 py-12">
         <div className="container max-w-6xl mx-auto px-4">
+          {/* My Companies Tab */}
+          {activeTab === "companies" && (
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold text-foreground">
+                My Companies
+              </h2>
+
+              {purchasedCompanies.length === 0 ? (
+                <div className="bg-card border border-border/40 rounded-lg p-12 text-center space-y-4">
+                  <Building2 className="w-12 h-12 text-muted-foreground/50 mx-auto" />
+                  <p className="text-muted-foreground">
+                    You haven't purchased any companies yet
+                  </p>
+                  <Button
+                    className="bg-primary hover:bg-primary-600 text-white"
+                    asChild
+                  >
+                    <Link to="/">Browse Marketplace</Link>
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  {purchasedCompanies.map((company) => {
+                    const statusConfig = getStatusConfig(company.status);
+                    const StatusIcon = statusConfig.icon;
+
+                    return (
+                      <div
+                        key={company.id}
+                        className="bg-card border border-border/40 rounded-lg overflow-hidden"
+                      >
+                        {/* Company Header */}
+                        <div className={`${statusConfig.bgLight} p-6 border-b border-border/40`}>
+                          <div className="flex items-start justify-between gap-4">
+                            <div className="flex-1">
+                              <h3 className="text-2xl font-bold text-foreground mb-2">
+                                {company.name}
+                              </h3>
+                              <div className="grid md:grid-cols-2 gap-4 text-sm">
+                                <div>
+                                  <p className="text-muted-foreground">
+                                    Company Number
+                                  </p>
+                                  <p className="font-semibold text-foreground">
+                                    {company.number}
+                                  </p>
+                                </div>
+                                <div>
+                                  <p className="text-muted-foreground">
+                                    Incorporation Date
+                                  </p>
+                                  <p className="font-semibold text-foreground">
+                                    {company.incorporationDate}
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="flex flex-col items-end gap-3">
+                              <div
+                                className={`${statusConfig.color} px-4 py-2 rounded-full flex items-center gap-2 font-semibold text-sm`}
+                              >
+                                <StatusIcon className="w-4 h-4" />
+                                {company.statusLabel}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Company Details */}
+                        <div className="p-6 space-y-6">
+                          {/* Renewal Info */}
+                          <div className="grid md:grid-cols-2 gap-6 pb-6 border-b border-border/40">
+                            <div>
+                              <p className="text-sm text-muted-foreground mb-1">
+                                Renewal Date
+                              </p>
+                              <p className="text-lg font-semibold text-foreground">
+                                {company.renewalDate}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-sm text-muted-foreground mb-1">
+                                Annual Renewal Fees
+                              </p>
+                              <p className="text-lg font-semibold text-foreground">
+                                £{company.renewalFees}
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Transfer Workflow Status */}
+                          <div>
+                            <h4 className="font-semibold text-foreground mb-4">
+                              Transfer Workflow
+                            </h4>
+                            <div className="flex items-center gap-2 mb-4">
+                              <div className="flex-1 h-2 bg-border/40 rounded-full overflow-hidden">
+                                <div
+                                  className="h-full bg-primary transition-all"
+                                  style={{
+                                    width: `${
+                                      {
+                                        "pending-form": "20%",
+                                        "under-review": "40%",
+                                        "amend-required": "40%",
+                                        "pending-transfer": "80%",
+                                        completed: "100%",
+                                      }[company.status] || "0%"
+                                    }`,
+                                  }}
+                                />
+                              </div>
+                            </div>
+                            <div className="text-sm text-muted-foreground">
+                              <p>
+                                {company.status === "pending-form" &&
+                                  "⏳ Waiting for you to complete the transfer form"}
+                                {company.status === "under-review" &&
+                                  "👀 Admin is reviewing your submitted form"}
+                                {company.status === "amend-required" &&
+                                  "✏️ Please review admin comments and make amendments"}
+                                {company.status === "pending-transfer" &&
+                                  "🔄 Form approved! Ownership transfer is in progress"}
+                                {company.status === "completed" &&
+                                  "✅ Ownership transfer completed successfully"}
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Admin Comments */}
+                          {company.adminComments && (
+                            <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                              <p className="text-sm font-semibold text-orange-900 mb-2">
+                                Admin Comments
+                              </p>
+                              <p className="text-sm text-orange-800">
+                                {company.adminComments}
+                              </p>
+                            </div>
+                          )}
+
+                          {/* Documents Section */}
+                          <div>
+                            <h4 className="font-semibold text-foreground mb-4">
+                              Documents
+                            </h4>
+                            <div className="space-y-3">
+                              {company.documents.map((doc) => (
+                                <div
+                                  key={doc.id}
+                                  className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border border-border/40"
+                                >
+                                  <div className="flex items-center gap-3">
+                                    <FileText className="w-5 h-5 text-primary" />
+                                    <div>
+                                      <p className="font-semibold text-foreground">
+                                        {doc.name}
+                                      </p>
+                                      <p className="text-sm text-muted-foreground">
+                                        Uploaded {doc.uploadedDate}
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="gap-2"
+                                  >
+                                    <Download className="w-4 h-4" />
+                                    Download
+                                  </Button>
+                                </div>
+                              ))}
+                            </div>
+
+                            {/* Upload Documents */}
+                            <div className="mt-4 p-4 border-2 border-dashed border-border/40 rounded-lg text-center">
+                              <Upload className="w-8 h-8 text-muted-foreground/50 mx-auto mb-2" />
+                              <p className="text-sm text-muted-foreground">
+                                Drag and drop documents or{" "}
+                                <button className="text-primary hover:underline">
+                                  click to upload
+                                </button>
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Transfer Form */}
+                          {company.status !== "completed" && (
+                            <div>
+                              {showTransferForm === company.id ? (
+                                <div className="space-y-4 p-6 bg-muted/30 rounded-lg border border-border/40">
+                                  <h4 className="font-semibold text-foreground">
+                                    Transfer Form
+                                  </h4>
+
+                                  <div className="grid md:grid-cols-2 gap-4">
+                                    <div>
+                                      <label className="block text-sm font-medium text-foreground mb-2">
+                                        Director Name *
+                                      </label>
+                                      <input
+                                        type="text"
+                                        value={formData.directorName}
+                                        onChange={(e) =>
+                                          setFormData({
+                                            ...formData,
+                                            directorName: e.target.value,
+                                          })
+                                        }
+                                        className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                      />
+                                    </div>
+                                    <div>
+                                      <label className="block text-sm font-medium text-foreground mb-2">
+                                        Director Email *
+                                      </label>
+                                      <input
+                                        type="email"
+                                        value={formData.directorEmail}
+                                        onChange={(e) =>
+                                          setFormData({
+                                            ...formData,
+                                            directorEmail: e.target.value,
+                                          })
+                                        }
+                                        className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                      />
+                                    </div>
+                                  </div>
+
+                                  <div className="grid md:grid-cols-2 gap-4">
+                                    <div>
+                                      <label className="block text-sm font-medium text-foreground mb-2">
+                                        Shareholder Name *
+                                      </label>
+                                      <input
+                                        type="text"
+                                        value={formData.shareholderName}
+                                        onChange={(e) =>
+                                          setFormData({
+                                            ...formData,
+                                            shareholderName: e.target.value,
+                                          })
+                                        }
+                                        className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                      />
+                                    </div>
+                                    <div>
+                                      <label className="block text-sm font-medium text-foreground mb-2">
+                                        Shareholder Email *
+                                      </label>
+                                      <input
+                                        type="email"
+                                        value={formData.shareholderEmail}
+                                        onChange={(e) =>
+                                          setFormData({
+                                            ...formData,
+                                            shareholderEmail: e.target.value,
+                                          })
+                                        }
+                                        className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                      />
+                                    </div>
+                                  </div>
+
+                                  <div>
+                                    <label className="block text-sm font-medium text-foreground mb-2">
+                                      Company Address
+                                    </label>
+                                    <input
+                                      type="text"
+                                      value={formData.companyAddress}
+                                      onChange={(e) =>
+                                        setFormData({
+                                          ...formData,
+                                          companyAddress: e.target.value,
+                                        })
+                                      }
+                                      className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                    />
+                                  </div>
+
+                                  <div className="flex gap-3">
+                                    <Button
+                                      onClick={() =>
+                                        handleSubmitTransferForm(company.id)
+                                      }
+                                      className="bg-primary hover:bg-primary-600 text-white gap-2"
+                                    >
+                                      <FileUp className="w-4 h-4" />
+                                      Submit Form
+                                    </Button>
+                                    <Button
+                                      variant="outline"
+                                      onClick={() => setShowTransferForm(null)}
+                                    >
+                                      Cancel
+                                    </Button>
+                                  </div>
+                                </div>
+                              ) : (
+                                <Button
+                                  onClick={() => setShowTransferForm(company.id)}
+                                  className="w-full bg-primary hover:bg-primary-600 text-white gap-2"
+                                >
+                                  <FileUp className="w-4 h-4" />
+                                  {company.transferFormFilled
+                                    ? "Edit Transfer Form"
+                                    : "Fill Transfer Form"}
+                                </Button>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Portfolio Tab */}
           {activeTab === "portfolio" && (
             <div className="space-y-8">
