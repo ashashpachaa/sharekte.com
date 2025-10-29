@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { useCart } from "@/lib/cart-context";
 
 export function CompanyTable() {
+  const { addItem } = useCart();
   const [companies, setCompanies] = useState<Company[]>([]);
   const [countries, setCountries] = useState<string[]>([]);
   const [years, setYears] = useState<number[]>([]);
