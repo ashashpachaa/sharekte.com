@@ -457,6 +457,9 @@ export default function Dashboard() {
       return;
     }
 
+    // Update in user-specific storage
+    updatePurchasedCompanyStatus(companyId, "under-review", "Under Review Transfer Form");
+
     const updated = purchasedCompanies.map((c) =>
       c.id === companyId
         ? {
@@ -469,7 +472,6 @@ export default function Dashboard() {
     );
 
     setPurchasedCompanies(updated);
-    localStorage.setItem("purchasedCompanies", JSON.stringify(updated));
     setShowTransferForm(null);
     setFormData({
       directorName: "",
