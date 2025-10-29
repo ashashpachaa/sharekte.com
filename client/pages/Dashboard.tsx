@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Search, X } from "lucide-react";
 import { useSearch } from "@/hooks/use-search";
-import { getPurchasedCompanies, getInvoices, savePurchasedCompany, updatePurchasedCompanyStatus, addInvoice } from "@/lib/user-data";
+import { getPurchasedCompanies, getInvoices, savePurchasedCompany, updatePurchasedCompanyStatus, addInvoice, renewCompany, updateCompanyRenewalStatus } from "@/lib/user-data";
 import {
   BarChart3,
   Plus,
