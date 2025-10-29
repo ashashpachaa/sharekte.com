@@ -147,13 +147,13 @@ export default function CartPage() {
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Subtotal</span>
                   <span className="font-semibold text-foreground">
-                    £{totalPrice.toLocaleString()}
+                    {formatPrice(totalPrice)}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Tax (20%)</span>
                   <span className="font-semibold text-foreground">
-                    £{Math.round(totalPrice * 0.2).toLocaleString()}
+                    {formatPrice(Math.round(totalPrice * 0.2))}
                   </span>
                 </div>
               </div>
@@ -161,7 +161,7 @@ export default function CartPage() {
               <div className="flex justify-between mb-6">
                 <span className="text-lg font-bold text-foreground">Total</span>
                 <span className="text-2xl font-bold text-primary">
-                  £{Math.round(totalPrice * 1.2).toLocaleString()}
+                  {formatPrice(Math.round(totalPrice * 1.2))}
                 </span>
               </div>
 
