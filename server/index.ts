@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
+import { getCompanies, getCountries, getYears } from "./routes/airtable";
 
 export function createServer() {
   const app = express();
