@@ -98,7 +98,7 @@ export function CompanyTable() {
       const companyName = company.fields["Company name"] || "Unknown";
       const companyNumber = company.fields["Company number"] || "N/A";
       const price = (company.fields["Price"] as number) || 0;
-      const country = company.fields["Country"] || "Unknown";
+      const country = (company.fields["Country"] as string)?.trim() || "UK";
       const incorporationDate = company.fields["Incorporate Date"] || "";
       const incorporationYear = company.fields["Incorporate Year"] || "";
 
@@ -107,7 +107,7 @@ export function CompanyTable() {
         name: companyName as string,
         price,
         companyNumber: companyNumber as string,
-        country: country as string,
+        country: country,
         incorporationDate: incorporationDate as string,
         incorporationYear: incorporationYear as string,
       });
