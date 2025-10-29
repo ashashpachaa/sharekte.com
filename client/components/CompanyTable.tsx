@@ -291,8 +291,21 @@ export function CompanyTable() {
                             size="sm"
                             className="bg-primary hover:bg-primary-600 text-white gap-1"
                             onClick={() => {
-                              alert(
-                                `Purchase initiated for ${companyName}\n\nThis will be connected to payment processing.`
+                              const price = (company.fields["Price"] as number) || 0;
+                              const companyNumber = company.fields["Company number"] || "N/A";
+
+                              addItem({
+                                id: company.id,
+                                name: companyName,
+                                price,
+                                companyNumber: companyNumber as string,
+                              });
+
+                              toast.success(
+                                `${companyName} added to cart! ✓`,
+                                {
+                                  icon: <Check className="w-4 h-4" />,
+                                }
                               );
                             }}
                           >
