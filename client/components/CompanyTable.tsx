@@ -321,12 +321,12 @@ export function CompanyTable() {
                         </td>
                         <td className="px-6 py-4">
                           <p className="text-foreground">
-                            {company.fields["Company number"] || "N/A"}
+                            {company.fields["Company Number"] || "N/A"}
                           </p>
                         </td>
                         <td className="px-6 py-4">
                           <p className="text-foreground">
-                            {company.fields["Incorporate date"] || "N/A"}
+                            {company.fields["Incorporate Date"] || "N/A"}
                           </p>
                         </td>
                         <td className="px-6 py-4">
