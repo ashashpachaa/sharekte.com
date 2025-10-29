@@ -33,7 +33,6 @@ import {
   Wallet,
   Zap,
   Package,
-  Clock,
   DollarSign as DollarSignIcon,
   ShoppingCart as ShoppingCartIcon,
 } from "lucide-react";
