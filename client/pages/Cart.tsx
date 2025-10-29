@@ -1,12 +1,25 @@
 import { Link } from "react-router-dom";
+import { useState, useMemo } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useCart } from "@/lib/cart-context";
-import { Trash2, ArrowLeft, ShoppingCart } from "lucide-react";
+import { Trash2, ArrowLeft, ShoppingCart, Search, X } from "lucide-react";
 
 export default function CartPage() {
   const { items, removeItem, clearCart, totalPrice } = useCart();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredItems = useMemo(() => {
+    if (!searchQuery.trim()) return items;
+
+    const query = searchQuery.toLowerCase();
+    return items.filter((item) =>
+      item.name.toLowerCase().includes(query) ||
+      item.companyNumber.toLowerCase().includes(query)
+    );
+  }, [items, searchQuery]);
 
   if (items.length === 0) {
     return (
