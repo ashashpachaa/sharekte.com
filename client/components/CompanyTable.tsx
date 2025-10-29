@@ -99,7 +99,8 @@ export function CompanyTable() {
       const companyName = company.fields["Company name"] || "Unknown";
       const companyNumber = company.fields["Company number"] || "N/A";
       const price = (company.fields["Price"] as number) || 0;
-      const country = (company.fields["Country"] as string) || "";
+      // Check for "Country " (with space) first, then "Country" (without space)
+      const country = (company.fields["Country "] as string) || (company.fields["Country"] as string) || "";
       const incorporationDate = company.fields["Incorporate Date"] || "";
       const incorporationYear = company.fields["Incorporate Year"] || "";
 
