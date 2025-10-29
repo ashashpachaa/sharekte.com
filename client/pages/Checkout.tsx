@@ -279,7 +279,7 @@ export default function Checkout() {
                         </p>
                       </div>
                       <p className="font-semibold text-foreground">
-                        £{item.price.toLocaleString()}
+                        {formatPrice(item.price)}
                       </p>
                     </div>
                   ))}
