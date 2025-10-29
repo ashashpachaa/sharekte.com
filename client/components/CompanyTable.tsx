@@ -275,7 +275,7 @@ export function CompanyTable() {
                   </tr>
                 </thead>
                 <tbody>
-                  {companies.slice(0, displayCount).map((company) => {
+                  {filteredCompanies.slice(0, displayCount).map((company) => {
                     const isSelected = selectedCompanies.has(company.id);
                     const companyName = company.fields["Company name"] || "N/A";
 
