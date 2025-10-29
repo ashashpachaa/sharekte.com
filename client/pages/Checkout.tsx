@@ -502,13 +502,13 @@ export default function Checkout() {
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Subtotal</span>
                   <span className="font-semibold text-foreground">
-                    £{totalPrice.toLocaleString()}
+                    {formatPrice(totalPrice)}
                   </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Tax (20%)</span>
                   <span className="font-semibold text-foreground">
-                    £{taxAmount.toLocaleString()}
+                    {formatPrice(taxAmount)}
                   </span>
                 </div>
               </div>
@@ -516,7 +516,7 @@ export default function Checkout() {
               <div className="flex justify-between mb-6">
                 <span className="text-lg font-bold text-foreground">Total</span>
                 <span className="text-2xl font-bold text-primary">
-                  £{finalTotal.toLocaleString()}
+                  {formatPrice(finalTotal)}
                 </span>
               </div>
 
