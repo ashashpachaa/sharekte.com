@@ -91,6 +91,7 @@ interface PurchasedCompany {
   number: string;
   incorporationDate: string;
   incorporationYear: string;
+  country: string;
   purchasedDate: string;
   renewalDate: string;
   renewalFees: number;
