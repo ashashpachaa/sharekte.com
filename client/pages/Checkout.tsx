@@ -4,7 +4,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/cart-context";
-import { ArrowLeft, CheckCircle, Loader } from "lucide-react";
+import { ArrowLeft, CheckCircle, Loader, Mail, Lock, User } from "lucide-react";
 import { toast } from "sonner";
 
 export default function Checkout() {
@@ -12,6 +12,18 @@ export default function Checkout() {
   const { items, clearCart, totalPrice } = useCart();
   const [loading, setLoading] = useState(false);
   const [orderCompleted, setOrderCompleted] = useState(false);
+  const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
+
+  // Sign In form
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  // Sign Up form
+  const [fullName, setFullName] = useState("");
+  const [signupEmail, setSignupEmail] = useState("");
+  const [signupPassword, setSignupPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [company, setCompany] = useState("");
 
   if (items.length === 0 && !orderCompleted) {
     return (
