@@ -307,6 +307,85 @@ export default function Dashboard() {
     toast.success("Default payment method updated");
   };
 
+  // Submit transfer form
+  const handleSubmitTransferForm = (companyId: string) => {
+    if (
+      !formData.directorName ||
+      !formData.directorEmail ||
+      !formData.shareholderName ||
+      !formData.shareholderEmail
+    ) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    const updated = purchasedCompanies.map((c) =>
+      c.id === companyId
+        ? {
+            ...c,
+            status: "under-review" as const,
+            statusLabel: "Under Review Transfer Form",
+            transferFormFilled: true,
+          }
+        : c
+    );
+
+    setPurchasedCompanies(updated);
+    localStorage.setItem("purchasedCompanies", JSON.stringify(updated));
+    setShowTransferForm(null);
+    setFormData({
+      directorName: "",
+      directorEmail: "",
+      shareholderName: "",
+      shareholderEmail: "",
+      companyAddress: "",
+    });
+
+    toast.success("Transfer form submitted for review!");
+  };
+
+  // Get status color and icon
+  const getStatusConfig = (status: string) => {
+    switch (status) {
+      case "pending-form":
+        return {
+          color: "bg-yellow-100 text-yellow-800",
+          icon: Clock,
+          bgLight: "bg-yellow-50",
+        };
+      case "under-review":
+        return {
+          color: "bg-blue-100 text-blue-800",
+          icon: FileText,
+          bgLight: "bg-blue-50",
+        };
+      case "amend-required":
+        return {
+          color: "bg-orange-100 text-orange-800",
+          icon: AlertCircle,
+          bgLight: "bg-orange-50",
+        };
+      case "pending-transfer":
+        return {
+          color: "bg-purple-100 text-purple-800",
+          icon: FileUp,
+          bgLight: "bg-purple-50",
+        };
+      case "completed":
+        return {
+          color: "bg-green-100 text-green-800",
+          icon: CheckCircle,
+          bgLight: "bg-green-50",
+        };
+      default:
+        return {
+          color: "bg-gray-100 text-gray-800",
+          icon: Clock,
+          bgLight: "bg-gray-50",
+        };
+    }
+  };
+
   const ownedCompanies = [
     {
       id: 1,
