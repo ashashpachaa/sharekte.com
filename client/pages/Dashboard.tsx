@@ -134,6 +134,11 @@ export default function Dashboard() {
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
 
+  // Search states for different tabs
+  const [companiesSearch, setCompaniesSearch] = useState("");
+  const [invoicesSearch, setInvoicesSearch] = useState("");
+  const [marketplaceSearch, setMarketplaceSearch] = useState("");
+
   // User data state
   const [userData, setUserData] = useState<UserData>(() => {
     const saved = localStorage.getItem("user");
