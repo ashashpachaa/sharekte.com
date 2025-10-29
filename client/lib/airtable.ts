@@ -50,6 +50,7 @@ export async function fetchCompanies(filters?: {
     }
 
     const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_ID}?${params.toString()}`;
+    console.log("Fetching from URL:", url.replace(AIRTABLE_API_TOKEN, "***"));
 
     const response = await fetch(url, {
       headers: {
@@ -58,7 +59,9 @@ export async function fetchCompanies(filters?: {
     });
 
     if (!response.ok) {
-      throw new Error(`Airtable API error: ${response.statusText}`);
+      const errorData = await response.text();
+      console.error(`Airtable API error [${response.status}]:`, errorData);
+      throw new Error(`Airtable API error: ${response.status} ${response.statusText}`);
     }
 
     const data: AirtableResponse = await response.json();
