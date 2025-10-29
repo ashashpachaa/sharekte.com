@@ -211,9 +211,13 @@ export function CompanyTable() {
           <div className="p-8 text-center">
             <p className="text-muted-foreground">Loading companies...</p>
           </div>
-        ) : companies.length === 0 ? (
+        ) : filteredCompanies.length === 0 ? (
           <div className="p-8 text-center">
-            <p className="text-muted-foreground">No companies found matching your filters</p>
+            <p className="text-muted-foreground">
+              {searchQuery || selectedCountry || selectedYear
+                ? "No companies found matching your filters"
+                : "No companies available"}
+            </p>
           </div>
         ) : (
           <>
