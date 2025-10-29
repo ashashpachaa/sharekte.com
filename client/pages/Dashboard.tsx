@@ -28,6 +28,14 @@ import {
   CheckCircle,
   AlertCircle,
   FileUp,
+  Stamp,
+  Scale,
+  Wallet,
+  Zap,
+  Package,
+  Clock,
+  DollarSign as DollarSignIcon,
+  ShoppingCart as ShoppingCartIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 
