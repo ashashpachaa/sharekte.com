@@ -143,6 +143,7 @@ interface LoginHistory {
 }
 
 export default function Dashboard() {
+  const { formatPrice } = useCurrency();
   const [activeTab, setActiveTab] = useState<DashboardTab>("portfolio");
   const [isEditing, setIsEditing] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
