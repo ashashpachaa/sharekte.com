@@ -74,11 +74,13 @@ export async function fetchCompanies(filters?: {
 
 export async function getCountries(): Promise<string[]> {
   if (!AIRTABLE_API_TOKEN) {
+    console.error("Airtable API token not configured");
     return [];
   }
 
   try {
     const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_ID}`;
+    console.log("Fetching countries from:", url.replace(AIRTABLE_API_TOKEN, "***"));
 
     const response = await fetch(url, {
       headers: {
@@ -87,7 +89,9 @@ export async function getCountries(): Promise<string[]> {
     });
 
     if (!response.ok) {
-      throw new Error(`Airtable API error: ${response.statusText}`);
+      const errorData = await response.text();
+      console.error(`Airtable API error [${response.status}]:`, errorData);
+      throw new Error(`Airtable API error: ${response.status} ${response.statusText}`);
     }
 
     const data: AirtableResponse = await response.json();
