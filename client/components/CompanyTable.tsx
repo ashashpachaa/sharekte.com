@@ -103,6 +103,9 @@ export function CompanyTable() {
       const incorporationDate = company.fields["Incorporate Date"] || "";
       const incorporationYear = company.fields["Incorporate Year"] || "";
 
+      console.log("Company fields:", company.fields);
+      console.log("Extracted country:", country);
+
       addItem({
         id: company.id,
         name: companyName as string,
