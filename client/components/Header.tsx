@@ -6,6 +6,8 @@ import { useCurrency, CURRENCY_RATES } from "@/lib/currency-context";
 import { Globe } from "lucide-react";
 
 export function Header() {
+  const { currency, setCurrency } = useCurrency();
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-6xl items-center justify-between">
@@ -34,7 +36,36 @@ export function Header() {
         </nav>
 
         {/* CTA Buttons */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
+          {/* Currency Selector */}
+          <div className="relative group">
+            <Button
+              variant="outline"
+              className="gap-2 text-xs h-9"
+            >
+              <Globe className="w-4 h-4" />
+              <span>{CURRENCY_RATES[currency].symbol}</span>
+            </Button>
+            <div className="absolute right-0 top-full mt-1 w-48 bg-card border border-border/40 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+              <div className="p-2 space-y-1">
+                {Object.entries(CURRENCY_RATES).map(([code, rate]) => (
+                  <button
+                    key={code}
+                    onClick={() => setCurrency(code as any)}
+                    className={`w-full text-left px-3 py-2 rounded text-sm transition-colors ${
+                      currency === code
+                        ? "bg-primary/10 text-primary font-semibold"
+                        : "text-foreground hover:bg-muted"
+                    }`}
+                  >
+                    <span className="font-medium">{rate.symbol}</span>
+                    <span className="ml-2 text-muted-foreground">{rate.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
           {/* Notifications */}
           <NotificationBell />
 
