@@ -31,7 +31,18 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-type DashboardTab = "portfolio" | "companies" | "invoices" | "account" | "payments" | "security";
+type DashboardTab = "portfolio" | "companies" | "invoices" | "marketplace" | "account" | "payments" | "security";
+
+interface Service {
+  id: string;
+  name: string;
+  description: string;
+  duration: string;
+  fees: number;
+  category: string;
+  features: string[];
+  icon: any;
+}
 
 interface Invoice {
   id: string;
