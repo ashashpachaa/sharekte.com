@@ -91,7 +91,7 @@ export default function Checkout() {
           price: item.price,
           incorporationDate: item.incorporationDate || today,
           incorporationYear: item.incorporationYear || new Date().getFullYear().toString(),
-          country: item.country || "Unknown",
+          country: item.country || "UK",
           purchasedDate: today,
           renewalDate: oneYearLater,
           renewalFees: 299,
