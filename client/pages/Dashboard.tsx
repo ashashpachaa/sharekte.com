@@ -1006,6 +1006,140 @@ Generated on: ${new Date().toLocaleDateString()}
       {/* Content */}
       <section className="flex-1 py-12">
         <div className="container max-w-6xl mx-auto px-4">
+          {/* Marketplace Tab */}
+          {activeTab === "marketplace" && (
+            <div className="space-y-6">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+                <div>
+                  <h2 className="text-2xl font-bold text-foreground">
+                    Services Marketplace
+                  </h2>
+                  <p className="text-muted-foreground mt-2">
+                    Add additional services to your company package
+                  </p>
+                </div>
+
+                {cartItems.length > 0 && (
+                  <div className="bg-primary/10 border border-primary/30 rounded-lg p-4 space-y-3">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Cart Total</p>
+                      <p className="text-2xl font-bold text-primary">
+                        £{cartTotal.toLocaleString()}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {cartItems.length}{" "}
+                        {cartItems.length === 1 ? "service" : "services"}
+                      </p>
+                    </div>
+                    <Button
+                      onClick={handleCheckoutServices}
+                      className="w-full bg-primary hover:bg-primary-600 text-white gap-2"
+                    >
+                      <ShoppingCartIcon className="w-4 h-4" />
+                      Checkout
+                    </Button>
+                  </div>
+                )}
+              </div>
+
+              {/* Services Grid */}
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {services.map((service) => {
+                  const ServiceIcon = service.icon;
+                  const isInCart = cartItems.some((item) => item.id === service.id);
+
+                  return (
+                    <div
+                      key={service.id}
+                      className="bg-card border border-border/40 rounded-lg overflow-hidden hover:shadow-md transition-all hover:border-primary/50"
+                    >
+                      {/* Service Header */}
+                      <div className="p-6 bg-gradient-to-br from-primary/10 to-transparent border-b border-border/40">
+                        <div className="flex items-start justify-between gap-3 mb-3">
+                          <ServiceIcon className="w-8 h-8 text-primary flex-shrink-0" />
+                          <span className="px-2 py-1 bg-primary/20 text-primary text-xs font-semibold rounded">
+                            {service.category}
+                          </span>
+                        </div>
+                        <h3 className="text-lg font-bold text-foreground">
+                          {service.name}
+                        </h3>
+                      </div>
+
+                      {/* Service Details */}
+                      <div className="p-6 space-y-4">
+                        <p className="text-sm text-muted-foreground">
+                          {service.description}
+                        </p>
+
+                        {/* Features */}
+                        <div>
+                          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
+                            Includes
+                          </p>
+                          <ul className="space-y-1">
+                            {service.features.map((feature, idx) => (
+                              <li
+                                key={idx}
+                                className="text-sm text-foreground flex items-start gap-2"
+                              >
+                                <span className="text-primary mt-1">✓</span>
+                                {feature}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        {/* Duration */}
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Clock className="w-4 h-4" />
+                          {service.duration}
+                        </div>
+
+                        {/* Price and Action */}
+                        <div className="pt-4 border-t border-border/40 space-y-3">
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-3xl font-bold text-primary">
+                              £{service.fees}
+                            </span>
+                            <span className="text-sm text-muted-foreground">
+                              one-time
+                            </span>
+                          </div>
+
+                          {isInCart ? (
+                            <div className="space-y-2">
+                              <div className="text-sm text-primary font-semibold text-center">
+                                ✓ Added to cart
+                              </div>
+                              <Button
+                                variant="outline"
+                                className="w-full text-destructive hover:bg-destructive/10"
+                                onClick={() =>
+                                  handleRemoveFromCart(service.id)
+                                }
+                              >
+                                Remove
+                              </Button>
+                            </div>
+                          ) : (
+                            <Button
+                              onClick={() => handleAddToCart(service)}
+                              className="w-full bg-primary hover:bg-primary-600 text-white gap-2"
+                            >
+                              <Plus className="w-4 h-4" />
+                              Add to Cart
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           {/* Invoices Tab */}
           {activeTab === "invoices" && (
             <div className="space-y-6">
