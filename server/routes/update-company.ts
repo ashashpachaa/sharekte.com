@@ -11,15 +11,17 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
   }
 
   try {
-    const { recordId, status } = req.body;
+    const { recordId, status } = req.body || {};
+    const pathRecordId = req.params.recordId;
+    const finalRecordId = recordId || pathRecordId;
 
-    if (!recordId || !status) {
+    if (!finalRecordId || !status) {
       return res.status(400).json({ error: "recordId and status are required" });
     }
 
-    console.log(`📝 Updating company ${recordId} status to: ${status}`);
+    console.log(`📝 Updating company ${finalRecordId} status to: ${status}`);
 
-    const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_ID}/${recordId}`;
+    const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_ID}/${finalRecordId}`;
 
     const response = await fetch(url, {
       method: "PATCH",
