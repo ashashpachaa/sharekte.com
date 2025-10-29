@@ -11,6 +11,7 @@ import { savePurchasedCompany, addInvoice, type PurchasedCompanyData, type Invoi
 
 export default function Checkout() {
   const navigate = useNavigate();
+  const { formatPrice } = useCurrency();
   const { items, clearCart, totalPrice } = useCart();
   const [loading, setLoading] = useState(false);
   const [orderCompleted, setOrderCompleted] = useState(false);
