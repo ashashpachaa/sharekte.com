@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { CartDropdown } from "./CartDropdown";
+import { NotificationBell } from "./NotificationBell";
 
 export function Header() {
   return (
@@ -32,6 +33,9 @@ export function Header() {
 
         {/* CTA Buttons */}
         <div className="flex items-center gap-3">
+          {/* Notifications */}
+          <NotificationBell />
+
           {/* Cart Dropdown */}
           <CartDropdown />
 
