@@ -66,14 +66,33 @@ export function CompanyTable() {
 
   const handleBuySelected = () => {
     if (selectedCompanies.size === 0) {
-      alert("Please select at least one company");
+      toast.error("Please select at least one company");
       return;
     }
-    const selectedList = companies
-      .filter((c) => selectedCompanies.has(c.id))
-      .map((c) => c.fields["Company Name"] || "Unknown")
-      .join(", ");
-    alert(`Purchase initiated for: ${selectedList}\n\nThis will be connected to payment processing.`);
+
+    const selectedItems = companies.filter((c) => selectedCompanies.has(c.id));
+
+    selectedItems.forEach((company) => {
+      const companyName = company.fields["Company name"] || "Unknown";
+      const companyNumber = company.fields["Company number"] || "N/A";
+      const price = (company.fields["Price"] as number) || 0;
+
+      addItem({
+        id: company.id,
+        name: companyName as string,
+        price,
+        companyNumber: companyNumber as string,
+      });
+    });
+
+    toast.success(
+      `${selectedItems.length} ${selectedItems.length === 1 ? "company" : "companies"} added to cart! ✓`,
+      {
+        icon: <Check className="w-4 h-4" />,
+      }
+    );
+
+    setSelectedCompanies(new Set());
   };
 
   return (
