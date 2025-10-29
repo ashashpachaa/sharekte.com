@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { CompanyTable } from "@/components/CompanyTable";
 import { ArrowRight, TrendingUp, Users, Zap, Shield, BarChart3, Globe, CheckCircle2 } from "lucide-react";
 
 export default function Index() {
