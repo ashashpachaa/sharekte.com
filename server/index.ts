@@ -25,6 +25,7 @@ export function createServer() {
   app.get("/api/companies", getCompanies);
   app.get("/api/countries", getCountries);
   app.get("/api/years", getYears);
+  app.patch("/api/companies/:recordId/status", updateCompanyStatus);
 
   return app;
 }
