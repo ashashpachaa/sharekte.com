@@ -459,6 +459,25 @@ export default function Dashboard() {
     }
 
     // Update in user-specific storage
+    const company = purchasedCompanies.find(c => c.id === companyId);
+    if (company) {
+      const updatedCompany = {
+        ...company,
+        status: "under-review" as const,
+        statusLabel: "Under Review Transfer Form",
+        transferFormFilled: true,
+        transferFormAttachments: formData.attachments,
+        transferFormData: {
+          directorName: formData.directorName,
+          directorEmail: formData.directorEmail,
+          shareholderName: formData.shareholderName,
+          shareholderEmail: formData.shareholderEmail,
+          companyAddress: formData.companyAddress,
+        },
+      };
+      savePurchasedCompany(updatedCompany);
+    }
+
     updatePurchasedCompanyStatus(companyId, "under-review", "Under Review Transfer Form");
 
     const updated = purchasedCompanies.map((c) =>
@@ -480,6 +499,7 @@ export default function Dashboard() {
       shareholderName: "",
       shareholderEmail: "",
       companyAddress: "",
+      attachments: [],
     });
 
     toast.success("Transfer form submitted for review!");
