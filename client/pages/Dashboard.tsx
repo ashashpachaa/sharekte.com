@@ -289,6 +289,113 @@ export default function Dashboard() {
     companyAddress: "",
   });
 
+  // Services state (Marketplace)
+  const [services] = useState<Service[]>([
+    {
+      id: "apostille",
+      name: "Apostille",
+      description:
+        "Get your company documents certified with an apostille for international use. Apostille is a form of authentication issued to documents for use in countries that are parties to the Hague Apostille Convention.",
+      duration: "2-3 business days",
+      fees: 150,
+      category: "Documentation",
+      features: [
+        "Official certification",
+        "International recognition",
+        "Multiple document copies",
+        "Digital delivery",
+      ],
+      icon: Stamp,
+    },
+    {
+      id: "poa",
+      name: "Power of Attorney (POA)",
+      description:
+        "Establish a legal power of attorney document for your company. Allows another person to act on your behalf for business transactions and legal matters.",
+      duration: "3-5 business days",
+      fees: 200,
+      category: "Legal Services",
+      features: [
+        "Legal document preparation",
+        "Notarization",
+        "Multiple copies",
+        "Legal consultation included",
+      ],
+      icon: Scale,
+    },
+    {
+      id: "wise-account",
+      name: "Wise Bank Account Setup",
+      description:
+        "Set up a business bank account with Wise for international payments and transfers. Low fees for multi-currency transactions.",
+      duration: "1-2 business days",
+      fees: 100,
+      category: "Banking",
+      features: [
+        "Account setup assistance",
+        "Multi-currency support",
+        "Competitive exchange rates",
+        "Ongoing support",
+      ],
+      icon: Wallet,
+    },
+    {
+      id: "stripe",
+      name: "Stripe Account Setup",
+      description:
+        "Get your Stripe business account configured for online payments. Accept credit cards, digital wallets, and more with competitive processing rates.",
+      duration: "1 business day",
+      fees: 75,
+      category: "Payment Processing",
+      features: [
+        "Account setup and verification",
+        "Payment gateway configuration",
+        "Integration support",
+        "Fraud protection included",
+      ],
+      icon: Zap,
+    },
+    {
+      id: "tax-registration",
+      name: "VAT/Tax Registration",
+      description:
+        "Register your company for VAT or other tax obligations. Ensures compliance with local tax authorities and enables tax-compliant invoicing.",
+      duration: "5-7 business days",
+      fees: 250,
+      category: "Tax & Compliance",
+      features: [
+        "Tax authority registration",
+        "Compliance review",
+        "Documentation assistance",
+        "Tax guidance",
+      ],
+      icon: DollarSignIcon,
+    },
+    {
+      id: "accounting-setup",
+      name: "Accounting Setup",
+      description:
+        "Professional accounting system setup for your business. Organize your finances with proper accounting software and templates.",
+      duration: "3-4 business days",
+      fees: 180,
+      category: "Business Services",
+      features: [
+        "Accounting software setup",
+        "Chart of accounts creation",
+        "Process documentation",
+        "Training session included",
+      ],
+      icon: Package,
+    },
+  ]);
+
+  const [cartItems, setCartItems] = useState<
+    Array<{ id: string; name: string; fees: number }>
+  >(() => {
+    const saved = localStorage.getItem("serviceCart");
+    return saved ? JSON.parse(saved) : [];
+  });
+
   // Invoices state
   const [invoices, setInvoices] = useState<Invoice[]>(() => {
     const saved = localStorage.getItem("invoices");
