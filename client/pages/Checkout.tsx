@@ -95,7 +95,9 @@ export default function Checkout() {
           renewalFees: 299,
           status: "pending-form",
           statusLabel: "Pending Transfer Form",
+          renewalStatus: "active",
           documents: [],
+          transferFormAttachments: [],
           transferFormFilled: false,
           purchasedDate: today,
         };
