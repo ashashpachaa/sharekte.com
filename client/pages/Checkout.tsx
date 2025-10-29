@@ -74,9 +74,20 @@ export default function Checkout() {
       setOrderCompleted(true);
       clearCart();
 
-      // Redirect to home after 3 seconds
+      // Store user info in localStorage (simple auth)
+      if (authMode === "signup") {
+        const userData = {
+          fullName,
+          email: signupEmail,
+          company,
+          accountCreated: new Date().toISOString(),
+        };
+        localStorage.setItem("user", JSON.stringify(userData));
+      }
+
+      // Redirect to dashboard after 3 seconds
       setTimeout(() => {
-        navigate("/");
+        navigate("/dashboard");
       }, 3000);
     } catch (error) {
       console.error("Error completing order:", error);
