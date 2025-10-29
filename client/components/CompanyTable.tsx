@@ -15,6 +15,7 @@ export function CompanyTable() {
   const [selectedYear, setSelectedYear] = useState<number | "">("");
   const [selectedCompanies, setSelectedCompanies] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
+  const [displayCount, setDisplayCount] = useState(10);
 
   // Load filter options on mount
   useEffect(() => {
