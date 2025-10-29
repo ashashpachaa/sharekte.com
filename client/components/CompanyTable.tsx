@@ -114,7 +114,31 @@ export function CompanyTable() {
           <h3 className="font-semibold text-foreground">Filters</h3>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Search */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">
+              Search
+            </label>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Company name..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 pr-8"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-muted rounded"
+                >
+                  <X className="w-4 h-4 text-muted-foreground" />
+                </button>
+              )}
+            </div>
+          </div>
+
           {/* Country Filter */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-foreground">
