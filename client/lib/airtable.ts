@@ -5,7 +5,6 @@ export interface Company {
     "Company Number"?: string;
     "Incorporate Date"?: string;
     "Incorporate Year"?: number;
-    "Country "?: string;
     Country?: string;
     Revenue?: string;
     Industry?: string;
