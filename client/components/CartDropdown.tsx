@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Popover,
@@ -11,11 +10,10 @@ import { ShoppingCart, Trash2, ArrowRight } from "lucide-react";
 
 export function CartDropdown() {
   const { items, removeItem, totalPrice } = useCart();
-  const [open, setOpen] = useState(false);
   const cartCount = items.length;
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover>
       <PopoverTrigger asChild>
         <button
           className="relative flex items-center justify-center w-10 h-10 rounded-lg border border-border/40 hover:bg-muted transition-colors"
