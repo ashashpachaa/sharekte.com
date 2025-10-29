@@ -184,6 +184,70 @@ export default function Dashboard() {
         ];
   });
 
+  // Purchased companies state
+  const [purchasedCompanies, setPurchasedCompanies] = useState<PurchasedCompany[]>(() => {
+    const saved = localStorage.getItem("purchasedCompanies");
+    return saved
+      ? JSON.parse(saved)
+      : [
+          {
+            id: "1",
+            name: "TechFlow Solutions",
+            number: "16662272",
+            incorporationDate: "2025-10-22",
+            incorporationYear: "2025",
+            renewalDate: "2026-10-22",
+            renewalFees: 299,
+            status: "pending-form",
+            statusLabel: "Pending Transfer Form",
+            documents: [
+              {
+                id: "d1",
+                name: "Articles of Association",
+                type: "pdf",
+                uploadedDate: "2024-12-10",
+              },
+            ],
+            transferFormFilled: false,
+          },
+          {
+            id: "2",
+            name: "GreenLeaf Organic",
+            number: "16656680",
+            incorporationDate: "2025-10-22",
+            incorporationYear: "2025",
+            renewalDate: "2026-10-22",
+            renewalFees: 299,
+            status: "under-review",
+            statusLabel: "Under Review Transfer Form",
+            documents: [
+              {
+                id: "d2",
+                name: "Transfer Form",
+                type: "pdf",
+                uploadedDate: "2024-12-12",
+              },
+              {
+                id: "d3",
+                name: "Shareholder Information",
+                type: "pdf",
+                uploadedDate: "2024-12-12",
+              },
+            ],
+            transferFormFilled: true,
+          },
+        ];
+  });
+
+  const [showTransferForm, setShowTransferForm] = useState<string | null>(null);
+  const [formData, setFormData] = useState({
+    directorName: "",
+    directorEmail: "",
+    shareholderName: "",
+    shareholderEmail: "",
+    companyAddress: "",
+  });
+
   // Save edited user data
   const handleSaveProfile = () => {
     if (!editedData.fullName || !editedData.email || !editedData.phone) {
