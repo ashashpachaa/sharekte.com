@@ -1437,8 +1437,34 @@ Generated on: ${new Date().toLocaleDateString()}
 
                               {/* Company Details */}
                               <div className="p-4 space-y-4 flex-1">
-                                {/* Purchase & Renewal Info */}
+                                {/* Incorporation & Renewal Info */}
                                 <div className="space-y-3 border-b border-border/40 pb-3">
+                                  <div className="grid grid-cols-2 gap-2">
+                                    <div>
+                                      <p className="text-xs text-muted-foreground mb-1">
+                                        Incorporated
+                                      </p>
+                                      <p className="font-semibold text-foreground text-sm">
+                                        {company.incorporationDate}
+                                      </p>
+                                    </div>
+                                    <div>
+                                      <p className="text-xs text-muted-foreground mb-1">
+                                        Year
+                                      </p>
+                                      <p className="font-semibold text-foreground text-sm">
+                                        {company.incorporationYear}
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <p className="text-xs text-muted-foreground mb-1">
+                                      Country
+                                    </p>
+                                    <p className="font-semibold text-foreground text-sm">
+                                      {company.country}
+                                    </p>
+                                  </div>
                                   <div>
                                     <p className="text-xs text-muted-foreground mb-1">
                                       Purchased
@@ -2270,7 +2296,7 @@ Generated on: ${new Date().toLocaleDateString()}
                       <div className="flex items-center gap-3 mb-2">
                         <CreditCard className="w-5 h-5 text-primary" />
                         <p className="font-semibold text-foreground">
-                          {method.brand} ��••• {method.lastDigits}
+                          {method.brand} •••• {method.lastDigits}
                         </p>
                         {method.isDefault && (
                           <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full">
