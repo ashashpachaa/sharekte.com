@@ -61,7 +61,77 @@ export default function Checkout() {
 
     setLoading(true);
     try {
-      // Update status for each company to "Sold"
+      // Determine user email and data
+      const userEmail = authMode === "signin" ? email : signupEmail;
+      const userFullName = authMode === "signin" ? email.split("@")[0] : fullName;
+      const userCompany = authMode === "signup" ? company : "Not specified";
+
+      // Store user info in localStorage (simple auth)
+      const userData = {
+        fullName: userFullName,
+        email: userEmail,
+        company: userCompany,
+        accountCreated: new Date().toISOString(),
+        authenticated: true,
+      };
+      localStorage.setItem("user", JSON.stringify(userData));
+
+      // Create purchased company records and invoices for each item
+      const today = new Date().toISOString().split("T")[0];
+      const oneYearLater = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
+        .toISOString()
+        .split("T")[0];
+
+      items.forEach((item, index) => {
+        // Create purchased company record
+        const purchasedCompany: PurchasedCompanyData = {
+          id: item.id,
+          name: item.name,
+          number: item.companyNumber,
+          price: item.price,
+          incorporationDate: today,
+          incorporationYear: new Date().getFullYear().toString(),
+          renewalDate: oneYearLater,
+          renewalFees: 299,
+          status: "pending-form",
+          statusLabel: "Pending Transfer Form",
+          documents: [],
+          transferFormFilled: false,
+          purchasedDate: today,
+        };
+
+        savePurchasedCompany(purchasedCompany);
+
+        // Create invoice record
+        const invoice: InvoiceData = {
+          id: `inv-${Date.now()}-${index}`,
+          invoiceNumber: `INV-${new Date().getFullYear()}-${String(Date.now()).slice(-5)}`,
+          date: today,
+          dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+            .toISOString()
+            .split("T")[0],
+          companyName: item.name,
+          companyNumber: item.companyNumber,
+          clientName: userData.fullName,
+          clientEmail: userEmail,
+          amount: item.price,
+          description: `Company Purchase - ${item.name}`,
+          status: "paid",
+          items: [
+            {
+              description: `${item.name} - Company Purchase`,
+              quantity: 1,
+              unitPrice: item.price,
+              total: item.price,
+            },
+          ],
+          orderId: `order-${Date.now()}`,
+        };
+
+        addInvoice(invoice);
+      });
+
+      // Update status for each company to "Sold" in Airtable
       const updatePromises = items.map((item) =>
         fetch(`/api/companies/${item.id}/status`, {
           method: "PATCH",
@@ -74,26 +144,11 @@ export default function Checkout() {
         })
       );
 
-      // Wait for all updates to complete
-      const results = await Promise.all(updatePromises);
-      const allSuccess = results.every((res) => res.ok);
-
-      if (!allSuccess) {
-        throw new Error("Failed to update some companies");
-      }
-
-      // Store user info in localStorage (simple auth)
-      if (authMode === "signin") {
-        localStorage.setItem("user", JSON.stringify({ email, authenticated: true }));
-      } else if (authMode === "signup") {
-        const userData = {
-          fullName,
-          email: signupEmail,
-          company,
-          accountCreated: new Date().toISOString(),
-          authenticated: true,
-        };
-        localStorage.setItem("user", JSON.stringify(userData));
+      // Wait for all updates to complete (non-blocking, so don't throw if fails)
+      try {
+        await Promise.all(updatePromises);
+      } catch (error) {
+        console.warn("Warning: Failed to update some companies in marketplace:", error);
       }
 
       toast.success("Order completed successfully! 🎉");
