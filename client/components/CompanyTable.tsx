@@ -209,8 +209,16 @@ export function CompanyTable() {
                 <tbody>
                   {companies.map((company) => {
                     const isSelected = selectedCompanies.has(company.id);
-                    const companyName = company.fields["Company name"] || company.fields["Company Name"] || "N/A";
-                    const optionInclude = company.fields["option include"] || company.fields["Option Include"] || "—";
+                    const companyName = company.fields["Company name"] || "N/A";
+
+                    // Handle option include which is an array
+                    const optionIncludeRaw = company.fields["option include"];
+                    const optionInclude = Array.isArray(optionIncludeRaw)
+                      ? optionIncludeRaw.join(", ")
+                      : (optionIncludeRaw || "—");
+
+                    // Handle Country field which has a trailing space
+                    const country = company.fields["Country "] || "N/A";
 
                     return (
                       <tr
@@ -233,38 +241,26 @@ export function CompanyTable() {
                         </td>
                         <td className="px-6 py-4">
                           <p className="text-foreground">
-                            {company.fields["Company number"] || company.fields["Company Number"] || "N/A"}
+                            {company.fields["Company number"] || "N/A"}
                           </p>
                         </td>
                         <td className="px-6 py-4">
                           <p className="text-foreground">
-                            {company.fields["Incorporate date"] || company.fields["Incorporate Date"] || "N/A"}
+                            {company.fields["Incorporate date"] || "N/A"}
                           </p>
                         </td>
                         <td className="px-6 py-4">
                           <p className="text-foreground">
-                            {company.fields["Incorporate Year"] || company.fields["Incorporate year"] || "N/A"}
+                            {company.fields["Incorporate Year"] || "N/A"}
                           </p>
                         </td>
                         <td className="px-6 py-4">
                           <p className="text-foreground">
-                            {(() => {
-                              const allFieldNames = Object.keys(company.fields);
-                              const allFieldsStr = JSON.stringify(company.fields);
-
-                              if (allFieldNames.includes("Country")) {
-                                console.log("✅ Found 'Country' field:", company.fields["Country"]);
-                              } else {
-                                console.log("❌ 'Country' not found. Available fields:", allFieldNames, "Full data:", allFieldsStr);
-                              }
-
-                              const country = company.fields["Country"] || company.fields["country"];
-                              return country || "N/A";
-                            })()}
+                            {country}
                           </p>
                         </td>
                         <td className="px-6 py-4 text-center">
-                          <p className="text-foreground font-medium">
+                          <p className="text-foreground font-medium text-sm">
                             {optionInclude}
                           </p>
                         </td>
