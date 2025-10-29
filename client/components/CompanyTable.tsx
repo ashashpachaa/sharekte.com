@@ -99,12 +99,16 @@ export function CompanyTable() {
       const companyName = company.fields["Company name"] || "Unknown";
       const companyNumber = company.fields["Company number"] || "N/A";
       const price = (company.fields["Price"] as number) || 0;
+
+      // Debug: log all field names to check exact names
+      console.log("All available fields:", Object.keys(company.fields));
+      console.log("Full company object:", company);
+
       const country = (company.fields["Country"] as string) || "";
       const incorporationDate = company.fields["Incorporate Date"] || "";
       const incorporationYear = company.fields["Incorporate Year"] || "";
 
-      console.log("Company fields:", company.fields);
-      console.log("Extracted country:", country);
+      console.log("Extracted - Name:", companyName, "Country:", country, "Date:", incorporationDate, "Year:", incorporationYear);
 
       addItem({
         id: company.id,
