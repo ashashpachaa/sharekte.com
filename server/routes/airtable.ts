@@ -133,8 +133,7 @@ export const getCountries: RequestHandler = async (req, res) => {
     const countries = new Set<string>();
 
     data.records.forEach((record) => {
-      // Handle both "Country" and "Country " (with trailing space)
-      const country = record.fields["Country "] || record.fields.Country;
+      const country = record.fields.Country;
       if (country) {
         countries.add(String(country));
       }
