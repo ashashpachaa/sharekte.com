@@ -3,6 +3,9 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { Input } from "@/components/ui/input";
+import { Search, X } from "lucide-react";
+import { useSearch } from "@/hooks/use-search";
 import {
   BarChart3,
   Plus,
