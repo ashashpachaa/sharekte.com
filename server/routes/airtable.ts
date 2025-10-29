@@ -15,11 +15,11 @@ if (!AIRTABLE_API_TOKEN) {
 export interface Company {
   id: string;
   fields: {
-    "Company Name"?: string;
-    "Company Number"?: string;
-    "Incorporate Date"?: string;
+    "Company name"?: string;
+    "Company number"?: string;
+    "Incorporate date"?: string;
     "Incorporate Year"?: number;
-    Country?: string;
+    country?: string;
     Revenue?: string;
     Industry?: string;
     [key: string]: unknown;
@@ -43,14 +43,14 @@ export const getCompanies: RequestHandler = async (req, res) => {
     const params = new URLSearchParams();
 
     if (country) {
-      params.append("filterByFormula", `{Country} = "${country}"`);
+      params.append("filterByFormula", `{country} = "${country}"`);
     }
 
     if (year) {
       if (country) {
         params.append(
           "filterByFormula",
-          `AND({Country} = "${country}", {Incorporate Year} = ${year})`
+          `AND({country} = "${country}", {Incorporate Year} = ${year})`
         );
       } else {
         params.append("filterByFormula", `{Incorporate Year} = ${year}`);
@@ -133,7 +133,7 @@ export const getCountries: RequestHandler = async (req, res) => {
     const countries = new Set<string>();
 
     data.records.forEach((record) => {
-      const country = record.fields.Country;
+      const country = record.fields.country;
       if (country) {
         countries.add(String(country));
       }

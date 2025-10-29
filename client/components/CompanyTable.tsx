@@ -99,8 +99,8 @@ export function CompanyTable() {
       const companyName = company.fields["Company name"] || "Unknown";
       const companyNumber = company.fields["Company number"] || "N/A";
       const price = (company.fields["Price"] as number) || 0;
-      const country = (company.fields["Country"] as string) || "";
-      const incorporationDate = company.fields["Incorporate Date"] || "";
+      const country = (company.fields["country"] as string) || "";
+      const incorporationDate = company.fields["Incorporate date"] || "";
       const incorporationYear = company.fields["Incorporate Year"] || "";
 
       addItem({
@@ -297,7 +297,7 @@ export function CompanyTable() {
                       : (optionIncludeRaw || "—");
 
                     // Handle Country field from Airtable
-                    const country = company.fields["Country"] || "N/A";
+                    const country = company.fields["country"] || "N/A";
 
                     return (
                       <tr
@@ -320,12 +320,12 @@ export function CompanyTable() {
                         </td>
                         <td className="px-6 py-4">
                           <p className="text-foreground">
-                            {company.fields["Company Number"] || "N/A"}
+                            {company.fields["Company number"] || "N/A"}
                           </p>
                         </td>
                         <td className="px-6 py-4">
                           <p className="text-foreground">
-                            {company.fields["Incorporate Date"] || "N/A"}
+                            {company.fields["Incorporate date"] || "N/A"}
                           </p>
                         </td>
                         <td className="px-6 py-4">
