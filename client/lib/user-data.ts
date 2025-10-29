@@ -23,6 +23,7 @@ export interface PurchasedCompanyData {
   renewalFees: number;
   status: "pending-form" | "under-review" | "amend-required" | "pending-transfer" | "completed";
   statusLabel: string;
+  renewalStatus: "active" | "expired" | "cancelled";
   documents: Array<{
     id: string;
     name: string;
