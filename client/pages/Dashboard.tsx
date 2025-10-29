@@ -942,7 +942,7 @@ Generated on: ${new Date().toLocaleDateString()}
       label: "Total Invoices",
       value: totalInvoices.toString(),
       icon: DollarSign,
-      change: `£${invoices.reduce((sum, inv) => sum + inv.amount, 0).toLocaleString()}`,
+      change: formatPrice(invoices.reduce((sum, inv) => sum + inv.amount, 0)),
     },
   ];
 
