@@ -745,6 +745,17 @@ Generated on: ${new Date().toLocaleDateString()}
               My Companies
             </button>
             <button
+              onClick={() => setActiveTab("invoices")}
+              className={`py-4 px-1 font-semibold transition-colors whitespace-nowrap ${
+                activeTab === "invoices"
+                  ? "text-primary border-b-2 border-primary"
+                  : "text-muted-foreground hover:text-foreground border-b-2 border-transparent"
+              }`}
+            >
+              <FileText className="w-4 h-4 inline mr-2" />
+              Invoices
+            </button>
+            <button
               onClick={() => setActiveTab("account")}
               className={`py-4 px-1 font-semibold transition-colors whitespace-nowrap ${
                 activeTab === "account"
