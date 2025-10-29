@@ -143,23 +143,27 @@ export const getCountries: RequestHandler = async (req, res) => {
 
 export const getYears: RequestHandler = async (req, res) => {
   if (!AIRTABLE_API_TOKEN) {
-    console.error("Airtable API token not configured");
+    console.error("❌ Airtable API token not configured");
     return res.status(500).json({ error: "Airtable API token not configured" });
   }
 
   try {
     const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_ID}`;
+    console.log("📅 Fetching years from Airtable...");
 
     const response = await fetch(url, {
       headers: {
         Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
+        "Content-Type": "application/json",
       },
     });
+
+    console.log("📊 Airtable response status:", response.status);
 
     if (!response.ok) {
       const errorText = await response.text();
       console.error(
-        `Airtable API error [${response.status}]:`,
+        `❌ Airtable API error [${response.status}]:`,
         errorText
       );
       return res.status(response.status).json({
@@ -178,9 +182,11 @@ export const getYears: RequestHandler = async (req, res) => {
       }
     });
 
-    res.json(Array.from(years).sort((a, b) => b - a));
+    const result = Array.from(years).sort((a, b) => b - a);
+    console.log("✅ Fetched", result.length, "years");
+    res.json(result);
   } catch (error) {
-    console.error("Failed to fetch years:", error);
+    console.error("❌ Failed to fetch years:", error);
     res.status(500).json({ error: "Failed to fetch years" });
   }
 };
