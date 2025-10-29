@@ -4,6 +4,7 @@ import cors from "cors";
 import { handleDemo } from "./routes/demo";
 import { getCompanies, getCountries, getYears } from "./routes/airtable";
 import { updateCompanyStatus } from "./routes/update-company";
+import { handleSupportSubmit } from "./routes/support";
 
 export function createServer() {
   const app = express();
@@ -26,6 +27,9 @@ export function createServer() {
   app.get("/api/countries", getCountries);
   app.get("/api/years", getYears);
   app.patch("/api/companies/:recordId/status", updateCompanyStatus);
+
+  // Support routes
+  app.post("/api/support/submit", handleSupportSubmit);
 
   return app;
 }
