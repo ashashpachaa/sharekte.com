@@ -1,11 +1,11 @@
 export interface Company {
   id: string;
   fields: {
-    "Company Name"?: string;
-    "Company Number"?: string;
-    "Incorporate Date"?: string;
+    "Company name"?: string;
+    "Company number"?: string;
+    "Incorporate date"?: string;
     "Incorporate Year"?: number;
-    Country?: string;
+    country?: string;
     Revenue?: string;
     Industry?: string;
     [key: string]: unknown;
