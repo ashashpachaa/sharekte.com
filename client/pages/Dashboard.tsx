@@ -1396,7 +1396,24 @@ Generated on: ${new Date().toLocaleDateString()}
                 </div>
               ) : (
                 <div className="space-y-6">
-                  {purchasedCompanies.map((company) => {
+                  {(() => {
+                    const filtered = purchasedCompanies.filter((company) => {
+                      const query = companiesSearch.toLowerCase();
+                      return (
+                        company.name.toLowerCase().includes(query) ||
+                        company.number.toLowerCase().includes(query)
+                      );
+                    });
+
+                    if (filtered.length === 0 && companiesSearch) {
+                      return (
+                        <div className="bg-card border border-border/40 rounded-lg p-8 text-center text-muted-foreground">
+                          No companies match your search
+                        </div>
+                      );
+                    }
+
+                    return filtered.map((company) => {
                     const statusConfig = getStatusConfig(company.status);
                     const StatusIcon = statusConfig.icon;
 
@@ -1692,7 +1709,9 @@ Generated on: ${new Date().toLocaleDateString()}
                         </div>
                       </div>
                     );
-                  })}
+                  });
+                  })()
+                }
                 </div>
               )}
             </div>
