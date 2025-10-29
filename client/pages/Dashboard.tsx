@@ -1547,45 +1547,50 @@ Generated on: ${new Date().toLocaleDateString()}
                             <h4 className="font-semibold text-foreground mb-4">
                               Documents
                             </h4>
-                            <div className="space-y-3">
-                              {company.documents.map((doc) => (
-                                <div
-                                  key={doc.id}
-                                  className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border border-border/40"
-                                >
-                                  <div className="flex items-center gap-3">
-                                    <FileText className="w-5 h-5 text-primary" />
-                                    <div>
-                                      <p className="font-semibold text-foreground">
-                                        {doc.name}
-                                      </p>
-                                      <p className="text-sm text-muted-foreground">
-                                        Uploaded {doc.uploadedDate}
-                                      </p>
-                                    </div>
-                                  </div>
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="gap-2"
+                            {company.documents.length > 0 ? (
+                              <div className="space-y-3">
+                                {company.documents.map((doc) => (
+                                  <div
+                                    key={doc.id}
+                                    className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border border-border/40"
                                   >
-                                    <Download className="w-4 h-4" />
-                                    Download
-                                  </Button>
-                                </div>
-                              ))}
-                            </div>
-
-                            {/* Upload Documents */}
-                            <div className="mt-4 p-4 border-2 border-dashed border-border/40 rounded-lg text-center">
-                              <Upload className="w-8 h-8 text-muted-foreground/50 mx-auto mb-2" />
-                              <p className="text-sm text-muted-foreground">
-                                Drag and drop documents or{" "}
-                                <button className="text-primary hover:underline">
-                                  click to upload
-                                </button>
-                              </p>
-                            </div>
+                                    <div className="flex items-center gap-3">
+                                      <FileText className="w-5 h-5 text-primary" />
+                                      <div>
+                                        <p className="font-semibold text-foreground">
+                                          {doc.name}
+                                        </p>
+                                        <p className="text-sm text-muted-foreground">
+                                          Uploaded {doc.uploadedDate}
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      className="gap-2"
+                                      onClick={() => {
+                                        if (doc.url) {
+                                          const a = document.createElement("a");
+                                          a.href = doc.url;
+                                          a.download = doc.name;
+                                          a.click();
+                                        }
+                                      }}
+                                    >
+                                      <Download className="w-4 h-4" />
+                                      Download
+                                    </Button>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <div className="p-4 bg-muted/30 rounded-lg border border-border/40 text-center">
+                                <p className="text-sm text-muted-foreground">
+                                  No documents uploaded yet. Admin will upload your company documents here.
+                                </p>
+                              </div>
+                            )}
                           </div>
 
                           {/* Transfer Form */}
