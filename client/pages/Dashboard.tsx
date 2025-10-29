@@ -772,49 +772,43 @@ Generated on: ${new Date().toLocaleDateString()}
     }
   };
 
-  const ownedCompanies = [
-    {
-      id: 1,
-      name: "TechFlow Solutions",
-      revenue: "$2.5M",
-      monthlyRevenue: "$210K",
-      growth: "+12%",
-      employees: 12,
-      status: "Active",
-    },
-    {
-      id: 2,
-      name: "GreenLeaf Organic",
-      revenue: "$1.8M",
-      monthlyRevenue: "$150K",
-      growth: "+8%",
-      employees: 18,
-      status: "Active",
-    },
-  ];
+  // Portfolio data from actual purchased companies
+  const ownedCompanies = purchasedCompanies.map((company) => ({
+    id: company.id,
+    name: company.name,
+    revenue: "$0", // Calculate or fetch from company data if available
+    monthlyRevenue: "$0",
+    growth: "+0%",
+    employees: 0,
+    status: company.status === "completed" ? "Active" : "Pending",
+  }));
+
+  // Calculate portfolio statistics from actual purchased companies
+  const totalPortfolioValue = purchasedCompanies.reduce((sum) => sum + 2000, 0); // Base value per company
+  const totalCompanies = purchasedCompanies.length;
 
   const stats = [
     {
       label: "Total Portfolio Value",
-      value: "$4.3M",
+      value: `£${totalPortfolioValue.toLocaleString()}`,
       icon: DollarSign,
-      change: "+18%",
+      change: `${totalCompanies} companies`,
     },
     {
       label: "Monthly Revenue",
-      value: "$360K",
+      value: "$0",
       icon: TrendingUp,
-      change: "+12%",
+      change: "Pending setup",
     },
     {
       label: "Total Employees",
-      value: "30",
+      value: "0",
       icon: Users,
-      change: "+5",
+      change: "Under setup",
     },
     {
       label: "Companies Owned",
-      value: "2",
+      value: totalCompanies.toString(),
       icon: BarChart3,
       change: "In Portfolio",
     },
