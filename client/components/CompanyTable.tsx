@@ -230,7 +230,7 @@ export function CompanyTable() {
                   </tr>
                 </thead>
                 <tbody>
-                  {companies.map((company) => {
+                  {companies.slice(0, displayCount).map((company) => {
                     const isSelected = selectedCompanies.has(company.id);
                     const companyName = company.fields["Company name"] || "N/A";
 
