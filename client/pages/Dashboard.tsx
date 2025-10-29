@@ -438,6 +438,180 @@ export default function Dashboard() {
     toast.success("Transfer form submitted for review!");
   };
 
+  // Generate PDF invoice (simplified)
+  const handleDownloadInvoice = (invoice: Invoice) => {
+    const invoiceContent = `
+INVOICE
+
+Invoice Number: ${invoice.invoiceNumber}
+Date: ${invoice.date}
+Due Date: ${invoice.dueDate}
+
+=== COMPANY INFORMATION ===
+Company Name: ${invoice.companyName}
+Company Number: ${invoice.companyNumber}
+
+=== CLIENT INFORMATION ===
+Name: ${invoice.clientName}
+Email: ${invoice.clientEmail}
+
+=== INVOICE DETAILS ===
+Description: ${invoice.description}
+Status: ${invoice.status.toUpperCase()}
+
+=== ITEMS ===
+${invoice.items
+  .map(
+    (item) =>
+      `${item.description}
+Quantity: ${item.quantity}
+Unit Price: £${item.unitPrice.toLocaleString()}
+Total: £${item.total.toLocaleString()}`
+  )
+  .join("\n\n")}
+
+=== TOTAL ===
+Amount: £${invoice.amount.toLocaleString()}
+
+---
+Generated on: ${new Date().toLocaleDateString()}
+    `;
+
+    // Create blob and download
+    const blob = new Blob([invoiceContent], { type: "text/plain" });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${invoice.invoiceNumber}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+
+    toast.success("Invoice downloaded successfully!");
+  };
+
+  // Print invoice
+  const handlePrintInvoice = (invoice: Invoice) => {
+    const printContent = `
+      <html>
+        <head>
+          <title>${invoice.invoiceNumber}</title>
+          <style>
+            body { font-family: Arial, sans-serif; padding: 20px; }
+            .invoice-header { text-align: center; margin-bottom: 20px; }
+            .invoice-header h1 { margin: 0; }
+            .invoice-details { margin: 20px 0; }
+            .section-title { font-weight: bold; font-size: 16px; margin-top: 20px; margin-bottom: 10px; border-bottom: 1px solid #ccc; }
+            .detail-row { display: flex; justify-content: space-between; margin: 5px 0; }
+            .items-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+            .items-table th, .items-table td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+            .items-table th { background-color: #f5f5f5; }
+            .total-section { text-align: right; margin-top: 20px; }
+            .total-amount { font-size: 18px; font-weight: bold; margin-top: 10px; }
+            .status-badge { display: inline-block; padding: 5px 15px; border-radius: 20px; margin-top: 10px; }
+            .status-paid { background-color: #d4edda; color: #155724; }
+            .status-unpaid { background-color: #fff3cd; color: #856404; }
+            .status-canceled { background-color: #f8d7da; color: #721c24; }
+          </style>
+        </head>
+        <body>
+          <div class="invoice-header">
+            <h1>INVOICE</h1>
+            <p>Invoice Number: ${invoice.invoiceNumber}</p>
+          </div>
+
+          <div class="invoice-details">
+            <div class="detail-row">
+              <span>Invoice Date:</span>
+              <span>${invoice.date}</span>
+            </div>
+            <div class="detail-row">
+              <span>Due Date:</span>
+              <span>${invoice.dueDate}</span>
+            </div>
+          </div>
+
+          <div class="section-title">COMPANY INFORMATION</div>
+          <div class="invoice-details">
+            <div class="detail-row">
+              <span>Company Name:</span>
+              <span>${invoice.companyName}</span>
+            </div>
+            <div class="detail-row">
+              <span>Company Number:</span>
+              <span>${invoice.companyNumber}</span>
+            </div>
+          </div>
+
+          <div class="section-title">CLIENT INFORMATION</div>
+          <div class="invoice-details">
+            <div class="detail-row">
+              <span>Name:</span>
+              <span>${invoice.clientName}</span>
+            </div>
+            <div class="detail-row">
+              <span>Email:</span>
+              <span>${invoice.clientEmail}</span>
+            </div>
+          </div>
+
+          <div class="section-title">INVOICE ITEMS</div>
+          <table class="items-table">
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${invoice.items
+                .map(
+                  (item) => `
+                <tr>
+                  <td>${item.description}</td>
+                  <td>${item.quantity}</td>
+                  <td>£${item.unitPrice.toLocaleString()}</td>
+                  <td>£${item.total.toLocaleString()}</td>
+                </tr>
+              `
+                )
+                .join("")}
+            </tbody>
+          </table>
+
+          <div class="total-section">
+            <div class="detail-row">
+              <span>Subtotal:</span>
+              <span>£${invoice.amount.toLocaleString()}</span>
+            </div>
+            <div class="detail-row">
+              <span>Tax:</span>
+              <span>£0.00</span>
+            </div>
+            <div class="total-amount">
+              Total: £${invoice.amount.toLocaleString()}
+            </div>
+            <div class="status-badge status-${invoice.status}">
+              ${invoice.status.toUpperCase()}
+            </div>
+          </div>
+        </body>
+      </html>
+    `;
+
+    const printWindow = window.open("", "", "height=600,width=800");
+    if (printWindow) {
+      printWindow.document.write(printContent);
+      printWindow.document.close();
+      printWindow.print();
+    }
+
+    toast.success("Invoice sent to printer!");
+  };
+
   // Get status color and icon
   const getStatusConfig = (status: string) => {
     switch (status) {
