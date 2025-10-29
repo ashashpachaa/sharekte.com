@@ -42,6 +42,8 @@ export default function Support() {
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [categorySearch, setCategorySearch] = useState("");
+  const [resourceSearch, setResourceSearch] = useState("");
 
   const categories: SupportCategory[] = [
     {
