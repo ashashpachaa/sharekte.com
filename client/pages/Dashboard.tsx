@@ -904,30 +904,42 @@ Generated on: ${new Date().toLocaleDateString()}
   const totalPortfolioValue = purchasedCompanies.reduce((sum) => sum + 2000, 0); // Base value per company
   const totalCompanies = purchasedCompanies.length;
 
+  // Calculate portfolio metrics
+  const pendingTransferCount = purchasedCompanies.filter(
+    (c) => c.status === "pending-form" || c.status === "under-review"
+  ).length;
+
+  const expireSoonCount = purchasedCompanies.filter((c) => {
+    const daysRemaining = calculateDaysRemaining(c.renewalDate);
+    return daysRemaining <= 15 && daysRemaining > -15;
+  }).length;
+
+  const totalInvoices = invoices.length;
+
   const stats = [
-    {
-      label: "Total Portfolio Value",
-      value: `£${totalPortfolioValue.toLocaleString()}`,
-      icon: DollarSign,
-      change: `${totalCompanies} companies`,
-    },
-    {
-      label: "Monthly Revenue",
-      value: "$0",
-      icon: TrendingUp,
-      change: "Pending setup",
-    },
-    {
-      label: "Total Employees",
-      value: "0",
-      icon: Users,
-      change: "Under setup",
-    },
     {
       label: "Companies Owned",
       value: totalCompanies.toString(),
       icon: BarChart3,
-      change: "In Portfolio",
+      change: `${totalCompanies} active`,
+    },
+    {
+      label: "Pending Transfer Form",
+      value: pendingTransferCount.toString(),
+      icon: FileText,
+      change: pendingTransferCount > 0 ? "Awaiting review" : "All completed",
+    },
+    {
+      label: "Expire Soon",
+      value: expireSoonCount.toString(),
+      icon: AlertCircle,
+      change: expireSoonCount > 0 ? "Action needed" : "All good",
+    },
+    {
+      label: "Total Invoices",
+      value: totalInvoices.toString(),
+      icon: DollarSign,
+      change: `£${invoices.reduce((sum, inv) => sum + inv.amount, 0).toLocaleString()}`,
     },
   ];
 
