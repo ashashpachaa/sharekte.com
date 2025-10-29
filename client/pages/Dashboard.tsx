@@ -367,76 +367,23 @@ export default function Dashboard() {
     return saved ? JSON.parse(saved) : [];
   });
 
-  // Invoices state
+  // Invoices state - fetch user-specific data
   const [invoices, setInvoices] = useState<Invoice[]>(() => {
-    const saved = localStorage.getItem("invoices");
-    return saved
-      ? JSON.parse(saved)
-      : [
-          {
-            id: "inv1",
-            invoiceNumber: "INV-2024-001",
-            date: "2024-12-10",
-            dueDate: "2025-01-10",
-            companyName: "TechFlow Solutions",
-            companyNumber: "16662272",
-            clientName: "John Doe",
-            clientEmail: "john@example.com",
-            amount: 2500,
-            description: "Company Purchase - TechFlow Solutions",
-            status: "paid",
-            items: [
-              {
-                description: "TechFlow Solutions - Company Purchase",
-                quantity: 1,
-                unitPrice: 2500,
-                total: 2500,
-              },
-            ],
-          },
-          {
-            id: "inv2",
-            invoiceNumber: "INV-2024-002",
-            date: "2024-12-12",
-            dueDate: "2025-01-12",
-            companyName: "GreenLeaf Organic",
-            companyNumber: "16656680",
-            clientName: "John Doe",
-            clientEmail: "john@example.com",
-            amount: 1800,
-            description: "Company Purchase - GreenLeaf Organic",
-            status: "unpaid",
-            items: [
-              {
-                description: "GreenLeaf Organic - Company Purchase",
-                quantity: 1,
-                unitPrice: 1800,
-                total: 1800,
-              },
-            ],
-          },
-          {
-            id: "inv3",
-            invoiceNumber: "INV-2024-003",
-            date: "2024-11-15",
-            dueDate: "2024-12-15",
-            companyName: "TechFlow Solutions",
-            companyNumber: "16662272",
-            clientName: "John Doe",
-            clientEmail: "john@example.com",
-            amount: 299,
-            description: "Annual Renewal Fee - TechFlow Solutions",
-            status: "paid",
-            items: [
-              {
-                description: "Annual Renewal Fee",
-                quantity: 1,
-                unitPrice: 299,
-                total: 299,
-              },
-            ],
-          },
-        ];
+    const userInvoices = getInvoices();
+    return userInvoices.map(ui => ({
+      id: ui.id,
+      invoiceNumber: ui.invoiceNumber,
+      date: ui.date,
+      dueDate: ui.dueDate,
+      companyName: ui.companyName,
+      companyNumber: ui.companyNumber,
+      clientName: ui.clientName,
+      clientEmail: ui.clientEmail,
+      amount: ui.amount,
+      description: ui.description,
+      status: ui.status,
+      items: ui.items,
+    }));
   });
 
   // Save edited user data
