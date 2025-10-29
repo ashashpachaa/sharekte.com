@@ -119,7 +119,7 @@ export default function CartPage() {
                       Company Number: {item.companyNumber}
                     </p>
                     <p className="text-lg font-semibold text-primary mt-2">
-                      £{item.price.toLocaleString()}
+                      {formatPrice(item.price)}
                     </p>
                   </div>
 
