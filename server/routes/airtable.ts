@@ -43,14 +43,14 @@ export const getCompanies: RequestHandler = async (req, res) => {
     const params = new URLSearchParams();
 
     if (country) {
-      params.append("filterByFormula", `{Country} = "${country}"`);
+      params.append("filterByFormula", `{Country } = "${country}"`);
     }
 
     if (year) {
       if (country) {
         params.append(
           "filterByFormula",
-          `AND({Country} = "${country}", {Incorporate Year} = ${year})`
+          `AND({Country } = "${country}", {Incorporate Year} = ${year})`
         );
       } else {
         params.append("filterByFormula", `{Incorporate Year} = ${year}`);
