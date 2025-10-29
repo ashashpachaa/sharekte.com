@@ -248,7 +248,11 @@ export function CompanyTable() {
                         </td>
                         <td className="px-6 py-4">
                           <p className="text-foreground">
-                            {company.fields["Country"] || "N/A"}
+                            {(() => {
+                              const country = company.fields["Country"] || company.fields["country"];
+                              console.log("Country debug:", { id: company.id, country, allFields: Object.keys(company.fields) });
+                              return country || "N/A";
+                            })()}
                           </p>
                         </td>
                         <td className="px-6 py-4 text-center">
