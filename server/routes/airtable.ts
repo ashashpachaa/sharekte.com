@@ -84,6 +84,13 @@ export const getCompanies: RequestHandler = async (req, res) => {
 
     const data: AirtableResponse = await response.json();
     console.log("✅ Fetched", data.records.length, "companies");
+
+    // Log first record fields for debugging
+    if (data.records.length > 0) {
+      console.log("📋 First record fields:", Object.keys(data.records[0].fields));
+      console.log("📋 First record data:", JSON.stringify(data.records[0].fields, null, 2));
+    }
+
     res.json(data.records);
   } catch (error) {
     console.error("❌ Failed to fetch companies from Airtable:", error);
