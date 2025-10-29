@@ -795,6 +795,214 @@ Generated on: ${new Date().toLocaleDateString()}
       {/* Content */}
       <section className="flex-1 py-12">
         <div className="container max-w-6xl mx-auto px-4">
+          {/* Invoices Tab */}
+          {activeTab === "invoices" && (
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold text-foreground">
+                Invoices
+              </h2>
+
+              {invoices.length === 0 ? (
+                <div className="bg-card border border-border/40 rounded-lg p-12 text-center space-y-4">
+                  <FileText className="w-12 h-12 text-muted-foreground/50 mx-auto" />
+                  <p className="text-muted-foreground">
+                    You don't have any invoices yet
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  {invoices.map((invoice) => (
+                    <div
+                      key={invoice.id}
+                      className="bg-card border border-border/40 rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+                    >
+                      {/* Invoice Header */}
+                      <div className="p-6 border-b border-border/40 bg-muted/30">
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <FileText className="w-5 h-5 text-primary" />
+                              <h3 className="text-lg font-bold text-foreground">
+                                {invoice.invoiceNumber}
+                              </h3>
+                            </div>
+                            <p className="text-muted-foreground">
+                              {invoice.description}
+                            </p>
+                          </div>
+
+                          <div className="flex items-center gap-3">
+                            <div
+                              className={`px-4 py-2 rounded-full font-semibold text-sm ${
+                                invoice.status === "paid"
+                                  ? "bg-green-100 text-green-800"
+                                  : invoice.status === "unpaid"
+                                    ? "bg-yellow-100 text-yellow-800"
+                                    : "bg-red-100 text-red-800"
+                              }`}
+                            >
+                              {invoice.status === "paid" && "✓ Paid"}
+                              {invoice.status === "unpaid" && "⏳ Unpaid"}
+                              {invoice.status === "canceled" && "✗ Canceled"}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Invoice Details */}
+                      <div className="p-6 space-y-6">
+                        {/* Info Grid */}
+                        <div className="grid md:grid-cols-2 gap-6">
+                          {/* Company Info */}
+                          <div>
+                            <h4 className="font-semibold text-foreground mb-3">
+                              Company Information
+                            </h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex justify-between">
+                                <span className="text-muted-foreground">
+                                  Company Name:
+                                </span>
+                                <span className="font-medium text-foreground">
+                                  {invoice.companyName}
+                                </span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-muted-foreground">
+                                  Company Number:
+                                </span>
+                                <span className="font-medium text-foreground">
+                                  {invoice.companyNumber}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Client Info */}
+                          <div>
+                            <h4 className="font-semibold text-foreground mb-3">
+                              Client Information
+                            </h4>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex justify-between">
+                                <span className="text-muted-foreground">
+                                  Name:
+                                </span>
+                                <span className="font-medium text-foreground">
+                                  {invoice.clientName}
+                                </span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-muted-foreground">
+                                  Email:
+                                </span>
+                                <span className="font-medium text-foreground">
+                                  {invoice.clientEmail}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Dates */}
+                        <div className="grid md:grid-cols-2 gap-6 pb-6 border-b border-border/40">
+                          <div>
+                            <p className="text-sm text-muted-foreground mb-1">
+                              Invoice Date
+                            </p>
+                            <p className="font-semibold text-foreground">
+                              {invoice.date}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-muted-foreground mb-1">
+                              Due Date
+                            </p>
+                            <p className="font-semibold text-foreground">
+                              {invoice.dueDate}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Items Table */}
+                        <div>
+                          <h4 className="font-semibold text-foreground mb-4">
+                            Invoice Items
+                          </h4>
+                          <table className="w-full text-sm">
+                            <thead>
+                              <tr className="border-b border-border/40">
+                                <th className="text-left py-2 text-muted-foreground">
+                                  Description
+                                </th>
+                                <th className="text-right py-2 text-muted-foreground">
+                                  Qty
+                                </th>
+                                <th className="text-right py-2 text-muted-foreground">
+                                  Unit Price
+                                </th>
+                                <th className="text-right py-2 text-muted-foreground">
+                                  Total
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {invoice.items.map((item, idx) => (
+                                <tr key={idx} className="border-b border-border/40">
+                                  <td className="py-3 text-foreground">
+                                    {item.description}
+                                  </td>
+                                  <td className="text-right py-3 text-foreground">
+                                    {item.quantity}
+                                  </td>
+                                  <td className="text-right py-3 text-foreground">
+                                    £{item.unitPrice.toLocaleString()}
+                                  </td>
+                                  <td className="text-right py-3 font-semibold text-foreground">
+                                    £{item.total.toLocaleString()}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+
+                        {/* Total */}
+                        <div className="flex justify-end">
+                          <div className="text-right">
+                            <p className="text-muted-foreground mb-1">Total Amount</p>
+                            <p className="text-3xl font-bold text-primary">
+                              £{invoice.amount.toLocaleString()}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="flex gap-3 pt-4 border-t border-border/40">
+                          <Button
+                            onClick={() => handleDownloadInvoice(invoice)}
+                            className="bg-primary hover:bg-primary-600 text-white gap-2 flex-1"
+                          >
+                            <Download className="w-4 h-4" />
+                            Download
+                          </Button>
+                          <Button
+                            onClick={() => handlePrintInvoice(invoice)}
+                            variant="outline"
+                            className="flex-1 gap-2"
+                          >
+                            <FileUp className="w-4 h-4" />
+                            Print
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* My Companies Tab */}
           {activeTab === "companies" && (
             <div className="space-y-6">
