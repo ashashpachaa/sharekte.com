@@ -209,6 +209,148 @@ export default function Checkout() {
                 </div>
               </div>
 
+              {/* Authentication Section */}
+              <div>
+                <h2 className="text-xl font-bold text-foreground mb-4">
+                  Account
+                </h2>
+                <div className="bg-card border border-border/40 rounded-lg p-6 space-y-4">
+                  {/* Tabs */}
+                  <div className="flex gap-4 mb-6">
+                    <button
+                      onClick={() => setAuthMode("signin")}
+                      className={`pb-2 px-1 font-semibold transition-colors ${
+                        authMode === "signin"
+                          ? "text-primary border-b-2 border-primary"
+                          : "text-muted-foreground hover:text-foreground border-b-2 border-transparent"
+                      }`}
+                    >
+                      <Mail className="w-4 h-4 inline mr-2" />
+                      Sign In
+                    </button>
+                    <button
+                      onClick={() => setAuthMode("signup")}
+                      className={`pb-2 px-1 font-semibold transition-colors ${
+                        authMode === "signup"
+                          ? "text-primary border-b-2 border-primary"
+                          : "text-muted-foreground hover:text-foreground border-b-2 border-transparent"
+                      }`}
+                    >
+                      <User className="w-4 h-4 inline mr-2" />
+                      Create Account
+                    </button>
+                  </div>
+
+                  {/* Sign In Form */}
+                  {authMode === "signin" && (
+                    <form onSubmit={handleSignIn} className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-foreground mb-2">
+                          Email
+                        </label>
+                        <input
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                          placeholder="john@example.com"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-foreground mb-2">
+                          Password
+                        </label>
+                        <input
+                          type="password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                          placeholder="••••••••"
+                        />
+                      </div>
+                      <Button
+                        type="submit"
+                        className="w-full bg-primary hover:bg-primary-600 text-white"
+                      >
+                        Sign In
+                      </Button>
+                    </form>
+                  )}
+
+                  {/* Sign Up Form */}
+                  {authMode === "signup" && (
+                    <form onSubmit={handleSignUp} className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-foreground mb-2">
+                          Full Name
+                        </label>
+                        <input
+                          type="text"
+                          value={fullName}
+                          onChange={(e) => setFullName(e.target.value)}
+                          className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                          placeholder="John Doe"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-foreground mb-2">
+                          Email
+                        </label>
+                        <input
+                          type="email"
+                          value={signupEmail}
+                          onChange={(e) => setSignupEmail(e.target.value)}
+                          className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                          placeholder="john@example.com"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-foreground mb-2">
+                          Company Name
+                        </label>
+                        <input
+                          type="text"
+                          value={company}
+                          onChange={(e) => setCompany(e.target.value)}
+                          className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                          placeholder="Your Company"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-foreground mb-2">
+                          Password
+                        </label>
+                        <input
+                          type="password"
+                          value={signupPassword}
+                          onChange={(e) => setSignupPassword(e.target.value)}
+                          className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                          placeholder="••••••••"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-foreground mb-2">
+                          Confirm Password
+                        </label>
+                        <input
+                          type="password"
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                          placeholder="••••••••"
+                        />
+                      </div>
+                      <Button
+                        type="submit"
+                        className="w-full bg-primary hover:bg-primary-600 text-white"
+                      >
+                        Create Account
+                      </Button>
+                    </form>
+                  )}
+                </div>
+              </div>
+
               {/* Billing Information */}
               <div>
                 <h2 className="text-xl font-bold text-foreground mb-4">
