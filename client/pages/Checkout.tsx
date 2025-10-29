@@ -47,6 +47,17 @@ export default function Checkout() {
   }
 
   const handleCompleteOrder = async () => {
+    // Validate authentication
+    if (authMode === "signin" && (!email || !password)) {
+      toast.error("Please sign in to complete your order");
+      return;
+    }
+
+    if (authMode === "signup" && (!fullName || !signupEmail || !signupPassword || !company)) {
+      toast.error("Please create an account to complete your order");
+      return;
+    }
+
     setLoading(true);
     try {
       // Update status for each company to "Sold"
@@ -70,20 +81,23 @@ export default function Checkout() {
         throw new Error("Failed to update some companies");
       }
 
-      toast.success("Order completed successfully! 🎉");
-      setOrderCompleted(true);
-      clearCart();
-
       // Store user info in localStorage (simple auth)
-      if (authMode === "signup") {
+      if (authMode === "signin") {
+        localStorage.setItem("user", JSON.stringify({ email, authenticated: true }));
+      } else if (authMode === "signup") {
         const userData = {
           fullName,
           email: signupEmail,
           company,
           accountCreated: new Date().toISOString(),
+          authenticated: true,
         };
         localStorage.setItem("user", JSON.stringify(userData));
       }
+
+      toast.success("Order completed successfully! 🎉");
+      setOrderCompleted(true);
+      clearCart();
 
       // Redirect to dashboard after 3 seconds
       setTimeout(() => {
