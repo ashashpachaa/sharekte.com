@@ -1211,38 +1211,35 @@ Generated on: ${new Date().toLocaleDateString()}
                             key={invoice.id}
                             className="bg-card border border-border/40 rounded-lg overflow-hidden hover:shadow-lg transition-shadow flex flex-col h-full"
                     >
-                      {/* Invoice Header */}
-                      <div className="p-6 border-b border-border/40 bg-muted/30">
-                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-2">
-                              <FileText className="w-5 h-5 text-primary" />
-                              <h3 className="text-lg font-bold text-foreground">
-                                {invoice.invoiceNumber}
-                              </h3>
+                            {/* Invoice Header */}
+                            <div className="p-4 border-b border-border/40 bg-muted/30">
+                              <div className="space-y-3">
+                                <div className="flex items-start justify-between gap-2">
+                                  <div className="flex items-start gap-2 flex-1 min-w-0">
+                                    <FileText className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                                    <h3 className="font-bold text-foreground text-sm truncate">
+                                      {invoice.invoiceNumber}
+                                    </h3>
+                                  </div>
+                                  <div
+                                    className={`px-2 py-1 rounded-full font-semibold text-xs whitespace-nowrap flex-shrink-0 ${
+                                      invoice.status === "paid"
+                                        ? "bg-green-100 text-green-800"
+                                        : invoice.status === "unpaid"
+                                          ? "bg-yellow-100 text-yellow-800"
+                                          : "bg-red-100 text-red-800"
+                                    }`}
+                                  >
+                                    {invoice.status === "paid" && "✓ Paid"}
+                                    {invoice.status === "unpaid" && "⏳ Unpaid"}
+                                    {invoice.status === "canceled" && "✗ Canceled"}
+                                  </div>
+                                </div>
+                                <p className="text-xs text-muted-foreground line-clamp-2">
+                                  {invoice.description}
+                                </p>
+                              </div>
                             </div>
-                            <p className="text-muted-foreground">
-                              {invoice.description}
-                            </p>
-                          </div>
-
-                          <div className="flex items-center gap-3">
-                            <div
-                              className={`px-4 py-2 rounded-full font-semibold text-sm ${
-                                invoice.status === "paid"
-                                  ? "bg-green-100 text-green-800"
-                                  : invoice.status === "unpaid"
-                                    ? "bg-yellow-100 text-yellow-800"
-                                    : "bg-red-100 text-red-800"
-                              }`}
-                            >
-                              {invoice.status === "paid" && "✓ Paid"}
-                              {invoice.status === "unpaid" && "⏳ Unpaid"}
-                              {invoice.status === "canceled" && "✗ Canceled"}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
 
                       {/* Invoice Details */}
                       <div className="p-6 space-y-6">
