@@ -296,8 +296,8 @@ export function CompanyTable() {
                       ? optionIncludeRaw.join(", ")
                       : (optionIncludeRaw || "—");
 
-                    // Handle Country field which has a trailing space
-                    const country = company.fields["Country "] || "N/A";
+                    // Handle Country field from Airtable
+                    const country = company.fields["Country"] || "N/A";
 
                     return (
                       <tr
