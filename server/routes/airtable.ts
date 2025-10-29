@@ -1,8 +1,16 @@
 import { RequestHandler } from "express";
 
-const AIRTABLE_API_TOKEN = process.env.VITE_AIRTABLE_API_TOKEN || process.env.AIRTABLE_API_TOKEN;
+const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
 const AIRTABLE_BASE_ID = "app0PK34gyJDizR3Q";
 const AIRTABLE_TABLE_ID = "tbljtdHPdHnTberDy";
+
+// Log token status on startup
+if (!AIRTABLE_API_TOKEN) {
+  console.error("⚠️ AIRTABLE_API_TOKEN is not configured!");
+  console.error("Available env vars:", Object.keys(process.env).filter(k => k.includes('AIRTABLE')));
+} else {
+  console.log("✅ AIRTABLE_API_TOKEN is configured (length:", AIRTABLE_API_TOKEN.length, ")");
+}
 
 export interface Company {
   id: string;
