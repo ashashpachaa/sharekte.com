@@ -133,14 +133,15 @@ export const getCountries: RequestHandler = async (req, res) => {
     const countries = new Set<string>();
 
     data.records.forEach((record) => {
-      const country = record.fields.Country;
+      // Handle both "Country" and "Country " (with trailing space)
+      const country = record.fields["Country "] || record.fields.Country;
       if (country) {
         countries.add(String(country));
       }
     });
 
     const result = Array.from(countries).sort();
-    console.log("✅ Fetched", result.length, "countries");
+    console.log("✅ Fetched", result.length, "countries:", result);
     res.json(result);
   } catch (error) {
     console.error("❌ Failed to fetch countries:", error);
