@@ -77,8 +77,34 @@ export default function CartPage() {
         <div className="container max-w-6xl mx-auto px-4">
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Items List */}
-            <div className="lg:col-span-2 space-y-4">
-              {items.map((item) => (
+            <div className="lg:col-span-2 space-y-6">
+              {/* Search */}
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search items..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 pr-8"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-muted rounded"
+                  >
+                    <X className="w-4 h-4 text-muted-foreground" />
+                  </button>
+                )}
+              </div>
+
+              {/* Items */}
+              <div className="space-y-4">
+                {filteredItems.length === 0 ? (
+                  <div className="bg-card border border-border/40 rounded-lg p-8 text-center text-muted-foreground">
+                    {searchQuery ? "No items match your search" : "Your cart is empty"}
+                  </div>
+                ) : (
+                  filteredItems.map((item) => (
                 <div
                   key={item.id}
                   className="bg-card border border-border/40 rounded-lg p-6 flex items-center justify-between hover:shadow-md transition-shadow"
@@ -104,7 +130,9 @@ export default function CartPage() {
                     <Trash2 className="w-4 h-4" />
                   </Button>
                 </div>
-              ))}
+              )))
+              }
+              </div>
             </div>
 
             {/* Order Summary */}
