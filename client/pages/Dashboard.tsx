@@ -86,6 +86,7 @@ interface PurchasedCompany {
   renewalFees: number;
   status: "pending-form" | "under-review" | "amend-required" | "pending-transfer" | "completed";
   statusLabel: string;
+  renewalStatus: "active" | "expired" | "cancelled";
   documents: Document[];
   transferFormFilled: boolean;
   adminComments?: string;
