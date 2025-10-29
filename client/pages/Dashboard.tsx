@@ -76,12 +76,22 @@ interface InvoiceItem {
   total: number;
 }
 
+interface RenewalHistoryEntry {
+  id: string;
+  renewalDate: string;
+  renewedDate: string;
+  isLate: boolean;
+  daysLate: number;
+  status: "on-time" | "late" | "pending";
+}
+
 interface PurchasedCompany {
   id: string;
   name: string;
   number: string;
   incorporationDate: string;
   incorporationYear: string;
+  purchasedDate: string;
   renewalDate: string;
   renewalFees: number;
   status: "pending-form" | "under-review" | "amend-required" | "pending-transfer" | "completed";
@@ -90,6 +100,7 @@ interface PurchasedCompany {
   documents: Document[];
   transferFormFilled: boolean;
   adminComments?: string;
+  renewalHistory: RenewalHistoryEntry[];
 }
 
 interface Document {
