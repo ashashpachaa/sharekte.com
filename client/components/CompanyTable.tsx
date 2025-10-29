@@ -195,6 +195,12 @@ export function CompanyTable() {
                     <th className="px-6 py-3 text-left text-sm font-semibold text-foreground">
                       Incorporate Year
                     </th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-foreground">
+                      Country
+                    </th>
+                    <th className="px-6 py-3 text-center text-sm font-semibold text-foreground">
+                      Option Include
+                    </th>
                     <th className="px-6 py-3 text-center text-sm font-semibold text-foreground">
                       Action
                     </th>
@@ -203,6 +209,9 @@ export function CompanyTable() {
                 <tbody>
                   {companies.map((company) => {
                     const isSelected = selectedCompanies.has(company.id);
+                    const companyName = company.fields["Company name"] || company.fields["Company Name"] || "N/A";
+                    const optionInclude = company.fields["option include"] || company.fields["Option Include"] || "—";
+
                     return (
                       <tr
                         key={company.id}
@@ -214,27 +223,37 @@ export function CompanyTable() {
                           <Checkbox
                             checked={isSelected}
                             onCheckedChange={() => handleSelectCompany(company.id)}
-                            aria-label={`Select ${company.fields["Company Name"]}`}
+                            aria-label={`Select ${companyName}`}
                           />
                         </td>
                         <td className="px-6 py-4">
                           <p className="font-semibold text-foreground">
-                            {company.fields["Company Name"] || "N/A"}
+                            {companyName}
                           </p>
                         </td>
                         <td className="px-6 py-4">
                           <p className="text-foreground">
-                            {company.fields["Company Number"] || "N/A"}
+                            {company.fields["Company number"] || company.fields["Company Number"] || "N/A"}
                           </p>
                         </td>
                         <td className="px-6 py-4">
                           <p className="text-foreground">
-                            {company.fields["Incorporate Date"] || "N/A"}
+                            {company.fields["Incorporate date"] || company.fields["Incorporate Date"] || "N/A"}
                           </p>
                         </td>
                         <td className="px-6 py-4">
                           <p className="text-foreground">
-                            {company.fields["Incorporate Year"] || "N/A"}
+                            {company.fields["Incorporate Year"] || company.fields["Incorporate year"] || "N/A"}
+                          </p>
+                        </td>
+                        <td className="px-6 py-4">
+                          <p className="text-foreground">
+                            {company.fields["Country"] || "N/A"}
+                          </p>
+                        </td>
+                        <td className="px-6 py-4 text-center">
+                          <p className="text-foreground font-medium">
+                            {optionInclude}
                           </p>
                         </td>
                         <td className="px-6 py-4 text-center">
@@ -243,7 +262,7 @@ export function CompanyTable() {
                             className="bg-primary hover:bg-primary-600 text-white gap-1"
                             onClick={() => {
                               alert(
-                                `Purchase initiated for ${company.fields["Company Name"]}\n\nThis will be connected to payment processing.`
+                                `Purchase initiated for ${companyName}\n\nThis will be connected to payment processing.`
                               );
                             }}
                           >
