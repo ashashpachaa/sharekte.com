@@ -91,6 +91,7 @@ export default function Checkout() {
           price: item.price,
           incorporationDate: today,
           incorporationYear: new Date().getFullYear().toString(),
+          purchasedDate: today,
           renewalDate: oneYearLater,
           renewalFees: 299,
           status: "pending-form",
@@ -99,7 +100,7 @@ export default function Checkout() {
           documents: [],
           transferFormAttachments: [],
           transferFormFilled: false,
-          purchasedDate: today,
+          renewalHistory: [],
         };
 
         savePurchasedCompany(purchasedCompany);
