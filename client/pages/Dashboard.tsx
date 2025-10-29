@@ -20,10 +20,41 @@ import {
   Trash2,
   Eye,
   EyeOff,
+  Building2,
+  Download,
+  FileText,
+  Upload,
+  Clock,
+  CheckCircle,
+  AlertCircle,
+  FileUp,
 } from "lucide-react";
 import { toast } from "sonner";
 
-type DashboardTab = "portfolio" | "account" | "payments" | "security";
+type DashboardTab = "portfolio" | "companies" | "account" | "payments" | "security";
+
+interface PurchasedCompany {
+  id: string;
+  name: string;
+  number: string;
+  incorporationDate: string;
+  incorporationYear: string;
+  renewalDate: string;
+  renewalFees: number;
+  status: "pending-form" | "under-review" | "amend-required" | "pending-transfer" | "completed";
+  statusLabel: string;
+  documents: Document[];
+  transferFormFilled: boolean;
+  adminComments?: string;
+}
+
+interface Document {
+  id: string;
+  name: string;
+  type: string;
+  uploadedDate: string;
+  url?: string;
+}
 
 interface UserData {
   fullName: string;
