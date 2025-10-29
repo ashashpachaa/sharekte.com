@@ -25,6 +25,9 @@ export function Header() {
           <a href="#features" className="text-foreground hover:text-primary transition-colors">
             Features
           </a>
+          <Link to="/support" className="text-foreground hover:text-primary transition-colors">
+            Support
+          </Link>
         </nav>
 
         {/* CTA Buttons */}
