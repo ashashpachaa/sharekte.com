@@ -329,7 +329,7 @@ export function CompanyTable() {
                   variant="outline"
                   className="px-8"
                 >
-                  Show More ({displayCount} of {companies.length})
+                  Show More
                 </Button>
               </div>
             )}
