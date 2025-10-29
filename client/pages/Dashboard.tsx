@@ -1423,8 +1423,16 @@ Generated on: ${new Date().toLocaleDateString()}
 
                               {/* Company Details */}
                               <div className="p-4 space-y-4 flex-1">
-                                {/* Renewal Info */}
-                                <div className="space-y-3">
+                                {/* Purchase & Renewal Info */}
+                                <div className="space-y-3 border-b border-border/40 pb-3">
+                                  <div>
+                                    <p className="text-xs text-muted-foreground mb-1">
+                                      Purchased
+                                    </p>
+                                    <p className="font-semibold text-foreground text-sm">
+                                      {company.purchasedDate}
+                                    </p>
+                                  </div>
                                   <div>
                                     <p className="text-xs text-muted-foreground mb-1">
                                       Renewal Date
@@ -1442,6 +1450,43 @@ Generated on: ${new Date().toLocaleDateString()}
                                     </p>
                                   </div>
                                 </div>
+
+                                {/* Renewal History */}
+                                {company.renewalHistory && company.renewalHistory.length > 0 && (
+                                  <div className="space-y-2">
+                                    <p className="text-xs font-semibold text-foreground">
+                                      Renewal History
+                                    </p>
+                                    <div className="space-y-1 max-h-32 overflow-y-auto">
+                                      {company.renewalHistory.map((renewal) => (
+                                        <div
+                                          key={renewal.id}
+                                          className="text-xs p-2 bg-muted/30 rounded border border-border/40"
+                                        >
+                                          <div className="flex justify-between mb-1">
+                                            <span className="text-muted-foreground">
+                                              {renewal.renewalDate}
+                                            </span>
+                                            <span
+                                              className={`font-semibold ${
+                                                renewal.status === "on-time"
+                                                  ? "text-green-600"
+                                                  : "text-amber-600"
+                                              }`}
+                                            >
+                                              {renewal.status === "on-time"
+                                                ? "✓ On Time"
+                                                : `⚠ ${renewal.daysLate}d Late`}
+                                            </span>
+                                          </div>
+                                          <p className="text-muted-foreground text-xs">
+                                            Renewed: {renewal.renewedDate}
+                                          </p>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
 
                                 {/* Renewal Countdown Section */}
                                 {(() => {
