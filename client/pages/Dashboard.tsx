@@ -31,7 +31,29 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-type DashboardTab = "portfolio" | "companies" | "account" | "payments" | "security";
+type DashboardTab = "portfolio" | "companies" | "invoices" | "account" | "payments" | "security";
+
+interface Invoice {
+  id: string;
+  invoiceNumber: string;
+  date: string;
+  dueDate: string;
+  companyName: string;
+  companyNumber: string;
+  clientName: string;
+  clientEmail: string;
+  amount: number;
+  description: string;
+  status: "paid" | "unpaid" | "canceled";
+  items: InvoiceItem[];
+}
+
+interface InvoiceItem {
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  total: number;
+}
 
 interface PurchasedCompany {
   id: string;
