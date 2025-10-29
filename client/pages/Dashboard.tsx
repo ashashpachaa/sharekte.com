@@ -1525,6 +1525,116 @@ Generated on: ${new Date().toLocaleDateString()}
                             </div>
                           </div>
 
+                          {/* Renewal Countdown Section */}
+                          {(() => {
+                            const daysRemaining = calculateDaysRemaining(company.renewalDate);
+                            const isRenewalNeeded = daysRemaining <= 15 && daysRemaining > -15 && company.renewalStatus === "active";
+                            const isExpired = daysRemaining <= 0 && daysRemaining > -15;
+                            const isCancelled = daysRemaining <= -15;
+
+                            return (
+                              <>
+                                {/* Renewal Alert - 15 days before */}
+                                {isRenewalNeeded && (
+                                  <div className="p-4 bg-red-50 border border-red-200 rounded-lg space-y-3">
+                                    <div className="flex items-start gap-3">
+                                      <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                                      <div className="flex-1">
+                                        <p className="text-sm font-semibold text-red-900 mb-1">
+                                          Renewal Required in {daysRemaining} days
+                                        </p>
+                                        <p className="text-sm text-red-800">
+                                          You should renew your company before it's cancelled or you lose it
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <Button
+                                      onClick={() => {
+                                        renewCompany(company.id);
+                                        setPurchasedCompanies(prev => prev.map(c =>
+                                          c.id === company.id
+                                            ? {...c, renewalDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split("T")[0], renewalStatus: "active"}
+                                            : c
+                                        ));
+                                        toast.success(`Company renewed! New renewal date set to 1 year from today`);
+                                      }}
+                                      className="w-full bg-red-600 hover:bg-red-700 text-white gap-2"
+                                    >
+                                      <Zap className="w-4 h-4" />
+                                      Renew Now
+                                    </Button>
+                                  </div>
+                                )}
+
+                                {/* Expired Status */}
+                                {isExpired && (
+                                  <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg space-y-3">
+                                    <div className="flex items-start gap-3">
+                                      <AlertCircle className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
+                                      <div className="flex-1">
+                                        <p className="text-sm font-semibold text-orange-900 mb-1">
+                                          Expired - {Math.abs(daysRemaining)} days overdue
+                                        </p>
+                                        <p className="text-sm text-orange-800">
+                                          Your company ownership has expired. Renew immediately to prevent cancellation.
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <Button
+                                      onClick={() => {
+                                        renewCompany(company.id);
+                                        setPurchasedCompanies(prev => prev.map(c =>
+                                          c.id === company.id
+                                            ? {...c, renewalDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split("T")[0], renewalStatus: "active"}
+                                            : c
+                                        ));
+                                        toast.success(`Company renewed! New renewal date set to 1 year from today`);
+                                      }}
+                                      className="w-full bg-orange-600 hover:bg-orange-700 text-white gap-2"
+                                    >
+                                      <Zap className="w-4 h-4" />
+                                      Renew Now
+                                    </Button>
+                                  </div>
+                                )}
+
+                                {/* Cancelled Status */}
+                                {isCancelled && (
+                                  <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                                    <div className="flex items-start gap-3">
+                                      <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                                      <div className="flex-1">
+                                        <p className="text-sm font-semibold text-red-900 mb-1">
+                                          Ownership Cancelled
+                                        </p>
+                                        <p className="text-sm text-red-800">
+                                          Your company ownership has been cancelled due to renewal expiration. Unfortunately, renewal is no longer available for this company.
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Active Status - Show Days Remaining */}
+                                {daysRemaining > 15 && company.renewalStatus === "active" && (
+                                  <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                                    <div className="flex items-start gap-3">
+                                      <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                                      <div className="flex-1">
+                                        <p className="text-sm font-semibold text-green-900">
+                                          Active - {daysRemaining} days until renewal required
+                                        </p>
+                                        <p className="text-sm text-green-800">
+                                          Your company is active and in good standing
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+                              </>
+                            );
+                          })()}
+
                           {/* Transfer Workflow Status */}
                           <div>
                             <h4 className="font-semibold text-foreground mb-4">
