@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { CartDropdown } from "./CartDropdown";
 import { NotificationBell } from "./NotificationBell";
+import { useCurrency, CURRENCY_RATES } from "@/lib/currency-context";
+import { Globe } from "lucide-react";
 
 export function Header() {
   return (
