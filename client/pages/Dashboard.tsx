@@ -1150,9 +1150,28 @@ Generated on: ${new Date().toLocaleDateString()}
           {/* Invoices Tab */}
           {activeTab === "invoices" && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-foreground">
-                Invoices
-              </h2>
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <h2 className="text-2xl font-bold text-foreground">
+                  Invoices
+                </h2>
+                <div className="flex-1 md:flex-initial md:w-64 relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search invoices..."
+                    value={invoicesSearch}
+                    onChange={(e) => setInvoicesSearch(e.target.value)}
+                    className="pl-10 pr-4"
+                  />
+                  {invoicesSearch && (
+                    <button
+                      onClick={() => setInvoicesSearch("")}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-muted rounded"
+                    >
+                      <X className="w-4 h-4 text-muted-foreground" />
+                    </button>
+                  )}
+                </div>
+              </div>
 
               {invoices.length === 0 ? (
                 <div className="bg-card border border-border/40 rounded-lg p-12 text-center space-y-4">
