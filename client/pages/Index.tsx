@@ -183,6 +183,21 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Company Marketplace Table Section */}
+      <section className="py-20 md:py-28 border-t border-border/40 bg-muted/20">
+        <div className="container max-w-6xl mx-auto px-4">
+          <div className="text-center space-y-4 mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground">
+              Browse All Companies
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Explore our complete marketplace of verified businesses. Filter by country and incorporation year to find your perfect match.
+            </p>
+          </div>
+          <CompanyTable />
+        </div>
+      </section>
+
       {/* Featured Companies Section */}
       <section id="companies" className="py-20 md:py-28 border-t border-border/40">
         <div className="container max-w-6xl mx-auto px-4">
