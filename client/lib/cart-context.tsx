@@ -5,6 +5,9 @@ export interface CartItem {
   name: string;
   price: number;
   companyNumber: string;
+  country?: string;
+  incorporationDate?: string;
+  incorporationYear?: string;
 }
 
 interface CartContextType {
