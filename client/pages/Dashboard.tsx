@@ -258,6 +258,7 @@ export default function Dashboard() {
     shareholderName: "",
     shareholderEmail: "",
     companyAddress: "",
+    attachments: [] as Array<{ id: string; name: string; size: number; type: string; uploadedDate: string; base64Data: string }>,
   });
 
   // Services state (Marketplace)
