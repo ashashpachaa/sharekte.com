@@ -3,6 +3,15 @@
  * Data is stored in localStorage with user email as the key
  */
 
+export interface TransferFormAttachment {
+  id: string;
+  name: string;
+  size: number;
+  type: string;
+  uploadedDate: string;
+  base64Data?: string;
+}
+
 export interface PurchasedCompanyData {
   id: string;
   name: string;
@@ -21,6 +30,14 @@ export interface PurchasedCompanyData {
     uploadedDate: string;
     url?: string;
   }>;
+  transferFormAttachments: TransferFormAttachment[];
+  transferFormData?: {
+    directorName: string;
+    directorEmail: string;
+    shareholderName: string;
+    shareholderEmail: string;
+    companyAddress: string;
+  };
   transferFormFilled: boolean;
   adminComments?: string;
   purchasedDate: string;
