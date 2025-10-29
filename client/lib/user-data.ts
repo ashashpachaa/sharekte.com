@@ -12,6 +12,15 @@ export interface TransferFormAttachment {
   base64Data?: string;
 }
 
+export interface RenewalHistoryEntry {
+  id: string;
+  renewalDate: string;
+  renewedDate: string;
+  isLate: boolean;
+  daysLate: number;
+  status: "on-time" | "late" | "pending";
+}
+
 export interface PurchasedCompanyData {
   id: string;
   name: string;
@@ -19,6 +28,7 @@ export interface PurchasedCompanyData {
   price: number;
   incorporationDate: string;
   incorporationYear: string;
+  purchasedDate: string;
   renewalDate: string;
   renewalFees: number;
   status: "pending-form" | "under-review" | "amend-required" | "pending-transfer" | "completed";
@@ -41,7 +51,7 @@ export interface PurchasedCompanyData {
   };
   transferFormFilled: boolean;
   adminComments?: string;
-  purchasedDate: string;
+  renewalHistory: RenewalHistoryEntry[];
 }
 
 export interface InvoiceData {
