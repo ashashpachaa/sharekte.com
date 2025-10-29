@@ -20,5 +20,10 @@ export function createServer() {
 
   app.get("/api/demo", handleDemo);
 
+  // Airtable routes
+  app.get("/api/companies", getCompanies);
+  app.get("/api/countries", getCountries);
+  app.get("/api/years", getYears);
+
   return app;
 }
