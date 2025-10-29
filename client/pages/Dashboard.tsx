@@ -453,10 +453,10 @@ export default function Dashboard() {
       {/* Tabs */}
       <section className="border-b border-border/40 bg-muted/30">
         <div className="container max-w-6xl mx-auto px-4">
-          <div className="flex gap-8">
+          <div className="flex gap-8 overflow-x-auto">
             <button
               onClick={() => setActiveTab("portfolio")}
-              className={`py-4 px-1 font-semibold transition-colors ${
+              className={`py-4 px-1 font-semibold transition-colors whitespace-nowrap ${
                 activeTab === "portfolio"
                   ? "text-primary border-b-2 border-primary"
                   : "text-muted-foreground hover:text-foreground border-b-2 border-transparent"
@@ -466,8 +466,19 @@ export default function Dashboard() {
               Portfolio
             </button>
             <button
+              onClick={() => setActiveTab("companies")}
+              className={`py-4 px-1 font-semibold transition-colors whitespace-nowrap ${
+                activeTab === "companies"
+                  ? "text-primary border-b-2 border-primary"
+                  : "text-muted-foreground hover:text-foreground border-b-2 border-transparent"
+              }`}
+            >
+              <Building2 className="w-4 h-4 inline mr-2" />
+              My Companies
+            </button>
+            <button
               onClick={() => setActiveTab("account")}
-              className={`py-4 px-1 font-semibold transition-colors ${
+              className={`py-4 px-1 font-semibold transition-colors whitespace-nowrap ${
                 activeTab === "account"
                   ? "text-primary border-b-2 border-primary"
                   : "text-muted-foreground hover:text-foreground border-b-2 border-transparent"
@@ -478,7 +489,7 @@ export default function Dashboard() {
             </button>
             <button
               onClick={() => setActiveTab("payments")}
-              className={`py-4 px-1 font-semibold transition-colors ${
+              className={`py-4 px-1 font-semibold transition-colors whitespace-nowrap ${
                 activeTab === "payments"
                   ? "text-primary border-b-2 border-primary"
                   : "text-muted-foreground hover:text-foreground border-b-2 border-transparent"
@@ -489,7 +500,7 @@ export default function Dashboard() {
             </button>
             <button
               onClick={() => setActiveTab("security")}
-              className={`py-4 px-1 font-semibold transition-colors ${
+              className={`py-4 px-1 font-semibold transition-colors whitespace-nowrap ${
                 activeTab === "security"
                   ? "text-primary border-b-2 border-primary"
                   : "text-muted-foreground hover:text-foreground border-b-2 border-transparent"
