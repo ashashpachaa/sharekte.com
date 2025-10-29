@@ -1438,7 +1438,7 @@ Generated on: ${new Date().toLocaleDateString()}
                   </Button>
                 </div>
               ) : (
-                <div className="space-y-6">
+                <div>
                   {(() => {
                     const filtered = purchasedCompanies.filter((company) => {
                       const query = companiesSearch.toLowerCase();
@@ -1456,15 +1456,18 @@ Generated on: ${new Date().toLocaleDateString()}
                       );
                     }
 
-                    return filtered.map((company) => {
-                    const statusConfig = getStatusConfig(company.status);
-                    const StatusIcon = statusConfig.icon;
-
                     return (
-                      <div
-                        key={company.id}
-                        className="bg-card border border-border/40 rounded-lg overflow-hidden"
-                      >
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {filtered.map((company) => {
+                          const statusConfig = getStatusConfig(company.status);
+                          const StatusIcon = statusConfig.icon;
+                          const daysRemaining = calculateDaysRemaining(company.renewalDate);
+
+                          return (
+                            <div
+                              key={company.id}
+                              className="bg-card border border-border/40 rounded-lg overflow-hidden hover:shadow-lg transition-shadow flex flex-col h-full"
+                            >
                         {/* Company Header */}
                         <div className={`${statusConfig.bgLight} p-6 border-b border-border/40`}>
                           <div className="flex items-start justify-between gap-4">
@@ -1918,8 +1921,10 @@ Generated on: ${new Date().toLocaleDateString()}
                           )}
                         </div>
                       </div>
+                          );
+                        })}
+                      </div>
                     );
-                  });
                   })()
                 }
                 </div>
