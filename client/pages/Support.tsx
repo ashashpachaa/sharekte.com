@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,8 @@ import {
   FileUp,
   ChevronRight,
   Loader2,
+  Search,
+  X as CloseIcon,
 } from "lucide-react";
 
 interface SupportCategory {
