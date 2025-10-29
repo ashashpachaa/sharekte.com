@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import { fetchCompanies, getCountries, getYears, type Company } from "@/lib/airtable";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ShoppingCart, Filter } from "lucide-react";
+import { ShoppingCart, Filter, Check } from "lucide-react";
+import { toast } from "sonner";
+import { useCart } from "@/lib/cart-context";
 
 export function CompanyTable() {
   const [companies, setCompanies] = useState<Company[]>([]);
