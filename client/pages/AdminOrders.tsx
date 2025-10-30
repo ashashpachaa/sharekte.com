@@ -172,174 +172,174 @@ export default function AdminOrders() {
           <TabsContent value="orders" className="space-y-8">
             {/* Stats */}
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-          <div className="bg-card border border-border/40 rounded-lg p-4">
-            <p className="text-xs text-muted-foreground mb-1">Total Orders</p>
-            <p className="text-2xl font-bold text-foreground">{orderStats.total}</p>
-          </div>
-          <div className="bg-card border border-border/40 rounded-lg p-4">
-            <p className="text-xs text-muted-foreground mb-1">Paid/Completed</p>
-            <p className="text-2xl font-bold text-green-600">{orderStats.paid}</p>
-          </div>
-          <div className="bg-card border border-border/40 rounded-lg p-4">
-            <p className="text-xs text-muted-foreground mb-1">Pending</p>
-            <p className="text-2xl font-bold text-yellow-600">{orderStats.pending}</p>
-          </div>
-          <div className="bg-card border border-border/40 rounded-lg p-4">
-            <p className="text-xs text-muted-foreground mb-1">Refunded</p>
-            <p className="text-2xl font-bold text-blue-600">{orderStats.refunded}</p>
-          </div>
-          <div className="bg-card border border-border/40 rounded-lg p-4">
-            <p className="text-xs text-muted-foreground mb-1">Total Revenue</p>
-            <p className="text-2xl font-bold text-primary">
-              £{orders.reduce((sum, o) => sum + o.amount, 0).toLocaleString()}
-            </p>
-          </div>
-        </div>
-
-        {/* Filters */}
-        <div className="bg-card border border-border/40 rounded-lg p-4 mb-6">
-          <div className="space-y-4">
-            {/* Search */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search by order ID, customer name, email, or company..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
+              <div className="bg-card border border-border/40 rounded-lg p-4">
+                <p className="text-xs text-muted-foreground mb-1">Total Orders</p>
+                <p className="text-2xl font-bold text-foreground">{orderStats.total}</p>
+              </div>
+              <div className="bg-card border border-border/40 rounded-lg p-4">
+                <p className="text-xs text-muted-foreground mb-1">Paid/Completed</p>
+                <p className="text-2xl font-bold text-green-600">{orderStats.paid}</p>
+              </div>
+              <div className="bg-card border border-border/40 rounded-lg p-4">
+                <p className="text-xs text-muted-foreground mb-1">Pending</p>
+                <p className="text-2xl font-bold text-yellow-600">{orderStats.pending}</p>
+              </div>
+              <div className="bg-card border border-border/40 rounded-lg p-4">
+                <p className="text-xs text-muted-foreground mb-1">Refunded</p>
+                <p className="text-2xl font-bold text-blue-600">{orderStats.refunded}</p>
+              </div>
+              <div className="bg-card border border-border/40 rounded-lg p-4">
+                <p className="text-xs text-muted-foreground mb-1">Total Revenue</p>
+                <p className="text-2xl font-bold text-primary">
+                  £{orders.reduce((sum, o) => sum + o.amount, 0).toLocaleString()}
+                </p>
+              </div>
             </div>
 
-            {/* Filter Row */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-              {/* Status Filter */}
-              <select
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value as FilterStatus)}
-                className="px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
-              >
-                <option value="all">All Statuses</option>
-                {statuses.map((status) => (
-                  <option key={status} value={status}>
-                    {status.replace(/-/g, " ").toUpperCase()}
-                  </option>
-                ))}
-              </select>
+            {/* Filters */}
+            <div className="bg-card border border-border/40 rounded-lg p-4 mb-6">
+              <div className="space-y-4">
+                {/* Search */}
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search by order ID, customer name, email, or company..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
 
-              {/* Country Filter */}
-              <select
-                value={filterCountry}
-                onChange={(e) => setFilterCountry(e.target.value)}
-                className="px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
-              >
-                <option value="">All Countries</option>
-                {uniqueCountries.map((country) => (
-                  <option key={country} value={country}>
-                    {country}
-                  </option>
-                ))}
-              </select>
+                {/* Filter Row */}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+                  {/* Status Filter */}
+                  <select
+                    value={filterStatus}
+                    onChange={(e) => setFilterStatus(e.target.value as FilterStatus)}
+                    className="px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
+                  >
+                    <option value="all">All Statuses</option>
+                    {statuses.map((status) => (
+                      <option key={status} value={status}>
+                        {status.replace(/-/g, " ").toUpperCase()}
+                      </option>
+                    ))}
+                  </select>
 
-              {/* Date From */}
-              <input
-                type="date"
-                value={dateFrom}
-                onChange={(e) => setDateFrom(e.target.value)}
-                className="px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
-              />
+                  {/* Country Filter */}
+                  <select
+                    value={filterCountry}
+                    onChange={(e) => setFilterCountry(e.target.value)}
+                    className="px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
+                  >
+                    <option value="">All Countries</option>
+                    {uniqueCountries.map((country) => (
+                      <option key={country} value={country}>
+                        {country}
+                      </option>
+                    ))}
+                  </select>
 
-              {/* Date To */}
-              <input
-                type="date"
-                value={dateTo}
-                onChange={(e) => setDateTo(e.target.value)}
-                className="px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
-              />
+                  {/* Date From */}
+                  <input
+                    type="date"
+                    value={dateFrom}
+                    onChange={(e) => setDateFrom(e.target.value)}
+                    className="px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
+                  />
+
+                  {/* Date To */}
+                  <input
+                    type="date"
+                    value={dateTo}
+                    onChange={(e) => setDateTo(e.target.value)}
+                    className="px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
+                  />
+                </div>
+
+                {/* Clear Filters */}
+                {(searchQuery || filterStatus !== "all" || filterCountry || dateFrom || dateTo) && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setSearchQuery("");
+                      setFilterStatus("all");
+                      setFilterCountry("");
+                      setDateFrom("");
+                      setDateTo("");
+                    }}
+                  >
+                    Clear Filters
+                  </Button>
+                )}
+              </div>
             </div>
 
-            {/* Clear Filters */}
-            {(searchQuery || filterStatus !== "all" || filterCountry || dateFrom || dateTo) && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  setSearchQuery("");
-                  setFilterStatus("all");
-                  setFilterCountry("");
-                  setDateFrom("");
-                  setDateTo("");
-                }}
-              >
-                Clear Filters
-              </Button>
-            )}
-          </div>
-        </div>
-
-        {/* Orders Table */}
-        <div className="bg-card border border-border/40 rounded-lg overflow-hidden">
-          {filteredOrders.length === 0 ? (
-            <div className="p-12 text-center text-muted-foreground">No orders found</div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-muted/50 border-b border-border/40">
-                  <tr>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Order</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Customer</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Company</th>
-                    <th className="px-6 py-4 text-right text-sm font-semibold text-foreground">Amount</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Status</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Date</th>
-                    <th className="px-6 py-4 text-center text-sm font-semibold text-foreground">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border/40">
-                  {filteredOrders.map((order) => (
-                    <tr key={order.id} className="hover:bg-muted/50 transition-colors">
-                      <td className="px-6 py-4">
-                        <div>
-                          <p className="font-semibold text-foreground">{order.orderId}</p>
-                          <p className="text-xs text-muted-foreground">{order.id}</p>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="text-sm">
-                          <p className="font-medium text-foreground">{order.customerName}</p>
-                          <p className="text-xs text-muted-foreground">{order.customerEmail}</p>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-foreground">{order.companyName}</td>
-                      <td className="px-6 py-4 text-right font-semibold text-foreground">
-                        {order.currency} {order.amount.toLocaleString()}
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(order.status)}`}>
-                          {order.status.replace(/-/g, " ")}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-muted-foreground">
-                        {new Date(order.purchaseDate).toLocaleDateString()}
-                      </td>
-                      <td className="px-6 py-4 text-center">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => {
-                            setSelectedOrder(order);
-                            setShowDetailsModal(true);
-                          }}
-                        >
-                          <Eye className="w-4 h-4" />
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            {/* Orders Table */}
+            <div className="bg-card border border-border/40 rounded-lg overflow-hidden">
+              {filteredOrders.length === 0 ? (
+                <div className="p-12 text-center text-muted-foreground">No orders found</div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-muted/50 border-b border-border/40">
+                      <tr>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Order</th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Customer</th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Company</th>
+                        <th className="px-6 py-4 text-right text-sm font-semibold text-foreground">Amount</th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Status</th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Date</th>
+                        <th className="px-6 py-4 text-center text-sm font-semibold text-foreground">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border/40">
+                      {filteredOrders.map((order) => (
+                        <tr key={order.id} className="hover:bg-muted/50 transition-colors">
+                          <td className="px-6 py-4">
+                            <div>
+                              <p className="font-semibold text-foreground">{order.orderId}</p>
+                              <p className="text-xs text-muted-foreground">{order.id}</p>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="text-sm">
+                              <p className="font-medium text-foreground">{order.customerName}</p>
+                              <p className="text-xs text-muted-foreground">{order.customerEmail}</p>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-foreground">{order.companyName}</td>
+                          <td className="px-6 py-4 text-right font-semibold text-foreground">
+                            {order.currency} {order.amount.toLocaleString()}
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(order.status)}`}>
+                              {order.status.replace(/-/g, " ")}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-muted-foreground">
+                            {new Date(order.purchaseDate).toLocaleDateString()}
+                          </td>
+                          <td className="px-6 py-4 text-center">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => {
+                                setSelectedOrder(order);
+                                setShowDetailsModal(true);
+                              }}
+                            >
+                              <Eye className="w-4 h-4" />
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
-          )}
-        </div>
 
             {/* Pagination info */}
             <p className="text-sm text-muted-foreground mt-4">
