@@ -217,13 +217,13 @@ export function CompanyTable({
   const filteredCompanies = safeCompanies.filter((company) => {
     const countryMatch = !selectedCountry || company.country === selectedCountry;
     const yearMatch = !selectedYear || company.incorporationYear === parseInt(selectedYear);
-    const statusMatch = company.status === "active";
+    const notSoldStatus = company.status !== "sold";
     const notSoldCompany = company.companyName !== "DOMAINО23 LTD" && company.companyName !== "DOMAIN023 LTD";
-    return countryMatch && yearMatch && statusMatch && notSoldCompany;
+    return countryMatch && yearMatch && notSoldStatus && notSoldCompany;
   });
 
-  // Get unique countries and years for filter options (only from active companies)
-  const activeCompanies = safeCompanies.filter((c) => c.status === "active");
+  // Get unique countries and years for filter options (only from available/non-sold companies)
+  const availableCompanies = safeCompanies.filter((c) => c.status !== "sold");
 
   const uniqueCountries = Array.from(
     new Set(activeCompanies.map((c) => c.country).filter(Boolean))
