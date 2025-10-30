@@ -550,24 +550,45 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
     const { id } = req.params;
     const { status, notes } = req.body;
 
-    // Fetch current company from Airtable
-    const getResponse = await fetch(
-      `https://api.airtable.com/v0/app0PK34gyJDizR3Q/tbljtdHPdHnTberDy/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.AIRTABLE_API_TOKEN}`,
-        },
-      }
-    );
+    // Step 1: Look up company by marketplace ID to get company name
+    const allCompanies = await getCompanies();
+    const company = allCompanies.find((c) => c.id === id);
 
-    if (!getResponse.ok) {
-      return res.status(404).json({ error: "Company not found" });
+    if (!company) {
+      return res.status(404).json({ error: "Company not found in database" });
     }
 
-    const record = await getResponse.json();
-    const fields = record.fields;
+    // Step 2: Search Airtable for record by company name
+    const searchUrl = `https://api.airtable.com/v0/app0PK34gyJDizR3Q/tbljtdHPdHnTberDy?filterByFormula={Company%20name}="${encodeURIComponent(
+      company.companyName
+    )}"`;
+
+    const searchResponse = await fetch(searchUrl, {
+      headers: {
+        Authorization: `Bearer ${process.env.AIRTABLE_API_TOKEN}`,
+      },
+    });
+
+    if (!searchResponse.ok) {
+      console.error("Airtable search failed:", searchResponse.statusText);
+      return res.status(500).json({ error: "Failed to search for company in Airtable" });
+    }
+
+    const searchData: any = await searchResponse.json();
+    if (searchData.records.length === 0) {
+      return res
+        .status(404)
+        .json({
+          error: `Company "${company.companyName}" not found in Airtable`,
+        });
+    }
+
+    // Step 3: Get the Airtable record ID from search results
+    const airtableRecord = searchData.records[0];
+    const airtableId = airtableRecord.id;
+    const fields = airtableRecord.fields;
     const incorporationDate = fields["Incorporate date"] || getTodayString();
-    const previousStatus = fields["Status"] || "available";
+    const previousStatus = fields["Statues "] || "available";
     const newStatus = status || previousStatus;
 
     // Clear cache since we're updating
