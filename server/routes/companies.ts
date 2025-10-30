@@ -678,18 +678,21 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
       ownershipHistory: [],
     };
 
+    console.log(`✓ Company ${airtableId} (${companyName}) status updated to ${newStatusValue}`);
     res.json(updatedCompany);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
-    console.error("Error updating company status:", {
-      error: errorMessage,
-      stack: error instanceof Error ? error.stack : undefined,
-      id: req.params.id,
-      status: req.body.status,
+    const errorStack = error instanceof Error ? error.stack : undefined;
+    console.error("[updateCompanyStatus] EXCEPTION:", {
+      message: errorMessage,
+      stack: errorStack,
+      airtableId: req.params?.id,
+      requestStatus: req.body?.status,
     });
     res.status(500).json({
       error: "Failed to update company status",
       details: errorMessage,
+      type: error instanceof Error ? error.name : typeof error,
     });
   }
 };
