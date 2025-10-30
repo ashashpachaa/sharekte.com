@@ -1449,7 +1449,7 @@ Generated on: ${new Date().toLocaleDateString()}
                       >
                         {selectedInvoice.status === "paid" && "✓ Paid"}
                         {selectedInvoice.status === "unpaid" && "⏳ Unpaid"}
-                        {selectedInvoice.status === "canceled" && "✗ Canceled"}
+                        {selectedInvoice.status === "canceled" && "�� Canceled"}
                       </div>
                     </div>
                   </div>
@@ -1506,11 +1506,11 @@ Generated on: ${new Date().toLocaleDateString()}
                           <div className="flex-1">
                             <p className="text-foreground">{item.description}</p>
                             <p className="text-xs text-muted-foreground">
-                              Qty: {item.quantity} × {formatPrice(item.unitPrice)}
+                              Qty: {item.quantity} × {formatPriceWithCurrency(item.unitPrice, selectedInvoice.currency, rates)}
                             </p>
                           </div>
                           <p className="font-semibold text-foreground">
-                            {formatPrice(item.total)}
+                            {formatPriceWithCurrency(item.total, selectedInvoice.currency, rates)}
                           </p>
                         </div>
                       ))}
