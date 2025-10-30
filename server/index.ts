@@ -125,21 +125,23 @@ export function createServer() {
   app.get("/api/transfer-forms/:id/pdf", generatePDF);
   app.get("/api/transfer-forms/analytics/summary", getFormAnalytics);
 
-  // Invoice routes
-  app.get("/api/invoices", getInvoices);
-  app.get("/api/invoices/:id", getInvoice);
-  app.post("/api/invoices", createInvoice);
-  app.patch("/api/invoices/:id", updateInvoice);
-  app.patch("/api/invoices/:id/status", updateInvoiceStatus);
-  app.delete("/api/invoices/:id", deleteInvoice);
-  app.post("/api/invoices/:id/attachments", uploadInvoiceAttachment);
-  app.delete("/api/invoices/:id/attachments/:attachmentId", deleteInvoiceAttachment);
-  app.post("/api/invoices/:id/send-email", sendInvoiceEmail);
-  app.get("/api/invoices/:id/pdf", generateInvoicePDF);
+  // Invoice routes - Specific routes before parameterized ones
+  app.get("/api/invoices/analytics/summary", getInvoiceAnalytics);
+  app.get("/api/invoices/export/csv", exportCSV);
   app.patch("/api/invoices/bulk/status", bulkUpdateStatus);
   app.post("/api/invoices/bulk/send-emails", bulkSendEmails);
-  app.get("/api/invoices/export/csv", exportCSV);
-  app.get("/api/invoices/analytics/summary", getInvoiceAnalytics);
+
+  app.get("/api/invoices", getInvoices);
+  app.post("/api/invoices", createInvoice);
+
+  app.get("/api/invoices/:id", getInvoice);
+  app.patch("/api/invoices/:id", updateInvoice);
+  app.delete("/api/invoices/:id", deleteInvoice);
+  app.patch("/api/invoices/:id/status", updateInvoiceStatus);
+  app.post("/api/invoices/:id/send-email", sendInvoiceEmail);
+  app.get("/api/invoices/:id/pdf", generateInvoicePDF);
+  app.post("/api/invoices/:id/attachments", uploadInvoiceAttachment);
+  app.delete("/api/invoices/:id/attachments/:attachmentId", deleteInvoiceAttachment);
 
   return app;
 }
