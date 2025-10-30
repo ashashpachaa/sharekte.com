@@ -85,64 +85,83 @@ function createNewCompany(
   };
 }
 
-// Get all companies
+// Get all companies from Airtable
 export const getCompanies: RequestHandler = async (req, res) => {
   try {
-    // For demo purposes, return sample data if no data exists
-    if (companiesDb.length === 0) {
-      const today = getTodayString();
-      const expiryDate = calculateExpiryDate(today);
+    const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
+    const AIRTABLE_BASE_ID = "app0PK34gyJDizR3Q";
+    const AIRTABLE_TABLE_ID = "tbljtdHPdHnTberDy";
 
-      companiesDb = [
-        createNewCompany({
-          companyName: "Tech Solutions Ltd",
-          companyNumber: "12345678",
-          country: "UK",
-          type: "LTD",
-          incorporationDate: today,
-          incorporationYear: new Date().getFullYear(),
-          purchasePrice: 500,
-          renewalFee: 100,
-          currency: "GBP",
-          clientName: "John Smith",
-          clientEmail: "john@example.com",
-          status: "active",
-          paymentStatus: "paid",
-        }),
-        createNewCompany({
-          companyName: "Nordic Business AB",
-          companyNumber: "98765432",
-          country: "Sweden",
-          type: "AB",
-          incorporationDate: today,
-          incorporationYear: new Date().getFullYear(),
-          purchasePrice: 450,
-          renewalFee: 90,
-          currency: "SEK",
-          clientName: "Anna Johnson",
-          clientEmail: "anna@example.com",
-          status: "active",
-          paymentStatus: "paid",
-        }),
-        createNewCompany({
-          companyName: "Dubai Trade FZCO",
-          companyNumber: "54321098",
-          country: "UAE",
-          type: "FZCO",
-          incorporationDate: today,
-          incorporationYear: new Date().getFullYear(),
-          purchasePrice: 600,
-          renewalFee: 150,
-          currency: "AED",
-          clientName: "Ahmed Hassan",
-          clientEmail: "ahmed@example.com",
-          status: "available",
-          paymentStatus: "pending",
-        }),
-      ];
+    if (!AIRTABLE_API_TOKEN) {
+      console.error("AIRTABLE_API_TOKEN not configured");
+      return res.status(500).json({ error: "Airtable integration not configured" });
     }
 
-    res.json(companiesDb);
+    // Fetch from Airtable
+    const response = await fetch(
+      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_ID}`,
+      {
+        headers: {
+          Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.text();
+      console.error("Airtable API error:", error);
+      return res.status(500).json({ error: "Failed to fetch from Airtable" });
+    }
+
+    const data = await response.json();
+    const companies: CompanyData[] = data.records.map((record: any) => {
+      const fields = record.fields;
+      const incorporationDate = fields["Incorporate date"] || getTodayString();
+
+      return {
+        id: record.id,
+        companyName: fields["Company name"] || "",
+        companyNumber: fields["Company number"] || "",
+        country: fields.Country || "",
+        type: "LTD" as any,
+        incorporationDate: incorporationDate,
+        incorporationYear: parseInt(fields["Incorporate year"] || new Date().getFullYear()),
+        purchasePrice: parseFloat(fields.Price || "0"),
+        renewalFee: 0,
+        currency: "GBP",
+        expiryDate: calculateExpiryDate(incorporationDate),
+        renewalDate: calculateExpiryDate(incorporationDate),
+        renewalDaysLeft: calculateRenewalDaysLeft(calculateExpiryDate(incorporationDate)),
+        status: "active" as const,
+        paymentStatus: "paid" as const,
+        refundStatus: "not-refunded" as const,
+        clientName: fields["Client Name"] || "",
+        clientEmail: fields["Client Email"] || "",
+        clientPhone: fields["Client Phone"],
+        industry: fields.Industry,
+        revenue: fields.Revenue,
+        adminNotes: fields["Admin Notes"],
+        internalNotes: fields["Internal Notes"],
+        createdBy: "airtable",
+        createdAt: getTodayString(),
+        updatedAt: getTodayString(),
+        updatedBy: "airtable",
+        tags: [],
+        documents: [],
+        activityLog: [
+          {
+            id: "log_1",
+            timestamp: getTodayString(),
+            action: "Imported from Airtable",
+            performedBy: "system",
+            details: `Company ${fields["Company name"]} imported from Airtable`,
+          },
+        ],
+        ownershipHistory: [],
+      };
+    });
+
+    res.json(companies);
   } catch (error) {
     console.error("Error fetching companies:", error);
     res.status(500).json({ error: "Failed to fetch companies" });
