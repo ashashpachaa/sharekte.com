@@ -19,9 +19,7 @@ import {
   formatPrice,
   formatDate,
   STATUS_COLORS,
-  PAYMENT_STATUS_COLORS,
   CompanyStatus,
-  PaymentStatus,
 } from "@/lib/company-management";
 import {
   Select,
@@ -98,10 +96,6 @@ export function CompanyDetailsModal({
 
   const handleStatusChange = (newStatus: CompanyStatus) => {
     setCompany({ ...company, status: newStatus });
-  };
-
-  const handlePaymentStatusChange = (newStatus: PaymentStatus) => {
-    setCompany({ ...company, paymentStatus: newStatus });
   };
 
   return (
