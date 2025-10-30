@@ -290,7 +290,7 @@ export function CompanyTable() {
                 <tbody>
                   {filteredCompanies.slice(0, displayCount).map((company) => {
                     const isSelected = selectedCompanies.has(company.id);
-                    const companyName = company.fields["Company name"] || "N/A";
+                    const companyName = (company.fields["Company name"] as string) || "N/A";
 
                     // Handle option include which is an array
                     const optionIncludeRaw = company.fields["option include"];
