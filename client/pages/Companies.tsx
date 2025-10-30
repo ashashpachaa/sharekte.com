@@ -260,15 +260,13 @@ export default function Companies() {
                 Manage and track all registered companies
               </p>
             </div>
-            {isAdmin && (
-              <Button
-                onClick={() => setShowAddModal(true)}
-                className="gap-2 bg-blue-600 hover:bg-blue-700"
-              >
-                <Plus className="w-4 h-4" />
-                Add Company
-              </Button>
-            )}
+            <Button
+              onClick={() => setShowAddModal(true)}
+              className="gap-2 bg-blue-600 hover:bg-blue-700"
+            >
+              <Plus className="w-4 h-4" />
+              Add Company
+            </Button>
           </div>
         </div>
 
