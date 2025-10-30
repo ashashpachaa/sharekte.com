@@ -339,6 +339,18 @@ export const addComment: RequestHandler = async (req, res) => {
     form.comments.push(comment);
     form.updatedAt = new Date().toISOString();
 
+    // Send comment notification email (if not admin-only)
+    if (!isAdminOnly) {
+      (async () => {
+        try {
+          const { sendCommentNotification } = await import("../utils/form-notifications");
+          await sendCommentNotification(form, text, isAdminOnly);
+        } catch (error) {
+          console.error("Error sending comment notification:", error);
+        }
+      })();
+    }
+
     res.json(comment);
   } catch (error) {
     console.error("Error adding comment:", error);
