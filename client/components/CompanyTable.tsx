@@ -257,12 +257,13 @@ export function CompanyTable({
           <TableHeader>
             <TableRow className="bg-gray-50">
               <TableHead className="font-semibold">Company Name</TableHead>
-              <TableHead className="font-semibold">Company Number</TableHead>
               <TableHead className="font-semibold">Country</TableHead>
+              <TableHead className="font-semibold">Company Number</TableHead>
               <TableHead className="font-semibold">Incorporate Date</TableHead>
               <TableHead className="font-semibold">Incorporate Year</TableHead>
               <TableHead className="font-semibold">Price</TableHead>
-              <TableHead className="text-right font-semibold">Actions</TableHead>
+              <TableHead className="font-semibold">Options Included</TableHead>
+              <TableHead className="text-right font-semibold">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
