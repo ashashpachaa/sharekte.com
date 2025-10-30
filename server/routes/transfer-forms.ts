@@ -205,6 +205,17 @@ export const updateFormStatus: RequestHandler = async (req, res) => {
     const index = formsDb.findIndex((f) => f.id === id);
     formsDb[index] = updated;
 
+    // Send status notification email (async - don't wait for response)
+    (async () => {
+      try {
+        const { sendFormStatusNotification } = await import("../utils/form-notifications");
+        await sendFormStatusNotification(updated, status as FormStatus, notes, reason);
+      } catch (error) {
+        console.error("Error sending notification:", error);
+        // Don't fail the request if notification fails
+      }
+    })();
+
     res.json(updated);
   } catch (error) {
     console.error("Error updating form status:", error);
