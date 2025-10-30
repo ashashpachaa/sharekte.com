@@ -201,7 +201,7 @@ export default function Checkout() {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              status: "Sold",
+              status: "sold",
             }),
           });
 
