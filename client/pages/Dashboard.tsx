@@ -90,6 +90,7 @@ interface PurchasedCompany {
   id: string;
   name: string;
   number: string;
+  price: number;
   incorporationDate: string;
   incorporationYear: string;
   country: string;
