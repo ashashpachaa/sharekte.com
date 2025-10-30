@@ -12,7 +12,7 @@ import { createOrder } from "@/lib/orders";
 
 export default function Checkout() {
   const navigate = useNavigate();
-  const { formatPrice, currency } = useCurrency();
+  const { formatPrice, convertPrice, currency } = useCurrency();
   const { items, clearCart, totalPrice } = useCart();
   const [loading, setLoading] = useState(false);
   const [orderCompleted, setOrderCompleted] = useState(false);
