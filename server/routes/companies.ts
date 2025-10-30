@@ -246,7 +246,7 @@ export const getCompany: RequestHandler = async (req, res) => {
     const company: CompanyData = {
       id: record.id,
       companyName: fields["Company name"] || "",
-      companyNumber: fields["Company number"] || "",
+      companyNumber: String(fields["Company number"] || ""),
       country: fields["country"] || fields.country || fields.Country || "",
       type: "LTD" as any,
       incorporationDate: incorporationDate,
@@ -467,7 +467,7 @@ export const updateCompany: RequestHandler = async (req, res) => {
     const company: CompanyData = {
       id: record.id,
       companyName: fields["Company name"] || "",
-      companyNumber: fields["Company number"] || "",
+      companyNumber: String(fields["Company number"] || ""),
       country: fields["country"] || fields.country || fields.Country || "",
       type: "LTD" as any,
       incorporationDate: incorporationDate,
