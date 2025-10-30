@@ -147,14 +147,6 @@ export function CompanyCard({
             <span className="font-medium">Incorporated:</span> {company.incorporationDate ? formatDate(company.incorporationDate) : "N/A"}
           </div>
 
-          {/* Payment Status */}
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-gray-600">Payment:</span>
-            <Badge className={PAYMENT_STATUS_COLORS[company.paymentStatus] || "bg-gray-100 text-gray-800"}>
-              {company.paymentStatus || "unknown"}
-            </Badge>
-          </div>
-
           {/* Tags */}
           {company.tags && company.tags.length > 0 && (
             <div className="flex flex-wrap gap-1">
