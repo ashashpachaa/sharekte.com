@@ -97,7 +97,7 @@ export function CompanyTable({
     }
   };
 
-  const safeCompanies = Array.isArray(companies) ? companies : [];
+  const safeCompanies = Array.isArray(loadedCompanies) ? loadedCompanies : [];
 
   return (
     <>
