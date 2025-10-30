@@ -339,68 +339,65 @@ export const updateOrder: RequestHandler = async (req, res) => {
  * Update order status
  */
 export const updateOrderStatus: RequestHandler = async (req, res) => {
-  if (!AIRTABLE_API_TOKEN) {
-    return res.status(500).json({ error: "Airtable API token not configured" });
-  }
-
   try {
     const { orderId } = req.params;
     const { status, reason } = req.body;
+    const now = new Date().toISOString();
 
-    // Get current order
-    const getUrl = `${AIRTABLE_API_URL}/${AIRTABLE_BASE_ID}/${AIRTABLE_ORDERS_TABLE}/${orderId}`;
-    const getResponse = await fetch(getUrl, {
-      headers: {
-        Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
-      },
-    });
+    // Find the order
+    let allOrders = [...getDemoOrders(), ...inMemoryOrders];
+    if (AIRTABLE_API_TOKEN) {
+      const airtableOrders = await fetchOrdersFromAirtable();
+      allOrders = [...airtableOrders, ...inMemoryOrders];
+    }
 
-    if (!getResponse.ok) {
+    const currentOrder = allOrders.find((o) => o.id === orderId || o.orderId === orderId);
+    if (!currentOrder) {
       return res.status(404).json({ error: "Order not found" });
     }
 
-    const currentRecord: AirtableRecord = await getResponse.json();
-    const currentOrder = currentRecord.fields as Partial<Order>;
-
     // Create status history entry
-    const statusHistory = (currentOrder.statusHistory as any[] || []);
-    statusHistory.push({
-      id: `status-${Date.now()}`,
-      fromStatus: currentOrder.status,
-      toStatus: status,
-      changedDate: new Date().toISOString(),
-      reason,
-    });
+    const statusHistory = [
+      ...(currentOrder.statusHistory || []),
+      {
+        id: `status-${Date.now()}`,
+        fromStatus: currentOrder.status as OrderStatus,
+        toStatus: status as OrderStatus,
+        changedDate: now,
+        changedBy: "system",
+        reason,
+        notes: `Status changed from ${currentOrder.status} to ${status}`,
+      },
+    ];
 
     // Update order
-    const updateUrl = getUrl;
-    const updateResponse = await fetch(updateUrl, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        fields: {
-          status,
-          statusChangedDate: new Date().toISOString(),
-          statusHistory: JSON.stringify(statusHistory),
-          updatedAt: new Date().toISOString(),
-        },
-      }),
-    });
-
-    if (!updateResponse.ok) {
-      throw new Error(`Airtable API error: ${updateResponse.statusText}`);
-    }
-
-    const record: AirtableRecord = await updateResponse.json();
-    const order: Order = {
-      id: record.id,
-      ...(record.fields as Omit<Order, "id">),
+    const updatedOrder: Order = {
+      ...currentOrder,
+      status: status as OrderStatus,
+      statusChangedDate: now,
+      statusHistory,
+      lastUpdateDate: now,
+      updatedAt: now,
     };
 
-    res.json(order);
+    // Sync to Airtable if configured
+    if (currentOrder.airtableId && AIRTABLE_API_TOKEN) {
+      await updateOrderStatusInAirtable(currentOrder.airtableId, status, now);
+      await syncOrderToAirtable(updatedOrder, currentOrder.airtableId);
+    } else if (AIRTABLE_API_TOKEN) {
+      const airtableId = await syncOrderToAirtable(updatedOrder);
+      if (airtableId) {
+        updatedOrder.airtableId = airtableId;
+      }
+    }
+
+    // Update in-memory if exists
+    const inMemIndex = inMemoryOrders.findIndex((o) => o.id === orderId || o.orderId === orderId);
+    if (inMemIndex >= 0) {
+      inMemoryOrders[inMemIndex] = updatedOrder;
+    }
+
+    res.json(updatedOrder);
   } catch (error) {
     console.error("Failed to update order status:", error);
     res.status(500).json({ error: "Failed to update order status" });
