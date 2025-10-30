@@ -145,7 +145,8 @@ export const getCompanies: RequestHandler = async (req, res) => {
         const companies: CompanyData[] = data.records.map((record: any) => {
           const fields = record.fields;
           const incorporationDate = fields["Incorporate date"] || getTodayString();
-          const statusValue = fields["Status"] || fields["Statues "] || "active";
+          const rawStatus = fields["Status"] || fields["Statues "] || "active";
+          const statusValue = rawStatus.toLowerCase() as CompanyStatus;
 
           return {
             id: record.id,
@@ -161,7 +162,7 @@ export const getCompanies: RequestHandler = async (req, res) => {
             expiryDate: calculateExpiryDate(incorporationDate),
             renewalDate: calculateExpiryDate(incorporationDate),
             renewalDaysLeft: calculateRenewalDaysLeft(calculateExpiryDate(incorporationDate)),
-            status: statusValue as CompanyStatus,
+            status: statusValue,
             paymentStatus: "paid" as const,
             refundStatus: "not-refunded" as const,
             clientName: fields["Client Name"] || "",
