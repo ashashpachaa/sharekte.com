@@ -72,6 +72,7 @@ interface Invoice {
   clientName: string;
   clientEmail: string;
   amount: number;
+  currency: string;
   description: string;
   status: "paid" | "unpaid" | "canceled";
   items: InvoiceItem[];
