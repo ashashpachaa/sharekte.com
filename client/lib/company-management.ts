@@ -67,6 +67,7 @@ export interface CompanyData {
   revenue?: string;
   adminNotes?: string;
   internalNotes?: string;
+  optionsInclude?: string[];
   createdBy?: string;
   createdAt: string;
   updatedAt: string;
