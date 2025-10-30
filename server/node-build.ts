@@ -9,17 +9,18 @@ const port = process.env.PORT || 3000;
 const __dirname = import.meta.dirname;
 const distPath = path.join(__dirname, "../spa");
 
-// Serve static files (but not for API routes - they're already handled by Express above)
-app.use((req, res, next) => {
-  // Skip static file serving for API routes - let them pass through to API handlers
-  if (req.path.startsWith("/api/")) {
-    return next();
-  }
-  express.static(distPath)(req, res, next);
-});
+// Serve static files
+app.use(express.static(distPath));
 
 // Handle React Router - serve index.html for all non-API routes
 app.get("*", (req, res) => {
+  // Skip API routes and other non-SPA routes
+  if (req.path.startsWith("/api/") ||
+      req.path === "/health" ||
+      req.path.includes(".")) {
+    return res.status(404).json({ error: "Not found" });
+  }
+
   res.sendFile(path.join(distPath, "index.html"));
 });
 
