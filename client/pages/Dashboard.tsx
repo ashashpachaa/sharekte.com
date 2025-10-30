@@ -1938,10 +1938,11 @@ Generated on: ${new Date().toLocaleDateString()}
                                       onClick={() =>
                                         handleSubmitTransferForm(company.id)
                                       }
-                                      className="bg-primary hover:bg-primary-600 text-white gap-2"
+                                      disabled={company.status !== "amend-required" && company.transferFormFilled}
+                                      className="bg-primary hover:bg-primary-600 text-white gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                       <FileUp className="w-4 h-4" />
-                                      Submit Form
+                                      {company.status !== "amend-required" && company.transferFormFilled ? "Form Under Review" : "Submit Form"}
                                     </Button>
                                     <Button
                                       variant="outline"
