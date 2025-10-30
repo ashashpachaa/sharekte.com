@@ -367,7 +367,7 @@ export default function AdminInvoices() {
       );
       if (success) {
         setSelectedIds(new Set());
-        setBulkStatusAction("");
+        setBulkStatusAction("none");
         toast.success("Invoices updated");
         await loadData();
       }
