@@ -102,6 +102,7 @@ export function CompanyTable() {
       const country = (company.fields["country"] as string) || "";
       const incorporationDate = company.fields["Incorporate date"] || "";
       const incorporationYear = company.fields["Incorporate Year"] || "";
+      const renewalFees = (company.fields["Renewal fees"] as number) || 0;
 
       addItem({
         id: company.id,
@@ -111,6 +112,7 @@ export function CompanyTable() {
         country: country,
         incorporationDate: incorporationDate as string,
         incorporationYear: incorporationYear as string,
+        renewalFees: renewalFees,
       });
     });
 
