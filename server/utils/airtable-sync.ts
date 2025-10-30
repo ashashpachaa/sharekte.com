@@ -312,6 +312,8 @@ export async function syncOrderToAirtable(order: Order, airtableRecordId?: strin
       return null;
     }
 
+    console.log(`[syncOrderToAirtable] Syncing order ${order.orderId} to Airtable (table: ${tableId})`);
+
     const airtableRecord = {
       fields: {
         "Order ID": order.orderId,
@@ -319,7 +321,6 @@ export async function syncOrderToAirtable(order: Order, airtableRecordId?: strin
         "Country": order.country,
         "Company name": order.companyName,
         "Company numbers": order.companyNumber,
-        "Incorporate date": order.purchaseDate,
         "Statues": order.status,
         "Customer name": order.customerName,
         "Customer Email": order.customerEmail,
