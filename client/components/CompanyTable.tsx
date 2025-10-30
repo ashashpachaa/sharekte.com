@@ -226,11 +226,11 @@ export function CompanyTable({
   const availableCompanies = safeCompanies.filter((c) => c.status !== "sold");
 
   const uniqueCountries = Array.from(
-    new Set(activeCompanies.map((c) => c.country).filter(Boolean))
+    new Set(availableCompanies.map((c) => c.country).filter(Boolean))
   ).sort();
 
   const uniqueYears = Array.from(
-    new Set(activeCompanies.map((c) => c.incorporationYear).filter(Boolean))
+    new Set(availableCompanies.map((c) => c.incorporationYear).filter(Boolean))
   ).sort((a, b) => b - a);
 
   // Display only the first `displayCount` items
