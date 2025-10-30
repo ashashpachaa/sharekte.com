@@ -2,8 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
-import { getCompanies, getCountries, getYears } from "./routes/airtable";
-import { updateCompanyStatus } from "./routes/update-company";
+import { getCountries, getYears } from "./routes/airtable";
 import { handleSupportSubmit } from "./routes/support";
 import {
   getOrders,
@@ -17,6 +16,17 @@ import {
   deleteOrder,
 } from "./routes/orders";
 import { sendEmailNotification, getNotifications } from "./routes/notifications";
+import {
+  getCompanies,
+  getCompany,
+  createCompany,
+  updateCompany,
+  deleteCompany,
+  updateCompanyStatus,
+  renewCompany,
+  requestRefund as requestCompanyRefund,
+  approveRefund as approveCompanyRefund,
+} from "./routes/companies";
 
 export function createServer() {
   const app = express();
