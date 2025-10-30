@@ -168,15 +168,77 @@ export const getCompanies: RequestHandler = async (req, res) => {
   }
 };
 
-// Get single company
+// Get single company from Airtable
 export const getCompany: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
-    const company = companiesDb.find((c) => c.id === id);
+    const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
+    const AIRTABLE_BASE_ID = "app0PK34gyJDizR3Q";
+    const AIRTABLE_TABLE_ID = "tbljtdHPdHnTberDy";
 
-    if (!company) {
+    if (!AIRTABLE_API_TOKEN) {
+      return res.status(500).json({ error: "Airtable integration not configured" });
+    }
+
+    // Fetch from Airtable
+    const response = await fetch(
+      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_ID}/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
       return res.status(404).json({ error: "Company not found" });
     }
+
+    const record = await response.json();
+    const fields = record.fields;
+    const incorporationDate = fields["Incorporate date"] || getTodayString();
+
+    const company: CompanyData = {
+      id: record.id,
+      companyName: fields["Company name"] || "",
+      companyNumber: fields["Company number"] || "",
+      country: fields.Country || "",
+      type: "LTD" as any,
+      incorporationDate: incorporationDate,
+      incorporationYear: parseInt(fields["Incorporate year"] || new Date().getFullYear()),
+      purchasePrice: parseFloat(fields.Price || "0"),
+      renewalFee: 0,
+      currency: "GBP",
+      expiryDate: calculateExpiryDate(incorporationDate),
+      renewalDate: calculateExpiryDate(incorporationDate),
+      renewalDaysLeft: calculateRenewalDaysLeft(calculateExpiryDate(incorporationDate)),
+      status: "active" as const,
+      paymentStatus: "paid" as const,
+      refundStatus: "not-refunded" as const,
+      clientName: fields["Client Name"] || "",
+      clientEmail: fields["Client Email"] || "",
+      clientPhone: fields["Client Phone"],
+      industry: fields.Industry,
+      revenue: fields.Revenue,
+      adminNotes: fields["Admin Notes"],
+      internalNotes: fields["Internal Notes"],
+      createdBy: "airtable",
+      createdAt: getTodayString(),
+      updatedAt: getTodayString(),
+      updatedBy: "airtable",
+      tags: [],
+      documents: [],
+      activityLog: [
+        {
+          id: "log_1",
+          timestamp: getTodayString(),
+          action: "Imported from Airtable",
+          performedBy: "system",
+          details: `Company ${fields["Company name"]} imported from Airtable`,
+        },
+      ],
+      ownershipHistory: [],
+    };
 
     res.json(company);
   } catch (error) {
