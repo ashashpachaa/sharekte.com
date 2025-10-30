@@ -853,6 +853,7 @@ Generated on: ${new Date().toLocaleDateString()}
     }
 
     // Create invoices for each service
+    const { currency } = useCurrency();
     const newInvoices = cartItems.map((item, idx) => ({
       id: `service-inv-${Date.now()}-${idx}`,
       invoiceNumber: `INV-SVC-${Date.now()}-${idx}`,
@@ -865,6 +866,7 @@ Generated on: ${new Date().toLocaleDateString()}
       clientName: userData.fullName,
       clientEmail: userData.email,
       amount: item.fees,
+      currency: currency,
       description: `Additional Service: ${item.name}`,
       status: "paid" as const,
       items: [
