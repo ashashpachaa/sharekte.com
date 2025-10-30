@@ -17,6 +17,9 @@ interface AirtableResponse {
   offset?: string;
 }
 
+// In-memory storage for orders (when Airtable is not configured)
+let inMemoryOrders: Order[] = [];
+
 // Helper function to generate unique ID
 function generateOrderId(): string {
   return "ord_" + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
