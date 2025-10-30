@@ -18,10 +18,21 @@ const DEFAULT_RATES: Record<Currency, CurrencyRate> = {
   GBP: { code: "GBP", symbol: "£", name: "British Pound", rate: 0.79 },
 };
 
-export let CURRENCY_RATES: Record<Currency, CurrencyRate> = DEFAULT_RATES;
+// Initialize with default rates
+let initialRates: Record<Currency, CurrencyRate> = DEFAULT_RATES;
+
+// Try to load cached rates on module load
+try {
+  const cachedRates = localStorage.getItem("currencyRates");
+  if (cachedRates) {
+    initialRates = JSON.parse(cachedRates);
+  }
+} catch {
+  // Fall back to defaults
+}
 
 // Fetch real-time exchange rates
-async function fetchExchangeRates() {
+async function fetchExchangeRates(): Promise<Record<Currency, CurrencyRate>> {
   try {
     const response = await fetch(
       "https://api.exchangerate-api.com/v4/latest/USD"
@@ -31,7 +42,7 @@ async function fetchExchangeRates() {
     const data = await response.json();
     const rates = data.rates;
 
-    CURRENCY_RATES = {
+    const newRates: Record<Currency, CurrencyRate> = {
       USD: { code: "USD", symbol: "$", name: "US Dollar", rate: 1 },
       AED: { code: "AED", symbol: "د.إ", name: "UAE Dirham", rate: rates.AED || 3.67 },
       SAR: { code: "SAR", symbol: "﷼", name: "Saudi Riyal", rate: rates.SAR || 3.75 },
@@ -39,18 +50,12 @@ async function fetchExchangeRates() {
       GBP: { code: "GBP", symbol: "£", name: "British Pound", rate: rates.GBP || 0.79 },
     };
 
-    localStorage.setItem("currencyRates", JSON.stringify(CURRENCY_RATES));
+    localStorage.setItem("currencyRates", JSON.stringify(newRates));
     localStorage.setItem("currencyRatesTimestamp", Date.now().toString());
+    return newRates;
   } catch (error) {
     console.warn("Failed to fetch live exchange rates, using defaults:", error);
-    const cached = localStorage.getItem("currencyRates");
-    if (cached) {
-      try {
-        CURRENCY_RATES = JSON.parse(cached);
-      } catch {
-        CURRENCY_RATES = DEFAULT_RATES;
-      }
-    }
+    return initialRates;
   }
 }
 
