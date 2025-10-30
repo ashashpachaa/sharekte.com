@@ -853,7 +853,6 @@ Generated on: ${new Date().toLocaleDateString()}
     }
 
     // Create invoices for each service
-    const { currency } = useCurrency();
     const newInvoices = cartItems.map((item, idx) => ({
       id: `service-inv-${Date.now()}-${idx}`,
       invoiceNumber: `INV-SVC-${Date.now()}-${idx}`,
