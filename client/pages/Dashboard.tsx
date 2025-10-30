@@ -8,6 +8,7 @@ import { Search, X } from "lucide-react";
 import { useSearch } from "@/hooks/use-search";
 import { getPurchasedCompanies, getInvoices, savePurchasedCompany, updatePurchasedCompanyStatus, addInvoice, renewCompany, updateCompanyRenewalStatus, type PurchasedCompanyData } from "@/lib/user-data";
 import { useCurrency } from "@/lib/currency-context";
+import { MyOrders } from "@/components/MyOrders";
 import {
   BarChart3,
   Plus,
@@ -42,7 +43,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-type DashboardTab = "portfolio" | "companies" | "invoices" | "marketplace" | "account" | "payments" | "security";
+type DashboardTab = "portfolio" | "companies" | "orders" | "invoices" | "marketplace" | "account" | "payments" | "security";
 
 interface Service {
   id: string;
