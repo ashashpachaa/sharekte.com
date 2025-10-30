@@ -8,6 +8,7 @@ import { useCurrency } from "@/lib/currency-context";
 import { ArrowLeft, CheckCircle, Loader, Mail, Lock, User } from "lucide-react";
 import { toast } from "sonner";
 import { savePurchasedCompany, addInvoice, type PurchasedCompanyData, type InvoiceData } from "@/lib/user-data";
+import { createOrder } from "@/lib/orders";
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -78,13 +79,13 @@ export default function Checkout() {
       };
       localStorage.setItem("user", JSON.stringify(userData));
 
-      // Create purchased company records and invoices for each item
+      // Create purchased company records, invoices, and orders for each item
       const today = new Date().toISOString().split("T")[0];
       const oneYearLater = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
         .toISOString()
         .split("T")[0];
 
-      items.forEach((item, index) => {
+      const orderPromises = items.map(async (item, index) => {
         // Create purchased company record
         const purchasedCompany: PurchasedCompanyData = {
           id: item.id,
@@ -135,7 +136,54 @@ export default function Checkout() {
         };
 
         addInvoice(invoice);
+
+        // Create order in API
+        try {
+          await createOrder({
+            orderId: `ORD-${new Date().getFullYear()}-${String(Date.now()).slice(-5)}`,
+            customerName: userData.fullName,
+            customerEmail: userEmail,
+            customerPhone: "+1 (555) 000-0000",
+            billingAddress: "Not specified",
+            country: item.country || "Not specified",
+            companyId: item.id,
+            companyName: item.name,
+            companyNumber: item.companyNumber,
+            paymentMethod: "credit_card",
+            paymentStatus: "completed",
+            transactionId: `txn-${Date.now()}`,
+            amount: item.price,
+            currency: "USD",
+            paymentDate: today,
+            status: "paid",
+            statusChangedDate: today,
+            statusHistory: [
+              {
+                id: `hist-${Date.now()}`,
+                fromStatus: "pending-payment",
+                toStatus: "paid",
+                changedDate: today,
+                changedBy: "system",
+                notes: "Order created through checkout",
+              },
+            ],
+            purchaseDate: today,
+            lastUpdateDate: today,
+            renewalDate: oneYearLater,
+            renewalFees: item.renewalFees || 0,
+            refundStatus: "none",
+            documents: [],
+            createdAt: today,
+            updatedAt: today,
+          });
+        } catch (error) {
+          console.warn(`Failed to create order for ${item.name}:`, error);
+          // Non-blocking error - order may have been saved to localStorage anyway
+        }
       });
+
+      // Wait for all order creation to complete
+      await Promise.all(orderPromises);
 
       // Update status for each company to "Sold" in Airtable
       const updatePromises = items.map((item) =>
