@@ -143,6 +143,9 @@ export function CompanyTable({
   const [loadedCompanies, setLoadedCompanies] = useState<CompanyData[]>(companies);
   const [isLoading, setIsLoading] = useState(!companies || companies.length === 0);
   const [error, setError] = useState<string | null>(null);
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
+  const [selectedYear, setSelectedYear] = useState<string>("");
+  const [displayCount, setDisplayCount] = useState(10);
   const hasFetched = useRef(false);
 
   const handleAddToCart = (company: CompanyData) => {
