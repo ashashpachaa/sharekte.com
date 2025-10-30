@@ -160,98 +160,39 @@ function getDemoOrders(): Order[] {
  */
 export const getOrders: RequestHandler = async (req, res) => {
   try {
-    // If no Airtable token, return demo orders + in-memory orders
-    if (!AIRTABLE_API_TOKEN) {
-      console.log("No Airtable token configured, returning demo orders + in-memory orders");
-      const demoOrders = getDemoOrders();
-      const allOrders = [...demoOrders, ...inMemoryOrders];
+    let allOrders: Order[] = [];
 
-      // Apply filters
-      let filtered = allOrders;
-      const { status, country } = req.query;
-
-      if (status) {
-        filtered = filtered.filter((o) => o.status === status);
-      }
-      if (country) {
-        filtered = filtered.filter((o) => o.country === country);
-      }
-
-      return res.json(filtered);
+    // Try to fetch from Airtable first
+    if (AIRTABLE_API_TOKEN) {
+      allOrders = await fetchOrdersFromAirtable();
     }
 
-    const { status, country, dateFrom, dateTo, priceMin, priceMax } = req.query;
-    const url = `${AIRTABLE_API_URL}/${AIRTABLE_BASE_ID}/${AIRTABLE_ORDERS_TABLE}`;
+    // If Airtable is not configured or empty, use demo + in-memory
+    if (allOrders.length === 0) {
+      console.log("Using demo orders + in-memory orders");
+      const demoOrders = getDemoOrders();
+      allOrders = [...demoOrders, ...inMemoryOrders];
+    } else {
+      // Add in-memory orders as well (for newly created orders before they sync)
+      allOrders = [...allOrders, ...inMemoryOrders.filter(
+        (inMemOrder) => !allOrders.some((airtableOrder) => airtableOrder.orderId === inMemOrder.orderId)
+      )];
+    }
 
-    const params = new URLSearchParams();
-
-    // Build filter formula
-    const filters: string[] = [];
+    // Apply filters
+    let filtered = allOrders;
+    const { status, country } = req.query;
 
     if (status) {
-      filters.push(`{status} = "${status}"`);
+      filtered = filtered.filter((o) => o.status === status);
     }
     if (country) {
-      filters.push(`{country} = "${country}"`);
-    }
-    if (dateFrom) {
-      filters.push(`{purchaseDate} >= "${dateFrom}"`);
-    }
-    if (dateTo) {
-      filters.push(`{purchaseDate} <= "${dateTo}"`);
-    }
-    if (priceMin) {
-      filters.push(`{amount} >= ${priceMin}`);
-    }
-    if (priceMax) {
-      filters.push(`{amount} <= ${priceMax}`);
+      filtered = filtered.filter((o) => o.country === country);
     }
 
-    if (filters.length > 0) {
-      const filterFormula = filters.length === 1
-        ? filters[0]
-        : `AND(${filters.join(", ")})`;
-      params.append("filterByFormula", filterFormula);
-    }
-
-    params.append("sort[0][field]", "purchaseDate");
-    params.append("sort[0][direction]", "desc");
-
-    const response = await fetch(`${url}?${params}`, {
-      headers: {
-        Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
-      },
-    });
-
-    if (!response.ok) {
-      console.warn(`Airtable API returned ${response.status}: ${response.statusText}, falling back to demo + in-memory orders`);
-      // Fall back to demo + in-memory orders if Airtable fails
-      const demoOrders = getDemoOrders();
-      let allOrders = [...demoOrders, ...inMemoryOrders];
-
-      if (status) {
-        allOrders = allOrders.filter((o) => o.status === status);
-      }
-      if (country) {
-        allOrders = allOrders.filter((o) => o.country === country);
-      }
-
-      return res.json(allOrders);
-    }
-
-    const data: AirtableResponse = await response.json();
-
-    const airtableOrders: Order[] = data.records.map((record) => ({
-      id: record.id,
-      ...(record.fields as Omit<Order, "id">),
-    }));
-
-    // Combine Airtable orders with in-memory orders (in-memory are fallbacks)
-    const allOrders = [...airtableOrders, ...inMemoryOrders];
-    res.json(allOrders);
+    res.json(filtered);
   } catch (error) {
     console.error("Error fetching orders:", error);
-    // Fall back to demo + in-memory orders on any error
     try {
       const demoOrders = getDemoOrders();
       let allOrders = [...demoOrders, ...inMemoryOrders];
