@@ -1352,6 +1352,18 @@ Generated on: ${new Date().toLocaleDateString()}
                               {/* Actions */}
                               <div className="flex gap-2 pt-3 border-t border-border/40">
                                 <Button
+                                  onClick={() => {
+                                    setSelectedInvoice(invoice);
+                                    setShowInvoiceModal(true);
+                                  }}
+                                  size="sm"
+                                  variant="outline"
+                                  className="gap-1 flex-1 text-xs h-8"
+                                >
+                                  <Eye className="w-3 h-3" />
+                                  View
+                                </Button>
+                                <Button
                                   onClick={() => handleDownloadInvoice(invoice)}
                                   size="sm"
                                   className="bg-primary hover:bg-primary-600 text-white gap-1 flex-1 text-xs h-8"
