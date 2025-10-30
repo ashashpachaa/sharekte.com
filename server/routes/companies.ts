@@ -682,8 +682,17 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
 
     res.json(updatedCompany);
   } catch (error) {
-    console.error("Error updating company status:", error);
-    res.status(500).json({ error: "Failed to update company status" });
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error("Error updating company status:", {
+      error: errorMessage,
+      stack: error instanceof Error ? error.stack : undefined,
+      id: req.params.id,
+      status: req.body.status,
+    });
+    res.status(500).json({
+      error: "Failed to update company status",
+      details: errorMessage,
+    });
   }
 };
 
