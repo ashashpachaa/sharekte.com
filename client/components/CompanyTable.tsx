@@ -66,6 +66,7 @@ export function CompanyTable({
   useEffect(() => {
     // If no companies passed as prop, fetch from API
     if (!companies || companies.length === 0) {
+      setIsLoading(true);
       const fetchCompanies = async () => {
         try {
           const response = await fetch("/api/companies");
@@ -75,11 +76,14 @@ export function CompanyTable({
           }
         } catch (error) {
           console.error("Error fetching companies:", error);
+        } finally {
+          setIsLoading(false);
         }
       };
       fetchCompanies();
     } else {
       setLoadedCompanies(companies);
+      setIsLoading(false);
     }
   }, [companies]);
 
