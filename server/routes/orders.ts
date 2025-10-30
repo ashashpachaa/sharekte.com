@@ -1,9 +1,10 @@
 import { RequestHandler } from "express";
 import { Order, OrderStatus, RefundStatus } from "../../client/lib/orders";
+import { syncOrderToAirtable, fetchOrdersFromAirtable, updateOrderStatusInAirtable } from "../utils/airtable-sync";
 
 const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
 const AIRTABLE_BASE_ID = "app0PK34gyJDizR3Q";
-const AIRTABLE_ORDERS_TABLE = "Orders"; // Will be created in Airtable
+const AIRTABLE_ORDERS_TABLE = "tblXvZ0kjl7p7h9Jq"; // Orders table
 const AIRTABLE_API_URL = "https://api.airtable.com/v0";
 
 interface AirtableRecord {
