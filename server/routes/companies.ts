@@ -621,19 +621,22 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
 
     if (!updateResponse.ok) {
       const airtableError = await updateResponse.json().catch(() => ({ error: updateResponse.statusText }));
+      const errorMsg = airtableError.error?.message || airtableError.error || updateResponse.statusText || "Unknown error";
       console.error(
-        "Airtable PATCH failed:",
-        updateResponse.status,
-        updateResponse.statusText,
-        "Response:",
-        JSON.stringify(airtableError)
+        `[updateCompanyStatus] FAILED - Status ${updateResponse.status}:`,
+        "Company:", companyName,
+        "Airtable ID:", airtableId,
+        "Field value being set: 'Statues ' =", newStatusValue,
+        "Full error:", JSON.stringify(airtableError)
       );
-      return res.status(updateResponse.status).json({
+      return res.status(500).json({
         error: "Failed to update company status in Airtable",
-        details: airtableError,
-        status: updateResponse.status,
+        details: errorMsg,
+        airtableError: airtableError,
         airtableId: airtableId,
-        companyName: companyName
+        companyName: companyName,
+        fieldName: "Statues ",
+        fieldValue: newStatusValue
       });
     }
 
