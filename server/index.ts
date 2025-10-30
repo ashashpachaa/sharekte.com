@@ -43,6 +43,22 @@ import {
   generatePDF,
   getFormAnalytics,
 } from "./routes/transfer-forms";
+import {
+  getInvoices,
+  getInvoice,
+  createInvoice,
+  updateInvoice,
+  updateInvoiceStatus,
+  deleteInvoice,
+  uploadAttachment as uploadInvoiceAttachment,
+  deleteAttachment as deleteInvoiceAttachment,
+  sendInvoiceEmail,
+  generatePDF as generateInvoicePDF,
+  bulkUpdateStatus,
+  bulkSendEmails,
+  exportCSV,
+  getAnalyticsSummary as getInvoiceAnalytics,
+} from "./routes/invoices";
 
 export function createServer() {
   const app = express();
