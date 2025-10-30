@@ -155,6 +155,10 @@ export default function Dashboard() {
   const [invoicesSearch, setInvoicesSearch] = useState("");
   const [marketplaceSearch, setMarketplaceSearch] = useState("");
 
+  // Invoice view state
+  const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
+  const [showInvoiceModal, setShowInvoiceModal] = useState(false);
+
   // User data state
   const [userData, setUserData] = useState<UserData>(() => {
     const saved = localStorage.getItem("user");
