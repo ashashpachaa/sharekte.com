@@ -97,6 +97,9 @@ function createNewCompany(
 // Get all companies from Airtable with caching and deduplication
 export const getCompanies: RequestHandler = async (req, res) => {
   try {
+    // Clear cache on each request for debugging
+    serverCache = null;
+
     // Check server cache first
     if (
       serverCache &&
