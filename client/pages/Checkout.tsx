@@ -85,9 +85,12 @@ export default function Checkout() {
         .toISOString()
         .split("T")[0];
 
+      // Convert prices for all items upfront
+      const priceConverter = (price: number) => currency !== "USD" ? convertPrice(price) : price;
+
       const orderPromises = items.map(async (item, index) => {
         // Convert price to selected currency
-        const convertedAmount = currency !== "USD" ? convertPrice(item.price) : item.price;
+        const convertedAmount = priceConverter(item.price);
 
         // Create purchased company record
         const purchasedCompany: PurchasedCompanyData = {
