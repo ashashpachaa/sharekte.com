@@ -20,9 +20,10 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <CurrencyProvider>
-          <NotificationsProvider>
-            <CartProvider>
+        <AdminProvider>
+          <CurrencyProvider>
+            <NotificationsProvider>
+              <CartProvider>
               <Toaster />
               <Sonner />
               <BrowserRouter>
@@ -36,9 +37,10 @@ export default function App() {
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </BrowserRouter>
-            </CartProvider>
-          </NotificationsProvider>
-        </CurrencyProvider>
+              </CartProvider>
+            </NotificationsProvider>
+          </CurrencyProvider>
+        </AdminProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
