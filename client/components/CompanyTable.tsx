@@ -280,16 +280,25 @@ export function CompanyTable({
                     {company.companyName}
                   </button>
                 </TableCell>
+                <TableCell className="text-sm">{company.country}</TableCell>
                 <TableCell className="text-sm text-gray-600">
                   {company.companyNumber}
                 </TableCell>
-                <TableCell className="text-sm">{company.country}</TableCell>
                 <TableCell className="text-sm">
                   {formatDate(company.incorporationDate)}
                 </TableCell>
                 <TableCell className="text-sm">{company.incorporationYear}</TableCell>
                 <TableCell className="text-sm font-medium">
                   {formatPrice(company.purchasePrice, company.currency)}
+                </TableCell>
+                <TableCell className="text-sm">
+                  {company.optionsInclude && company.optionsInclude.length > 0 ? (
+                    <span className="text-gray-700">
+                      {company.optionsInclude.join(", ")}
+                    </span>
+                  ) : (
+                    <span className="text-gray-400">None</span>
+                  )}
                 </TableCell>
                 <TableCell className="text-right">
                   {isAdmin ? (
@@ -341,11 +350,13 @@ export function CompanyTable({
                     </DropdownMenu>
                   ) : (
                     <Button
-                      variant="ghost"
+                      variant="default"
                       size="sm"
-                      onClick={() => onViewDetails?.(company)}
+                      onClick={() => handleAddToCart(company)}
+                      className="gap-1"
                     >
-                      <Eye className="w-4 h-4" />
+                      <ShoppingCart className="w-4 h-4" />
+                      Add to Cart
                     </Button>
                   )}
                 </TableCell>
