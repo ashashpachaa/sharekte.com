@@ -180,7 +180,7 @@ export default function AdminInvoices() {
     }
 
     // Payment method filter
-    if (filterPaymentMethod) {
+    if (filterPaymentMethod && filterPaymentMethod !== "all") {
       result = result.filter((inv) => inv.paymentMethod === filterPaymentMethod);
     }
 
