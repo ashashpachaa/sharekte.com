@@ -1393,6 +1393,151 @@ Generated on: ${new Date().toLocaleDateString()}
             </div>
           )}
 
+          {/* Invoice View Modal */}
+          {selectedInvoice && (
+            <Dialog open={showInvoiceModal} onOpenChange={setShowInvoiceModal}>
+              <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>Invoice {selectedInvoice.invoiceNumber}</DialogTitle>
+                  <DialogDescription>
+                    {selectedInvoice.description}
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="space-y-6">
+                  {/* Header */}
+                  <div className="border-b pb-4">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h3 className="text-lg font-bold text-foreground">
+                          {selectedInvoice.invoiceNumber}
+                        </h3>
+                        <p className="text-sm text-muted-foreground">
+                          {selectedInvoice.description}
+                        </p>
+                      </div>
+                      <div
+                        className={`px-3 py-1 rounded-full font-semibold text-sm ${
+                          selectedInvoice.status === "paid"
+                            ? "bg-green-100 text-green-800"
+                            : selectedInvoice.status === "unpaid"
+                              ? "bg-yellow-100 text-yellow-800"
+                              : "bg-red-100 text-red-800"
+                        }`}
+                      >
+                        {selectedInvoice.status === "paid" && "✓ Paid"}
+                        {selectedInvoice.status === "unpaid" && "⏳ Unpaid"}
+                        {selectedInvoice.status === "canceled" && "✗ Canceled"}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Company & Client Info */}
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-1">Company</p>
+                      <p className="font-semibold text-foreground">
+                        {selectedInvoice.companyName}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {selectedInvoice.companyNumber}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-1">Client</p>
+                      <p className="font-semibold text-foreground">
+                        {selectedInvoice.clientName}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {selectedInvoice.clientEmail}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Dates */}
+                  <div className="grid md:grid-cols-2 gap-6 border-t pt-4">
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-1">Invoice Date</p>
+                      <p className="font-semibold text-foreground">
+                        {selectedInvoice.date}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-1">Due Date</p>
+                      <p className="font-semibold text-foreground">
+                        {selectedInvoice.dueDate}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Items */}
+                  <div className="border-t pt-4">
+                    <p className="text-sm font-semibold text-foreground mb-3">
+                      Line Items
+                    </p>
+                    <div className="space-y-2">
+                      {selectedInvoice.items.map((item, idx) => (
+                        <div
+                          key={idx}
+                          className="flex justify-between items-center py-2 border-b text-sm"
+                        >
+                          <div className="flex-1">
+                            <p className="text-foreground">{item.description}</p>
+                            <p className="text-xs text-muted-foreground">
+                              Qty: {item.quantity} × {formatPrice(item.unitPrice)}
+                            </p>
+                          </div>
+                          <p className="font-semibold text-foreground">
+                            {formatPrice(item.total)}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Total */}
+                  <div className="border-t pt-4">
+                    <div className="flex justify-end">
+                      <div className="w-48">
+                        <div className="flex justify-between mb-2">
+                          <span className="text-sm text-muted-foreground">Subtotal</span>
+                          <span className="text-sm font-medium">
+                            {formatPrice(selectedInvoice.amount)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between pt-2 border-t">
+                          <span className="font-semibold text-foreground">Total</span>
+                          <span className="text-lg font-bold text-primary">
+                            {formatPrice(selectedInvoice.amount)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex gap-2 border-t pt-4">
+                    <Button
+                      onClick={() => handleDownloadInvoice(selectedInvoice)}
+                      className="bg-primary hover:bg-primary-600 text-white gap-1 flex-1"
+                    >
+                      <Download className="w-4 h-4" />
+                      Download PDF
+                    </Button>
+                    <Button
+                      onClick={() => handlePrintInvoice(selectedInvoice)}
+                      variant="outline"
+                      className="gap-1 flex-1"
+                    >
+                      <FileUp className="w-4 h-4" />
+                      Print
+                    </Button>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+          )}
+
           {/* My Companies Tab */}
           {activeTab === "companies" && (
             <div className="space-y-6">
