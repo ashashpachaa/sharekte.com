@@ -410,17 +410,16 @@ export default function Companies() {
                     pageNum = currentPage - 2 + i;
                   }
                 }
-                if (pageNum > totalPages) return null;
-                return (
-                  <Button
-                    key={pageNum}
-                    variant={currentPage === pageNum ? "default" : "outline"}
-                    onClick={() => setCurrentPage(pageNum)}
-                  >
-                    {pageNum}
-                  </Button>
-                );
-              })}
+                return pageNum <= totalPages ? pageNum : null;
+              }).filter((pageNum) => pageNum !== null).map((pageNum) => (
+                <Button
+                  key={`page-${pageNum}`}
+                  variant={currentPage === pageNum ? "default" : "outline"}
+                  onClick={() => setCurrentPage(pageNum as number)}
+                >
+                  {pageNum}
+                </Button>
+              ))}
               <Button
                 variant="outline"
                 onClick={() =>
