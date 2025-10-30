@@ -16,6 +16,7 @@ import {
   rejectRefund,
   deleteOrder,
 } from "./routes/orders";
+import { sendEmailNotification, getNotifications } from "./routes/notifications";
 
 export function createServer() {
   const app = express();
@@ -52,6 +53,10 @@ export function createServer() {
   app.post("/api/orders/:orderId/refund-approve", approveRefund);
   app.post("/api/orders/:orderId/refund-reject", rejectRefund);
   app.delete("/api/orders/:orderId", deleteOrder);
+
+  // Notification routes
+  app.post("/api/notifications/email", sendEmailNotification);
+  app.get("/api/notifications", getNotifications);
 
   return app;
 }
