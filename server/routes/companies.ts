@@ -145,7 +145,8 @@ export const getCompanies: RequestHandler = async (req, res) => {
         const companies: CompanyData[] = data.records.map((record: any) => {
           const fields = record.fields;
           const incorporationDate = fields["Incorporate date"] || getTodayString();
-          const rawStatus = fields["Status"] || fields["Statues "] || "active";
+          // Try Statues (with space) first, then Status - both are valid field names in Airtable
+          const rawStatus = fields["Statues "] || fields["Status"] || "active";
           const statusValue = rawStatus.toLowerCase() as CompanyStatus;
 
           return {
