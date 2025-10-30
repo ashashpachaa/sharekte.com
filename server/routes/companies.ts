@@ -591,6 +591,8 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
     const previousStatus = fields["Statues "] || "available";
     const newStatus = status || previousStatus;
 
+    console.log(`Updating company status: ${company.companyName} (${airtableId}) from "${previousStatus}" to "${newStatus}"`);
+
     // Clear cache since we're updating
     serverCache = null;
 
