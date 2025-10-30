@@ -118,16 +118,20 @@ export interface Order {
 }
 
 /**
- * Get all orders (mock - replace with API call)
+ * Get all orders
  */
 export async function getAllOrders(): Promise<Order[]> {
   try {
     const response = await fetch("/api/orders");
-    if (!response.ok) throw new Error("Failed to fetch orders");
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ error: "Unknown error" }));
+      throw new Error(errorData.error || `Failed to fetch orders: ${response.statusText}`);
+    }
     return response.json();
   } catch (error) {
-    console.error("Failed to fetch orders:", error);
-    return [];
+    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
+    console.error("Failed to fetch orders:", errorMessage);
+    throw error;
   }
 }
 
