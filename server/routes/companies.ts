@@ -77,8 +77,8 @@ async function fetchCompaniesData(): Promise<CompanyData[]> {
         const companies: CompanyData[] = data.records.map((record: any) => {
           const fields = record.fields;
           const incorporationDate = fields["Incorporate date"] || getTodayString();
-          // Try Statues (with space) first, then Status - both are valid field names in Airtable
-          const rawStatus = fields["Statues "] || fields["Status"] || "active";
+          // Try multiple field name variations for status/statues field
+          const rawStatus = fields["Statues "] || fields["Statues"] || fields["Status"] || "active";
           const statusValue = rawStatus.toLowerCase() as CompanyStatus;
 
           return {
