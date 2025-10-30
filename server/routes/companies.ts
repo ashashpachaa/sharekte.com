@@ -220,40 +220,90 @@ export const createCompany: RequestHandler = async (req, res) => {
         .json({ error: "Missing required fields" });
     }
 
-    const company = createNewCompany({
-      companyName,
-      companyNumber,
-      country,
-      type: type || "LTD",
-      incorporationDate:
-        incorporationDate || new Date().toISOString().split("T")[0],
-      incorporationYear:
-        incorporationYear || new Date().getFullYear(),
-      purchasePrice: purchasePrice || 0,
-      renewalFee: renewalFee || 0,
-      currency: currency || "USD",
-      clientName,
-      clientEmail,
+    const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
+    const AIRTABLE_BASE_ID = "app0PK34gyJDizR3Q";
+    const AIRTABLE_TABLE_ID = "tbljtdHPdHnTberDy";
+
+    if (!AIRTABLE_API_TOKEN) {
+      return res.status(500).json({ error: "Airtable integration not configured" });
+    }
+
+    // Create record in Airtable
+    const airtableResponse = await fetch(
+      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_ID}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          records: [
+            {
+              fields: {
+                "Company name": companyName,
+                "Company number": companyNumber,
+                Country: country,
+                "Incorporate date": incorporationDate || new Date().toISOString().split("T")[0],
+                "Incorporate year": incorporationYear || new Date().getFullYear(),
+                Price: purchasePrice || 0,
+              },
+            },
+          ],
+        }),
+      }
+    );
+
+    if (!airtableResponse.ok) {
+      const error = await airtableResponse.text();
+      console.error("Airtable API error:", error);
+      return res.status(500).json({ error: "Failed to create company in Airtable" });
+    }
+
+    const airtableData = await airtableResponse.json();
+    const record = airtableData.records[0];
+
+    // Map Airtable response to CompanyData
+    const company: CompanyData = {
+      id: record.id,
+      companyName: record.fields["Company name"] || "",
+      companyNumber: record.fields["Company number"] || "",
+      country: record.fields.Country || "",
+      type: "LTD" as any,
+      incorporationDate: record.fields["Incorporate date"] || getTodayString(),
+      incorporationYear: record.fields["Incorporate year"] || new Date().getFullYear(),
+      purchasePrice: parseFloat(record.fields.Price || "0"),
+      renewalFee: 0,
+      currency: "GBP",
+      expiryDate: calculateExpiryDate(record.fields["Incorporate date"] || getTodayString()),
+      renewalDate: calculateExpiryDate(record.fields["Incorporate date"] || getTodayString()),
+      renewalDaysLeft: calculateRenewalDaysLeft(calculateExpiryDate(record.fields["Incorporate date"] || getTodayString())),
+      status: "active" as const,
+      paymentStatus: "paid" as const,
+      refundStatus: "not-refunded" as const,
+      clientName: clientName || "",
+      clientEmail: clientEmail || "",
       clientPhone,
       industry,
       revenue,
       adminNotes,
-      status: status || "pending",
-      paymentStatus: paymentStatus || "pending",
-    });
-
-    companiesDb.push(company);
-
-    // Sync to Airtable if configured
-    const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
-    if (AIRTABLE_API_TOKEN) {
-      try {
-        await syncCompanyToAirtable(company);
-      } catch (airtableError) {
-        console.error("Error syncing to Airtable:", airtableError);
-        // Don't fail the request if Airtable sync fails
-      }
-    }
+      createdBy: "airtable",
+      createdAt: getTodayString(),
+      updatedAt: getTodayString(),
+      updatedBy: "airtable",
+      tags: [],
+      documents: [],
+      activityLog: [
+        {
+          id: "log_1",
+          timestamp: getTodayString(),
+          action: "Created in Airtable",
+          performedBy: "system",
+          details: `Company ${companyName} created`,
+        },
+      ],
+      ownershipHistory: [],
+    };
 
     res.status(201).json(company);
   } catch (error) {
