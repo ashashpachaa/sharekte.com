@@ -402,14 +402,38 @@ export const generatePDF: RequestHandler = async (req, res) => {
       return res.status(404).json({ error: "Form not found" });
     }
 
-    // TODO: Implement actual PDF generation with pdfkit or similar
-    // For now, return a placeholder
-    res.setHeader("Content-Type", "application/pdf");
+    // Generate HTML for PDF
+    // Note: This returns HTML that can be converted to PDF using:
+    // - Puppeteer (recommended)
+    // - wkhtmltopdf
+    // - node-html-pdf
+    //
+    // For production, you'll want to use a library like:
+    // - npm install puppeteer
+    // - npm install pdfkit
+    // - npm install html-to-pdf
+
+    const { getFormPDFHTML } = await import("../utils/pdf-generator");
+    const htmlContent = getFormPDFHTML(form, {
+      includeAttachments: true,
+      includeComments: true,
+      includeAdminNotes: true,
+      compact: false,
+    });
+
+    // For now, return HTML that can be printed to PDF in browser
+    res.setHeader("Content-Type", "text/html");
     res.setHeader(
       "Content-Disposition",
-      `attachment; filename=transfer-form-${form.formId}.pdf`
+      `attachment; filename=transfer-form-${form.formId}.html`
     );
-    res.send(Buffer.from("PDF content placeholder"));
+    res.send(htmlContent);
+
+    // TODO: When using Puppeteer or similar, implement:
+    // const html2pdf = require('html2pdf.js');
+    // const pdfBuffer = await html2pdf().set(options).from.string(htmlContent).output();
+    // res.setHeader("Content-Type", "application/pdf");
+    // res.send(pdfBuffer);
   } catch (error) {
     console.error("Error generating PDF:", error);
     res.status(500).json({ error: "Failed to generate PDF" });
