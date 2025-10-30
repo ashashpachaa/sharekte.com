@@ -150,8 +150,23 @@ interface LoginHistory {
   location: string;
 }
 
+function formatPriceWithCurrency(
+  amount: number,
+  currency: string,
+  rates: Record<string, { symbol: string; rate: number }>
+): string {
+  const currencyInfo = rates[currency as keyof typeof rates];
+  if (!currencyInfo) return `${amount.toLocaleString()}`;
+
+  const converted = amount * currencyInfo.rate;
+  return `${currencyInfo.symbol}${converted.toLocaleString(undefined, {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  })}`;
+}
+
 export default function Dashboard() {
-  const { formatPrice } = useCurrency();
+  const { formatPrice, rates } = useCurrency();
   const [activeTab, setActiveTab] = useState<DashboardTab>("portfolio");
   const [isEditing, setIsEditing] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
