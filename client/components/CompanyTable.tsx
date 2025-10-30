@@ -22,6 +22,7 @@ import {
   Eye,
   MoreHorizontal,
   TrendingUp,
+  ShoppingCart,
 } from "lucide-react";
 import {
   CompanyData,
@@ -39,6 +40,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { useCart } from "@/lib/cart-context";
 
 interface CompanyTableProps {
   companies: CompanyData[];
