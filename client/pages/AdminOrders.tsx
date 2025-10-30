@@ -4,8 +4,10 @@ import { useAdmin } from "@/lib/admin-context";
 import { getAllOrders, updateOrderStatus, getStatusColor, type Order, type OrderStatus } from "@/lib/orders";
 import { RefundManagement } from "@/components/RefundManagement";
 import { DocumentManagement } from "@/components/DocumentManagement";
+import { TransferFormManagement } from "@/components/TransferFormManagement";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Search,
   Filter,
@@ -18,6 +20,7 @@ import {
   CheckCircle2,
   AlertCircle,
   Trash2,
+  FileText,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
