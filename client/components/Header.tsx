@@ -24,9 +24,9 @@ export function Header() {
           <Link to="/" className="text-foreground hover:text-primary transition-colors">
             Home
           </Link>
-          <a href="#companies" className="text-foreground hover:text-primary transition-colors">
-            Browse
-          </a>
+          <Link to="/companies" className="text-foreground hover:text-primary transition-colors">
+            Companies
+          </Link>
           <a href="#features" className="text-foreground hover:text-primary transition-colors">
             Features
           </a>
