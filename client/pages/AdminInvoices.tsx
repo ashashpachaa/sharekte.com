@@ -358,7 +358,7 @@ export default function AdminInvoices() {
   };
 
   const handleBulkStatusUpdate = async () => {
-    if (!bulkStatusAction || selectedIds.size === 0) return;
+    if (!bulkStatusAction || bulkStatusAction === "none" || selectedIds.size === 0) return;
 
     try {
       const success = await bulkUpdateInvoiceStatus(
