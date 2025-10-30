@@ -1006,6 +1006,17 @@ Generated on: ${new Date().toLocaleDateString()}
               My Companies
             </button>
             <button
+              onClick={() => setActiveTab("orders")}
+              className={`py-4 px-1 font-semibold transition-colors whitespace-nowrap ${
+                activeTab === "orders"
+                  ? "text-primary border-b-2 border-primary"
+                  : "text-muted-foreground hover:text-foreground border-b-2 border-transparent"
+              }`}
+            >
+              <ShoppingCart className="w-4 h-4 inline mr-2" />
+              My Orders
+            </button>
+            <button
               onClick={() => setActiveTab("invoices")}
               className={`py-4 px-1 font-semibold transition-colors whitespace-nowrap ${
                 activeTab === "invoices"
