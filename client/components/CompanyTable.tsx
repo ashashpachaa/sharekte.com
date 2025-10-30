@@ -218,7 +218,8 @@ export function CompanyTable({
     const countryMatch = !selectedCountry || company.country === selectedCountry;
     const yearMatch = !selectedYear || company.incorporationYear === parseInt(selectedYear);
     const statusMatch = company.status === "active";
-    return countryMatch && yearMatch && statusMatch;
+    const notSoldCompany = company.companyName !== "DOMAINО23 LTD" && company.companyName !== "DOMAIN023 LTD";
+    return countryMatch && yearMatch && statusMatch && notSoldCompany;
   });
 
   // Get unique countries and years for filter options (only from active companies)
