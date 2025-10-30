@@ -540,19 +540,33 @@ function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModal
           <div className="grid grid-cols-2 gap-6">
             <div>
               <p className="text-xs text-muted-foreground font-semibold mb-1">Order ID</p>
-              <p className="text-foreground font-mono">{order.orderId}</p>
+              <p className="text-foreground font-mono">{editedOrder.orderId}</p>
             </div>
             <div>
               <p className="text-xs text-muted-foreground font-semibold mb-1">Order Date</p>
-              <p className="text-foreground">{new Date(order.purchaseDate).toLocaleDateString()}</p>
+              <input
+                type="date"
+                value={editedOrder.purchaseDate.split("T")[0]}
+                onChange={(e) => handleFieldChange("purchaseDate", e.target.value)}
+                className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
+              />
             </div>
             <div>
               <p className="text-xs text-muted-foreground font-semibold mb-1">Last Updated</p>
-              <p className="text-foreground">{new Date(order.lastUpdateDate).toLocaleDateString()}</p>
+              <p className="text-foreground text-sm py-2">{new Date(editedOrder.lastUpdateDate).toLocaleDateString()}</p>
             </div>
             <div>
               <p className="text-xs text-muted-foreground font-semibold mb-1">Payment Status</p>
-              <p className="text-foreground capitalize">{order.paymentStatus}</p>
+              <select
+                value={editedOrder.paymentStatus}
+                onChange={(e) => handleFieldChange("paymentStatus", e.target.value)}
+                className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
+              >
+                <option value="pending">Pending</option>
+                <option value="completed">Completed</option>
+                <option value="failed">Failed</option>
+                <option value="refunded">Refunded</option>
+              </select>
             </div>
           </div>
 
@@ -561,20 +575,49 @@ function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModal
             <h3 className="font-semibold text-foreground mb-4">Customer Information</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-xs text-muted-foreground">Name</p>
-                <p className="text-foreground font-medium">{order.customerName}</p>
+                <p className="text-xs text-muted-foreground font-semibold mb-1">Name</p>
+                <input
+                  type="text"
+                  value={editedOrder.customerName}
+                  onChange={(e) => handleFieldChange("customerName", e.target.value)}
+                  className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
+                />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Email</p>
-                <p className="text-foreground font-medium">{order.customerEmail}</p>
+                <p className="text-xs text-muted-foreground font-semibold mb-1">Email</p>
+                <input
+                  type="email"
+                  value={editedOrder.customerEmail}
+                  onChange={(e) => handleFieldChange("customerEmail", e.target.value)}
+                  className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
+                />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Phone</p>
-                <p className="text-foreground font-medium">{order.customerPhone || "—"}</p>
+                <p className="text-xs text-muted-foreground font-semibold mb-1">Phone</p>
+                <input
+                  type="tel"
+                  value={editedOrder.customerPhone || ""}
+                  onChange={(e) => handleFieldChange("customerPhone", e.target.value)}
+                  className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
+                />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Country</p>
-                <p className="text-foreground font-medium">{order.country}</p>
+                <p className="text-xs text-muted-foreground font-semibold mb-1">Country</p>
+                <input
+                  type="text"
+                  value={editedOrder.country}
+                  onChange={(e) => handleFieldChange("country", e.target.value)}
+                  className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
+                />
+              </div>
+              <div className="col-span-2">
+                <p className="text-xs text-muted-foreground font-semibold mb-1">Billing Address</p>
+                <input
+                  type="text"
+                  value={editedOrder.billingAddress || ""}
+                  onChange={(e) => handleFieldChange("billingAddress", e.target.value)}
+                  className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
+                />
               </div>
             </div>
           </div>
@@ -584,12 +627,22 @@ function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModal
             <h3 className="font-semibold text-foreground mb-4">Company Information</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-xs text-muted-foreground">Name</p>
-                <p className="text-foreground font-medium">{order.companyName}</p>
+                <p className="text-xs text-muted-foreground font-semibold mb-1">Name</p>
+                <input
+                  type="text"
+                  value={editedOrder.companyName}
+                  onChange={(e) => handleFieldChange("companyName", e.target.value)}
+                  className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
+                />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Company Number</p>
-                <p className="text-foreground font-mono">{order.companyNumber}</p>
+                <p className="text-xs text-muted-foreground font-semibold mb-1">Company Number</p>
+                <input
+                  type="text"
+                  value={editedOrder.companyNumber}
+                  onChange={(e) => handleFieldChange("companyNumber", e.target.value)}
+                  className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
+                />
               </div>
             </div>
           </div>
@@ -599,47 +652,103 @@ function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModal
             <h3 className="font-semibold text-foreground mb-4">Payment Information</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-xs text-muted-foreground">Amount</p>
-                <p className="text-lg font-bold text-foreground">
-                  {order.currency} {order.amount.toLocaleString()}
-                </p>
+                <p className="text-xs text-muted-foreground font-semibold mb-1">Amount</p>
+                <input
+                  type="number"
+                  value={editedOrder.amount}
+                  onChange={(e) => handleFieldChange("amount", parseFloat(e.target.value))}
+                  className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
+                />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground">Method</p>
-                <p className="text-foreground capitalize">{order.paymentMethod.replace(/_/g, " ")}</p>
+                <p className="text-xs text-muted-foreground font-semibold mb-1">Currency</p>
+                <select
+                  value={editedOrder.currency}
+                  onChange={(e) => handleFieldChange("currency", e.target.value)}
+                  className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
+                >
+                  <option value="USD">USD</option>
+                  <option value="AED">AED</option>
+                  <option value="SAR">SAR</option>
+                  <option value="EUR">EUR</option>
+                  <option value="GBP">GBP</option>
+                </select>
               </div>
-              {order.transactionId && (
-                <div className="col-span-2">
-                  <p className="text-xs text-muted-foreground">Transaction ID</p>
-                  <p className="text-foreground font-mono text-sm">{order.transactionId}</p>
-                </div>
-              )}
+              <div>
+                <p className="text-xs text-muted-foreground font-semibold mb-1">Method</p>
+                <select
+                  value={editedOrder.paymentMethod}
+                  onChange={(e) => handleFieldChange("paymentMethod", e.target.value)}
+                  className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
+                >
+                  <option value="credit_card">Credit Card</option>
+                  <option value="debit_card">Debit Card</option>
+                  <option value="bank_transfer">Bank Transfer</option>
+                  <option value="paypal">PayPal</option>
+                </select>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground font-semibold mb-1">Transaction ID</p>
+                <input
+                  type="text"
+                  value={editedOrder.transactionId || ""}
+                  onChange={(e) => handleFieldChange("transactionId", e.target.value)}
+                  className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
+                />
+              </div>
             </div>
+          </div>
+
+          {/* Renewal Info */}
+          <div className="border-t border-border/40 pt-6">
+            <h3 className="font-semibold text-foreground mb-4">Renewal Information</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-xs text-muted-foreground font-semibold mb-1">Renewal Date</p>
+                <input
+                  type="date"
+                  value={editedOrder.renewalDate.split("T")[0]}
+                  onChange={(e) => handleFieldChange("renewalDate", e.target.value)}
+                  className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
+                />
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground font-semibold mb-1">Renewal Fees</p>
+                <input
+                  type="number"
+                  value={editedOrder.renewalFees}
+                  onChange={(e) => handleFieldChange("renewalFees", parseFloat(e.target.value))}
+                  className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Admin Notes */}
+          <div className="border-t border-border/40 pt-6">
+            <h3 className="font-semibold text-foreground mb-4">Admin Notes</h3>
+            <textarea
+              value={editedOrder.adminNotes || ""}
+              onChange={(e) => handleFieldChange("adminNotes", e.target.value)}
+              placeholder="Internal admin notes..."
+              className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground min-h-24"
+            />
           </div>
 
           {/* Status Update */}
           <div className="border-t border-border/40 pt-6">
-            <h3 className="font-semibold text-foreground mb-4">Update Status</h3>
-            <div className="flex gap-3">
-              <select
-                value={newStatus}
-                onChange={(e) => setNewStatus(e.target.value as OrderStatus)}
-                className="flex-1 px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
-              >
-                {statuses.map((status) => (
-                  <option key={status} value={status}>
-                    {status.replace(/-/g, " ").toUpperCase()}
-                  </option>
-                ))}
-              </select>
-              <Button
-                onClick={handleChangeStatus}
-                disabled={newStatus === order.status}
-                className="bg-primary hover:bg-primary-600 text-white"
-              >
-                Update
-              </Button>
-            </div>
+            <h3 className="font-semibold text-foreground mb-4">Order Status</h3>
+            <select
+              value={editedOrder.status}
+              onChange={(e) => handleFieldChange("status", e.target.value as OrderStatus)}
+              className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
+            >
+              {statuses.map((status) => (
+                <option key={status} value={status}>
+                  {status.replace(/-/g, " ").toUpperCase()}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Refund Management */}
