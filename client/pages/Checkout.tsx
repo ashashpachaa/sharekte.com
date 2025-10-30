@@ -86,12 +86,16 @@ export default function Checkout() {
         .split("T")[0];
 
       const orderPromises = items.map(async (item, index) => {
+        // Convert price to selected currency
+        const { convertPrice } = useCurrency();
+        const convertedAmount = currency !== "USD" ? convertPrice(item.price) : item.price;
+
         // Create purchased company record
         const purchasedCompany: PurchasedCompanyData = {
           id: item.id,
           name: item.name,
           number: item.companyNumber,
-          price: item.price,
+          price: convertedAmount,
           incorporationDate: item.incorporationDate || today,
           incorporationYear: item.incorporationYear || new Date().getFullYear().toString(),
           country: item.country || "",
@@ -121,7 +125,7 @@ export default function Checkout() {
           companyNumber: item.companyNumber,
           clientName: userData.fullName,
           clientEmail: userEmail,
-          amount: item.price,
+          amount: convertedAmount,
           currency: currency,
           description: `Company Purchase - ${item.name}`,
           status: "paid",
@@ -129,8 +133,8 @@ export default function Checkout() {
             {
               description: `${item.name} - Company Purchase`,
               quantity: 1,
-              unitPrice: item.price,
-              total: item.price,
+              unitPrice: convertedAmount,
+              total: convertedAmount,
             },
           ],
           orderId: `order-${Date.now()}`,
@@ -153,7 +157,7 @@ export default function Checkout() {
             paymentMethod: "credit_card",
             paymentStatus: "completed",
             transactionId: `txn-${Date.now()}`,
-            amount: item.price,
+            amount: convertedAmount,
             currency: currency,
             paymentDate: today,
             status: "paid",
