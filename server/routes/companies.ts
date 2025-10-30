@@ -620,11 +620,11 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
       return res.status(500).json({ error: "Failed to update company status in Airtable" });
     }
 
-    const updatedRecord = await updateResponse.json();
-    const updatedFields = updatedRecord.fields;
+    const updatedResponse = await updateResponse.json();
+    const updatedFields = updatedResponse.fields;
 
-    const company: CompanyData = {
-      id: updatedRecord.id,
+    const updatedCompany: CompanyData = {
+      id: id,
       companyName: updatedFields["Company name"] || "",
       companyNumber: updatedFields["Company number"] || "",
       country: updatedFields.country || updatedFields.Country || "",
