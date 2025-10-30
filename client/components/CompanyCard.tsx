@@ -25,7 +25,6 @@ import {
 import {
   CompanyData,
   STATUS_COLORS,
-  PAYMENT_STATUS_COLORS,
   formatPrice,
   formatDate,
   getRenewalCountdown,
