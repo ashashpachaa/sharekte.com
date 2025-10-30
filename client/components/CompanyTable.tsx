@@ -41,6 +41,7 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart-context";
+import { useCurrency } from "@/lib/currency-context";
 
 interface CompanyTableProps {
   companies: CompanyData[];
