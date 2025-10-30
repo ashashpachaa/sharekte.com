@@ -294,9 +294,9 @@ export function CompanyTable() {
 
                     // Handle option include which is an array
                     const optionIncludeRaw = company.fields["option include"];
-                    const optionInclude = Array.isArray(optionIncludeRaw)
+                    const optionInclude = (Array.isArray(optionIncludeRaw)
                       ? optionIncludeRaw.join(", ")
-                      : (optionIncludeRaw || "—");
+                      : (optionIncludeRaw as string) || "—") as string;
 
                     // Handle Country field from Airtable
                     const country = company.fields["country"] || "N/A";
