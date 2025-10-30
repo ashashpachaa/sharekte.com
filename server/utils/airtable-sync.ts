@@ -1,17 +1,19 @@
 /**
  * Airtable Synchronization Utility
- * Syncs transfer forms and related data to Airtable base
- * 
+ * Syncs transfer forms, orders, and related data to Airtable base
+ *
  * Airtable Base: https://airtable.com/app0PK34gyJDizR3Q/tblXvZ0kjl7p7h9Jq
- * 
+ * Orders Table: tblXvZ0kjl7p7h9Jq
+ *
  * Environment Variables Required:
  * - AIRTABLE_API_TOKEN: Your Airtable personal access token
  * - AIRTABLE_BASE_ID: Your base ID (app0PK34gyJDizR3Q)
  * - AIRTABLE_TABLE_FORMS: Table ID for transfer forms
- * - AIRTABLE_TABLE_ORDERS: Table ID for orders
+ * - AIRTABLE_TABLE_ORDERS: Table ID for orders (tblXvZ0kjl7p7h9Jq)
  */
 
 import { TransferFormData, FormStatus } from "../../client/lib/transfer-form";
+import { Order } from "../../client/lib/orders";
 
 const AIRTABLE_API_URL = "https://api.airtable.com/v0";
 
