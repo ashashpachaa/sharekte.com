@@ -32,6 +32,8 @@ export default function AdminOrders() {
   const { toast } = useToast();
 
   const [orders, setOrders] = useState<Order[]>([]);
+  const [newOrdersCount, setNewOrdersCount] = useState(0);
+  const [newFormsCount, setNewFormsCount] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
   const [filterCountry, setFilterCountry] = useState<string>("");
