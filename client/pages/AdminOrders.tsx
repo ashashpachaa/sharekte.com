@@ -49,17 +49,52 @@ export default function AdminOrders() {
       navigate("/admin/login");
     } else {
       loadOrders();
+      // Auto-refresh orders every 10 seconds to catch new orders
+      const refreshInterval = setInterval(() => {
+        loadOrders();
+      }, 10000);
+      return () => clearInterval(refreshInterval);
     }
   }, [isAdmin, navigate]);
+
+  // Refresh when tab changes
+  useEffect(() => {
+    loadOrders();
+  }, [activeTab]);
 
   const loadOrders = async () => {
     try {
       setLoading(true);
       const data = await getAllOrders();
-      setOrders(data);
+      const sortedData = data.sort((a, b) => new Date(b.purchaseDate).getTime() - new Date(a.purchaseDate).getTime());
+      setOrders(sortedData);
+
+      // Check for new orders and show notification
+      const newOrders = sortedData.filter((o) => {
+        const orderDate = new Date(o.purchaseDate);
+        const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+        return orderDate > fiveMinutesAgo;
+      });
+
+      if (newOrders.length > 0) {
+        const message = newOrders.length === 1
+          ? `New order: ${newOrders[0].orderId} from ${newOrders[0].customerName}`
+          : `${newOrders.length} new orders received`;
+
+        // Only show toast notification if not already shown
+        const lastNotificationTime = localStorage.getItem("lastOrderNotification");
+        const now = Date.now();
+        if (!lastNotificationTime || now - parseInt(lastNotificationTime) > 30000) {
+          toast.success(message);
+          localStorage.setItem("lastOrderNotification", now.toString());
+        }
+      }
     } catch (error) {
       console.error("Failed to load orders:", error);
-      toast.error("Failed to load orders");
+      // Don't show error toast on auto-refresh
+      if (!loading) {
+        toast.error("Failed to load orders");
+      }
     } finally {
       setLoading(false);
     }
