@@ -1961,6 +1961,13 @@ Generated on: ${new Date().toLocaleDateString()}
             </div>
           )}
 
+          {/* My Orders Tab */}
+          {activeTab === "orders" && (
+            <div className="space-y-6">
+              <MyOrders userEmail={userEmail || "user@example.com"} />
+            </div>
+          )}
+
           {/* Portfolio Tab */}
           {activeTab === "portfolio" && (
             <div className="space-y-8">
