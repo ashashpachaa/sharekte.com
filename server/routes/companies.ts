@@ -394,6 +394,7 @@ export const createCompany: RequestHandler = async (req, res) => {
       industry,
       revenue,
       adminNotes,
+      optionsInclude: Array.isArray(record.fields["option include"]) ? record.fields["option include"] : [],
       createdBy: "airtable",
       createdAt: getTodayString(),
       updatedAt: getTodayString(),
