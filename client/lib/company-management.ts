@@ -409,12 +409,26 @@ export function sortCompanies(
 // API Functions
 export async function fetchAllCompanies(): Promise<CompanyData[]> {
   try {
-    const response = await fetch("/api/companies");
-    if (!response.ok) throw new Error("Failed to fetch companies");
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+    const response = await fetch("/api/companies", {
+      signal: controller.signal,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ error: "Unknown error" }));
+      throw new Error(errorData.error || `Failed to fetch companies: ${response.statusText}`);
+    }
     return await response.json();
   } catch (error) {
-    console.error("Error fetching companies:", error);
-    return [];
+    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
+    console.error("Error fetching companies:", errorMessage);
+    throw new Error(`Failed to fetch companies: ${errorMessage}`);
   }
 }
 
