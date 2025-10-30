@@ -198,23 +198,39 @@ export function determineStatus(
 }
 
 // Format currency
-export function formatPrice(price: number, currency: string = "USD"): string {
-  const formatter = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: currency,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  });
-  return formatter.format(price);
+export function formatPrice(price: number | undefined, currency: string = "USD"): string {
+  if (price === undefined || price === null) {
+    return "N/A";
+  }
+  try {
+    const formatter = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: currency || "USD",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    });
+    return formatter.format(price);
+  } catch (error) {
+    console.warn("Format price error:", error);
+    return `${price} ${currency}`;
+  }
 }
 
 // Format date
-export function formatDate(dateString: string): string {
-  return new Date(dateString).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+export function formatDate(dateString: string | undefined): string {
+  if (!dateString) {
+    return "N/A";
+  }
+  try {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  } catch (error) {
+    console.warn("Format date error:", error);
+    return dateString;
+  }
 }
 
 // Get renewal countdown text
