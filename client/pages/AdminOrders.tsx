@@ -156,8 +156,22 @@ export default function AdminOrders() {
 
       {/* Main Content */}
       <main className="container max-w-7xl mx-auto px-4 py-8">
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+        {/* Tabs */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-8">
+            <TabsTrigger value="orders" className="gap-2">
+              <DollarSign className="w-4 h-4" />
+              Orders
+            </TabsTrigger>
+            <TabsTrigger value="forms" className="gap-2">
+              <FileText className="w-4 h-4" />
+              Transfer Forms
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="orders" className="space-y-8">
+            {/* Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
           <div className="bg-card border border-border/40 rounded-lg p-4">
             <p className="text-xs text-muted-foreground mb-1">Total Orders</p>
             <p className="text-2xl font-bold text-foreground">{orderStats.total}</p>
@@ -327,10 +341,16 @@ export default function AdminOrders() {
           )}
         </div>
 
-        {/* Pagination info */}
-        <p className="text-sm text-muted-foreground mt-4">
-          Showing {filteredOrders.length} of {orders.length} orders
-        </p>
+            {/* Pagination info */}
+            <p className="text-sm text-muted-foreground mt-4">
+              Showing {filteredOrders.length} of {orders.length} orders
+            </p>
+          </TabsContent>
+
+          <TabsContent value="forms" className="space-y-8">
+            <TransferFormManagement />
+          </TabsContent>
+        </Tabs>
       </main>
 
       {/* Order Details Modal */}
