@@ -45,6 +45,7 @@ export default function AdminOrders() {
   const [showRefundModal, setShowRefundModal] = useState(false);
   const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("orders");
+  const [previousOrderStates, setPreviousOrderStates] = useState<Map<string, string>>(new Map());
 
   useEffect(() => {
     if (!isAdmin) {
