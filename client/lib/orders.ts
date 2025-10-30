@@ -141,8 +141,7 @@ export async function getAllOrders(): Promise<Order[]> {
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
     console.error("Failed to fetch orders:", errorMessage);
-    // Return empty array instead of throwing to allow app to continue
-    return [];
+    throw new Error(`Failed to fetch orders: ${errorMessage}`);
   }
 }
 
