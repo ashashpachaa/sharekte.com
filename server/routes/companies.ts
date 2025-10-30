@@ -556,6 +556,12 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
 
     console.log(`[updateCompanyStatus] Starting - Airtable ID: ${id}, New Status: ${status}`);
 
+    // Verify Airtable token is configured
+    if (!process.env.AIRTABLE_API_TOKEN) {
+      console.error("AIRTABLE_API_TOKEN not configured");
+      return res.status(500).json({ error: "Airtable API token not configured" });
+    }
+
     // The ID is the Airtable record ID (rec123456), so we can use it directly
     const airtableId = id;
 
