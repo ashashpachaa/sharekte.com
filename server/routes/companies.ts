@@ -487,6 +487,7 @@ export const updateCompany: RequestHandler = async (req, res) => {
       revenue: fields.Revenue,
       adminNotes: fields["Admin Notes"],
       internalNotes: fields["Internal Notes"],
+      optionsInclude: Array.isArray(fields["option include"]) ? fields["option include"] : [],
       createdBy: "airtable",
       createdAt: getTodayString(),
       updatedAt: getTodayString(),
