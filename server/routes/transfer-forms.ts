@@ -5,7 +5,7 @@ import {
   createEmptyForm,
   type DirectorInfo,
   type ShareholderInfo,
-} from "@/lib/transfer-form";
+} from "../../client/lib/transfer-form";
 
 // Mock database - Ready for Airtable integration
 let formsDb: TransferFormData[] = [];
