@@ -59,6 +59,7 @@ interface CurrencyContextType {
   setCurrency: (currency: Currency) => void;
   convertPrice: (priceInUSD: number) => number;
   formatPrice: (priceInUSD: number) => string;
+  rates: Record<Currency, CurrencyRate>;
 }
 
 const CurrencyContext = createContext<CurrencyContextType | undefined>(undefined);
@@ -73,6 +74,36 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
     }
   });
 
+  const [rates, setRates] = useState<Record<Currency, CurrencyRate>>(CURRENCY_RATES);
+
+  // Fetch exchange rates on mount and periodically refresh
+  useEffect(() => {
+    // Load cached rates if available and recent (less than 24 hours old)
+    const cachedRates = localStorage.getItem("currencyRates");
+    const cachedTimestamp = localStorage.getItem("currencyRatesTimestamp");
+    const now = Date.now();
+    const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+
+    if (
+      cachedRates &&
+      cachedTimestamp &&
+      now - parseInt(cachedTimestamp) < CACHE_DURATION
+    ) {
+      try {
+        const parsed = JSON.parse(cachedRates);
+        setRates(parsed);
+        return;
+      } catch {
+        // Fall through to fetch fresh data
+      }
+    }
+
+    // Fetch fresh rates
+    fetchExchangeRates().then(() => {
+      setRates(CURRENCY_RATES);
+    });
+  }, []);
+
   const setCurrency = (newCurrency: Currency) => {
     setCurrencyState(newCurrency);
     try {
@@ -83,12 +114,14 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
   };
 
   const convertPrice = (priceInUSD: number): number => {
-    const rate = CURRENCY_RATES[currency]?.rate || 1;
+    const rate = rates[currency]?.rate || 1;
     return priceInUSD * rate;
   };
 
   const formatPrice = (priceInUSD: number): string => {
-    const currencyInfo = CURRENCY_RATES[currency];
+    const currencyInfo = rates[currency];
+    if (!currencyInfo) return `$${priceInUSD.toLocaleString()}`;
+
     const converted = convertPrice(priceInUSD);
     return `${currencyInfo.symbol}${converted.toLocaleString(undefined, {
       minimumFractionDigits: 0,
@@ -97,7 +130,7 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <CurrencyContext.Provider value={{ currency, setCurrency, convertPrice, formatPrice }}>
+    <CurrencyContext.Provider value={{ currency, setCurrency, convertPrice, formatPrice, rates }}>
       {children}
     </CurrencyContext.Provider>
   );
