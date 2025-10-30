@@ -554,55 +554,37 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
     const { id } = req.params;
     const { status, notes } = req.body;
 
-    console.log(`[updateCompanyStatus] Starting - ID: ${id}, Status: ${status}`);
+    console.log(`[updateCompanyStatus] Starting - Airtable ID: ${id}, New Status: ${status}`);
 
-    // Step 1: Look up company by marketplace ID to get company name
-    const allCompanies = await fetchCompaniesData();
-    const company = allCompanies.find((c) => c.id === id);
+    // The ID is the Airtable record ID (rec123456), so we can use it directly
+    const airtableId = id;
 
-    if (!company) {
-      return res.status(404).json({ error: "Company not found in database" });
-    }
-
-    // Step 2: Search Airtable for record by company name
-    const searchUrl = `https://api.airtable.com/v0/app0PK34gyJDizR3Q/tbljtdHPdHnTberDy?filterByFormula={Company%20name}="${encodeURIComponent(
-      company.companyName
-    )}"`;
-
-    console.log(`Searching Airtable for company: ${company.companyName}`);
-
-    const searchResponse = await fetch(searchUrl, {
+    // Fetch the current record to get field details
+    const getUrl = `https://api.airtable.com/v0/app0PK34gyJDizR3Q/tbljtdHPdHnTberDy/${airtableId}`;
+    const getResponse = await fetch(getUrl, {
       headers: {
         Authorization: `Bearer ${process.env.AIRTABLE_API_TOKEN}`,
       },
     });
 
-    if (!searchResponse.ok) {
-      console.error("Airtable search failed:", searchResponse.status, searchResponse.statusText);
-      return res.status(500).json({ error: "Failed to search for company in Airtable" });
+    if (!getResponse.ok) {
+      const getError = await getResponse.text();
+      console.error(`Airtable GET failed for ${airtableId}:`, getResponse.status, getError);
+      return res.status(getResponse.status).json({
+        error: "Failed to fetch company from Airtable",
+        details: getError,
+      });
     }
 
-    const searchData: any = await searchResponse.json();
-    console.log(`Airtable search returned ${searchData.records.length} records for ${company.companyName}`);
-
-    if (searchData.records.length === 0) {
-      return res
-        .status(404)
-        .json({
-          error: `Company "${company.companyName}" not found in Airtable`,
-        });
-    }
-
-    // Step 3: Get the Airtable record ID from search results
-    const airtableRecord = searchData.records[0];
-    const airtableId = airtableRecord.id;
-    const fields = airtableRecord.fields;
+    const currentRecord = await getResponse.json();
+    const fields = currentRecord.fields;
+    const companyName = fields["Company name"] || "Unknown Company";
     const incorporationDate = fields["Incorporate date"] || getTodayString();
-    // Read from Statues (with space) - this is the field we're updating
+    // Read from Statues (with space) first, then Status
     const previousStatus = fields["Statues "] || fields["Status"] || "active";
     const newStatus = status || previousStatus;
 
-    console.log(`[${airtableId}] Updating "${company.companyName}": "${previousStatus}" → "${newStatus}" in field "Statues "`);
+    console.log(`[${airtableId}] Updating "${companyName}": "${previousStatus}" → "${newStatus}"`);
 
     // Clear cache since we're updating
     serverCache = null;
