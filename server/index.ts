@@ -87,6 +87,7 @@ export function createServer() {
   app.post("/api/companies/:id/renew", renewCompany);
   app.post("/api/companies/:id/refund-request", requestCompanyRefund);
   app.post("/api/companies/:id/refund-approve", approveCompanyRefund);
+  app.post("/api/companies/:id/mark-sold", markCompanyAsSold);
 
   // Legacy Airtable routes
   app.get("/api/countries", getCountries);
