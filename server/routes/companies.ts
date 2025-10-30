@@ -615,12 +615,21 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
     );
 
     if (!updateResponse.ok) {
+      const airtableError = await updateResponse.json().catch(() => ({ error: updateResponse.statusText }));
       console.error(
         "Airtable PATCH failed:",
         updateResponse.status,
-        updateResponse.statusText
+        updateResponse.statusText,
+        "Response:",
+        JSON.stringify(airtableError)
       );
-      return res.status(500).json({ error: "Failed to update company status in Airtable" });
+      return res.status(updateResponse.status).json({
+        error: "Failed to update company status in Airtable",
+        details: airtableError,
+        status: updateResponse.status,
+        airtableId: airtableId,
+        companyName: company.companyName
+      });
     }
 
     const updatedResponse = await updateResponse.json();
