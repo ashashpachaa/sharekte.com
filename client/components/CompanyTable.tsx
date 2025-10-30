@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -50,6 +50,83 @@ interface CompanyTableProps {
   isAdmin?: boolean;
 }
 
+// Cache for companies data with expiry
+let companiesCache: { data: CompanyData[]; timestamp: number } | null = null;
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
+// Pending fetch promise to deduplicate concurrent requests
+let pendingFetch: Promise<CompanyData[]> | null = null;
+
+async function fetchCompaniesWithRetry(): Promise<CompanyData[]> {
+  // Return cached data if available and not expired
+  if (
+    companiesCache &&
+    Date.now() - companiesCache.timestamp < CACHE_DURATION
+  ) {
+    return companiesCache.data;
+  }
+
+  // If a fetch is already in progress, return that promise
+  if (pendingFetch) {
+    return pendingFetch;
+  }
+
+  // Create new fetch promise with exponential backoff retry
+  pendingFetch = (async () => {
+    let retries = 0;
+    const maxRetries = 3;
+    let lastError: Error | null = null;
+
+    while (retries < maxRetries) {
+      try {
+        const response = await fetch("/api/companies");
+
+        if (response.ok) {
+          const data = await response.json();
+
+          // Cache the successful response
+          companiesCache = {
+            data,
+            timestamp: Date.now(),
+          };
+
+          pendingFetch = null;
+          return data;
+        } else if (response.status === 429) {
+          // Rate limited - exponential backoff
+          const waitTime = Math.pow(2, retries) * 1000; // 1s, 2s, 4s
+          console.warn(
+            `Rate limited (429). Retry ${retries + 1}/${maxRetries} after ${waitTime}ms`
+          );
+          await new Promise((resolve) => setTimeout(resolve, waitTime));
+          retries++;
+        } else {
+          throw new Error(`API error: ${response.status}`);
+        }
+      } catch (error) {
+        lastError = error instanceof Error ? error : new Error(String(error));
+        retries++;
+
+        if (retries < maxRetries) {
+          const waitTime = Math.pow(2, retries - 1) * 1000;
+          console.warn(
+            `Fetch failed. Retry ${retries}/${maxRetries} after ${waitTime}ms`
+          );
+          await new Promise((resolve) => setTimeout(resolve, waitTime));
+        }
+      }
+    }
+
+    pendingFetch = null;
+    throw (
+      lastError ||
+      new Error("Failed to fetch companies after maximum retries")
+    );
+  })();
+
+  return pendingFetch;
+}
+
 export function CompanyTable({
   companies = [],
   onViewDetails,
@@ -62,33 +139,40 @@ export function CompanyTable({
   const [showDeleteDialog, setShowDeleteDialog] = useState<string | null>(null);
   const [loadedCompanies, setLoadedCompanies] = useState<CompanyData[]>(companies);
   const [isLoading, setIsLoading] = useState(!companies || companies.length === 0);
+  const [error, setError] = useState<string | null>(null);
+  const hasFetched = useRef(false);
 
   useEffect(() => {
-    // If no companies passed as prop, fetch from API
+    // If no companies passed as prop, fetch from API (only once per component mount)
     if (!companies || companies.length === 0) {
+      if (hasFetched.current) {
+        return;
+      }
+      hasFetched.current = true;
+
       setIsLoading(true);
-      const fetchCompanies = async () => {
-        try {
-          const response = await fetch("/api/companies");
-          if (response.ok) {
-            const data = await response.json();
-            console.log("Fetched companies:", data);
-            setLoadedCompanies(data);
-          } else {
-            console.error("API error:", response.status);
-          }
-        } catch (error) {
-          console.error("Error fetching companies:", error);
-        } finally {
+      setError(null);
+
+      fetchCompaniesWithRetry()
+        .then((data) => {
+          setLoadedCompanies(data);
+          setError(null);
+        })
+        .catch((err) => {
+          console.error("Error fetching companies:", err);
+          setError(
+            err instanceof Error ? err.message : "Failed to load companies"
+          );
+          setLoadedCompanies([]);
+        })
+        .finally(() => {
           setIsLoading(false);
-        }
-      };
-      fetchCompanies();
+        });
     } else {
       setLoadedCompanies(companies);
       setIsLoading(false);
     }
-  }, [companies]);
+  }, []);
 
   const handleDelete = (id: string) => {
     if (onDelete) {
