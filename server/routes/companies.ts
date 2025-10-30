@@ -475,11 +475,10 @@ async function syncCompanyToAirtable(company: CompanyData): Promise<void> {
           fields: {
             "Company name": company.companyName,
             "Company number": company.companyNumber,
+            Country: company.country,
             "Incorporate date": company.incorporationDate,
-            "Incorporate Year": company.incorporationYear,
-            country: company.country,
-            Revenue: company.revenue || "",
-            Industry: company.industry || "",
+            "Incorporate year": company.incorporationYear,
+            Price: company.purchasePrice,
           },
         }),
       }
