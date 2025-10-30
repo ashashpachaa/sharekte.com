@@ -20,9 +20,9 @@ export function DocumentManagement({ order, onDocumentsUpdated, isAdmin = false 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Validate file size (max 10MB)
-      if (file.size > 10 * 1024 * 1024) {
-        toast.error("File size must be less than 10MB");
+      // Validate file size (max 50MB)
+      if (file.size > 50 * 1024 * 1024) {
+        toast.error("File size must be less than 50MB");
         return;
       }
       setSelectedFile(file);
@@ -110,7 +110,7 @@ export function DocumentManagement({ order, onDocumentsUpdated, isAdmin = false 
                     <p className="text-sm font-medium text-foreground">
                       {selectedFile ? selectedFile.name : "Click to select a file"}
                     </p>
-                    <p className="text-xs text-muted-foreground">Max 10MB</p>
+                    <p className="text-xs text-muted-foreground">Max 50MB</p>
                   </div>
                 </label>
               </div>
