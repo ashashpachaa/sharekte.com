@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAdmin } from "@/lib/admin-context";
 import { getAllUsers, searchUsers } from "@/lib/user-management";
 import { Button } from "@/components/ui/button";
-import { Users, Settings, LogOut, BarChart3, AlertCircle } from "lucide-react";
+import { Users, Settings, LogOut, BarChart3, AlertCircle, Building2 } from "lucide-react";
 
 export default function AdminDashboard() {
   const { currentAdmin, isAdmin, logout } = useAdmin();
