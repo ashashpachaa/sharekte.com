@@ -78,7 +78,7 @@ export default function AdminOrders() {
       const sortedData = data.sort((a, b) => new Date(b.purchaseDate).getTime() - new Date(a.purchaseDate).getTime());
       setOrders(sortedData);
 
-      // Check for new orders and show notification
+      // Check for new orders and status changes
       const newOrders = sortedData.filter((o) => {
         const orderDate = new Date(o.purchaseDate);
         const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
@@ -101,6 +101,22 @@ export default function AdminOrders() {
       } else {
         setNewOrdersCount(0);
       }
+
+      // Check for status changes from Airtable
+      sortedData.forEach((order) => {
+        const previousStatus = previousOrderStates.get(order.id || order.orderId);
+        if (previousStatus && previousStatus !== order.status) {
+          // Status changed - show notification
+          toast.info(`Order ${order.orderId}: Status changed to ${order.status}`);
+        }
+      });
+
+      // Update previous order states
+      const newStates = new Map(previousOrderStates);
+      sortedData.forEach((order) => {
+        newStates.set(order.id || order.orderId, order.status);
+      });
+      setPreviousOrderStates(newStates);
     } catch (error) {
       console.error("Failed to load orders:", error);
       // Don't show error toast on auto-refresh
