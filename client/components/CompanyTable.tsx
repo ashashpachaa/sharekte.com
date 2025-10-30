@@ -60,6 +60,27 @@ export function CompanyTable({
   isAdmin = false,
 }: CompanyTableProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState<string | null>(null);
+  const [loadedCompanies, setLoadedCompanies] = useState<CompanyData[]>(companies);
+
+  useEffect(() => {
+    // If no companies passed as prop, fetch from API
+    if (!companies || companies.length === 0) {
+      const fetchCompanies = async () => {
+        try {
+          const response = await fetch("/api/companies");
+          if (response.ok) {
+            const data = await response.json();
+            setLoadedCompanies(data);
+          }
+        } catch (error) {
+          console.error("Error fetching companies:", error);
+        }
+      };
+      fetchCompanies();
+    } else {
+      setLoadedCompanies(companies);
+    }
+  }, [companies]);
 
   const handleDelete = (id: string) => {
     if (onDelete) {
