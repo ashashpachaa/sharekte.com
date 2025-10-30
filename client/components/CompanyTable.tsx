@@ -72,7 +72,10 @@ export function CompanyTable({
           const response = await fetch("/api/companies");
           if (response.ok) {
             const data = await response.json();
+            console.log("Fetched companies:", data);
             setLoadedCompanies(data);
+          } else {
+            console.error("API error:", response.status);
           }
         } catch (error) {
           console.error("Error fetching companies:", error);
