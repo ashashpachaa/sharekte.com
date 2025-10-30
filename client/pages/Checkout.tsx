@@ -96,7 +96,7 @@ export default function Checkout() {
           country: item.country || "",
           purchasedDate: today,
           renewalDate: oneYearLater,
-          renewalFees: 299,
+          renewalFees: item.renewalFees || 0,
           status: "pending-form",
           statusLabel: "Pending Transfer Form",
           renewalStatus: "active",

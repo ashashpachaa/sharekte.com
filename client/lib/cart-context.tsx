@@ -8,6 +8,7 @@ export interface CartItem {
   country?: string;
   incorporationDate?: string;
   incorporationYear?: string;
+  renewalFees?: number;
 }
 
 interface CartContextType {
