@@ -359,7 +359,7 @@ export function CompanyTable() {
 
                               addItem({
                                 id: company.id,
-                                name: companyName,
+                                name: companyName as string,
                                 price,
                                 companyNumber: companyNumber as string,
                                 country: country,
