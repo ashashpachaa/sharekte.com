@@ -223,47 +223,49 @@ export const getOrders: RequestHandler = async (req, res) => {
     });
 
     if (!response.ok) {
-      console.warn(`Airtable API returned ${response.status}: ${response.statusText}, falling back to demo orders`);
-      // Fall back to demo orders if Airtable fails
+      console.warn(`Airtable API returned ${response.status}: ${response.statusText}, falling back to demo + in-memory orders`);
+      // Fall back to demo + in-memory orders if Airtable fails
       const demoOrders = getDemoOrders();
-      let filtered = demoOrders;
+      let allOrders = [...demoOrders, ...inMemoryOrders];
 
       if (status) {
-        filtered = filtered.filter((o) => o.status === status);
+        allOrders = allOrders.filter((o) => o.status === status);
       }
       if (country) {
-        filtered = filtered.filter((o) => o.country === country);
+        allOrders = allOrders.filter((o) => o.country === country);
       }
 
-      return res.json(filtered);
+      return res.json(allOrders);
     }
 
     const data: AirtableResponse = await response.json();
 
-    const orders: Order[] = data.records.map((record) => ({
+    const airtableOrders: Order[] = data.records.map((record) => ({
       id: record.id,
       ...(record.fields as Omit<Order, "id">),
     }));
 
-    res.json(orders);
+    // Combine Airtable orders with in-memory orders (in-memory are fallbacks)
+    const allOrders = [...airtableOrders, ...inMemoryOrders];
+    res.json(allOrders);
   } catch (error) {
     console.error("Error fetching orders:", error);
-    // Fall back to demo orders on any error
+    // Fall back to demo + in-memory orders on any error
     try {
       const demoOrders = getDemoOrders();
+      let allOrders = [...demoOrders, ...inMemoryOrders];
       const { status, country } = req.query;
-      let filtered = demoOrders;
 
       if (status) {
-        filtered = filtered.filter((o) => o.status === status);
+        allOrders = allOrders.filter((o) => o.status === status);
       }
       if (country) {
-        filtered = filtered.filter((o) => o.country === country);
+        allOrders = allOrders.filter((o) => o.country === country);
       }
 
-      return res.json(filtered);
+      return res.json(allOrders);
     } catch (fallbackError) {
-      console.error("Failed to return demo orders:", fallbackError);
+      console.error("Failed to return demo + in-memory orders:", fallbackError);
       res.status(500).json({ error: "Failed to fetch orders" });
     }
   }
