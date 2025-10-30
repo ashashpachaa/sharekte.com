@@ -5,6 +5,17 @@ import { handleDemo } from "./routes/demo";
 import { getCompanies, getCountries, getYears } from "./routes/airtable";
 import { updateCompanyStatus } from "./routes/update-company";
 import { handleSupportSubmit } from "./routes/support";
+import {
+  getOrders,
+  getOrderById,
+  createOrder,
+  updateOrder,
+  updateOrderStatus,
+  requestRefund,
+  approveRefund,
+  rejectRefund,
+  deleteOrder,
+} from "./routes/orders";
 
 export function createServer() {
   const app = express();
@@ -30,6 +41,17 @@ export function createServer() {
 
   // Support routes
   app.post("/api/support/submit", handleSupportSubmit);
+
+  // Orders routes
+  app.get("/api/orders", getOrders);
+  app.get("/api/orders/:orderId", getOrderById);
+  app.post("/api/orders", createOrder);
+  app.patch("/api/orders/:orderId", updateOrder);
+  app.patch("/api/orders/:orderId/status", updateOrderStatus);
+  app.post("/api/orders/:orderId/refund-request", requestRefund);
+  app.post("/api/orders/:orderId/refund-approve", approveRefund);
+  app.post("/api/orders/:orderId/refund-reject", rejectRefund);
+  app.delete("/api/orders/:orderId", deleteOrder);
 
   return app;
 }
