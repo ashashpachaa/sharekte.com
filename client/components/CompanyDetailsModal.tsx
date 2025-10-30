@@ -109,19 +109,17 @@ export function CompanyDetailsModal({
       {children && <DialogTrigger asChild>{children}</DialogTrigger>}
 
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
+        <div className="flex flex-col gap-2 pb-4 border-b">
           <DialogTitle className="text-2xl">{company.companyName}</DialogTitle>
-          <DialogDescription>
-            <div className="flex gap-2 mt-2">
-              <Badge className={STATUS_COLORS[company.status]}>
-                {company.status}
-              </Badge>
-              <Badge className={PAYMENT_STATUS_COLORS[company.paymentStatus]}>
-                {company.paymentStatus}
-              </Badge>
-            </div>
-          </DialogDescription>
-        </DialogHeader>
+          <div className="flex gap-2">
+            <Badge className={STATUS_COLORS[company.status]}>
+              {company.status}
+            </Badge>
+            <Badge className={PAYMENT_STATUS_COLORS[company.paymentStatus]}>
+              {company.paymentStatus}
+            </Badge>
+          </div>
+        </div>
 
         <Tabs defaultValue="overview" className="w-full">
           <TabsList className="grid w-full grid-cols-4">
