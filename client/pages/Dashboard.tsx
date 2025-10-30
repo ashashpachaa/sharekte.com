@@ -555,7 +555,7 @@ export default function Dashboard() {
     // Update in user-specific storage
     const company = purchasedCompanies.find(c => c.id === companyId);
     if (company) {
-      const updatedCompany = {
+      const updatedCompany: PurchasedCompanyData = {
         ...company,
         status: "under-review" as const,
         statusLabel: "Under Review Transfer Form",
