@@ -565,6 +565,8 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
       company.companyName
     )}"`;
 
+    console.log(`Searching Airtable for company: ${company.companyName}`);
+
     const searchResponse = await fetch(searchUrl, {
       headers: {
         Authorization: `Bearer ${process.env.AIRTABLE_API_TOKEN}`,
@@ -572,11 +574,13 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
     });
 
     if (!searchResponse.ok) {
-      console.error("Airtable search failed:", searchResponse.statusText);
+      console.error("Airtable search failed:", searchResponse.status, searchResponse.statusText);
       return res.status(500).json({ error: "Failed to search for company in Airtable" });
     }
 
     const searchData: any = await searchResponse.json();
+    console.log(`Airtable search returned ${searchData.records.length} records for ${company.companyName}`);
+
     if (searchData.records.length === 0) {
       return res
         .status(404)
@@ -594,7 +598,7 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
     const previousStatus = fields["Statues "] || fields["Status"] || "active";
     const newStatus = status || previousStatus;
 
-    console.log(`Updating company status: ${company.companyName} (${airtableId}) from "${previousStatus}" to "${newStatus}"`);
+    console.log(`[${airtableId}] Updating "${company.companyName}": "${previousStatus}" → "${newStatus}" in field "Statues "`);
 
     // Clear cache since we're updating
     serverCache = null;
