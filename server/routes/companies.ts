@@ -252,7 +252,7 @@ export const getCompany: RequestHandler = async (req, res) => {
       incorporationDate: incorporationDate,
       incorporationYear: parseInt(String(fields["Incorporate Year"] || new Date().getFullYear())),
       purchasePrice: parseFloat(String(fields["Price"] || "0")),
-      renewalFee: parseFloat(String(fields["Renewal fees"] || updatedFields["Renewal fees"] || "0")),
+      renewalFee: parseFloat(String(fields["Renewal fees"] || "0")),
       currency: "USD",
       expiryDate: calculateExpiryDate(incorporationDate),
       renewalDate: calculateExpiryDate(incorporationDate),
