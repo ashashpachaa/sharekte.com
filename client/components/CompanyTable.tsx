@@ -217,7 +217,8 @@ export function CompanyTable({
   const filteredCompanies = safeCompanies.filter((company) => {
     const countryMatch = !selectedCountry || company.country === selectedCountry;
     const yearMatch = !selectedYear || company.incorporationYear === parseInt(selectedYear);
-    return countryMatch && yearMatch;
+    const statusMatch = company.status === "active";
+    return countryMatch && yearMatch && statusMatch;
   });
 
   // Get unique countries and years for filter options
