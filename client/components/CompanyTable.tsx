@@ -61,6 +61,7 @@ export function CompanyTable({
 }: CompanyTableProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState<string | null>(null);
   const [loadedCompanies, setLoadedCompanies] = useState<CompanyData[]>(companies);
+  const [isLoading, setIsLoading] = useState(!companies || companies.length === 0);
 
   useEffect(() => {
     // If no companies passed as prop, fetch from API
