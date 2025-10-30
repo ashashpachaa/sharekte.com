@@ -8,14 +8,8 @@ import {
   determineStatus,
 } from "@/lib/company-management";
 
-// Mock database - In production, use a real database
-let companiesDb: CompanyData[] = [];
-let idCounter = 1;
-
-// Helper function to generate IDs
-function generateId(): string {
-  return `company_${idCounter++}`;
-}
+// All company data comes from Airtable - no local in-memory storage
+// Airtable provides persistent storage and real-time synchronization
 
 // Helper function to get today's date as string
 function getTodayString(): string {
