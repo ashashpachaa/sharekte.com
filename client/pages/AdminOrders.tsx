@@ -51,10 +51,10 @@ export default function AdminOrders() {
       navigate("/admin/login");
     } else {
       loadOrders();
-      // Auto-refresh orders every 10 seconds to catch new orders
+      // Auto-refresh orders every 1 second to sync with Airtable
       const refreshInterval = setInterval(() => {
         loadOrders();
-      }, 10000);
+      }, 1000);
       return () => clearInterval(refreshInterval);
     }
   }, [isAdmin, navigate]);
