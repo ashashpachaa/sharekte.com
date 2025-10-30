@@ -145,6 +145,7 @@ export const getCompanies: RequestHandler = async (req, res) => {
         const companies: CompanyData[] = data.records.map((record: any) => {
           const fields = record.fields;
           const incorporationDate = fields["Incorporate date"] || getTodayString();
+          const statusValue = fields["Status"] || fields["Statues "] || "active";
 
           return {
             id: record.id,
@@ -160,7 +161,7 @@ export const getCompanies: RequestHandler = async (req, res) => {
             expiryDate: calculateExpiryDate(incorporationDate),
             renewalDate: calculateExpiryDate(incorporationDate),
             renewalDaysLeft: calculateRenewalDaysLeft(calculateExpiryDate(incorporationDate)),
-            status: "active" as const,
+            status: statusValue as CompanyStatus,
             paymentStatus: "paid" as const,
             refundStatus: "not-refunded" as const,
             clientName: fields["Client Name"] || "",
@@ -242,6 +243,7 @@ export const getCompany: RequestHandler = async (req, res) => {
     const record = await response.json();
     const fields = record.fields;
     const incorporationDate = fields["Incorporate date"] || getTodayString();
+    const statusValue = fields["Status"] || fields["Statues "] || "active";
 
     const company: CompanyData = {
       id: record.id,
@@ -257,7 +259,7 @@ export const getCompany: RequestHandler = async (req, res) => {
       expiryDate: calculateExpiryDate(incorporationDate),
       renewalDate: calculateExpiryDate(incorporationDate),
       renewalDaysLeft: calculateRenewalDaysLeft(calculateExpiryDate(incorporationDate)),
-      status: "active" as const,
+      status: statusValue as CompanyStatus,
       paymentStatus: "paid" as const,
       refundStatus: "not-refunded" as const,
       clientName: fields["Client Name"] || "",
@@ -442,6 +444,7 @@ export const updateCompany: RequestHandler = async (req, res) => {
     if (updates.incorporationDate) airtableFields["Incorporate date"] = updates.incorporationDate;
     if (updates.incorporationYear) airtableFields["Incorporate year"] = updates.incorporationYear;
     if (updates.purchasePrice !== undefined) airtableFields.Price = updates.purchasePrice;
+    if (updates.status) airtableFields.Status = updates.status;
 
     // Update in Airtable
     const response = await fetch(
@@ -463,6 +466,7 @@ export const updateCompany: RequestHandler = async (req, res) => {
     const record = await response.json();
     const fields = record.fields;
     const incorporationDate = fields["Incorporate date"] || getTodayString();
+    const statusValue = fields["Status"] || fields["Statues "] || "active";
 
     const company: CompanyData = {
       id: record.id,
@@ -478,7 +482,7 @@ export const updateCompany: RequestHandler = async (req, res) => {
       expiryDate: calculateExpiryDate(incorporationDate),
       renewalDate: calculateExpiryDate(incorporationDate),
       renewalDaysLeft: calculateRenewalDaysLeft(calculateExpiryDate(incorporationDate)),
-      status: "active" as const,
+      status: statusValue as CompanyStatus,
       paymentStatus: "paid" as const,
       refundStatus: "not-refunded" as const,
       clientName: fields["Client Name"] || "",
