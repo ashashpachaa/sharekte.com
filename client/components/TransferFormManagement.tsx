@@ -74,16 +74,49 @@ export function TransferFormManagement({ orderId }: TransferFormManagementProps)
 
   useEffect(() => {
     loadForms();
+    // Auto-refresh transfer forms every 10 seconds
+    const refreshInterval = setInterval(() => {
+      loadForms();
+    }, 10000);
+    return () => clearInterval(refreshInterval);
   }, [orderId]);
 
   const loadForms = async () => {
     try {
       setLoading(true);
       const data = await fetchTransferForms(orderId);
-      setForms(data);
+      const sortedData = data.sort((a, b) => {
+        const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return dateB - dateA;
+      });
+      setForms(sortedData);
+
+      // Check for new forms and show notification
+      const newForms = sortedData.filter((f) => {
+        if (!f.createdAt) return false;
+        const formDate = new Date(f.createdAt);
+        const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+        return formDate > fiveMinutesAgo;
+      });
+
+      if (newForms.length > 0) {
+        const message = newForms.length === 1
+          ? `New transfer form: ${newForms[0].formId} from ${newForms[0].buyerName}`
+          : `${newForms.length} new transfer forms received`;
+
+        const lastNotificationTime = localStorage.getItem("lastTransferFormNotification");
+        const now = Date.now();
+        if (!lastNotificationTime || now - parseInt(lastNotificationTime) > 30000) {
+          toast.success(message);
+          localStorage.setItem("lastTransferFormNotification", now.toString());
+        }
+      }
     } catch (error) {
       console.error("Failed to load forms:", error);
-      toast.error("Failed to load transfer forms");
+      if (!loading) {
+        toast.error("Failed to load transfer forms");
+      }
     } finally {
       setLoading(false);
     }
