@@ -459,18 +459,34 @@ export const updateCompany: RequestHandler = async (req, res) => {
   }
 };
 
-// Delete company
+// Delete company from Airtable
 export const deleteCompany: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
-    const company = companiesDb.find((c) => c.id === id);
+    const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
+    const AIRTABLE_BASE_ID = "app0PK34gyJDizR3Q";
+    const AIRTABLE_TABLE_ID = "tbljtdHPdHnTberDy";
 
-    if (!company) {
+    if (!AIRTABLE_API_TOKEN) {
+      return res.status(500).json({ error: "Airtable integration not configured" });
+    }
+
+    // Delete from Airtable
+    const response = await fetch(
+      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_ID}/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
       return res.status(404).json({ error: "Company not found" });
     }
 
-    companiesDb = companiesDb.filter((c) => c.id !== id);
-    res.json({ message: "Company deleted" });
+    res.json({ success: true, message: "Company deleted from Airtable" });
   } catch (error) {
     console.error("Error deleting company:", error);
     res.status(500).json({ error: "Failed to delete company" });
