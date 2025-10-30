@@ -1887,7 +1887,8 @@ Generated on: ${new Date().toLocaleDateString()}
                                       type="file"
                                       multiple
                                       onChange={handleAttachmentChange}
-                                      className="block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer"
+                                      disabled={company.status !== "amend-required" && company.transferFormFilled}
+                                      className="block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                                       accept="*/*"
                                     />
                                     <p className="text-xs text-muted-foreground mt-1">
