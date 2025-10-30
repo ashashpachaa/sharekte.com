@@ -291,6 +291,7 @@ export default function Dashboard() {
         id: uc.id,
         name: uc.name,
         number: uc.number,
+        price: uc.price,
         incorporationDate: uc.incorporationDate,
         incorporationYear: uc.incorporationYear,
         country: uc.country,
