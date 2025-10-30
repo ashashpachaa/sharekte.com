@@ -90,19 +90,19 @@ export function InvoiceDetailsModal({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader className="flex flex-row items-start justify-between space-y-0 pb-4 border-b">
-          <div>
+        <div className="flex flex-row items-start justify-between gap-4 pb-4 border-b">
+          <div className="flex-1">
             <DialogTitle className="text-2xl">
               Invoice {invoice.invoiceNumber}
             </DialogTitle>
-            <p className="text-sm text-muted-foreground mt-1">
+            <div className="text-sm text-muted-foreground mt-1">
               Created: {formatInvoiceDate(invoice.createdDate)}
-            </p>
+            </div>
           </div>
           <Badge className={INVOICE_STATUS_COLORS[displayStatus]}>
             {INVOICE_STATUS_LABELS[displayStatus]}
           </Badge>
-        </DialogHeader>
+        </div>
 
         <Tabs defaultValue="details" className="space-y-4">
           <TabsList className="grid grid-cols-4">
