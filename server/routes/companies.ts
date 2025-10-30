@@ -916,6 +916,105 @@ export const approveRefund: RequestHandler = async (req, res) => {
   }
 };
 
+// Mark company as sold
+export const markCompanyAsSold: RequestHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
+    const AIRTABLE_BASE_ID = "app0PK34gyJDizR3Q";
+    const AIRTABLE_TABLE_ID = "tbljtdHPdHnTberDy";
+
+    if (!AIRTABLE_API_TOKEN) {
+      return res.status(500).json({ error: "Airtable integration not configured" });
+    }
+
+    // Fetch current company from Airtable
+    const getResponse = await fetch(
+      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_ID}/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
+        },
+      }
+    );
+
+    if (!getResponse.ok) {
+      return res.status(404).json({ error: "Company not found" });
+    }
+
+    const record = await getResponse.json();
+    const fields = record.fields;
+    const incorporationDate = fields["Incorporate date"] || getTodayString();
+
+    // Clear cache since we're updating
+    serverCache = null;
+
+    // Update in Airtable with "sold" status
+    const updateResponse = await fetch(
+      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_ID}/${id}`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fields: {
+            Status: "sold",
+          },
+        }),
+      }
+    );
+
+    if (!updateResponse.ok) {
+      return res.status(500).json({ error: "Failed to mark company as sold" });
+    }
+
+    const updatedRecord = await updateResponse.json();
+    const updatedFields = updatedRecord.fields;
+
+    const company: CompanyData = {
+      id: updatedRecord.id,
+      companyName: updatedFields["Company name"] || "",
+      companyNumber: String(updatedFields["Company number"] || ""),
+      country: updatedFields.country || updatedFields.Country || "",
+      type: "LTD" as any,
+      incorporationDate: incorporationDate,
+      incorporationYear: parseInt(String(updatedFields["Incorporate Year"] || new Date().getFullYear())),
+      purchasePrice: parseFloat(String(updatedFields["Price"] || "0")),
+      renewalFee: parseFloat(String(updatedFields["Renewal fees"] || "0")),
+      currency: "USD",
+      expiryDate: calculateExpiryDate(incorporationDate),
+      renewalDate: calculateExpiryDate(incorporationDate),
+      renewalDaysLeft: calculateRenewalDaysLeft(calculateExpiryDate(incorporationDate)),
+      status: "sold" as CompanyStatus,
+      paymentStatus: "paid" as const,
+      refundStatus: "not-refunded" as const,
+      clientName: updatedFields["Client Name"] || "",
+      clientEmail: updatedFields["Client Email"] || "",
+      clientPhone: updatedFields["Client Phone"],
+      industry: updatedFields.Industry,
+      revenue: updatedFields.Revenue,
+      adminNotes: updatedFields["Admin Notes"],
+      internalNotes: updatedFields["Internal Notes"],
+      optionsInclude: Array.isArray(updatedFields["option include"]) ? updatedFields["option include"] : [],
+      createdBy: "airtable",
+      createdAt: getTodayString(),
+      updatedAt: getTodayString(),
+      updatedBy: "system",
+      tags: [],
+      documents: [],
+      activityLog: [],
+      ownershipHistory: [],
+    };
+
+    res.json(company);
+  } catch (error) {
+    console.error("Error marking company as sold:", error);
+    res.status(500).json({ error: "Failed to mark company as sold" });
+  }
+};
+
 // Helper: Sync company to Airtable (using original table and field mappings)
 async function syncCompanyToAirtable(company: CompanyData): Promise<void> {
   const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
