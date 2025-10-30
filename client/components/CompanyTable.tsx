@@ -107,7 +107,16 @@ export function CompanyTable({
   return (
     <>
       <div className="border rounded-lg overflow-hidden bg-white">
-        <Table>
+        {isLoading ? (
+          <div className="p-8 text-center">
+            <p className="text-gray-500">Loading companies...</p>
+          </div>
+        ) : safeCompanies.length === 0 ? (
+          <div className="p-8 text-center">
+            <p className="text-gray-500">No companies available</p>
+          </div>
+        ) : (
+          <Table>
           <TableHeader>
             <TableRow className="bg-gray-50">
               <TableHead className="font-semibold">Company Name</TableHead>
@@ -206,6 +215,7 @@ export function CompanyTable({
             ))}
           </TableBody>
         </Table>
+        )}
       </div>
 
       {/* Delete Confirmation Dialog */}
