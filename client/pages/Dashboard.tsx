@@ -1106,7 +1106,7 @@ Generated on: ${new Date().toLocaleDateString()}
                       onClick={handleCheckoutServices}
                       className="w-full bg-primary hover:bg-primary-600 text-white gap-2"
                     >
-                      <ShoppingCartIcon className="w-4 h-4" />
+                      <ShoppingCart className="w-4 h-4" />
                       Checkout
                     </Button>
                   </div>
