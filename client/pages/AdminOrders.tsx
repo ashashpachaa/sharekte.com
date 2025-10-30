@@ -752,16 +752,16 @@ function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModal
           </div>
 
           {/* Refund Management */}
-          {order.refundStatus !== "none" && (
+          {editedOrder.refundStatus !== "none" && (
             <div className="border-t border-border/40 pt-6">
               <h3 className="font-semibold text-foreground mb-4">Refund Management</h3>
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
                 <p className="text-sm text-blue-900 font-medium">
-                  Refund Status: <span className="capitalize">{order.refundStatus}</span>
+                  Refund Status: <span className="capitalize">{editedOrder.refundStatus}</span>
                 </p>
-                {order.refundRequest && (
+                {editedOrder.refundRequest && (
                   <p className="text-sm text-blue-800 mt-1">
-                    Amount Requested: {order.currency} {order.refundRequest.requestedAmount.toLocaleString()}
+                    Amount Requested: {editedOrder.currency} {editedOrder.refundRequest.requestedAmount.toLocaleString()}
                   </p>
                 )}
               </div>
@@ -778,12 +778,30 @@ function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModal
 
           {/* Documents Management */}
           <DocumentManagement
-            order={order}
+            order={editedOrder}
             onDocumentsUpdated={(updatedOrder) => {
               // Refresh orders list
             }}
             isAdmin={true}
           />
+
+          {/* Action Buttons */}
+          <div className="border-t border-border/40 pt-6 flex gap-3 sticky bottom-0 bg-background">
+            <Button
+              onClick={onClose}
+              variant="outline"
+              className="flex-1"
+            >
+              Close
+            </Button>
+            <Button
+              onClick={handleSave}
+              disabled={!hasChanges || isSaving}
+              className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+            >
+              {isSaving ? "Saving..." : hasChanges ? "Save Changes" : "No Changes"}
+            </Button>
+          </div>
         </div>
       </div>
     </div>
