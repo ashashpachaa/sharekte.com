@@ -48,7 +48,7 @@ export function Header() {
             </Button>
             <div className="absolute right-0 top-full mt-1 w-48 bg-card border border-border/40 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
               <div className="p-2 space-y-1">
-                {Object.entries(CURRENCY_RATES).map(([code, rate]) => (
+                {Object.entries(rates).map(([code, rate]) => (
                   <button
                     key={code}
                     onClick={() => setCurrency(code as any)}
