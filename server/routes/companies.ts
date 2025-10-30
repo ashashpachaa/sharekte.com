@@ -451,11 +451,11 @@ export const approveRefund: RequestHandler = async (req, res) => {
   }
 };
 
-// Helper: Sync company to Airtable
+// Helper: Sync company to Airtable (using original table and field mappings)
 async function syncCompanyToAirtable(company: CompanyData): Promise<void> {
   const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
   const AIRTABLE_BASE_ID = "app0PK34gyJDizR3Q";
-  const AIRTABLE_TABLE = "Companies";
+  const AIRTABLE_TABLE_ID = "tbljtdHPdHnTberDy"; // Original table ID from user's Airtable
 
   if (!AIRTABLE_API_TOKEN) {
     console.log("Airtable token not configured, skipping sync");
@@ -464,7 +464,7 @@ async function syncCompanyToAirtable(company: CompanyData): Promise<void> {
 
   try {
     const response = await fetch(
-      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE}`,
+      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_ID}`,
       {
         method: "POST",
         headers: {
@@ -473,27 +473,13 @@ async function syncCompanyToAirtable(company: CompanyData): Promise<void> {
         },
         body: JSON.stringify({
           fields: {
-            "Company Name": company.companyName,
-            "Company Number": company.companyNumber,
-            Country: company.country,
-            Type: company.type,
-            "Incorporation Date": company.incorporationDate,
-            "Incorporation Year": company.incorporationYear,
-            "Purchase Price": company.purchasePrice,
-            "Renewal Fee": company.renewalFee,
-            Currency: company.currency,
-            "Expiry Date": company.expiryDate,
-            "Renewal Date": company.renewalDate,
-            Status: company.status,
-            "Payment Status": company.paymentStatus,
-            "Refund Status": company.refundStatus,
-            "Client Name": company.clientName,
-            "Client Email": company.clientEmail,
-            "Client Phone": company.clientPhone || "",
-            Industry: company.industry || "",
+            "Company name": company.companyName,
+            "Company number": company.companyNumber,
+            "Incorporate date": company.incorporationDate,
+            "Incorporate Year": company.incorporationYear,
+            country: company.country,
             Revenue: company.revenue || "",
-            "Admin Notes": company.adminNotes || "",
-            "Internal Notes": company.internalNotes || "",
+            Industry: company.industry || "",
           },
         }),
       }
