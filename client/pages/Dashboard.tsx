@@ -1449,7 +1449,7 @@ Generated on: ${new Date().toLocaleDateString()}
                       >
                         {selectedInvoice.status === "paid" && "✓ Paid"}
                         {selectedInvoice.status === "unpaid" && "⏳ Unpaid"}
-                        {selectedInvoice.status === "canceled" && "�� Canceled"}
+                        {selectedInvoice.status === "canceled" && "✗ Canceled"}
                       </div>
                     </div>
                   </div>
@@ -1524,13 +1524,13 @@ Generated on: ${new Date().toLocaleDateString()}
                         <div className="flex justify-between mb-2">
                           <span className="text-sm text-muted-foreground">Subtotal</span>
                           <span className="text-sm font-medium">
-                            {formatPrice(selectedInvoice.amount)}
+                            {formatPriceWithCurrency(selectedInvoice.amount, selectedInvoice.currency, rates)}
                           </span>
                         </div>
                         <div className="flex justify-between pt-2 border-t">
                           <span className="font-semibold text-foreground">Total</span>
                           <span className="text-lg font-bold text-primary">
-                            {formatPrice(selectedInvoice.amount)}
+                            {formatPriceWithCurrency(selectedInvoice.amount, selectedInvoice.currency, rates)}
                           </span>
                         </div>
                       </div>
