@@ -637,24 +637,22 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
       }
     }
 
-    if (!updateResponse.ok) {
-      const airtableError = await updateResponse.json().catch(() => ({ error: updateResponse.statusText }));
-      const errorMsg = airtableError.error?.message || airtableError.error || updateResponse.statusText || "Unknown error";
+    if (!updateResponse || !updateResponse.ok) {
       console.error(
-        `[updateCompanyStatus] FAILED - Status ${updateResponse.status}:`,
+        `[updateCompanyStatus] FAILED for all field names:`,
         "Company:", companyName,
         "Airtable ID:", airtableId,
-        "Field value being set: 'Statues ' =", newStatusValue,
-        "Full error:", JSON.stringify(airtableError)
+        "Trying to set value:", newStatusValue,
+        "Last error:", lastError
       );
       return res.status(500).json({
         error: "Failed to update company status in Airtable",
-        details: errorMsg,
-        airtableError: airtableError,
+        details: "Airtable field name could not be determined or API error occurred",
+        lastAttempt: lastError,
         airtableId: airtableId,
         companyName: companyName,
-        fieldName: "Statues ",
-        fieldValue: newStatusValue
+        fieldValue: newStatusValue,
+        help: "Check Airtable field names: try 'Statues', 'Statues ', or 'Status'"
       });
     }
 
