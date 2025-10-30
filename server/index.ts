@@ -94,16 +94,17 @@ export function createServer() {
   // Support routes
   app.post("/api/support/submit", handleSupportSubmit);
 
-  // Orders routes
+  // Orders routes - Specific routes before parameterized ones
   app.get("/api/orders", getOrders);
-  app.get("/api/orders/:orderId", getOrderById);
   app.post("/api/orders", createOrder);
+
+  app.get("/api/orders/:orderId", getOrderById);
   app.patch("/api/orders/:orderId", updateOrder);
+  app.delete("/api/orders/:orderId", deleteOrder);
   app.patch("/api/orders/:orderId/status", updateOrderStatus);
   app.post("/api/orders/:orderId/refund-request", requestRefund);
   app.post("/api/orders/:orderId/refund-approve", approveRefund);
   app.post("/api/orders/:orderId/refund-reject", rejectRefund);
-  app.delete("/api/orders/:orderId", deleteOrder);
 
   // Notification routes
   app.post("/api/notifications/email", sendEmailNotification);
