@@ -156,13 +156,14 @@ function getDemoOrders(): Order[] {
  */
 export const getOrders: RequestHandler = async (req, res) => {
   try {
-    // If no Airtable token, return demo orders
+    // If no Airtable token, return demo orders + in-memory orders
     if (!AIRTABLE_API_TOKEN) {
-      console.log("No Airtable token configured, returning demo orders");
+      console.log("No Airtable token configured, returning demo orders + in-memory orders");
       const demoOrders = getDemoOrders();
+      const allOrders = [...demoOrders, ...inMemoryOrders];
 
-      // Apply filters to demo orders
-      let filtered = demoOrders;
+      // Apply filters
+      let filtered = allOrders;
       const { status, country } = req.query;
 
       if (status) {
@@ -304,58 +305,68 @@ export const getOrderById: RequestHandler = async (req, res) => {
  * Create new order
  */
 export const createOrder: RequestHandler = async (req, res) => {
-  if (!AIRTABLE_API_TOKEN) {
-    return res.status(500).json({ error: "Airtable API token not configured" });
-  }
-
   try {
     const orderData = req.body;
-    const url = `${AIRTABLE_API_URL}/${AIRTABLE_BASE_ID}/${AIRTABLE_ORDERS_TABLE}`;
 
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        fields: {
-          orderId: orderData.orderId,
-          customerName: orderData.customerName,
-          customerEmail: orderData.customerEmail,
-          customerPhone: orderData.customerPhone,
-          country: orderData.country,
-          companyId: orderData.companyId,
-          companyName: orderData.companyName,
-          companyNumber: orderData.companyNumber,
-          paymentMethod: orderData.paymentMethod,
-          paymentStatus: orderData.paymentStatus,
-          amount: orderData.amount,
-          currency: orderData.currency,
-          status: orderData.status,
-          purchaseDate: orderData.purchaseDate,
-          renewalDate: orderData.renewalDate,
-          renewalFees: orderData.renewalFees,
-          refundStatus: orderData.refundStatus || "none",
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          statusHistory: JSON.stringify(orderData.statusHistory || []),
-          documents: JSON.stringify(orderData.documents || []),
+    // If Airtable is configured, save to Airtable
+    if (AIRTABLE_API_TOKEN) {
+      const url = `${AIRTABLE_API_URL}/${AIRTABLE_BASE_ID}/${AIRTABLE_ORDERS_TABLE}`;
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
+          "Content-Type": "application/json",
         },
-      }),
-    });
+        body: JSON.stringify({
+          fields: {
+            orderId: orderData.orderId,
+            customerName: orderData.customerName,
+            customerEmail: orderData.customerEmail,
+            customerPhone: orderData.customerPhone,
+            country: orderData.country,
+            companyId: orderData.companyId,
+            companyName: orderData.companyName,
+            companyNumber: orderData.companyNumber,
+            paymentMethod: orderData.paymentMethod,
+            paymentStatus: orderData.paymentStatus,
+            amount: orderData.amount,
+            currency: orderData.currency,
+            status: orderData.status,
+            purchaseDate: orderData.purchaseDate,
+            renewalDate: orderData.renewalDate,
+            renewalFees: orderData.renewalFees,
+            refundStatus: orderData.refundStatus || "none",
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            statusHistory: JSON.stringify(orderData.statusHistory || []),
+            documents: JSON.stringify(orderData.documents || []),
+          },
+        }),
+      });
 
-    if (!response.ok) {
-      throw new Error(`Airtable API error: ${response.statusText}`);
+      if (!response.ok) {
+        throw new Error(`Airtable API error: ${response.statusText}`);
+      }
+
+      const record: AirtableRecord = await response.json();
+      const order: Order = {
+        id: record.id,
+        ...(record.fields as Omit<Order, "id">),
+      };
+
+      res.status(201).json(order);
+    } else {
+      // Fallback to in-memory storage
+      console.log("Airtable not configured, saving order to in-memory storage");
+      const newOrder: Order = {
+        id: `mem-${Date.now()}`,
+        ...orderData,
+      };
+
+      inMemoryOrders.push(newOrder);
+      res.status(201).json(newOrder);
     }
-
-    const record: AirtableRecord = await response.json();
-    const order: Order = {
-      id: record.id,
-      ...(record.fields as Omit<Order, "id">),
-    };
-
-    res.status(201).json(order);
   } catch (error) {
     console.error("Failed to create order:", error);
     res.status(500).json({ error: "Failed to create order" });
