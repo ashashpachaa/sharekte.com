@@ -1,10 +1,11 @@
-export type CompanyStatus = 
-  | "active" 
-  | "expired" 
-  | "cancelled" 
-  | "refunded" 
-  | "available" 
-  | "pending";
+export type CompanyStatus =
+  | "active"
+  | "expired"
+  | "cancelled"
+  | "refunded"
+  | "available"
+  | "pending"
+  | "sold";
 
 export type CompanyType =
   | "LTD"
