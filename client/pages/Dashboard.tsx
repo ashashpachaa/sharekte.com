@@ -556,11 +556,22 @@ export default function Dashboard() {
     const company = purchasedCompanies.find(c => c.id === companyId);
     if (company) {
       const updatedCompany: PurchasedCompanyData = {
-        ...company,
+        id: company.id,
+        name: company.name,
+        number: company.number,
+        price: company.price,
+        incorporationDate: company.incorporationDate,
+        incorporationYear: company.incorporationYear,
+        country: company.country,
+        purchasedDate: company.purchasedDate,
+        renewalDate: company.renewalDate,
+        renewalFees: company.renewalFees,
         status: "under-review",
         statusLabel: "Under Review Transfer Form",
-        transferFormFilled: true,
+        renewalStatus: company.renewalStatus,
+        documents: company.documents,
         transferFormAttachments: formData.attachments,
+        transferFormFilled: true,
         transferFormData: {
           directorName: formData.directorName,
           directorEmail: formData.directorEmail,
@@ -568,6 +579,8 @@ export default function Dashboard() {
           shareholderEmail: formData.shareholderEmail,
           companyAddress: formData.companyAddress,
         },
+        adminComments: company.adminComments,
+        renewalHistory: company.renewalHistory,
       };
       savePurchasedCompany(updatedCompany);
     }
