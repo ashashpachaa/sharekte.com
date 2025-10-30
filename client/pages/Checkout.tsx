@@ -232,6 +232,13 @@ export default function Checkout() {
         );
       }
 
+      // Clear the companies cache to force refetch with updated status
+      try {
+        await fetch("/api/companies/clear-cache", { method: "POST" }).catch(() => {});
+      } catch {
+        // Cache clear is non-blocking
+      }
+
       toast.success("Order completed successfully! 🎉");
       setOrderCompleted(true);
       clearCart();
