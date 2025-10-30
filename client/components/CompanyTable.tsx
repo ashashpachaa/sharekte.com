@@ -51,7 +51,7 @@ interface CompanyTableProps {
 }
 
 export function CompanyTable({
-  companies,
+  companies = [],
   onViewDetails,
   onEdit,
   onDelete,
@@ -76,6 +76,8 @@ export function CompanyTable({
     }
   };
 
+  const safeCompanies = Array.isArray(companies) ? companies : [];
+
   return (
     <>
       <div className="border rounded-lg overflow-hidden bg-white">
@@ -95,7 +97,7 @@ export function CompanyTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {companies.map((company) => (
+            {safeCompanies.map((company) => (
               <TableRow
                 key={company.id}
                 className="hover:bg-gray-50 transition-colors"
