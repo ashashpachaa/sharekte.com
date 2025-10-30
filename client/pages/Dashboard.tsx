@@ -4,6 +4,12 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Search, X, ShoppingCart } from "lucide-react";
 import { useSearch } from "@/hooks/use-search";
 import { getPurchasedCompanies, getInvoices, savePurchasedCompany, updatePurchasedCompanyStatus, addInvoice, renewCompany, updateCompanyRenewalStatus, type PurchasedCompanyData } from "@/lib/user-data";
