@@ -189,7 +189,7 @@ export default function Checkout() {
       // Wait for all order creation to complete
       await Promise.all(orderPromises);
 
-      // Update status for each company to "Sold" in Airtable
+      // Update status for each company to "sold" in Airtable
       const updatePromises = items.map((item) =>
         fetch(`/api/companies/${item.id}/status`, {
           method: "PATCH",
@@ -197,7 +197,7 @@ export default function Checkout() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            status: "Sold",
+            status: "sold",
           }),
         })
       );
