@@ -599,6 +599,7 @@ export default function AdminInvoices() {
                     <SelectValue placeholder="Change status..." />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="none">Select status...</SelectItem>
                     <SelectItem value="pending">Mark Pending</SelectItem>
                     <SelectItem value="paid">Mark Paid</SelectItem>
                     <SelectItem value="partial">Mark Partial</SelectItem>
@@ -608,7 +609,7 @@ export default function AdminInvoices() {
                 <Button
                   size="sm"
                   onClick={handleBulkStatusUpdate}
-                  disabled={!bulkStatusAction}
+                  disabled={bulkStatusAction === "none" || !bulkStatusAction}
                 >
                   Update
                 </Button>
