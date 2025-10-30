@@ -297,3 +297,200 @@ export function getAirtableConfig(): {
     },
   };
 }
+
+/**
+ * Sync order to Airtable (create or update)
+ */
+export async function syncOrderToAirtable(order: Order, airtableRecordId?: string): Promise<string | null> {
+  try {
+    const baseId = process.env.AIRTABLE_BASE_ID || "app0PK34gyJDizR3Q";
+    const tableId = process.env.AIRTABLE_TABLE_ORDERS || "tblXvZ0kjl7p7h9Jq";
+    const token = process.env.AIRTABLE_API_TOKEN;
+
+    if (!token) {
+      console.warn("AIRTABLE_API_TOKEN not configured. Skipping order sync.");
+      return null;
+    }
+
+    const airtableRecord = {
+      fields: {
+        "Order ID": order.orderId,
+        "Order date": order.purchaseDate,
+        "Country": order.country,
+        "Company name": order.companyName,
+        "Company numbers": order.companyNumber,
+        "Incorporate date": order.purchaseDate,
+        "Statues": order.status,
+        "Customer name": order.customerName,
+        "Customer Email": order.customerEmail,
+        "Customer Mobile number": order.customerPhone || "",
+        "price": order.amount,
+        "currency": order.currency,
+        "Payment Status": order.paymentStatus,
+        "Payment Method": order.paymentMethod,
+        "Transaction ID": order.transactionId || "",
+        "Renewal Date": order.renewalDate,
+        "Renewal Fees": order.renewalFees,
+        "Refund Status": order.refundStatus,
+        "Billing Address": order.billingAddress || "",
+        "Company ID": order.companyId,
+        "Last Update Date": order.lastUpdateDate,
+        "Status History": JSON.stringify(order.statusHistory || []),
+        "Documents": JSON.stringify(order.documents || []),
+        "Admin Notes": order.adminNotes || "",
+        "Internal Notes": order.internalNotes || "",
+        "Created At": order.createdAt,
+        "Updated At": order.updatedAt,
+      },
+    };
+
+    const url = airtableRecordId
+      ? `${AIRTABLE_API_URL}/${baseId}/${tableId}/${airtableRecordId}`
+      : `${AIRTABLE_API_URL}/${baseId}/${tableId}`;
+
+    const response = await fetch(url, {
+      method: airtableRecordId ? "PATCH" : "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(airtableRecord),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ error: response.statusText }));
+      console.error("Airtable order sync failed:", errorData);
+      return null;
+    }
+
+    const data = await response.json();
+    const recordId = data.id || airtableRecordId;
+    console.log(`Order ${order.orderId} synced to Airtable (${airtableRecordId ? "updated" : "created"})`);
+    return recordId;
+  } catch (error) {
+    console.error("Airtable order sync error:", error);
+    return null;
+  }
+}
+
+/**
+ * Fetch orders from Airtable
+ */
+export async function fetchOrdersFromAirtable(): Promise<Order[]> {
+  try {
+    const baseId = process.env.AIRTABLE_BASE_ID || "app0PK34gyJDizR3Q";
+    const tableId = process.env.AIRTABLE_TABLE_ORDERS || "tblXvZ0kjl7p7h9Jq";
+    const token = process.env.AIRTABLE_API_TOKEN;
+
+    if (!token) {
+      console.warn("AIRTABLE_API_TOKEN not configured. Cannot fetch orders from Airtable.");
+      return [];
+    }
+
+    const url = `${AIRTABLE_API_URL}/${baseId}/${tableId}`;
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      console.error(`Airtable fetch failed: ${response.status} ${response.statusText}`);
+      return [];
+    }
+
+    const data = await response.json();
+    const orders: Order[] = data.records.map((record: any) => {
+      const fields = record.fields;
+      return {
+        id: record.id,
+        orderId: fields["Order ID"] || "",
+        customerName: fields["Customer name"] || "",
+        customerEmail: fields["Customer Email"] || "",
+        customerPhone: fields["Customer Mobile number"] || "",
+        billingAddress: fields["Billing Address"] || "",
+        country: fields["Country"] || "",
+        companyId: fields["Company ID"] || "",
+        companyName: fields["Company name"] || "",
+        companyNumber: fields["Company numbers"] || "",
+        paymentMethod: fields["Payment Method"] || "credit_card",
+        paymentStatus: fields["Payment Status"] || "pending",
+        transactionId: fields["Transaction ID"] || "",
+        amount: fields.price || 0,
+        currency: fields.currency || "USD",
+        paymentDate: fields["Order date"] || "",
+        status: fields["Statues"] || "pending-payment",
+        statusChangedDate: fields["Last Update Date"] || new Date().toISOString().split("T")[0],
+        statusHistory: fields["Status History"] ? JSON.parse(fields["Status History"]) : [],
+        purchaseDate: fields["Order date"] || "",
+        lastUpdateDate: fields["Last Update Date"] || "",
+        renewalDate: fields["Renewal Date"] || "",
+        renewalFees: fields["Renewal Fees"] || 0,
+        refundStatus: fields["Refund Status"] || "none",
+        refundRequest: undefined,
+        documents: fields.Documents ? JSON.parse(fields.Documents) : [],
+        transferFormUrl: "",
+        adminNotes: fields["Admin Notes"] || "",
+        internalNotes: fields["Internal Notes"] || "",
+        createdAt: fields["Created At"] || "",
+        updatedAt: fields["Updated At"] || "",
+        createdBy: "airtable",
+        updatedBy: "airtable",
+        airtableId: record.id,
+      } as Order;
+    });
+
+    console.log(`Fetched ${orders.length} orders from Airtable`);
+    return orders;
+  } catch (error) {
+    console.error("Airtable fetch orders error:", error);
+    return [];
+  }
+}
+
+/**
+ * Update order status in Airtable
+ */
+export async function updateOrderStatusInAirtable(
+  airtableRecordId: string,
+  newStatus: string,
+  updatedAt: string
+): Promise<boolean> {
+  try {
+    const baseId = process.env.AIRTABLE_BASE_ID || "app0PK34gyJDizR3Q";
+    const tableId = process.env.AIRTABLE_TABLE_ORDERS || "tblXvZ0kjl7p7h9Jq";
+    const token = process.env.AIRTABLE_API_TOKEN;
+
+    if (!token) {
+      console.warn("AIRTABLE_API_TOKEN not configured. Skipping status update.");
+      return false;
+    }
+
+    const url = `${AIRTABLE_API_URL}/${baseId}/${tableId}/${airtableRecordId}`;
+    const response = await fetch(url, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        fields: {
+          "Statues": newStatus,
+          "Last Update Date": updatedAt,
+        },
+      }),
+    });
+
+    if (!response.ok) {
+      console.error("Airtable status update failed:", response.statusText);
+      return false;
+    }
+
+    console.log(`Order status updated in Airtable: ${newStatus}`);
+    return true;
+  } catch (error) {
+    console.error("Airtable status update error:", error);
+    return false;
+  }
+}
