@@ -42,6 +42,7 @@ export default function AdminOrders() {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showRefundModal, setShowRefundModal] = useState(false);
   const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState("orders");
 
   useEffect(() => {
     if (!isAdmin) {
