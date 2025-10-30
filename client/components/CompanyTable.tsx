@@ -221,13 +221,15 @@ export function CompanyTable({
     return countryMatch && yearMatch && statusMatch;
   });
 
-  // Get unique countries and years for filter options
+  // Get unique countries and years for filter options (only from active companies)
+  const activeCompanies = safeCompanies.filter((c) => c.status === "active");
+
   const uniqueCountries = Array.from(
-    new Set(safeCompanies.map((c) => c.country).filter(Boolean))
+    new Set(activeCompanies.map((c) => c.country).filter(Boolean))
   ).sort();
 
   const uniqueYears = Array.from(
-    new Set(safeCompanies.map((c) => c.incorporationYear).filter(Boolean))
+    new Set(activeCompanies.map((c) => c.incorporationYear).filter(Boolean))
   ).sort((a, b) => b - a);
 
   // Display only the first `displayCount` items
