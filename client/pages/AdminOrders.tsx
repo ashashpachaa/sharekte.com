@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAdmin } from "@/lib/admin-context";
-import { getAllOrders, updateOrderStatus, getStatusColor, type Order, type OrderStatus } from "@/lib/orders";
+import { getAllOrders, updateOrder, updateOrderStatus, getStatusColor, type Order, type OrderStatus } from "@/lib/orders";
 import { RefundManagement } from "@/components/RefundManagement";
 import { DocumentManagement } from "@/components/DocumentManagement";
 import { TransferFormManagement } from "@/components/TransferFormManagement";
