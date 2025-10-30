@@ -1,0 +1,459 @@
+import { RequestHandler } from "express";
+import {
+  TransferFormData,
+  FormStatus,
+  createEmptyForm,
+  type DirectorInfo,
+  type ShareholderInfo,
+} from "@/lib/transfer-form";
+
+// Mock database - Ready for Airtable integration
+let formsDb: TransferFormData[] = [];
+let idCounter = 1;
+
+function generateId(): string {
+  return `form_${idCounter++}`;
+}
+
+function getTodayString(): string {
+  return new Date().toISOString().split("T")[0];
+}
+
+// Get all transfer forms
+export const getTransferForms: RequestHandler = async (req, res) => {
+  try {
+    const { orderId } = req.query;
+
+    let result = formsDb;
+    if (orderId) {
+      result = formsDb.filter((f) => f.orderId === orderId);
+    }
+
+    res.json(result);
+  } catch (error) {
+    console.error("Error fetching forms:", error);
+    res.status(500).json({ error: "Failed to fetch forms" });
+  }
+};
+
+// Get single transfer form
+export const getTransferForm: RequestHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const form = formsDb.find((f) => f.id === id);
+
+    if (!form) {
+      return res.status(404).json({ error: "Form not found" });
+    }
+
+    res.json(form);
+  } catch (error) {
+    console.error("Error fetching form:", error);
+    res.status(500).json({ error: "Failed to fetch form" });
+  }
+};
+
+// Create transfer form
+export const createTransferForm: RequestHandler = async (req, res) => {
+  try {
+    const {
+      orderId,
+      companyId,
+      companyName,
+      companyNumber,
+      buyerName,
+      buyerEmail,
+      buyerPhone,
+      buyerAddress,
+      buyerCity,
+      buyerState,
+      buyerPostalCode,
+      buyerCountry,
+    } = req.body;
+
+    if (!orderId || !companyId || !companyName || !buyerName || !buyerEmail) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    const newForm: TransferFormData = {
+      id: generateId(),
+      formId: `FORM-${Date.now()}`,
+      orderId,
+      companyId,
+      companyName,
+      companyNumber: companyNumber || "",
+      sellerName: "",
+      sellerEmail: "",
+      sellerPhone: "",
+      sellerAddress: "",
+      sellerCity: "",
+      sellerState: "",
+      sellerPostalCode: "",
+      sellerCountry: "",
+      buyerName,
+      buyerEmail,
+      buyerPhone: buyerPhone || "",
+      buyerAddress: buyerAddress || "",
+      buyerCity: buyerCity || "",
+      buyerState: buyerState || "",
+      buyerPostalCode: buyerPostalCode || "",
+      buyerCountry: buyerCountry || "",
+      directors: [],
+      shareholders: [],
+      companyType: "",
+      incorporationDate: "",
+      businessDescription: "",
+      transferReason: "",
+      transferDate: getTodayString(),
+      salePrice: undefined,
+      currency: "USD",
+      status: "under-review",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      amendmentsRequiredCount: 0,
+      attachments: [],
+      comments: [],
+      statusHistory: [
+        {
+          id: `log_${Date.now()}`,
+          fromStatus: "under-review" as FormStatus,
+          toStatus: "under-review",
+          changedDate: new Date().toISOString(),
+          changedBy: "system",
+          notes: "Form created",
+        },
+      ],
+    };
+
+    formsDb.push(newForm);
+    res.status(201).json(newForm);
+  } catch (error) {
+    console.error("Error creating form:", error);
+    res.status(500).json({ error: "Failed to create form" });
+  }
+};
+
+// Update transfer form
+export const updateTransferForm: RequestHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const form = formsDb.find((f) => f.id === id);
+
+    if (!form) {
+      return res.status(404).json({ error: "Form not found" });
+    }
+
+    const updated: TransferFormData = {
+      ...form,
+      ...req.body,
+      id: form.id,
+      createdAt: form.createdAt,
+      updatedAt: new Date().toISOString(),
+    };
+
+    const index = formsDb.findIndex((f) => f.id === id);
+    formsDb[index] = updated;
+
+    res.json(updated);
+  } catch (error) {
+    console.error("Error updating form:", error);
+    res.status(500).json({ error: "Failed to update form" });
+  }
+};
+
+// Update form status
+export const updateFormStatus: RequestHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status, notes, reason } = req.body;
+
+    const form = formsDb.find((f) => f.id === id);
+    if (!form) {
+      return res.status(404).json({ error: "Form not found" });
+    }
+
+    if (!status) {
+      return res.status(400).json({ error: "Status is required" });
+    }
+
+    const previousStatus = form.status;
+    const amendmentCount =
+      status === "amend-required"
+        ? form.amendmentsRequiredCount + 1
+        : form.amendmentsRequiredCount;
+
+    const updated: TransferFormData = {
+      ...form,
+      status: status as FormStatus,
+      amendmentsRequiredCount: amendmentCount,
+      lastAmendmentDate: status === "amend-required" ? new Date().toISOString() : form.lastAmendmentDate,
+      updatedAt: new Date().toISOString(),
+      statusHistory: [
+        ...form.statusHistory,
+        {
+          id: `log_${Date.now()}`,
+          fromStatus: previousStatus,
+          toStatus: status,
+          changedDate: new Date().toISOString(),
+          changedBy: "admin",
+          reason: reason || undefined,
+          notes: notes || undefined,
+        },
+      ],
+    };
+
+    const index = formsDb.findIndex((f) => f.id === id);
+    formsDb[index] = updated;
+
+    res.json(updated);
+  } catch (error) {
+    console.error("Error updating form status:", error);
+    res.status(500).json({ error: "Failed to update form status" });
+  }
+};
+
+// Delete transfer form
+export const deleteTransferForm: RequestHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const form = formsDb.find((f) => f.id === id);
+
+    if (!form) {
+      return res.status(404).json({ error: "Form not found" });
+    }
+
+    formsDb = formsDb.filter((f) => f.id !== id);
+    res.json({ message: "Form deleted" });
+  } catch (error) {
+    console.error("Error deleting form:", error);
+    res.status(500).json({ error: "Failed to delete form" });
+  }
+};
+
+// Add director
+export const addDirector: RequestHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const directorData = req.body;
+
+    const form = formsDb.find((f) => f.id === id);
+    if (!form) {
+      return res.status(404).json({ error: "Form not found" });
+    }
+
+    const director: DirectorInfo = {
+      id: `director_${Date.now()}`,
+      ...directorData,
+    };
+
+    form.directors.push(director);
+    form.updatedAt = new Date().toISOString();
+
+    res.json(director);
+  } catch (error) {
+    console.error("Error adding director:", error);
+    res.status(500).json({ error: "Failed to add director" });
+  }
+};
+
+// Remove director
+export const removeDirector: RequestHandler = async (req, res) => {
+  try {
+    const { id, directorId } = req.params;
+
+    const form = formsDb.find((f) => f.id === id);
+    if (!form) {
+      return res.status(404).json({ error: "Form not found" });
+    }
+
+    form.directors = form.directors.filter((d) => d.id !== directorId);
+    form.updatedAt = new Date().toISOString();
+
+    res.json({ message: "Director removed" });
+  } catch (error) {
+    console.error("Error removing director:", error);
+    res.status(500).json({ error: "Failed to remove director" });
+  }
+};
+
+// Add shareholder
+export const addShareholder: RequestHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const shareholderData = req.body;
+
+    const form = formsDb.find((f) => f.id === id);
+    if (!form) {
+      return res.status(404).json({ error: "Form not found" });
+    }
+
+    const shareholder: ShareholderInfo = {
+      id: `shareholder_${Date.now()}`,
+      ...shareholderData,
+    };
+
+    form.shareholders.push(shareholder);
+    form.updatedAt = new Date().toISOString();
+
+    res.json(shareholder);
+  } catch (error) {
+    console.error("Error adding shareholder:", error);
+    res.status(500).json({ error: "Failed to add shareholder" });
+  }
+};
+
+// Add comment
+export const addComment: RequestHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { text, isAdminOnly } = req.body;
+
+    const form = formsDb.find((f) => f.id === id);
+    if (!form) {
+      return res.status(404).json({ error: "Form not found" });
+    }
+
+    if (!text) {
+      return res.status(400).json({ error: "Comment text is required" });
+    }
+
+    const comment = {
+      id: `comment_${Date.now()}`,
+      author: "admin",
+      text,
+      createdAt: new Date().toISOString(),
+      isAdminOnly: isAdminOnly || false,
+    };
+
+    form.comments.push(comment);
+    form.updatedAt = new Date().toISOString();
+
+    res.json(comment);
+  } catch (error) {
+    console.error("Error adding comment:", error);
+    res.status(500).json({ error: "Failed to add comment" });
+  }
+};
+
+// Upload attachment
+export const uploadAttachment: RequestHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { filename, filesize, filetype } = req.body;
+
+    const form = formsDb.find((f) => f.id === id);
+    if (!form) {
+      return res.status(404).json({ error: "Form not found" });
+    }
+
+    // Check file size limit (50MB)
+    const maxSize = 50 * 1024 * 1024;
+    if (filesize > maxSize) {
+      return res.status(400).json({ error: "File size exceeds 50MB limit" });
+    }
+
+    const attachment = {
+      id: `attachment_${Date.now()}`,
+      name: filename,
+      type: filetype,
+      size: filesize,
+      url: `/uploads/${form.id}/${filename}`,
+      uploadedDate: new Date().toISOString(),
+      uploadedBy: "admin",
+    };
+
+    form.attachments.push(attachment);
+    form.updatedAt = new Date().toISOString();
+
+    res.json(attachment);
+  } catch (error) {
+    console.error("Error uploading attachment:", error);
+    res.status(500).json({ error: "Failed to upload attachment" });
+  }
+};
+
+// Delete attachment
+export const deleteAttachment: RequestHandler = async (req, res) => {
+  try {
+    const { id, attachmentId } = req.params;
+
+    const form = formsDb.find((f) => f.id === id);
+    if (!form) {
+      return res.status(404).json({ error: "Form not found" });
+    }
+
+    form.attachments = form.attachments.filter((a) => a.id !== attachmentId);
+    form.updatedAt = new Date().toISOString();
+
+    res.json({ message: "Attachment deleted" });
+  } catch (error) {
+    console.error("Error deleting attachment:", error);
+    res.status(500).json({ error: "Failed to delete attachment" });
+  }
+};
+
+// Generate PDF
+export const generatePDF: RequestHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const form = formsDb.find((f) => f.id === id);
+    if (!form) {
+      return res.status(404).json({ error: "Form not found" });
+    }
+
+    // TODO: Implement actual PDF generation with pdfkit or similar
+    // For now, return a placeholder
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename=transfer-form-${form.formId}.pdf`
+    );
+    res.send(Buffer.from("PDF content placeholder"));
+  } catch (error) {
+    console.error("Error generating PDF:", error);
+    res.status(500).json({ error: "Failed to generate PDF" });
+  }
+};
+
+// Get form analytics
+export const getFormAnalytics: RequestHandler = async (req, res) => {
+  try {
+    const analytics = {
+      total: formsDb.length,
+      underReview: formsDb.filter((f) => f.status === "under-review").length,
+      amendRequired: formsDb.filter((f) => f.status === "amend-required").length,
+      confirmApplication: formsDb.filter(
+        (f) => f.status === "confirm-application"
+      ).length,
+      transferring: formsDb.filter((f) => f.status === "transferring").length,
+      completed: formsDb.filter((f) => f.status === "complete-transfer").length,
+      canceled: formsDb.filter((f) => f.status === "canceled").length,
+      averageProcessingTime: calculateAverageProcessingTime(),
+      pendingAmendments: formsDb.filter((f) => f.status === "amend-required")
+        .length,
+    };
+
+    res.json(analytics);
+  } catch (error) {
+    console.error("Error getting analytics:", error);
+    res.status(500).json({ error: "Failed to get analytics" });
+  }
+};
+
+function calculateAverageProcessingTime(): number {
+  if (formsDb.length === 0) return 0;
+
+  const completedForms = formsDb.filter(
+    (f) => f.status === "complete-transfer" && f.completedAt
+  );
+  if (completedForms.length === 0) return 0;
+
+  const totalTime = completedForms.reduce((sum, form) => {
+    const created = new Date(form.createdAt).getTime();
+    const completed = new Date(form.completedAt || "").getTime();
+    return sum + (completed - created);
+  }, 0);
+
+  return Math.round(totalTime / completedForms.length / (1000 * 60 * 60 * 24)); // in days
+}
