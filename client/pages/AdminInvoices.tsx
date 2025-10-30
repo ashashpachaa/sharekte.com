@@ -523,7 +523,7 @@ export default function AdminInvoices() {
                   <SelectValue placeholder="All Methods" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Methods</SelectItem>
+                  <SelectItem value="all">All Methods</SelectItem>
                   <SelectItem value="stripe">Stripe</SelectItem>
                   <SelectItem value="wise">Wise</SelectItem>
                   <SelectItem value="manual">Manual</SelectItem>
