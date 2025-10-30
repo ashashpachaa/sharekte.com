@@ -608,7 +608,7 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
         },
         body: JSON.stringify({
           fields: {
-            "Status": newStatus,
+            "Statues ": newStatus,
           },
         }),
       }
