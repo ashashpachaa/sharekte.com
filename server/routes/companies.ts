@@ -31,6 +31,118 @@ function generateId(): string {
   return "rec_" + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
 }
 
+// Helper function to fetch companies data from Airtable (used by multiple endpoints)
+async function fetchCompaniesData(): Promise<CompanyData[]> {
+  try {
+    // Check server cache first
+    if (
+      serverCache &&
+      Date.now() - serverCache.timestamp < SERVER_CACHE_DURATION
+    ) {
+      return serverCache.data;
+    }
+
+    // If fetch is already in progress, wait for it
+    if (pendingAirtableFetch) {
+      return await pendingAirtableFetch;
+    }
+
+    const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
+    const AIRTABLE_BASE_ID = "app0PK34gyJDizR3Q";
+    const AIRTABLE_TABLE_ID = "tbljtdHPdHnTberDy";
+
+    if (!AIRTABLE_API_TOKEN) {
+      console.error("AIRTABLE_API_TOKEN not configured");
+      return [];
+    }
+
+    pendingAirtableFetch = (async () => {
+      try {
+        const response = await fetch(
+          `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_ID}`,
+          {
+            headers: {
+              Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          const error = await response.text();
+          console.error("Airtable API error:", response.status, error);
+          throw new Error(`Airtable API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const companies: CompanyData[] = data.records.map((record: any) => {
+          const fields = record.fields;
+          const incorporationDate = fields["Incorporate date"] || getTodayString();
+          // Try Statues (with space) first, then Status - both are valid field names in Airtable
+          const rawStatus = fields["Statues "] || fields["Status"] || "active";
+          const statusValue = rawStatus.toLowerCase() as CompanyStatus;
+
+          return {
+            id: record.id,
+            companyName: fields["Company name"] || "",
+            companyNumber: String(fields["Company number"] || ""),
+            country: fields["country"] || "",
+            type: "LTD" as any,
+            incorporationDate: incorporationDate,
+            incorporationYear: parseInt(String(fields["Incorporate Year"] || new Date().getFullYear())),
+            purchasePrice: parseFloat(String(fields["Price"] || "0")),
+            renewalFee: parseFloat(String(fields["Renewal fees"] || "0")),
+            currency: "USD",
+            expiryDate: calculateExpiryDate(incorporationDate),
+            renewalDate: calculateExpiryDate(incorporationDate),
+            renewalDaysLeft: calculateRenewalDaysLeft(calculateExpiryDate(incorporationDate)),
+            status: statusValue,
+            paymentStatus: "paid" as const,
+            refundStatus: "not-refunded" as const,
+            clientName: fields["Client Name"] || "",
+            clientEmail: fields["Client Email"] || "",
+            clientPhone: fields["Client Phone"],
+            industry: fields.Industry,
+            revenue: fields.Revenue,
+            adminNotes: fields["Admin Notes"],
+            internalNotes: fields["Internal Notes"],
+            optionsInclude: Array.isArray(fields["option include"]) ? fields["option include"] : [],
+            createdBy: "airtable",
+            createdAt: getTodayString(),
+            updatedAt: getTodayString(),
+            updatedBy: "airtable",
+            tags: [],
+            documents: [],
+            activityLog: [
+              {
+                id: "log_1",
+                timestamp: getTodayString(),
+                action: "Imported from Airtable",
+                performedBy: "system",
+                details: `Company ${fields["Company name"]} imported from Airtable`,
+              },
+            ],
+            ownershipHistory: [],
+          };
+        });
+
+        serverCache = {
+          data: companies,
+          timestamp: Date.now(),
+        };
+
+        return companies;
+      } finally {
+        pendingAirtableFetch = null;
+      }
+    })();
+
+    return await pendingAirtableFetch;
+  } catch (error) {
+    console.error("Error fetching companies data:", error);
+    return [];
+  }
+}
+
 // Helper function to create a new company
 function createNewCompany(
   data: Partial<CompanyData> & {
