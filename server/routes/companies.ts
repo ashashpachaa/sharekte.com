@@ -659,6 +659,9 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
     const updatedResponse = await updateResponse.json();
     const updatedFields = updatedResponse.fields;
 
+    // Normalize status to lowercase for filtering
+    const normalizedStatus = newStatusValue.toLowerCase() as CompanyStatus;
+
     const updatedCompany: CompanyData = {
       id: id,
       companyName: updatedFields["Company name"] || "",
@@ -673,7 +676,7 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
       expiryDate: calculateExpiryDate(incorporationDate),
       renewalDate: calculateExpiryDate(incorporationDate),
       renewalDaysLeft: calculateRenewalDaysLeft(calculateExpiryDate(incorporationDate)),
-      status: newStatus as CompanyStatus,
+      status: normalizedStatus,
       paymentStatus: "paid" as const,
       refundStatus: "not-refunded" as const,
       clientName: updatedFields["Client Name"] || "",
