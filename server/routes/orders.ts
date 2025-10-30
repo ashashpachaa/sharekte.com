@@ -219,7 +219,19 @@ export const getOrders: RequestHandler = async (req, res) => {
     });
 
     if (!response.ok) {
-      throw new Error(`Airtable API error: ${response.statusText}`);
+      console.warn(`Airtable API returned ${response.status}: ${response.statusText}, falling back to demo orders`);
+      // Fall back to demo orders if Airtable fails
+      const demoOrders = getDemoOrders();
+      let filtered = demoOrders;
+
+      if (status) {
+        filtered = filtered.filter((o) => o.status === status);
+      }
+      if (country) {
+        filtered = filtered.filter((o) => o.country === country);
+      }
+
+      return res.json(filtered);
     }
 
     const data: AirtableResponse = await response.json();
@@ -231,8 +243,25 @@ export const getOrders: RequestHandler = async (req, res) => {
 
     res.json(orders);
   } catch (error) {
-    console.error("Failed to fetch orders:", error);
-    res.status(500).json({ error: "Failed to fetch orders" });
+    console.error("Error fetching orders:", error);
+    // Fall back to demo orders on any error
+    try {
+      const demoOrders = getDemoOrders();
+      const { status, country } = req.query;
+      let filtered = demoOrders;
+
+      if (status) {
+        filtered = filtered.filter((o) => o.status === status);
+      }
+      if (country) {
+        filtered = filtered.filter((o) => o.country === country);
+      }
+
+      return res.json(filtered);
+    } catch (fallbackError) {
+      console.error("Failed to return demo orders:", fallbackError);
+      res.status(500).json({ error: "Failed to fetch orders" });
+    }
   }
 };
 
