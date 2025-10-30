@@ -879,7 +879,7 @@ export const approveRefund: RequestHandler = async (req, res) => {
       incorporationDate: incorporationDate,
       incorporationYear: parseInt(updatedFields["Incorporate Year"] || new Date().getFullYear()),
       purchasePrice: parseFloat(updatedFields.Price || "0"),
-      renewalFee: parseFloat(String(fields["Renewal fees"] || updatedFields["Renewal fees"] || "0")),
+      renewalFee: parseFloat(String(updatedFields["Renewal fees"] || "0")),
       currency: "USD",
       expiryDate: calculateExpiryDate(incorporationDate),
       renewalDate: calculateExpiryDate(incorporationDate),
