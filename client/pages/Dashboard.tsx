@@ -557,7 +557,7 @@ export default function Dashboard() {
     if (company) {
       const updatedCompany: PurchasedCompanyData = {
         ...company,
-        status: "under-review" as const,
+        status: "under-review",
         statusLabel: "Under Review Transfer Form",
         transferFormFilled: true,
         transferFormAttachments: formData.attachments,
