@@ -305,8 +305,8 @@ export function CompanyFiltersComponent({
           <div className="space-y-2">
             <Label className="font-semibold">Country</Label>
             <div className="max-h-32 overflow-y-auto space-y-2">
-              {countries.map((country) => (
-                <div key={country} className="flex items-center space-x-2">
+              {Array.from(new Set(countries || [])).map((country) => (
+                <div key={`country-${country}`} className="flex items-center space-x-2">
                   <input
                     type="checkbox"
                     id={`country-${country}`}
