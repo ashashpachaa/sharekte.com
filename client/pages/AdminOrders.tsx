@@ -518,12 +518,6 @@ function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModal
     }
   };
 
-  const handleStatusChange = () => {
-    if (editedOrder.status !== order.status) {
-      onStatusChange(editedOrder.status);
-      toast.success("Status updated successfully");
-    }
-  };
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
