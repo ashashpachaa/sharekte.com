@@ -590,7 +590,8 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
     const airtableId = airtableRecord.id;
     const fields = airtableRecord.fields;
     const incorporationDate = fields["Incorporate date"] || getTodayString();
-    const previousStatus = fields["Statues "] || "available";
+    // Read from Statues (with space) - this is the field we're updating
+    const previousStatus = fields["Statues "] || fields["Status"] || "active";
     const newStatus = status || previousStatus;
 
     console.log(`Updating company status: ${company.companyName} (${airtableId}) from "${previousStatus}" to "${newStatus}"`);
