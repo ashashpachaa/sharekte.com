@@ -44,7 +44,7 @@ export function Header() {
               className="gap-2 text-xs h-9"
             >
               <Globe className="w-4 h-4" />
-              <span>{CURRENCY_RATES[currency].symbol}</span>
+              <span>{rates[currency]?.symbol || "$"}</span>
             </Button>
             <div className="absolute right-0 top-full mt-1 w-48 bg-card border border-border/40 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
               <div className="p-2 space-y-1">
