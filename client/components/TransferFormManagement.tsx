@@ -297,8 +297,8 @@ export function TransferFormManagement({ orderId }: TransferFormManagementProps)
       </Card>
 
       {/* Form Details Modal */}
-      {selectedForm && (
-        <Dialog open={showDetailsModal} onOpenChange={setShowDetailsModal}>
+      <Dialog open={showDetailsModal && !!selectedForm} onOpenChange={setShowDetailsModal}>
+        {selectedForm && (
           <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Transfer Form: {selectedForm.formId}</DialogTitle>
@@ -445,12 +445,12 @@ export function TransferFormManagement({ orderId }: TransferFormManagementProps)
               </Button>
             </DialogFooter>
           </DialogContent>
-        </Dialog>
-      )}
+        )}
+      </Dialog>
 
       {/* Status Change Modal */}
-      {selectedForm && (
-        <Dialog open={showStatusModal} onOpenChange={setShowStatusModal}>
+      <Dialog open={showStatusModal && !!selectedForm} onOpenChange={setShowStatusModal}>
+        {selectedForm && (
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Change Form Status</DialogTitle>
@@ -509,8 +509,8 @@ export function TransferFormManagement({ orderId }: TransferFormManagementProps)
               </Button>
             </DialogFooter>
           </DialogContent>
-        </Dialog>
-      )}
+        )}
+      </Dialog>
     </div>
   );
 }
