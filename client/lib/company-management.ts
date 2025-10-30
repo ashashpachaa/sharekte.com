@@ -336,41 +336,46 @@ export function sortCompanies(
   const sorted = [...companies];
 
   sorted.sort((a, b) => {
-    let aValue: string | number | Date;
-    let bValue: string | number | Date;
+    let aValue: string | number | Date | undefined;
+    let bValue: string | number | Date | undefined;
 
-    switch (sort.field) {
-      case "name":
-        aValue = a.companyName.toLowerCase();
-        bValue = b.companyName.toLowerCase();
-        break;
-      case "date":
-        aValue = new Date(a.createdAt);
-        bValue = new Date(b.createdAt);
-        break;
-      case "price":
-        aValue = a.purchasePrice;
-        bValue = b.purchasePrice;
-        break;
-      case "renewal":
-        aValue = new Date(a.renewalDate);
-        bValue = new Date(b.renewalDate);
-        break;
-      case "status":
-        aValue = a.status;
-        bValue = b.status;
-        break;
-      default:
-        return 0;
-    }
+    try {
+      switch (sort.field) {
+        case "name":
+          aValue = (a.companyName || "").toLowerCase();
+          bValue = (b.companyName || "").toLowerCase();
+          break;
+        case "date":
+          aValue = new Date(a.createdAt || "");
+          bValue = new Date(b.createdAt || "");
+          break;
+        case "price":
+          aValue = a.purchasePrice || 0;
+          bValue = b.purchasePrice || 0;
+          break;
+        case "renewal":
+          aValue = new Date(a.renewalDate || "");
+          bValue = new Date(b.renewalDate || "");
+          break;
+        case "status":
+          aValue = a.status || "";
+          bValue = b.status || "";
+          break;
+        default:
+          return 0;
+      }
 
-    if (aValue < bValue) {
-      return sort.order === "asc" ? -1 : 1;
+      if (aValue < bValue) {
+        return sort.order === "asc" ? -1 : 1;
+      }
+      if (aValue > bValue) {
+        return sort.order === "asc" ? 1 : -1;
+      }
+      return 0;
+    } catch (error) {
+      console.warn("Sort error:", error);
+      return 0;
     }
-    if (aValue > bValue) {
-      return sort.order === "asc" ? 1 : -1;
-    }
-    return 0;
   });
 
   return sorted;
