@@ -115,9 +115,6 @@ export function CompanyDetailsModal({
             <Badge className={STATUS_COLORS[company.status]}>
               {company.status}
             </Badge>
-            <Badge className={PAYMENT_STATUS_COLORS[company.paymentStatus]}>
-              {company.paymentStatus}
-            </Badge>
           </div>
         </div>
 
@@ -285,23 +282,6 @@ export function CompanyDetailsModal({
                     </Select>
                   </div>
 
-                  <div>
-                    <Label htmlFor="paymentStatus">Payment Status</Label>
-                    <Select
-                      value={company.paymentStatus}
-                      onValueChange={handlePaymentStatusChange}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="paid">Paid</SelectItem>
-                        <SelectItem value="pending">Pending</SelectItem>
-                        <SelectItem value="failed">Failed</SelectItem>
-                        <SelectItem value="refunded">Refunded</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
                 </div>
 
                 <div>
@@ -337,12 +317,6 @@ export function CompanyDetailsModal({
                     <Label className="text-xs text-gray-600">Status</Label>
                     <Badge className={STATUS_COLORS[company.status]}>
                       {company.status}
-                    </Badge>
-                  </div>
-                  <div>
-                    <Label className="text-xs text-gray-600">Payment Status</Label>
-                    <Badge className={PAYMENT_STATUS_COLORS[company.paymentStatus]}>
-                      {company.paymentStatus}
                     </Badge>
                   </div>
                 </div>
