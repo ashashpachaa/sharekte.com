@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "@/lib/cart-context";
 import { NotificationsProvider } from "@/lib/notifications-context";
 import { CurrencyProvider } from "@/lib/currency-context";
+import { AdminProvider } from "@/lib/admin-context";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Cart from "./pages/Cart";
