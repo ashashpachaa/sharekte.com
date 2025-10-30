@@ -554,6 +554,8 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
     const { id } = req.params;
     const { status, notes } = req.body;
 
+    console.log(`[updateCompanyStatus] Starting - ID: ${id}, Status: ${status}`);
+
     // Step 1: Look up company by marketplace ID to get company name
     const allCompanies = await fetchCompaniesData();
     const company = allCompanies.find((c) => c.id === id);
