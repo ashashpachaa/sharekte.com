@@ -620,7 +620,7 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
         details: airtableError,
         status: updateResponse.status,
         airtableId: airtableId,
-        companyName: company.companyName
+        companyName: companyName
       });
     }
 
