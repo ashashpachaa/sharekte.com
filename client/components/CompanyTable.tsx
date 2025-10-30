@@ -198,6 +198,39 @@ export function CompanyTable({
           <div className="p-8 text-center">
             <p className="text-gray-500">Loading companies...</p>
           </div>
+        ) : error ? (
+          <div className="p-8 text-center">
+            <p className="text-red-600 font-medium mb-4">{error}</p>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                hasFetched.current = false;
+                setIsLoading(true);
+                setError(null);
+                companiesCache = null;
+                pendingFetch = null;
+                fetchCompaniesWithRetry()
+                  .then((data) => {
+                    setLoadedCompanies(data);
+                    setError(null);
+                  })
+                  .catch((err) => {
+                    console.error("Error fetching companies:", err);
+                    setError(
+                      err instanceof Error ? err.message : "Failed to load companies"
+                    );
+                    setLoadedCompanies([]);
+                  })
+                  .finally(() => {
+                    setIsLoading(false);
+                  });
+              }}
+            >
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Retry
+            </Button>
+          </div>
         ) : safeCompanies.length === 0 ? (
           <div className="p-8 text-center">
             <p className="text-gray-500">No companies available</p>
