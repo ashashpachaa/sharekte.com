@@ -142,19 +142,42 @@ export const getCompanies: RequestHandler = async (req, res) => {
         }
 
         const data = await response.json();
-        const companies: CompanyData[] = data.records.map((record: any) => {
+        const companies: CompanyData[] = data.records.map((record: any, index: number) => {
           const fields = record.fields;
           const incorporationDate = fields["Incorporate date"] || getTodayString();
+          const companyName = fields["Company name"] || "";
+          const companyNumber = String(fields["Company number"] || "");
+          const country = fields["country"] || "";
+          const incorporationYear = parseInt(String(fields["Incorporate Year"] || new Date().getFullYear()));
+          const purchasePrice = parseFloat(String(fields["Price"] || "0"));
+
+          if (index === 0) {
+            console.log("DEBUG SERVER - First company mapping:");
+            console.log("  Input fields:", Object.keys(fields));
+            console.log("  Company name from:", fields["Company name"]);
+            console.log("  Company number from:", fields["Company number"]);
+            console.log("  Country from:", fields["country"]);
+            console.log("  Incorporate date from:", fields["Incorporate date"]);
+            console.log("  Incorporate Year from:", fields["Incorporate Year"]);
+            console.log("  Price from:", fields["Price"]);
+            console.log("  Mapped values:");
+            console.log("    companyName:", companyName);
+            console.log("    companyNumber:", companyNumber);
+            console.log("    country:", country);
+            console.log("    incorporationDate:", incorporationDate);
+            console.log("    incorporationYear:", incorporationYear);
+            console.log("    purchasePrice:", purchasePrice);
+          }
 
           return {
             id: record.id,
-            companyName: fields["Company name"] || "",
-            companyNumber: String(fields["Company number"] || ""),
-            country: fields["country"] || fields.country || fields.Country || "",
+            companyName: companyName,
+            companyNumber: companyNumber,
+            country: country,
             type: "LTD" as any,
             incorporationDate: incorporationDate,
-            incorporationYear: parseInt(String(fields["Incorporate Year"] || new Date().getFullYear())),
-            purchasePrice: parseFloat(String(fields["Price"] || "0")),
+            incorporationYear: incorporationYear,
+            purchasePrice: purchasePrice,
             renewalFee: 0,
             currency: "GBP",
             expiryDate: calculateExpiryDate(incorporationDate),
