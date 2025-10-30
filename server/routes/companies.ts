@@ -450,3 +450,61 @@ export const approveRefund: RequestHandler = async (req, res) => {
     res.status(500).json({ error: "Failed to approve refund" });
   }
 };
+
+// Helper: Sync company to Airtable
+async function syncCompanyToAirtable(company: CompanyData): Promise<void> {
+  const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
+  const AIRTABLE_BASE_ID = "app0PK34gyJDizR3Q";
+  const AIRTABLE_TABLE = "Companies";
+
+  if (!AIRTABLE_API_TOKEN) {
+    console.log("Airtable token not configured, skipping sync");
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
+        },
+        body: JSON.stringify({
+          fields: {
+            "Company Name": company.companyName,
+            "Company Number": company.companyNumber,
+            Country: company.country,
+            Type: company.type,
+            "Incorporation Date": company.incorporationDate,
+            "Incorporation Year": company.incorporationYear,
+            "Purchase Price": company.purchasePrice,
+            "Renewal Fee": company.renewalFee,
+            Currency: company.currency,
+            "Expiry Date": company.expiryDate,
+            "Renewal Date": company.renewalDate,
+            Status: company.status,
+            "Payment Status": company.paymentStatus,
+            "Refund Status": company.refundStatus,
+            "Client Name": company.clientName,
+            "Client Email": company.clientEmail,
+            "Client Phone": company.clientPhone || "",
+            Industry: company.industry || "",
+            Revenue: company.revenue || "",
+            "Admin Notes": company.adminNotes || "",
+            "Internal Notes": company.internalNotes || "",
+          },
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.text();
+      console.error("Airtable sync failed:", error);
+    }
+  } catch (error) {
+    console.error("Error syncing to Airtable:", error);
+    throw error;
+  }
+}
