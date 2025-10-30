@@ -224,6 +224,18 @@ export const createCompany: RequestHandler = async (req, res) => {
     });
 
     companiesDb.push(company);
+
+    // Sync to Airtable if configured
+    const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
+    if (AIRTABLE_API_TOKEN) {
+      try {
+        await syncCompanyToAirtable(company);
+      } catch (airtableError) {
+        console.error("Error syncing to Airtable:", airtableError);
+        // Don't fail the request if Airtable sync fails
+      }
+    }
+
     res.status(201).json(company);
   } catch (error) {
     console.error("Error creating company:", error);
