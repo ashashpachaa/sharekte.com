@@ -211,8 +211,96 @@ export function CompanyTable({
 
   const safeCompanies = Array.isArray(loadedCompanies) ? loadedCompanies : [];
 
+  // Filter companies based on selected criteria
+  const filteredCompanies = safeCompanies.filter((company) => {
+    const countryMatch = !selectedCountry || company.country === selectedCountry;
+    const yearMatch = !selectedYear || company.incorporationYear === parseInt(selectedYear);
+    return countryMatch && yearMatch;
+  });
+
+  // Get unique countries and years for filter options
+  const uniqueCountries = Array.from(
+    new Set(safeCompanies.map((c) => c.country).filter(Boolean))
+  ).sort();
+
+  const uniqueYears = Array.from(
+    new Set(safeCompanies.map((c) => c.incorporationYear).filter(Boolean))
+  ).sort((a, b) => b - a);
+
+  // Display only the first `displayCount` items
+  const displayedCompanies = filteredCompanies.slice(0, displayCount);
+  const hasMoreItems = filteredCompanies.length > displayCount;
+
   return (
     <>
+      <div className="w-full">
+        {/* Filters */}
+        <div className="mb-6 flex flex-col sm:flex-row gap-4 p-4 bg-gray-50 rounded-lg border">
+          <div className="flex-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Filter by Country
+            </label>
+            <select
+              value={selectedCountry}
+              onChange={(e) => {
+                setSelectedCountry(e.target.value);
+                setDisplayCount(10);
+              }}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="">All Countries</option>
+              {uniqueCountries.map((country) => (
+                <option key={country} value={country}>
+                  {country}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex-1">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Filter by Incorporation Year
+            </label>
+            <select
+              value={selectedYear}
+              onChange={(e) => {
+                setSelectedYear(e.target.value);
+                setDisplayCount(10);
+              }}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="">All Years</option>
+              {uniqueYears.map((year) => (
+                <option key={year} value={year.toString()}>
+                  {year}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {(selectedCountry || selectedYear) && (
+            <div className="flex items-end">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setSelectedCountry("");
+                  setSelectedYear("");
+                  setDisplayCount(10);
+                }}
+                className="w-full sm:w-auto"
+              >
+                Clear Filters
+              </Button>
+            </div>
+          )}
+        </div>
+
+        {/* Results info */}
+        <div className="mb-4 text-sm text-gray-600 px-4">
+          Showing {displayedCompanies.length} of {filteredCompanies.length} companies
+        </div>
+      </div>
+
       <div className="border rounded-lg overflow-hidden bg-white">
         {isLoading ? (
           <div className="p-8 text-center">
