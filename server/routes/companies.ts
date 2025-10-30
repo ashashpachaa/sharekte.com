@@ -697,8 +697,7 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
       ownershipHistory: [],
     };
 
-    const successFieldName = fieldNames.find(() => updateResponse?.ok);
-    console.log(`✓ Company ${airtableId} (${companyName}) status updated to ${newStatusValue} (field: "${successFieldName}")`);
+    console.log(`✓ Company ${airtableId} (${companyName}) status updated to ${newStatusValue}`);
     res.json(updatedCompany);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
