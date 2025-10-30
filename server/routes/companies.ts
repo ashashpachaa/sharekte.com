@@ -6,7 +6,7 @@ import {
   calculateExpiryDate,
   calculateRenewalDaysLeft,
   determineStatus,
-} from "@/lib/company-management";
+} from "../../client/lib/company-management";
 
 // All company data comes from Airtable - no local in-memory storage
 // Airtable provides persistent storage and real-time synchronization
