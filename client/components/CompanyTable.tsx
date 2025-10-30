@@ -138,11 +138,26 @@ export function CompanyTable({
   onStatusChange,
   isAdmin = false,
 }: CompanyTableProps) {
+  const { addItem } = useCart();
   const [showDeleteDialog, setShowDeleteDialog] = useState<string | null>(null);
   const [loadedCompanies, setLoadedCompanies] = useState<CompanyData[]>(companies);
   const [isLoading, setIsLoading] = useState(!companies || companies.length === 0);
   const [error, setError] = useState<string | null>(null);
   const hasFetched = useRef(false);
+
+  const handleAddToCart = (company: CompanyData) => {
+    addItem({
+      id: company.id,
+      name: company.companyName,
+      price: company.purchasePrice,
+      companyNumber: company.companyNumber,
+      country: company.country,
+      incorporationDate: company.incorporationDate,
+      incorporationYear: company.incorporationYear?.toString(),
+      renewalFees: company.renewalFee,
+    });
+    toast.success(`${company.companyName} added to cart`);
+  };
 
   useEffect(() => {
     // If no companies passed as prop, fetch from API (only once per component mount)
