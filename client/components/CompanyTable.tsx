@@ -358,7 +358,7 @@ export function CompanyTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {safeCompanies.map((company) => (
+            {displayedCompanies.map((company) => (
               <TableRow
                 key={company.id}
                 className="hover:bg-gray-50 transition-colors"
