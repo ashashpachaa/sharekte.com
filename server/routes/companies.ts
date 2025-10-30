@@ -89,9 +89,25 @@ function createNewCompany(
   };
 }
 
-// Get all companies from Airtable
+// Get all companies from Airtable with caching and deduplication
 export const getCompanies: RequestHandler = async (req, res) => {
   try {
+    // Check server cache first
+    if (
+      serverCache &&
+      Date.now() - serverCache.timestamp < SERVER_CACHE_DURATION
+    ) {
+      res.set("Cache-Control", "public, max-age=120"); // 2 minute cache
+      return res.json(serverCache.data);
+    }
+
+    // If fetch is already in progress, wait for it
+    if (pendingAirtableFetch) {
+      const companies = await pendingAirtableFetch;
+      res.set("Cache-Control", "public, max-age=120");
+      return res.json(companies);
+    }
+
     const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
     const AIRTABLE_BASE_ID = "app0PK34gyJDizR3Q";
     const AIRTABLE_TABLE_ID = "tbljtdHPdHnTberDy";
@@ -101,73 +117,92 @@ export const getCompanies: RequestHandler = async (req, res) => {
       return res.status(500).json({ error: "Airtable integration not configured" });
     }
 
-    // Fetch from Airtable
-    const response = await fetch(
-      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_ID}`,
-      {
-        headers: {
-          Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
-        },
-      }
-    );
-
-    if (!response.ok) {
-      const error = await response.text();
-      console.error("Airtable API error:", error);
-      return res.status(500).json({ error: "Failed to fetch from Airtable" });
-    }
-
-    const data = await response.json();
-    const companies: CompanyData[] = data.records.map((record: any) => {
-      const fields = record.fields;
-      const incorporationDate = fields["Incorporate date"] || getTodayString();
-
-      return {
-        id: record.id,
-        companyName: fields["Company name"] || "",
-        companyNumber: fields["Company number"] || "",
-        country: fields.Country || "",
-        type: "LTD" as any,
-        incorporationDate: incorporationDate,
-        incorporationYear: parseInt(fields["Incorporate year"] || new Date().getFullYear()),
-        purchasePrice: parseFloat(fields.Price || "0"),
-        renewalFee: 0,
-        currency: "GBP",
-        expiryDate: calculateExpiryDate(incorporationDate),
-        renewalDate: calculateExpiryDate(incorporationDate),
-        renewalDaysLeft: calculateRenewalDaysLeft(calculateExpiryDate(incorporationDate)),
-        status: "active" as const,
-        paymentStatus: "paid" as const,
-        refundStatus: "not-refunded" as const,
-        clientName: fields["Client Name"] || "",
-        clientEmail: fields["Client Email"] || "",
-        clientPhone: fields["Client Phone"],
-        industry: fields.Industry,
-        revenue: fields.Revenue,
-        adminNotes: fields["Admin Notes"],
-        internalNotes: fields["Internal Notes"],
-        createdBy: "airtable",
-        createdAt: getTodayString(),
-        updatedAt: getTodayString(),
-        updatedBy: "airtable",
-        tags: [],
-        documents: [],
-        activityLog: [
+    // Create fetch promise to handle concurrent requests
+    pendingAirtableFetch = (async () => {
+      try {
+        // Fetch from Airtable
+        const response = await fetch(
+          `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_ID}`,
           {
-            id: "log_1",
-            timestamp: getTodayString(),
-            action: "Imported from Airtable",
-            performedBy: "system",
-            details: `Company ${fields["Company name"]} imported from Airtable`,
-          },
-        ],
-        ownershipHistory: [],
-      };
-    });
+            headers: {
+              Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
+            },
+          }
+        );
 
+        if (!response.ok) {
+          const error = await response.text();
+          console.error("Airtable API error:", response.status, error);
+          throw new Error(`Airtable API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const companies: CompanyData[] = data.records.map((record: any) => {
+          const fields = record.fields;
+          const incorporationDate = fields["Incorporate date"] || getTodayString();
+
+          return {
+            id: record.id,
+            companyName: fields["Company name"] || "",
+            companyNumber: fields["Company number"] || "",
+            country: fields.Country || "",
+            type: "LTD" as any,
+            incorporationDate: incorporationDate,
+            incorporationYear: parseInt(fields["Incorporate year"] || new Date().getFullYear()),
+            purchasePrice: parseFloat(fields.Price || "0"),
+            renewalFee: 0,
+            currency: "GBP",
+            expiryDate: calculateExpiryDate(incorporationDate),
+            renewalDate: calculateExpiryDate(incorporationDate),
+            renewalDaysLeft: calculateRenewalDaysLeft(calculateExpiryDate(incorporationDate)),
+            status: "active" as const,
+            paymentStatus: "paid" as const,
+            refundStatus: "not-refunded" as const,
+            clientName: fields["Client Name"] || "",
+            clientEmail: fields["Client Email"] || "",
+            clientPhone: fields["Client Phone"],
+            industry: fields.Industry,
+            revenue: fields.Revenue,
+            adminNotes: fields["Admin Notes"],
+            internalNotes: fields["Internal Notes"],
+            createdBy: "airtable",
+            createdAt: getTodayString(),
+            updatedAt: getTodayString(),
+            updatedBy: "airtable",
+            tags: [],
+            documents: [],
+            activityLog: [
+              {
+                id: "log_1",
+                timestamp: getTodayString(),
+                action: "Imported from Airtable",
+                performedBy: "system",
+                details: `Company ${fields["Company name"]} imported from Airtable`,
+              },
+            ],
+            ownershipHistory: [],
+          };
+        });
+
+        // Cache the result
+        serverCache = {
+          data: companies,
+          timestamp: Date.now(),
+        };
+
+        return companies;
+      } finally {
+        // Clear pending fetch
+        pendingAirtableFetch = null;
+      }
+    })();
+
+    const companies = await pendingAirtableFetch;
+    res.set("Cache-Control", "public, max-age=120");
     res.json(companies);
   } catch (error) {
     console.error("Error fetching companies:", error);
+    pendingAirtableFetch = null;
     res.status(500).json({ error: "Failed to fetch companies" });
   }
 };
