@@ -1922,7 +1922,8 @@ Generated on: ${new Date().toLocaleDateString()}
                                               variant="ghost"
                                               size="sm"
                                               onClick={() => removeAttachment(attachment.id)}
-                                              className="text-destructive hover:bg-destructive/10"
+                                              disabled={company.status !== "amend-required" && company.transferFormFilled}
+                                              className="text-destructive hover:bg-destructive/10 disabled:opacity-50 disabled:cursor-not-allowed"
                                             >
                                               <X className="w-4 h-4" />
                                             </Button>
