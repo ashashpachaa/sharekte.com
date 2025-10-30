@@ -125,5 +125,21 @@ export function createServer() {
   app.get("/api/transfer-forms/:id/pdf", generatePDF);
   app.get("/api/transfer-forms/analytics/summary", getFormAnalytics);
 
+  // Invoice routes
+  app.get("/api/invoices", getInvoices);
+  app.get("/api/invoices/:id", getInvoice);
+  app.post("/api/invoices", createInvoice);
+  app.patch("/api/invoices/:id", updateInvoice);
+  app.patch("/api/invoices/:id/status", updateInvoiceStatus);
+  app.delete("/api/invoices/:id", deleteInvoice);
+  app.post("/api/invoices/:id/attachments", uploadInvoiceAttachment);
+  app.delete("/api/invoices/:id/attachments/:attachmentId", deleteInvoiceAttachment);
+  app.post("/api/invoices/:id/send-email", sendInvoiceEmail);
+  app.get("/api/invoices/:id/pdf", generateInvoicePDF);
+  app.patch("/api/invoices/bulk/status", bulkUpdateStatus);
+  app.post("/api/invoices/bulk/send-emails", bulkSendEmails);
+  app.get("/api/invoices/export/csv", exportCSV);
+  app.get("/api/invoices/analytics/summary", getInvoiceAnalytics);
+
   return app;
 }
