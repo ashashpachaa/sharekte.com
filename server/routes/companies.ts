@@ -658,7 +658,7 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
       ownershipHistory: [],
     };
 
-    res.json(company);
+    res.json(updatedCompany);
   } catch (error) {
     console.error("Error updating company status:", error);
     res.status(500).json({ error: "Failed to update company status" });
