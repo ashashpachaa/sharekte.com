@@ -230,18 +230,20 @@ export default function Checkout() {
         console.warn(
           `Warning: ${failureCount} company/companies failed to update status. ${successCount} succeeded.`
         );
+        toast.warning(`${failureCount} company status updates failed. Check admin dashboard.`);
       }
 
-      // Clear the companies cache to force refetch with updated status
-      try {
-        await fetch("/api/companies/clear-cache", { method: "POST" }).catch(() => {});
-      } catch {
-        // Cache clear is non-blocking
-      }
+      // Log completion for debugging
+      console.log(`Order completed: ${successCount}/${items.length} companies status updated`);
 
       toast.success("Order completed successfully! 🎉");
       setOrderCompleted(true);
       clearCart();
+
+      // Redirect to dashboard to see orders and purchased companies
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 2000);
 
       // Redirect to dashboard after 3 seconds
       setTimeout(() => {
