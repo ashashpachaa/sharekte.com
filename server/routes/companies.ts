@@ -573,7 +573,7 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
     // Clear cache since we're updating
     serverCache = null;
 
-    // Update in Airtable
+    // Update in Airtable (use "Statues " field with space as per Airtable table)
     const updateResponse = await fetch(
       `https://api.airtable.com/v0/app0PK34gyJDizR3Q/tbljtdHPdHnTberDy/${id}`,
       {
@@ -584,7 +584,7 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
         },
         body: JSON.stringify({
           fields: {
-            Status: newStatus,
+            "Statues ": newStatus,
           },
         }),
       }
