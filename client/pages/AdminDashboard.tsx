@@ -142,6 +142,44 @@ export default function AdminDashboard() {
             </Button>
           </div>
 
+          {/* Orders Management */}
+          <div className="bg-card border border-border/40 rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <ShoppingCart className="w-5 h-5" />
+              Orders
+            </h3>
+            <p className="text-muted-foreground text-sm mb-4">
+              Manage orders, handle refunds, and track transfer forms
+            </p>
+            <Button
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+              asChild
+            >
+              <Link to="/admin/orders">
+                Manage Orders
+              </Link>
+            </Button>
+          </div>
+
+          {/* Invoices Management */}
+          <div className="bg-card border border-border/40 rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <FileText className="w-5 h-5" />
+              Invoices
+            </h3>
+            <p className="text-muted-foreground text-sm mb-4">
+              Generate, manage, and send invoices to clients
+            </p>
+            <Button
+              className="w-full bg-green-600 hover:bg-green-700 text-white"
+              asChild
+            >
+              <Link to="/admin/invoices">
+                Manage Invoices
+              </Link>
+            </Button>
+          </div>
+
           {/* Users Management */}
           <div className="bg-card border border-border/40 rounded-lg p-6">
             <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
