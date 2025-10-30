@@ -110,13 +110,16 @@ export function createServer() {
   app.post("/api/notifications/email", sendEmailNotification);
   app.get("/api/notifications", getNotifications);
 
-  // Transfer Form routes
+  // Transfer Form routes - Specific routes before parameterized ones
+  app.get("/api/transfer-forms/analytics/summary", getFormAnalytics);
+
   app.get("/api/transfer-forms", getTransferForms);
-  app.get("/api/transfer-forms/:id", getTransferForm);
   app.post("/api/transfer-forms", createTransferForm);
+
+  app.get("/api/transfer-forms/:id", getTransferForm);
   app.patch("/api/transfer-forms/:id", updateTransferForm);
-  app.patch("/api/transfer-forms/:id/status", updateFormStatus);
   app.delete("/api/transfer-forms/:id", deleteTransferForm);
+  app.patch("/api/transfer-forms/:id/status", updateFormStatus);
   app.post("/api/transfer-forms/:id/directors", addDirector);
   app.delete("/api/transfer-forms/:id/directors/:directorId", removeDirector);
   app.post("/api/transfer-forms/:id/shareholders", addShareholder);
@@ -124,7 +127,6 @@ export function createServer() {
   app.post("/api/transfer-forms/:id/attachments", uploadAttachment);
   app.delete("/api/transfer-forms/:id/attachments/:attachmentId", deleteAttachment);
   app.get("/api/transfer-forms/:id/pdf", generatePDF);
-  app.get("/api/transfer-forms/analytics/summary", getFormAnalytics);
 
   // Invoice routes - Specific routes before parameterized ones
   app.get("/api/invoices/analytics/summary", getInvoiceAnalytics);
