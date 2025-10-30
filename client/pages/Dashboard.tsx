@@ -39,7 +39,6 @@ import {
   Zap,
   Package,
   DollarSign as DollarSignIcon,
-  ShoppingCart as ShoppingCartIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 
