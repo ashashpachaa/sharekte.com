@@ -463,7 +463,9 @@ interface OrderDetailsModalProps {
 }
 
 function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModalProps) {
-  const [newStatus, setNewStatus] = useState<OrderStatus>(order.status);
+  const [editedOrder, setEditedOrder] = useState<Order>(order);
+  const [isSaving, setIsSaving] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
   const { toast } = useToast();
 
   const statuses: OrderStatus[] = [
@@ -479,9 +481,46 @@ function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModal
     "disputed",
   ];
 
-  const handleChangeStatus = () => {
-    if (newStatus !== order.status) {
-      onStatusChange(newStatus);
+  const handleFieldChange = (field: keyof Order, value: any) => {
+    setEditedOrder((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+    setHasChanges(true);
+  };
+
+  const handleSave = async () => {
+    try {
+      setIsSaving(true);
+      const changes: Partial<Order> = {};
+
+      // Only include changed fields
+      Object.keys(editedOrder).forEach((key) => {
+        if (editedOrder[key as keyof Order] !== order[key as keyof Order]) {
+          changes[key as keyof Order] = editedOrder[key as keyof Order];
+        }
+      });
+
+      if (Object.keys(changes).length === 0) {
+        toast.info("No changes to save");
+        return;
+      }
+
+      await updateOrder(order.id, changes);
+      toast.success("Order updated and synced to Airtable");
+      setHasChanges(false);
+      onClose();
+    } catch (error) {
+      console.error("Failed to save order:", error);
+      toast.error("Failed to update order");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleStatusChange = () => {
+    if (editedOrder.status !== order.status) {
+      onStatusChange(editedOrder.status);
       toast.success("Status updated successfully");
     }
   };
