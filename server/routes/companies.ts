@@ -581,10 +581,17 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
     const companyName = fields["Company name"] || "Unknown Company";
     const incorporationDate = fields["Incorporate date"] || getTodayString();
     // Read from Statues (with space) first, then Status
-    const previousStatus = (fields["Statues "] || fields["Status"] || "active").toLowerCase();
-    const newStatusValue = status ? status.charAt(0).toUpperCase() + status.slice(1).toLowerCase() : previousStatus.charAt(0).toUpperCase() + previousStatus.slice(1).toLowerCase();
+    const currentStatusValue = fields["Statues "] || fields["Status"] || "active";
 
-    console.log(`[${airtableId}] Updating "${companyName}": "${previousStatus}" → "${newStatusValue}" (stored as "${newStatusValue}")`);
+    // Ensure status is provided
+    if (!status) {
+      return res.status(400).json({ error: "Status value is required" });
+    }
+
+    // Capitalize first letter: "sold" → "Sold", "active" → "Active"
+    const newStatusValue = status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
+
+    console.log(`[${airtableId}] Updating "${companyName}": "${currentStatusValue}" → "${newStatusValue}"`);
 
     // Clear cache since we're updating
     serverCache = null;
