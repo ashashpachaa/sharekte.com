@@ -17,15 +17,164 @@ interface AirtableResponse {
   offset?: string;
 }
 
+// Helper function to generate unique ID
+function generateOrderId(): string {
+  return "ord_" + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+}
+
+// Helper function to create demo orders
+function getDemoOrders(): Order[] {
+  const today = new Date().toISOString().split("T")[0];
+  const renewalDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
+
+  return [
+    {
+      id: "rec_demo_1",
+      orderId: "ORD-2024-001",
+      customerName: "John Smith",
+      customerEmail: "john@techsolutions.com",
+      customerPhone: "+44 20 7946 0958",
+      billingAddress: "123 Tech Street, London",
+      country: "United Kingdom",
+      companyId: "comp_1",
+      companyName: "Tech Solutions Ltd",
+      companyNumber: "12345678",
+      paymentMethod: "credit_card",
+      paymentStatus: "completed",
+      transactionId: "txn_2024_001",
+      amount: 500,
+      currency: "GBP",
+      paymentDate: today,
+      status: "completed",
+      statusChangedDate: today,
+      statusHistory: [
+        {
+          id: "hist_1",
+          fromStatus: "pending-payment",
+          toStatus: "completed",
+          changedDate: today,
+          changedBy: "system",
+          notes: "Payment processed successfully",
+        },
+      ],
+      purchaseDate: today,
+      lastUpdateDate: today,
+      renewalDate,
+      renewalFees: 50,
+      refundStatus: "none",
+      documents: [],
+      createdAt: today,
+      updatedAt: today,
+    },
+    {
+      id: "rec_demo_2",
+      orderId: "ORD-2024-002",
+      customerName: "Jane Doe",
+      customerEmail: "jane@nordicsolutions.se",
+      customerPhone: "+46 8 123 45 67",
+      billingAddress: "456 Innovation Way, Stockholm",
+      country: "Sweden",
+      companyId: "comp_2",
+      companyName: "Nordic Business AB",
+      companyNumber: "987654321",
+      paymentMethod: "bank_transfer",
+      paymentStatus: "completed",
+      transactionId: "txn_2024_002",
+      amount: 450,
+      currency: "SEK",
+      paymentDate: today,
+      status: "transfer-form-pending",
+      statusChangedDate: today,
+      statusHistory: [
+        {
+          id: "hist_2",
+          fromStatus: "pending-payment",
+          toStatus: "paid",
+          changedDate: today,
+          changedBy: "system",
+        },
+        {
+          id: "hist_3",
+          fromStatus: "paid",
+          toStatus: "transfer-form-pending",
+          changedDate: today,
+          changedBy: "admin",
+          notes: "Awaiting transfer form submission",
+        },
+      ],
+      purchaseDate: today,
+      lastUpdateDate: today,
+      renewalDate,
+      renewalFees: 45,
+      refundStatus: "none",
+      documents: [],
+      createdAt: today,
+      updatedAt: today,
+    },
+    {
+      id: "rec_demo_3",
+      orderId: "ORD-2024-003",
+      customerName: "Ahmed Al-Mansouri",
+      customerEmail: "ahmed@dubaibiz.ae",
+      customerPhone: "+971 4 123 4567",
+      billingAddress: "789 Business Park, Dubai",
+      country: "United Arab Emirates",
+      companyId: "comp_3",
+      companyName: "Dubai Trade FZCO",
+      companyNumber: "FZ-123456",
+      paymentMethod: "credit_card",
+      paymentStatus: "pending",
+      transactionId: "",
+      amount: 600,
+      currency: "AED",
+      status: "pending-payment",
+      statusChangedDate: today,
+      statusHistory: [
+        {
+          id: "hist_4",
+          fromStatus: "pending-payment",
+          toStatus: "pending-payment",
+          changedDate: today,
+          changedBy: "system",
+          notes: "Order created",
+        },
+      ],
+      purchaseDate: today,
+      lastUpdateDate: today,
+      renewalDate,
+      renewalFees: 60,
+      refundStatus: "none",
+      documents: [],
+      createdAt: today,
+      updatedAt: today,
+    },
+  ];
+}
+
 /**
  * Get all orders
  */
 export const getOrders: RequestHandler = async (req, res) => {
-  if (!AIRTABLE_API_TOKEN) {
-    return res.status(500).json({ error: "Airtable API token not configured" });
-  }
-
   try {
+    // If no Airtable token, return demo orders
+    if (!AIRTABLE_API_TOKEN) {
+      console.log("No Airtable token configured, returning demo orders");
+      const demoOrders = getDemoOrders();
+
+      // Apply filters to demo orders
+      let filtered = demoOrders;
+      const { status, country } = req.query;
+
+      if (status) {
+        filtered = filtered.filter((o) => o.status === status);
+      }
+      if (country) {
+        filtered = filtered.filter((o) => o.country === country);
+      }
+
+      return res.json(filtered);
+    }
+
     const { status, country, dateFrom, dateTo, priceMin, priceMax } = req.query;
     const url = `${AIRTABLE_API_URL}/${AIRTABLE_BASE_ID}/${AIRTABLE_ORDERS_TABLE}`;
 
@@ -54,8 +203,8 @@ export const getOrders: RequestHandler = async (req, res) => {
     }
 
     if (filters.length > 0) {
-      const filterFormula = filters.length === 1 
-        ? filters[0] 
+      const filterFormula = filters.length === 1
+        ? filters[0]
         : `AND(${filters.join(", ")})`;
       params.append("filterByFormula", filterFormula);
     }
@@ -74,7 +223,7 @@ export const getOrders: RequestHandler = async (req, res) => {
     }
 
     const data: AirtableResponse = await response.json();
-    
+
     const orders: Order[] = data.records.map((record) => ({
       id: record.id,
       ...(record.fields as Omit<Order, "id">),
