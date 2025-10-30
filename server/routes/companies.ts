@@ -594,9 +594,9 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
     // Clear cache since we're updating
     serverCache = null;
 
-    // Update in Airtable (use "Statues " field with space as per Airtable table)
+    // Step 4: Update in Airtable using the found Airtable record ID (use "Statues " field with space as per Airtable table)
     const updateResponse = await fetch(
-      `https://api.airtable.com/v0/app0PK34gyJDizR3Q/tbljtdHPdHnTberDy/${id}`,
+      `https://api.airtable.com/v0/app0PK34gyJDizR3Q/tbljtdHPdHnTberDy/${airtableId}`,
       {
         method: "PATCH",
         headers: {
@@ -612,7 +612,12 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
     );
 
     if (!updateResponse.ok) {
-      return res.status(500).json({ error: "Failed to update company status" });
+      console.error(
+        "Airtable PATCH failed:",
+        updateResponse.status,
+        updateResponse.statusText
+      );
+      return res.status(500).json({ error: "Failed to update company status in Airtable" });
     }
 
     const updatedRecord = await updateResponse.json();
