@@ -97,10 +97,8 @@ function createNewCompany(
 // Get all companies from Airtable with caching and deduplication
 export const getCompanies: RequestHandler = async (req, res) => {
   try {
-    // Clear cache on each request for debugging
-    serverCache = null;
-
-    // Check server cache first
+    // Check server cache first (disabled for debugging)
+    /*
     if (
       serverCache &&
       Date.now() - serverCache.timestamp < SERVER_CACHE_DURATION
@@ -108,6 +106,7 @@ export const getCompanies: RequestHandler = async (req, res) => {
       res.set("Cache-Control", "public, max-age=120"); // 2 minute cache
       return res.json(serverCache.data);
     }
+    */
 
     // If fetch is already in progress, wait for it
     if (pendingAirtableFetch) {
