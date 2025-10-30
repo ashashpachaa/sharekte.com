@@ -44,11 +44,20 @@ export function createServer() {
 
   app.get("/api/demo", handleDemo);
 
-  // Airtable routes
+  // Company routes
   app.get("/api/companies", getCompanies);
+  app.get("/api/companies/:id", getCompany);
+  app.post("/api/companies", createCompany);
+  app.patch("/api/companies/:id", updateCompany);
+  app.delete("/api/companies/:id", deleteCompany);
+  app.patch("/api/companies/:id/status", updateCompanyStatus);
+  app.post("/api/companies/:id/renew", renewCompany);
+  app.post("/api/companies/:id/refund-request", requestCompanyRefund);
+  app.post("/api/companies/:id/refund-approve", approveCompanyRefund);
+
+  // Legacy Airtable routes
   app.get("/api/countries", getCountries);
   app.get("/api/years", getYears);
-  app.patch("/api/companies/:recordId/status", updateCompanyStatus);
 
   // Support routes
   app.post("/api/support/submit", handleSupportSubmit);
