@@ -26,6 +26,7 @@ import {
   renewCompany,
   requestRefund as requestCompanyRefund,
   approveRefund as approveCompanyRefund,
+  markCompanyAsSold,
 } from "./routes/companies";
 import {
   getTransferForms,
