@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAdmin } from "@/lib/admin-context";
 import { getAllOrders, updateOrderStatus, getStatusColor, type Order, type OrderStatus } from "@/lib/orders";
 import { RefundManagement } from "@/components/RefundManagement";
+import { DocumentManagement } from "@/components/DocumentManagement";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -529,6 +530,15 @@ function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModal
               </Button>
             </div>
           )}
+
+          {/* Documents Management */}
+          <DocumentManagement
+            order={order}
+            onDocumentsUpdated={(updatedOrder) => {
+              // Refresh orders list
+            }}
+            isAdmin={true}
+          />
         </div>
       </div>
     </div>
