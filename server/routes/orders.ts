@@ -254,74 +254,30 @@ export const getOrderById: RequestHandler = async (req, res) => {
 export const createOrder: RequestHandler = async (req, res) => {
   try {
     const orderData = req.body;
+    const now = new Date().toISOString();
 
-    // If Airtable is configured, try to save to Airtable
-    if (AIRTABLE_API_TOKEN) {
-      try {
-        const url = `${AIRTABLE_API_URL}/${AIRTABLE_BASE_ID}/${AIRTABLE_ORDERS_TABLE}`;
-
-        const response = await fetch(url, {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            fields: {
-              orderId: orderData.orderId,
-              customerName: orderData.customerName,
-              customerEmail: orderData.customerEmail,
-              customerPhone: orderData.customerPhone,
-              country: orderData.country,
-              companyId: orderData.companyId,
-              companyName: orderData.companyName,
-              companyNumber: orderData.companyNumber,
-              paymentMethod: orderData.paymentMethod,
-              paymentStatus: orderData.paymentStatus,
-              amount: orderData.amount,
-              currency: orderData.currency,
-              status: orderData.status,
-              purchaseDate: orderData.purchaseDate,
-              renewalDate: orderData.renewalDate,
-              renewalFees: orderData.renewalFees,
-              refundStatus: orderData.refundStatus || "none",
-              createdAt: new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
-              statusHistory: JSON.stringify(orderData.statusHistory || []),
-              documents: JSON.stringify(orderData.documents || []),
-            },
-          }),
-        });
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.warn(`Airtable API error (${response.status}): ${errorText}`);
-          throw new Error(`Airtable API error: ${response.statusText}`);
-        }
-
-        const record: AirtableRecord = await response.json();
-        const order: Order = {
-          id: record.id,
-          ...(record.fields as Omit<Order, "id">),
-        };
-
-        res.status(201).json(order);
-        return;
-      } catch (airtableError) {
-        // Fallback to in-memory storage if Airtable fails
-        console.warn("Airtable save failed, falling back to in-memory storage:", airtableError);
-      }
-    }
-
-    // Fallback to in-memory storage (either Airtable not configured or failed)
-    console.log("Saving order to in-memory storage");
-    const newOrder: Order = {
-      id: `mem-${Date.now()}`,
+    // Prepare order with timestamps
+    const order: Order = {
+      id: `ord-${Date.now()}`,
       ...orderData,
+      createdAt: orderData.createdAt || now,
+      updatedAt: orderData.updatedAt || now,
     };
 
-    inMemoryOrders.push(newOrder);
-    res.status(201).json(newOrder);
+    // Try to sync to Airtable
+    const airtableId = await syncOrderToAirtable(order);
+
+    // If Airtable sync succeeded, add the Airtable ID
+    if (airtableId) {
+      order.airtableId = airtableId;
+      res.status(201).json(order);
+      return;
+    }
+
+    // Fallback to in-memory storage (if Airtable is not configured or failed)
+    console.log("Saving order to in-memory storage");
+    inMemoryOrders.push(order);
+    res.status(201).json(order);
   } catch (error) {
     console.error("Failed to create order:", error);
     res.status(500).json({ error: "Failed to create order" });
