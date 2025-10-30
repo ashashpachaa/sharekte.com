@@ -198,21 +198,25 @@ export function determineStatus(
 }
 
 // Format currency
-export function formatPrice(price: number | undefined, currency: string = "USD"): string {
-  if (price === undefined || price === null) {
+export function formatPrice(price: number | string | undefined, currency: string = "USD"): string {
+  if (price === undefined || price === null || price === "") {
     return "N/A";
   }
   try {
+    const numPrice = typeof price === "string" ? parseFloat(price) : price;
+    if (isNaN(numPrice)) {
+      return "N/A";
+    }
     const formatter = new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: currency || "USD",
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     });
-    return formatter.format(price);
+    return formatter.format(numPrice);
   } catch (error) {
     console.warn("Format price error:", error);
-    return `${price} ${currency}`;
+    return price ? `${price} ${currency}` : "N/A";
   }
 }
 
@@ -222,9 +226,13 @@ export function formatDate(dateString: string | undefined): string {
     return "N/A";
   }
   try {
-    return new Date(dateString).toLocaleDateString("en-US", {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      return dateString;
+    }
+    return date.toLocaleDateString("en-US", {
       year: "numeric",
-      month: "long",
+      month: "short",
       day: "numeric",
     });
   } catch (error) {
