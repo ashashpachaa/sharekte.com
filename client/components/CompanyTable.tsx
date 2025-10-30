@@ -456,6 +456,19 @@ export function CompanyTable({
           </TableBody>
         </Table>
         )}
+
+        {/* Show More Button */}
+        {hasMoreItems && (
+          <div className="flex justify-center p-6">
+            <Button
+              onClick={() => setDisplayCount((prev) => prev + 10)}
+              variant="outline"
+              className="px-8"
+            >
+              Show More ({filteredCompanies.length - displayCount} remaining)
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Delete Confirmation Dialog */}
