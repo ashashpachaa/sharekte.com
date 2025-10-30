@@ -154,7 +154,7 @@ export default function Checkout() {
             paymentStatus: "completed",
             transactionId: `txn-${Date.now()}`,
             amount: item.price,
-            currency: "USD",
+            currency: currency,
             paymentDate: today,
             status: "paid",
             statusChangedDate: today,
