@@ -1996,7 +1996,7 @@ Generated on: ${new Date().toLocaleDateString()}
           {/* My Orders Tab */}
           {activeTab === "orders" && (
             <div className="space-y-6">
-              <MyOrders userEmail={userEmail || "user@example.com"} />
+              <MyOrders userEmail={userData.email || "user@example.com"} />
             </div>
           )}
 
