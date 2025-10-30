@@ -6,14 +6,18 @@ export type CompanyStatus =
   | "available" 
   | "pending";
 
-export type CompanyType = 
-  | "LTD" 
-  | "AB" 
-  | "FZCO" 
-  | "GmbH" 
-  | "SARL" 
-  | "BV" 
-  | "OOO" 
+export type CompanyType =
+  | "LTD"
+  | "LLC"
+  | "INC"
+  | "AB"
+  | "FZCO"
+  | "GmbH"
+  | "SARL"
+  | "BV"
+  | "OOO"
+  | "Ltd Liability Partnership"
+  | "Sole Proprietor"
   | "Other";
 
 export type RefundStatus = 

@@ -495,13 +495,18 @@ export default function Companies() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="LTD">LTD</SelectItem>
-                    <SelectItem value="AB">AB</SelectItem>
-                    <SelectItem value="FZCO">FZCO</SelectItem>
-                    <SelectItem value="GmbH">GmbH</SelectItem>
-                    <SelectItem value="SARL">SARL</SelectItem>
-                    <SelectItem value="BV">BV</SelectItem>
-                    <SelectItem value="OOO">OOO</SelectItem>
+                    <SelectItem value="LTD">Limited Company (LTD)</SelectItem>
+                    <SelectItem value="LLC">Limited Liability Company (LLC)</SelectItem>
+                    <SelectItem value="INC">Incorporated (INC)</SelectItem>
+                    <SelectItem value="AB">Swedish Company (AB)</SelectItem>
+                    <SelectItem value="FZCO">Free Zone (FZCO)</SelectItem>
+                    <SelectItem value="GmbH">German Limited (GmbH)</SelectItem>
+                    <SelectItem value="SARL">French Limited (SARL)</SelectItem>
+                    <SelectItem value="BV">Dutch Limited (BV)</SelectItem>
+                    <SelectItem value="OOO">Russian Limited (OOO)</SelectItem>
+                    <SelectItem value="Ltd Liability Partnership">Ltd Liability Partnership</SelectItem>
+                    <SelectItem value="Sole Proprietor">Sole Proprietor</SelectItem>
+                    <SelectItem value="Other">Other</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
