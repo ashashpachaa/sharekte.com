@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAdmin } from "@/lib/admin-context";
 import { getAllOrders, updateOrderStatus, getStatusColor, type Order, type OrderStatus } from "@/lib/orders";
+import { RefundManagement } from "@/components/RefundManagement";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -35,6 +36,7 @@ export default function AdminOrders() {
   const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [showRefundModal, setShowRefundModal] = useState(false);
   const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -335,6 +337,20 @@ export default function AdminOrders() {
             handleStatusChange(selectedOrder.id, status);
             setShowDetailsModal(false);
           }}
+          onRefundClick={() => setShowRefundModal(true)}
+        />
+      )}
+
+      {/* Refund Management Modal */}
+      {showRefundModal && selectedOrder && selectedOrder.refundStatus !== "none" && (
+        <RefundManagement
+          order={selectedOrder}
+          onClose={() => setShowRefundModal(false)}
+          onRefundProcessed={(updatedOrder) => {
+            setSelectedOrder(updatedOrder);
+            loadOrders();
+            setShowRefundModal(false);
+          }}
         />
       )}
     </div>
@@ -345,6 +361,7 @@ interface OrderDetailsModalProps {
   order: Order;
   onClose: () => void;
   onStatusChange: (status: OrderStatus) => void;
+  onRefundClick?: () => void;
 }
 
 function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModalProps) {
@@ -487,6 +504,31 @@ function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModal
               </Button>
             </div>
           </div>
+
+          {/* Refund Management */}
+          {order.refundStatus !== "none" && (
+            <div className="border-t border-border/40 pt-6">
+              <h3 className="font-semibold text-foreground mb-4">Refund Management</h3>
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <p className="text-sm text-blue-900 font-medium">
+                  Refund Status: <span className="capitalize">{order.refundStatus}</span>
+                </p>
+                {order.refundRequest && (
+                  <p className="text-sm text-blue-800 mt-1">
+                    Amount Requested: {order.currency} {order.refundRequest.requestedAmount.toLocaleString()}
+                  </p>
+                )}
+              </div>
+              <Button
+                onClick={() => {
+                  if (onRefundClick) onRefundClick();
+                }}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                Manage Refund
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </div>
