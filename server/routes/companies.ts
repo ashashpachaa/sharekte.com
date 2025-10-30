@@ -602,22 +602,40 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
     // Clear cache since we're updating
     serverCache = null;
 
-    // Step 4: Update in Airtable using the found Airtable record ID (use "Statues " field with space as per Airtable table)
-    const updateResponse = await fetch(
-      `https://api.airtable.com/v0/app0PK34gyJDizR3Q/tbljtdHPdHnTberDy/${airtableId}`,
-      {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${process.env.AIRTABLE_API_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          fields: {
-            "Statues ": newStatusValue,
+    // Step 4: Update in Airtable using the found Airtable record ID
+    // Try both "Statues " (with space) and "Statues" (without space) field names
+    const fieldNames = ["Statues ", "Statues", "Status"];
+    let updateResponse = null;
+    let lastError = null;
+
+    for (const fieldName of fieldNames) {
+      console.log(`[updateCompanyStatus] Attempting PATCH with field name: "${fieldName}"`);
+
+      updateResponse = await fetch(
+        `https://api.airtable.com/v0/app0PK34gyJDizR3Q/tbljtdHPdHnTberDy/${airtableId}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${process.env.AIRTABLE_API_TOKEN}`,
+            "Content-Type": "application/json",
           },
-        }),
+          body: JSON.stringify({
+            fields: {
+              [fieldName]: newStatusValue,
+            },
+          }),
+        }
+      );
+
+      if (updateResponse.ok) {
+        console.log(`[updateCompanyStatus] SUCCESS with field name: "${fieldName}"`);
+        break;
+      } else {
+        const responseText = await updateResponse.text();
+        lastError = { fieldName, status: updateResponse.status, responseText };
+        console.warn(`[updateCompanyStatus] FAILED with field name "${fieldName}": Status ${updateResponse.status}, Body: ${responseText}`);
       }
-    );
+    }
 
     if (!updateResponse.ok) {
       const airtableError = await updateResponse.json().catch(() => ({ error: updateResponse.statusText }));
