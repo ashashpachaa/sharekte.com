@@ -465,7 +465,7 @@ export function CompanyTable({
               variant="outline"
               className="px-8"
             >
-              Show More ({filteredCompanies.length - displayCount} remaining)
+              Show More
             </Button>
           </div>
         )}
