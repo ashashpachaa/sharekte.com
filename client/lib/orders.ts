@@ -122,7 +122,17 @@ export interface Order {
  */
 export async function getAllOrders(): Promise<Order[]> {
   try {
-    const response = await fetch("/api/orders");
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+    const response = await fetch("/api/orders", {
+      signal: controller.signal,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    clearTimeout(timeoutId);
+
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({ error: "Unknown error" }));
       throw new Error(errorData.error || `Failed to fetch orders: ${response.statusText}`);
@@ -131,7 +141,8 @@ export async function getAllOrders(): Promise<Order[]> {
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
     console.error("Failed to fetch orders:", errorMessage);
-    throw error;
+    // Return empty array instead of throwing to allow app to continue
+    return [];
   }
 }
 
