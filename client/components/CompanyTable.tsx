@@ -350,12 +350,18 @@ export function CompanyTable() {
                             onClick={() => {
                               const price = (company.fields["Price"] as number) || 0;
                               const companyNumber = company.fields["Company number"] || "N/A";
+                              const country = (company.fields["country"] as string) || "";
+                              const incorporationDate = company.fields["Incorporate date"] || "";
+                              const incorporationYear = company.fields["Incorporate Year"] || "";
 
                               addItem({
                                 id: company.id,
                                 name: companyName,
                                 price,
                                 companyNumber: companyNumber as string,
+                                country: country,
+                                incorporationDate: incorporationDate as string,
+                                incorporationYear: incorporationYear as string,
                               });
 
                               toast.success(
