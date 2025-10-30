@@ -208,12 +208,17 @@ export default function Checkout() {
           if (!response.ok) {
             const errorData = await response.json().catch(() => ({ error: response.statusText }));
             const errorMessage = typeof errorData === 'object' ? JSON.stringify(errorData) : String(errorData);
-            console.error(`Failed to update company ${item.id} status:`, errorMessage);
-            toast.error(`Failed to update ${item.name} status: ${response.status}`);
+            console.error(
+              `Failed to update company ${item.id} (${item.name}) status:`,
+              `Status: ${response.status}`,
+              `Error:`, errorMessage
+            );
+            toast.error(`Failed to update ${item.name}: ${response.status}`);
             return false;
           }
 
-          console.log(`Company ${item.id} status updated to sold`);
+          const responseData = await response.json().catch(() => ({}));
+          console.log(`✓ Company ${item.id} (${item.name}) status updated to sold`, responseData);
           return true;
         } catch (error) {
           console.error(`Error updating company ${item.id} status:`, error);
