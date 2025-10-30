@@ -26,6 +26,11 @@ function getTodayString(): string {
   return new Date().toISOString().split("T")[0];
 }
 
+// Helper function to generate unique ID
+function generateId(): string {
+  return "rec_" + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+}
+
 // Helper function to create a new company
 function createNewCompany(
   data: Partial<CompanyData> & {
