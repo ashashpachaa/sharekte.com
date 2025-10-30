@@ -8,6 +8,7 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
+  DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Search, X, ShoppingCart } from "lucide-react";
