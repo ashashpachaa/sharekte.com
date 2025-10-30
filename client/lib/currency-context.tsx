@@ -79,34 +79,20 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
     }
   });
 
-  const [rates, setRates] = useState<Record<Currency, CurrencyRate>>(CURRENCY_RATES);
+  const [rates, setRates] = useState<Record<Currency, CurrencyRate>>(initialRates);
 
   // Fetch exchange rates on mount and periodically refresh
   useEffect(() => {
-    // Load cached rates if available and recent (less than 24 hours old)
-    const cachedRates = localStorage.getItem("currencyRates");
     const cachedTimestamp = localStorage.getItem("currencyRatesTimestamp");
     const now = Date.now();
     const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
-    if (
-      cachedRates &&
-      cachedTimestamp &&
-      now - parseInt(cachedTimestamp) < CACHE_DURATION
-    ) {
-      try {
-        const parsed = JSON.parse(cachedRates);
-        setRates(parsed);
-        return;
-      } catch {
-        // Fall through to fetch fresh data
-      }
+    // Only fetch if cache is expired
+    if (!cachedTimestamp || now - parseInt(cachedTimestamp) >= CACHE_DURATION) {
+      fetchExchangeRates().then((newRates) => {
+        setRates(newRates);
+      });
     }
-
-    // Fetch fresh rates
-    fetchExchangeRates().then(() => {
-      setRates(CURRENCY_RATES);
-    });
   }, []);
 
   const setCurrency = (newCurrency: Currency) => {
