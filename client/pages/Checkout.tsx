@@ -87,7 +87,6 @@ export default function Checkout() {
 
       const orderPromises = items.map(async (item, index) => {
         // Convert price to selected currency
-        const { convertPrice } = useCurrency();
         const convertedAmount = currency !== "USD" ? convertPrice(item.price) : item.price;
 
         // Create purchased company record
