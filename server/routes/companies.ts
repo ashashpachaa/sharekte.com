@@ -11,6 +11,16 @@ import {
 // All company data comes from Airtable - no local in-memory storage
 // Airtable provides persistent storage and real-time synchronization
 
+// Server-side cache for companies data
+let serverCache: {
+  data: CompanyData[];
+  timestamp: number;
+} | null = null;
+const SERVER_CACHE_DURATION = 2 * 60 * 1000; // 2 minutes
+
+// Pending Airtable fetch to deduplicate concurrent requests
+let pendingAirtableFetch: Promise<CompanyData[]> | null = null;
+
 // Helper function to get today's date as string
 function getTodayString(): string {
   return new Date().toISOString().split("T")[0];
