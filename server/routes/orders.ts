@@ -288,48 +288,47 @@ export const createOrder: RequestHandler = async (req, res) => {
  * Update order
  */
 export const updateOrder: RequestHandler = async (req, res) => {
-  if (!AIRTABLE_API_TOKEN) {
-    return res.status(500).json({ error: "Airtable API token not configured" });
-  }
-
   try {
     const { orderId } = req.params;
     const updates = req.body;
-    const url = `${AIRTABLE_API_URL}/${AIRTABLE_BASE_ID}/${AIRTABLE_ORDERS_TABLE}/${orderId}`;
+    const now = new Date().toISOString();
 
-    const updatePayload: Record<string, unknown> = {};
-    Object.entries(updates).forEach(([key, value]) => {
-      if (Array.isArray(value) || typeof value === "object") {
-        updatePayload[key] = JSON.stringify(value);
-      } else {
-        updatePayload[key] = value;
-      }
-    });
-
-    updatePayload.updatedAt = new Date().toISOString();
-
-    const response = await fetch(url, {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        fields: updatePayload,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Airtable API error: ${response.statusText}`);
+    // Find the order (from Airtable or in-memory)
+    let allOrders = [...getDemoOrders(), ...inMemoryOrders];
+    if (AIRTABLE_API_TOKEN) {
+      const airtableOrders = await fetchOrdersFromAirtable();
+      allOrders = [...airtableOrders, ...inMemoryOrders];
     }
 
-    const record: AirtableRecord = await response.json();
-    const order: Order = {
-      id: record.id,
-      ...(record.fields as Omit<Order, "id">),
+    const existingOrder = allOrders.find((o) => o.id === orderId || o.orderId === orderId);
+    if (!existingOrder) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+
+    // Prepare updated order
+    const updatedOrder: Order = {
+      ...existingOrder,
+      ...updates,
+      updatedAt: now,
     };
 
-    res.json(order);
+    // Sync to Airtable if configured
+    if (existingOrder.airtableId && AIRTABLE_API_TOKEN) {
+      await syncOrderToAirtable(updatedOrder, existingOrder.airtableId);
+    } else if (AIRTABLE_API_TOKEN) {
+      const airtableId = await syncOrderToAirtable(updatedOrder);
+      if (airtableId) {
+        updatedOrder.airtableId = airtableId;
+      }
+    }
+
+    // Update in-memory if exists
+    const inMemIndex = inMemoryOrders.findIndex((o) => o.id === orderId || o.orderId === orderId);
+    if (inMemIndex >= 0) {
+      inMemoryOrders[inMemIndex] = updatedOrder;
+    }
+
+    res.json(updatedOrder);
   } catch (error) {
     console.error("Failed to update order:", error);
     res.status(500).json({ error: "Failed to update order" });
