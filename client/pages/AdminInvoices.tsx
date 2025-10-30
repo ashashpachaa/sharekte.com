@@ -98,8 +98,8 @@ export default function AdminInvoices() {
   // Bulk actions
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [showBulkActions, setShowBulkActions] = useState(false);
-  const [bulkStatusAction, setBulkStatusAction] = useState<InvoiceStatus | "">(
-    ""
+  const [bulkStatusAction, setBulkStatusAction] = useState<InvoiceStatus | "none">(
+    "none"
   );
 
   // Sorting
