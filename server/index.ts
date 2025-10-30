@@ -27,6 +27,22 @@ import {
   requestRefund as requestCompanyRefund,
   approveRefund as approveCompanyRefund,
 } from "./routes/companies";
+import {
+  getTransferForms,
+  getTransferForm,
+  createTransferForm,
+  updateTransferForm,
+  updateFormStatus,
+  deleteTransferForm,
+  addDirector,
+  removeDirector,
+  addShareholder,
+  addComment,
+  uploadAttachment,
+  deleteAttachment,
+  generatePDF,
+  getFormAnalytics,
+} from "./routes/transfer-forms";
 
 export function createServer() {
   const app = express();
