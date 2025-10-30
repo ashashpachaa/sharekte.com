@@ -1773,9 +1773,19 @@ Generated on: ${new Date().toLocaleDateString()}
                             <div>
                               {showTransferForm === company.id ? (
                                 <div className="space-y-4 p-6 bg-muted/30 rounded-lg border border-border/40">
-                                  <h4 className="font-semibold text-foreground">
-                                    Transfer Form
-                                  </h4>
+                                  <div className="flex items-start justify-between">
+                                    <h4 className="font-semibold text-foreground">
+                                      Transfer Form
+                                    </h4>
+                                    {company.status !== "amend-required" && company.transferFormFilled && (
+                                      <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-3 text-sm">
+                                        <p className="text-amber-700 font-medium">Form Locked</p>
+                                        <p className="text-amber-600 text-xs mt-1">
+                                          Admin is reviewing your form. You can only edit when admin marks it as "Amend Required".
+                                        </p>
+                                      </div>
+                                    )}
+                                  </div>
 
                                   <div className="grid md:grid-cols-2 gap-4">
                                     <div>
@@ -1791,7 +1801,8 @@ Generated on: ${new Date().toLocaleDateString()}
                                             directorName: e.target.value,
                                           })
                                         }
-                                        className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                        disabled={company.status !== "amend-required" && company.transferFormFilled}
+                                        className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-muted"
                                       />
                                     </div>
                                     <div>
