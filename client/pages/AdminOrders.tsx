@@ -199,13 +199,23 @@ export default function AdminOrders() {
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-2 mb-8">
-            <TabsTrigger value="orders" className="gap-2">
+            <TabsTrigger value="orders" className="gap-2 relative">
               <DollarSign className="w-4 h-4" />
               Orders
+              {newOrdersCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  {newOrdersCount > 9 ? "9+" : newOrdersCount}
+                </span>
+              )}
             </TabsTrigger>
-            <TabsTrigger value="forms" className="gap-2">
+            <TabsTrigger value="forms" className="gap-2 relative">
               <FileText className="w-4 h-4" />
               Transfer Forms
+              {newFormsCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  {newFormsCount > 9 ? "9+" : newFormsCount}
+                </span>
+              )}
             </TabsTrigger>
           </TabsList>
 
