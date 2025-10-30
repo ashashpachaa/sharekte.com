@@ -59,9 +59,15 @@ export default function AdminOrders() {
     }
   }, [isAdmin, navigate]);
 
-  // Refresh when tab changes
+  // Refresh when tab changes and reset badge counts
   useEffect(() => {
     loadOrders();
+    // Reset badge when switching to that tab
+    if (activeTab === "orders") {
+      setNewOrdersCount(0);
+    } else if (activeTab === "forms") {
+      setNewFormsCount(0);
+    }
   }, [activeTab]);
 
   const loadOrders = async () => {
