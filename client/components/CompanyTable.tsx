@@ -382,7 +382,7 @@ export function CompanyTable({
                 </TableCell>
                 <TableCell className="text-sm">{company.incorporationYear}</TableCell>
                 <TableCell className="text-sm font-medium">
-                  {formatPrice(company.purchasePrice, company.currency)}
+                  {formatWithCurrency(company.purchasePrice)}
                 </TableCell>
                 <TableCell className="text-sm">
                   {company.optionsInclude && company.optionsInclude.length > 0 ? (
