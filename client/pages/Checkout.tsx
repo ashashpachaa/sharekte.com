@@ -206,9 +206,10 @@ export default function Checkout() {
           });
 
           if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            console.error(`Failed to update company ${item.id} status:`, errorData);
-            toast.error(`Failed to update ${item.name} status in marketplace`);
+            const errorData = await response.json().catch(() => ({ error: response.statusText }));
+            const errorMessage = typeof errorData === 'object' ? JSON.stringify(errorData) : String(errorData);
+            console.error(`Failed to update company ${item.id} status:`, errorMessage);
+            toast.error(`Failed to update ${item.name} status: ${response.status}`);
             return false;
           }
 
