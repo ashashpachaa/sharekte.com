@@ -106,19 +106,19 @@ export function CompanyCard({
           <div className="grid grid-cols-2 gap-2 text-xs">
             <div className="flex items-center gap-1 text-gray-600">
               <Globe className="w-3 h-3" />
-              <span>{company.country}</span>
+              <span>{company.country || "N/A"}</span>
             </div>
             <div className="flex items-center gap-1 text-gray-600">
               <Hash className="w-3 h-3" />
-              <span>{company.type}</span>
+              <span>{company.type || "N/A"}</span>
             </div>
             <div className="flex items-center gap-1 text-gray-600">
               <DollarSign className="w-3 h-3" />
-              <span>{formatPrice(company.purchasePrice, company.currency)}</span>
+              <span>{company.purchasePrice ? formatPrice(company.purchasePrice, company.currency || "USD") : "N/A"}</span>
             </div>
             <div className="flex items-center gap-1 text-gray-600">
               <User className="w-3 h-3" />
-              <span className="truncate">{company.clientName.split(" ")[0]}</span>
+              <span className="truncate">{company.clientName ? company.clientName.split(" ")[0] : "N/A"}</span>
             </div>
           </div>
 
@@ -135,7 +135,7 @@ export function CompanyCard({
             <Clock className="w-4 h-4 flex-shrink-0" />
             <div className="flex-1 min-w-0">
               <p className="font-medium text-xs">{renewalCountdown}</p>
-              <p className="text-xs opacity-75">{formatDate(company.renewalDate)}</p>
+              <p className="text-xs opacity-75">{company.renewalDate ? formatDate(company.renewalDate) : "N/A"}</p>
             </div>
             {isRenewingSoon && (
               <AlertCircle className="w-4 h-4 flex-shrink-0" />
@@ -144,14 +144,14 @@ export function CompanyCard({
 
           {/* Incorporation Date */}
           <div className="text-xs text-gray-600">
-            <span className="font-medium">Incorporated:</span> {formatDate(company.incorporationDate)}
+            <span className="font-medium">Incorporated:</span> {company.incorporationDate ? formatDate(company.incorporationDate) : "N/A"}
           </div>
 
           {/* Payment Status */}
           <div className="flex items-center justify-between">
             <span className="text-xs text-gray-600">Payment:</span>
-            <Badge className={PAYMENT_STATUS_COLORS[company.paymentStatus]}>
-              {company.paymentStatus}
+            <Badge className={PAYMENT_STATUS_COLORS[company.paymentStatus] || "bg-gray-100 text-gray-800"}>
+              {company.paymentStatus || "unknown"}
             </Badge>
           </div>
 
