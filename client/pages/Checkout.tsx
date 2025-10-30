@@ -193,23 +193,43 @@ export default function Checkout() {
       await Promise.all(orderPromises);
 
       // Update status for each company to "sold" in Airtable
-      const updatePromises = items.map((item) =>
-        fetch(`/api/companies/${item.id}/status`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            status: "sold",
-          }),
-        })
-      );
+      const updatePromises = items.map(async (item) => {
+        try {
+          const response = await fetch(`/api/companies/${item.id}/status`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              status: "sold",
+            }),
+          });
 
-      // Wait for all updates to complete (non-blocking, so don't throw if fails)
-      try {
-        await Promise.all(updatePromises);
-      } catch (error) {
-        console.warn("Warning: Failed to update some companies in marketplace:", error);
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            console.error(`Failed to update company ${item.id} status:`, errorData);
+            toast.error(`Failed to update ${item.name} status in marketplace`);
+            return false;
+          }
+
+          console.log(`Company ${item.id} status updated to sold`);
+          return true;
+        } catch (error) {
+          console.error(`Error updating company ${item.id} status:`, error);
+          toast.error(`Error updating ${item.name} status`);
+          return false;
+        }
+      });
+
+      // Wait for all updates to complete
+      const results = await Promise.all(updatePromises);
+      const successCount = results.filter(Boolean).length;
+      const failureCount = results.filter((r) => !r).length;
+
+      if (failureCount > 0) {
+        console.warn(
+          `Warning: ${failureCount} company/companies failed to update status. ${successCount} succeeded.`
+        );
       }
 
       toast.success("Order completed successfully! 🎉");
