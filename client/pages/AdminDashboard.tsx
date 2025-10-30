@@ -122,7 +122,26 @@ export default function AdminDashboard() {
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Companies Management */}
+          <div className="bg-card border border-border/40 rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <Building2 className="w-5 h-5" />
+              Companies
+            </h3>
+            <p className="text-muted-foreground text-sm mb-4">
+              Manage registered companies, track renewals, and handle refunds
+            </p>
+            <Button
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+              asChild
+            >
+              <Link to="/companies">
+                Manage Companies
+              </Link>
+            </Button>
+          </div>
+
           {/* Users Management */}
           <div className="bg-card border border-border/40 rounded-lg p-6">
             <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
