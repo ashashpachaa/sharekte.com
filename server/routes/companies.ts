@@ -537,161 +537,368 @@ export const deleteCompany: RequestHandler = async (req, res) => {
   }
 };
 
-// Update company status
+// Update company status in Airtable
 export const updateCompanyStatus: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
     const { status, notes } = req.body;
 
-    const company = companiesDb.find((c) => c.id === id);
-    if (!company) {
+    // Fetch current company from Airtable
+    const getResponse = await fetch(
+      `https://api.airtable.com/v0/app0PK34gyJDizR3Q/tbljtdHPdHnTberDy/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.AIRTABLE_API_TOKEN}`,
+        },
+      }
+    );
+
+    if (!getResponse.ok) {
       return res.status(404).json({ error: "Company not found" });
     }
 
-    const previousStatus = company.status;
-    const newStatus = determineStatus(company.renewalDate, status);
+    const record = await getResponse.json();
+    const fields = record.fields;
+    const incorporationDate = fields["Incorporate date"] || getTodayString();
+    const previousStatus = fields["Status"] || "available";
+    const newStatus = status || previousStatus;
 
-    const updated: CompanyData = {
-      ...company,
-      status: newStatus as CompanyStatus,
-      updatedAt: getTodayString(),
-      activityLog: [
-        ...company.activityLog,
-        {
-          id: `log_${Date.now()}`,
-          timestamp: getTodayString(),
-          action: `Status Changed to ${newStatus}`,
-          performedBy: "admin",
-          details: notes || `Status changed from ${previousStatus} to ${newStatus}`,
-          previousStatus: previousStatus,
-          newStatus: newStatus,
+    // Clear cache since we're updating
+    serverCache = null;
+
+    // Update in Airtable
+    const updateResponse = await fetch(
+      `https://api.airtable.com/v0/app0PK34gyJDizR3Q/tbljtdHPdHnTberDy/${id}`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${process.env.AIRTABLE_API_TOKEN}`,
+          "Content-Type": "application/json",
         },
-      ],
+        body: JSON.stringify({
+          fields: {
+            Status: newStatus,
+          },
+        }),
+      }
+    );
+
+    if (!updateResponse.ok) {
+      return res.status(500).json({ error: "Failed to update company status" });
+    }
+
+    const updatedRecord = await updateResponse.json();
+    const updatedFields = updatedRecord.fields;
+
+    const company: CompanyData = {
+      id: updatedRecord.id,
+      companyName: updatedFields["Company name"] || "",
+      companyNumber: updatedFields["Company number"] || "",
+      country: updatedFields.Country || "",
+      type: "LTD" as any,
+      incorporationDate: incorporationDate,
+      incorporationYear: parseInt(updatedFields["Incorporate year"] || new Date().getFullYear()),
+      purchasePrice: parseFloat(updatedFields.Price || "0"),
+      renewalFee: 0,
+      currency: "GBP",
+      expiryDate: calculateExpiryDate(incorporationDate),
+      renewalDate: calculateExpiryDate(incorporationDate),
+      renewalDaysLeft: calculateRenewalDaysLeft(calculateExpiryDate(incorporationDate)),
+      status: newStatus as CompanyStatus,
+      paymentStatus: "paid" as const,
+      refundStatus: "not-refunded" as const,
+      clientName: updatedFields["Client Name"] || "",
+      clientEmail: updatedFields["Client Email"] || "",
+      clientPhone: updatedFields["Client Phone"],
+      industry: updatedFields.Industry,
+      revenue: updatedFields.Revenue,
+      adminNotes: updatedFields["Admin Notes"],
+      internalNotes: updatedFields["Internal Notes"],
+      createdBy: "airtable",
+      createdAt: getTodayString(),
+      updatedAt: getTodayString(),
+      updatedBy: "system",
+      tags: [],
+      documents: [],
+      activityLog: [],
+      ownershipHistory: [],
     };
 
-    const index = companiesDb.findIndex((c) => c.id === id);
-    companiesDb[index] = updated;
-
-    res.json(updated);
+    res.json(company);
   } catch (error) {
     console.error("Error updating company status:", error);
     res.status(500).json({ error: "Failed to update company status" });
   }
 };
 
-// Renew company
+// Renew company in Airtable
 export const renewCompany: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
-    const { notes } = req.body;
 
-    const company = companiesDb.find((c) => c.id === id);
-    if (!company) {
+    // Fetch current company from Airtable
+    const getResponse = await fetch(
+      `https://api.airtable.com/v0/app0PK34gyJDizR3Q/tbljtdHPdHnTberDy/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.AIRTABLE_API_TOKEN}`,
+        },
+      }
+    );
+
+    if (!getResponse.ok) {
       return res.status(404).json({ error: "Company not found" });
     }
 
+    const record = await getResponse.json();
+    const fields = record.fields;
+    const incorporationDate = fields["Incorporate date"] || getTodayString();
     const newRenewalDate = calculateExpiryDate(getTodayString());
-    const newExpiryDate = calculateExpiryDate(newRenewalDate);
 
-    const updated: CompanyData = {
-      ...company,
-      renewalDate: newRenewalDate,
-      expiryDate: newExpiryDate,
-      renewalDaysLeft: calculateRenewalDaysLeft(newRenewalDate),
-      status: "active",
-      updatedAt: getTodayString(),
-      activityLog: [
-        ...company.activityLog,
-        {
-          id: `log_${Date.now()}`,
-          timestamp: getTodayString(),
-          action: "Company Renewed",
-          performedBy: "admin",
-          details: notes || `Company renewed. New renewal date: ${newRenewalDate}`,
+    // Clear cache since we're updating
+    serverCache = null;
+
+    // Update in Airtable
+    const updateResponse = await fetch(
+      `https://api.airtable.com/v0/app0PK34gyJDizR3Q/tbljtdHPdHnTberDy/${id}`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${process.env.AIRTABLE_API_TOKEN}`,
+          "Content-Type": "application/json",
         },
-      ],
+        body: JSON.stringify({
+          fields: {
+            Status: "active",
+          },
+        }),
+      }
+    );
+
+    if (!updateResponse.ok) {
+      return res.status(500).json({ error: "Failed to renew company" });
+    }
+
+    const updatedRecord = await updateResponse.json();
+    const updatedFields = updatedRecord.fields;
+
+    const company: CompanyData = {
+      id: updatedRecord.id,
+      companyName: updatedFields["Company name"] || "",
+      companyNumber: updatedFields["Company number"] || "",
+      country: updatedFields.Country || "",
+      type: "LTD" as any,
+      incorporationDate: incorporationDate,
+      incorporationYear: parseInt(updatedFields["Incorporate year"] || new Date().getFullYear()),
+      purchasePrice: parseFloat(updatedFields.Price || "0"),
+      renewalFee: 0,
+      currency: "GBP",
+      expiryDate: calculateExpiryDate(incorporationDate),
+      renewalDate: newRenewalDate,
+      renewalDaysLeft: calculateRenewalDaysLeft(newRenewalDate),
+      status: "active" as const,
+      paymentStatus: "paid" as const,
+      refundStatus: "not-refunded" as const,
+      clientName: updatedFields["Client Name"] || "",
+      clientEmail: updatedFields["Client Email"] || "",
+      clientPhone: updatedFields["Client Phone"],
+      industry: updatedFields.Industry,
+      revenue: updatedFields.Revenue,
+      adminNotes: updatedFields["Admin Notes"],
+      internalNotes: updatedFields["Internal Notes"],
+      createdBy: "airtable",
+      createdAt: getTodayString(),
+      updatedAt: getTodayString(),
+      updatedBy: "system",
+      tags: [],
+      documents: [],
+      activityLog: [],
+      ownershipHistory: [],
     };
 
-    const index = companiesDb.findIndex((c) => c.id === id);
-    companiesDb[index] = updated;
-
-    res.json(updated);
+    res.json(company);
   } catch (error) {
     console.error("Error renewing company:", error);
     res.status(500).json({ error: "Failed to renew company" });
   }
 };
 
-// Request refund
+// Request refund for company
 export const requestRefund: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
-    const { reason, notes } = req.body;
 
-    const company = companiesDb.find((c) => c.id === id);
-    if (!company) {
+    // Fetch current company from Airtable
+    const getResponse = await fetch(
+      `https://api.airtable.com/v0/app0PK34gyJDizR3Q/tbljtdHPdHnTberDy/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.AIRTABLE_API_TOKEN}`,
+        },
+      }
+    );
+
+    if (!getResponse.ok) {
       return res.status(404).json({ error: "Company not found" });
     }
 
-    const updated: CompanyData = {
-      ...company,
-      refundStatus: "partially-refunded",
-      updatedAt: getTodayString(),
-      activityLog: [
-        ...company.activityLog,
-        {
-          id: `log_${Date.now()}`,
-          timestamp: getTodayString(),
-          action: "Refund Requested",
-          performedBy: "customer",
-          details: `Refund requested. Reason: ${reason}. ${notes || ""}`,
+    const record = await getResponse.json();
+    const fields = record.fields;
+    const incorporationDate = fields["Incorporate date"] || getTodayString();
+
+    // Clear cache since we're updating
+    serverCache = null;
+
+    // Update in Airtable
+    const updateResponse = await fetch(
+      `https://api.airtable.com/v0/app0PK34gyJDizR3Q/tbljtdHPdHnTberDy/${id}`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${process.env.AIRTABLE_API_TOKEN}`,
+          "Content-Type": "application/json",
         },
-      ],
+        body: JSON.stringify({
+          fields: {
+            Status: "refund-pending",
+          },
+        }),
+      }
+    );
+
+    if (!updateResponse.ok) {
+      return res.status(500).json({ error: "Failed to request refund" });
+    }
+
+    const updatedRecord = await updateResponse.json();
+    const updatedFields = updatedRecord.fields;
+
+    const company: CompanyData = {
+      id: updatedRecord.id,
+      companyName: updatedFields["Company name"] || "",
+      companyNumber: updatedFields["Company number"] || "",
+      country: updatedFields.Country || "",
+      type: "LTD" as any,
+      incorporationDate: incorporationDate,
+      incorporationYear: parseInt(updatedFields["Incorporate year"] || new Date().getFullYear()),
+      purchasePrice: parseFloat(updatedFields.Price || "0"),
+      renewalFee: 0,
+      currency: "GBP",
+      expiryDate: calculateExpiryDate(incorporationDate),
+      renewalDate: calculateExpiryDate(incorporationDate),
+      renewalDaysLeft: calculateRenewalDaysLeft(calculateExpiryDate(incorporationDate)),
+      status: "refund-pending" as CompanyStatus,
+      paymentStatus: "pending" as const,
+      refundStatus: "partially-refunded" as const,
+      clientName: updatedFields["Client Name"] || "",
+      clientEmail: updatedFields["Client Email"] || "",
+      clientPhone: updatedFields["Client Phone"],
+      industry: updatedFields.Industry,
+      revenue: updatedFields.Revenue,
+      adminNotes: updatedFields["Admin Notes"],
+      internalNotes: updatedFields["Internal Notes"],
+      createdBy: "airtable",
+      createdAt: getTodayString(),
+      updatedAt: getTodayString(),
+      updatedBy: "system",
+      tags: [],
+      documents: [],
+      activityLog: [],
+      ownershipHistory: [],
     };
 
-    const index = companiesDb.findIndex((c) => c.id === id);
-    companiesDb[index] = updated;
-
-    res.json(updated);
+    res.json(company);
   } catch (error) {
     console.error("Error requesting refund:", error);
     res.status(500).json({ error: "Failed to request refund" });
   }
 };
 
-// Approve refund
+// Approve refund for company
 export const approveRefund: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
-    const { refundAmount, notes } = req.body;
 
-    const company = companiesDb.find((c) => c.id === id);
-    if (!company) {
+    // Fetch current company from Airtable
+    const getResponse = await fetch(
+      `https://api.airtable.com/v0/app0PK34gyJDizR3Q/tbljtdHPdHnTberDy/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.AIRTABLE_API_TOKEN}`,
+        },
+      }
+    );
+
+    if (!getResponse.ok) {
       return res.status(404).json({ error: "Company not found" });
     }
 
-    const updated: CompanyData = {
-      ...company,
-      status: "refunded",
-      refundStatus: "fully-refunded",
-      paymentStatus: "refunded",
-      updatedAt: getTodayString(),
-      activityLog: [
-        ...company.activityLog,
-        {
-          id: `log_${Date.now()}`,
-          timestamp: getTodayString(),
-          action: "Refund Approved",
-          performedBy: "admin",
-          details: `Refund of ${refundAmount} approved. ${notes || ""}`,
+    const record = await getResponse.json();
+    const fields = record.fields;
+    const incorporationDate = fields["Incorporate date"] || getTodayString();
+
+    // Clear cache since we're updating
+    serverCache = null;
+
+    // Update in Airtable
+    const updateResponse = await fetch(
+      `https://api.airtable.com/v0/app0PK34gyJDizR3Q/tbljtdHPdHnTberDy/${id}`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${process.env.AIRTABLE_API_TOKEN}`,
+          "Content-Type": "application/json",
         },
-      ],
+        body: JSON.stringify({
+          fields: {
+            Status: "refunded",
+          },
+        }),
+      }
+    );
+
+    if (!updateResponse.ok) {
+      return res.status(500).json({ error: "Failed to approve refund" });
+    }
+
+    const updatedRecord = await updateResponse.json();
+    const updatedFields = updatedRecord.fields;
+
+    const company: CompanyData = {
+      id: updatedRecord.id,
+      companyName: updatedFields["Company name"] || "",
+      companyNumber: updatedFields["Company number"] || "",
+      country: updatedFields.Country || "",
+      type: "LTD" as any,
+      incorporationDate: incorporationDate,
+      incorporationYear: parseInt(updatedFields["Incorporate year"] || new Date().getFullYear()),
+      purchasePrice: parseFloat(updatedFields.Price || "0"),
+      renewalFee: 0,
+      currency: "GBP",
+      expiryDate: calculateExpiryDate(incorporationDate),
+      renewalDate: calculateExpiryDate(incorporationDate),
+      renewalDaysLeft: calculateRenewalDaysLeft(calculateExpiryDate(incorporationDate)),
+      status: "refunded" as const,
+      paymentStatus: "refunded" as const,
+      refundStatus: "fully-refunded" as const,
+      clientName: updatedFields["Client Name"] || "",
+      clientEmail: updatedFields["Client Email"] || "",
+      clientPhone: updatedFields["Client Phone"],
+      industry: updatedFields.Industry,
+      revenue: updatedFields.Revenue,
+      adminNotes: updatedFields["Admin Notes"],
+      internalNotes: updatedFields["Internal Notes"],
+      createdBy: "airtable",
+      createdAt: getTodayString(),
+      updatedAt: getTodayString(),
+      updatedBy: "system",
+      tags: [],
+      documents: [],
+      activityLog: [],
+      ownershipHistory: [],
     };
 
-    const index = companiesDb.findIndex((c) => c.id === id);
-    companiesDb[index] = updated;
-
-    res.json(updated);
+    res.json(company);
   } catch (error) {
     console.error("Error approving refund:", error);
     res.status(500).json({ error: "Failed to approve refund" });
