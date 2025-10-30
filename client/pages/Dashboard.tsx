@@ -1953,15 +1953,30 @@ Generated on: ${new Date().toLocaleDateString()}
                                   </div>
                                 </div>
                               ) : (
-                                <Button
-                                  onClick={() => setShowTransferForm(company.id)}
-                                  className="w-full bg-primary hover:bg-primary-600 text-white gap-2"
-                                >
-                                  <FileUp className="w-4 h-4" />
-                                  {company.transferFormFilled
-                                    ? "Edit Transfer Form"
-                                    : "Fill Transfer Form"}
-                                </Button>
+                                <>
+                                  {company.status !== "amend-required" && company.transferFormFilled && (
+                                    <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 mb-4">
+                                      <p className="text-blue-700 font-medium text-sm">
+                                        ⏳ Form Under Review
+                                      </p>
+                                      <p className="text-blue-600 text-xs mt-1">
+                                        Your transfer form has been submitted and is currently under review by our admin team. You'll be able to edit it once they request amendments.
+                                      </p>
+                                    </div>
+                                  )}
+                                  <Button
+                                    onClick={() => setShowTransferForm(company.id)}
+                                    disabled={company.status !== "amend-required" && company.transferFormFilled}
+                                    className="w-full bg-primary hover:bg-primary-600 text-white gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                  >
+                                    <FileUp className="w-4 h-4" />
+                                    {company.status === "amend-required"
+                                      ? "Edit Transfer Form (Amendments Required)"
+                                      : company.transferFormFilled
+                                        ? "Edit Transfer Form"
+                                        : "Fill Transfer Form"}
+                                  </Button>
+                                </>
                               )}
                             </div>
                           )}
