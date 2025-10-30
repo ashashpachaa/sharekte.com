@@ -77,6 +77,7 @@ export default function AdminOrders() {
       });
 
       if (newOrders.length > 0) {
+        setNewOrdersCount(newOrders.length);
         const message = newOrders.length === 1
           ? `New order: ${newOrders[0].orderId} from ${newOrders[0].customerName}`
           : `${newOrders.length} new orders received`;
@@ -88,6 +89,8 @@ export default function AdminOrders() {
           toast.success(message);
           localStorage.setItem("lastOrderNotification", now.toString());
         }
+      } else {
+        setNewOrdersCount(0);
       }
     } catch (error) {
       console.error("Failed to load orders:", error);
