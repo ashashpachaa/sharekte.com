@@ -122,6 +122,7 @@ export default function Checkout() {
           clientName: userData.fullName,
           clientEmail: userEmail,
           amount: item.price,
+          currency: currency,
           description: `Company Purchase - ${item.name}`,
           status: "paid",
           items: [
