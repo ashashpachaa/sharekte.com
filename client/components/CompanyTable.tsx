@@ -111,41 +111,12 @@ export function CompanyTable({
                   {company.companyNumber}
                 </TableCell>
                 <TableCell className="text-sm">{company.country}</TableCell>
-                <TableCell className="text-sm">{company.type}</TableCell>
                 <TableCell className="text-sm">
-                  <div className="truncate" title={company.clientName}>
-                    {company.clientName}
-                  </div>
-                  <div className="text-xs text-gray-500 truncate" title={company.clientEmail}>
-                    {company.clientEmail}
-                  </div>
+                  {formatDate(company.incorporationDate)}
                 </TableCell>
+                <TableCell className="text-sm">{company.incorporationYear}</TableCell>
                 <TableCell className="text-sm font-medium">
                   {formatPrice(company.purchasePrice, company.currency)}
-                </TableCell>
-                <TableCell>
-                  <Badge className={STATUS_COLORS[company.status]}>
-                    {company.status}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  <Badge
-                    className={PAYMENT_STATUS_COLORS[company.paymentStatus]}
-                  >
-                    {company.paymentStatus}
-                  </Badge>
-                </TableCell>
-                <TableCell className="text-sm">
-                  {formatDate(company.renewalDate)}
-                  <div
-                    className={`text-xs font-medium ${
-                      company.renewalDaysLeft <= 30
-                        ? "text-orange-600"
-                        : "text-gray-600"
-                    }`}
-                  >
-                    {company.renewalDaysLeft} days
-                  </div>
                 </TableCell>
                 <TableCell className="text-right">
                   {isAdmin ? (
