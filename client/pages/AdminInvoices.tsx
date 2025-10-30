@@ -89,7 +89,7 @@ export default function AdminInvoices() {
   // Filters
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
-  const [filterPaymentMethod, setFilterPaymentMethod] = useState<string>("");
+  const [filterPaymentMethod, setFilterPaymentMethod] = useState<string>("all");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [clientSearch, setClientSearch] = useState("");
