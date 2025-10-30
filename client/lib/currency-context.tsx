@@ -30,9 +30,9 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
   const [currency, setCurrencyState] = useState<Currency>(() => {
     try {
       const saved = localStorage.getItem("selectedCurrency");
-      return (saved as Currency) || "GBP";
+      return (saved as Currency) || "USD";
     } catch {
-      return "GBP";
+      return "USD";
     }
   });
 
