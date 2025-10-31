@@ -319,19 +319,19 @@ export async function syncOrderToAirtable(order: Order, airtableRecordId?: strin
       fields: {
         // Core Order Fields
         "Order ID": order.orderId,
-        "Order date": order.purchaseDate || new Date().toISOString().split("T")[0],
+        "Order Date": order.purchaseDate || new Date().toISOString().split("T")[0],
 
         // Customer Info
-        "Customer name": order.customerName,
+        "Customer Name": order.customerName,
         "Customer Email": order.customerEmail,
-        "Customer Mobile number": order.customerPhone || "",
+        "Customer Phone": order.customerPhone || "",
         "Billing Address": order.billingAddress || "",
         "Country": order.country,
 
         // Company Info
         "Company ID": order.companyId,
-        "Company name": order.companyName,
-        "Company numbers": order.companyNumber,
+        "Company Name": order.companyName,
+        "Company Number": order.companyNumber,
 
         // Payment Info
         "Payment Method": order.paymentMethod,
@@ -339,10 +339,9 @@ export async function syncOrderToAirtable(order: Order, airtableRecordId?: strin
         "Transaction ID": order.transactionId || "",
         "Amount": order.amount,
         "Currency": order.currency,
-        "Payment Date": order.paymentDate || "",
 
         // Order Status
-        "Statues": order.status,
+        "Status": order.status,
         "Status Changed Date": order.statusChangedDate || new Date().toISOString().split("T")[0],
         "Status History": JSON.stringify(order.statusHistory || []),
 
@@ -355,7 +354,7 @@ export async function syncOrderToAirtable(order: Order, airtableRecordId?: strin
         "Refund Request": order.refundRequest ? JSON.stringify(order.refundRequest) : "",
 
         // Documents & Transfer Form
-        "Customer Document's": JSON.stringify(order.documents || []),
+        "Documents": JSON.stringify(order.documents || []),
         "Transfer Form URL": order.transferFormUrl || "",
 
         // Admin & Internal Notes
@@ -367,9 +366,6 @@ export async function syncOrderToAirtable(order: Order, airtableRecordId?: strin
         "Updated At": order.updatedAt || new Date().toISOString().split("T")[0],
         "Created By": order.createdBy || "website",
         "Updated By": order.updatedBy || "website",
-
-        // Additional Fields if needed
-        "Incorporate date": order.purchaseDate || new Date().toISOString().split("T")[0],
       },
     };
 
