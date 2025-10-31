@@ -2,14 +2,14 @@
  * Airtable Synchronization Utility
  * Syncs transfer forms, orders, and related data to Airtable base
  *
- * Airtable Base: https://airtable.com/app0PK34gyJDizR3Q/tblXvZ0kjl7p7h9Jq
- * Orders Table: tblXvZ0kjl7p7h9Jq
+ * Airtable Base: https://airtable.com/app0PK34gyJDizR3Q/tbl01DTvrGtsAaPfZ
+ * Orders Table: tbl01DTvrGtsAaPfZ
  *
  * Environment Variables Required:
  * - AIRTABLE_API_TOKEN: Your Airtable personal access token
  * - AIRTABLE_BASE_ID: Your base ID (app0PK34gyJDizR3Q)
  * - AIRTABLE_TABLE_FORMS: Table ID for transfer forms
- * - AIRTABLE_TABLE_ORDERS: Table ID for orders (tblXvZ0kjl7p7h9Jq)
+ * - AIRTABLE_TABLE_ORDERS: Table ID for orders (tbl01DTvrGtsAaPfZ)
  */
 
 import { TransferFormData, FormStatus } from "../../client/lib/transfer-form";
