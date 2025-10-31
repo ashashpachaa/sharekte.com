@@ -934,5 +934,3 @@ export function CompanyTransferForm({
     </>
   );
 }
-
-export { CompanyTransferForm };
