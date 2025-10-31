@@ -64,16 +64,28 @@ export function DocumentManagement({ order, onDocumentsUpdated, isAdmin = false 
   };
 
   const handleDownload = (doc: OrderDocument) => {
-    if (doc.url) {
-      const link = document.createElement("a");
-      link.href = doc.url;
-      link.download = doc.name;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      toast.success("Document downloaded");
-    } else {
-      toast.error("Document URL not available");
+    try {
+      let downloadUrl = doc.url;
+
+      // If we have base64 file data, use that instead
+      if (!downloadUrl && doc.fileData) {
+        downloadUrl = doc.fileData;
+      }
+
+      if (downloadUrl) {
+        const link = document.createElement("a");
+        link.href = downloadUrl;
+        link.download = doc.name;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        toast.success("Document downloaded");
+      } else {
+        toast.error("Document data not available");
+      }
+    } catch (error) {
+      console.error("Failed to download document:", error);
+      toast.error("Failed to download document");
     }
   };
 
