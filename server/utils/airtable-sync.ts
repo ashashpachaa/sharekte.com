@@ -314,21 +314,19 @@ export async function syncOrderToAirtable(order: Order, airtableRecordId?: strin
 
     console.log(`[syncOrderToAirtable] Syncing order ${order.orderId} to Airtable (table: ${tableId})`);
 
-    // Send order data to Airtable using the field names from the combined Order+Form table
-    // Only order-related fields are synced now; transfer form fields will be added later
+    // Send order data to Airtable using the exact field names from the user's Orders table
     const airtableRecord = {
       fields: {
-        // Core order fields from the Airtable form
-        "order_id": order.orderId,
-        "country": order.country,
-        "company_name": order.companyName,
-        "company_numbers": order.companyNumber,
-        "customer_name": order.customerName,
-        "customer_email": order.customerEmail,
-        "customer_mobile_number": order.customerPhone || "",
-
-        // Optional admin notes field
-        ...(order.adminNotes && { "any_other_notes": order.adminNotes }),
+        "Order ID": order.orderId,
+        "Order date": order.purchaseDate || new Date().toISOString().split("T")[0],
+        "Country": order.country,
+        "Company name": order.companyName,
+        "Company numbers": order.companyNumber,
+        "Statues": order.status,
+        "Customer name": order.customerName,
+        "Customer Mobile number": order.customerPhone || "",
+        "price": order.amount,
+        "Customer Document's": JSON.stringify(order.documents || []),
       },
     };
 
