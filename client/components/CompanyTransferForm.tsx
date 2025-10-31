@@ -1203,40 +1203,222 @@ export function CompanyTransferForm({
   );
 
   const renderReview = () => (
-    <Card>
-      <CardHeader>
-        <CardTitle>Review & Confirm</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="bg-blue-50 border border-blue-200 rounded p-4">
-          <p className="text-sm text-blue-800">
-            Please review all the information you've provided. You won't be able to edit after submission.
-          </p>
-        </div>
-        <div className="grid grid-cols-2 gap-4 text-sm">
-          <div>
-            <span className="font-semibold">Total Shares:</span>
-            <p>{formData.totalShares}</p>
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Review & Confirm</CardTitle>
+          <CardDescription>Please review all the information you've provided. You won't be able to edit after submission.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="bg-blue-50 border border-blue-200 rounded p-4">
+            <p className="text-sm text-blue-800">
+              ℹ️ Please carefully review all the information below before confirming your submission.
+            </p>
           </div>
-          <div>
-            <span className="font-semibold">Share Capital:</span>
-            <p>£{formData.totalShareCapital?.toFixed(2)}</p>
+        </CardContent>
+      </Card>
+
+      {/* Company Information */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">Company Information</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            <div>
+              <Label className="text-gray-600">Company Name</Label>
+              <p className="font-semibold mt-1">{formData.companyName}</p>
+            </div>
+            <div>
+              <Label className="text-gray-600">Company Number</Label>
+              <p className="font-semibold mt-1">{formData.companyNumber || "N/A"}</p>
+            </div>
+            <div>
+              <Label className="text-gray-600">Incorporation Date</Label>
+              <p className="font-semibold mt-1">{formData.incorporationDate || "N/A"}</p>
+            </div>
+            <div>
+              <Label className="text-gray-600">Incorporation Year</Label>
+              <p className="font-semibold mt-1">{formData.incorporationYear}</p>
+            </div>
           </div>
-          <div>
-            <span className="font-semibold">Number of Shareholders:</span>
-            <p>{formData.numberOfShareholders}</p>
+        </CardContent>
+      </Card>
+
+      {/* Shares Information */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">Shares Information</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-3 gap-4 text-sm">
+            <div>
+              <Label className="text-gray-600">Total Shares</Label>
+              <p className="font-semibold mt-1">{formData.totalShares}</p>
+            </div>
+            <div>
+              <Label className="text-gray-600">Share Capital</Label>
+              <p className="font-semibold mt-1">£{formData.totalShareCapital?.toFixed(2)}</p>
+            </div>
+            <div>
+              <Label className="text-gray-600">Price per Share</Label>
+              <p className="font-semibold mt-1">£{(formData.totalShareCapital && formData.totalShares ? (formData.totalShareCapital / formData.totalShares).toFixed(2) : "0.00")}</p>
+            </div>
           </div>
-          <div>
-            <span className="font-semibold">Number of PSCs:</span>
-            <p>{formData.numberOfPSCs}</p>
+        </CardContent>
+      </Card>
+
+      {/* Shareholders */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">Shareholders ({formData.numberOfShareholders})</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {(formData.shareholders || []).map((shareholder, index) => (
+              <div key={shareholder.id} className="border-l-4 border-blue-500 pl-4 py-2">
+                <h4 className="font-semibold text-sm mb-2">Shareholder {index + 1}</h4>
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                  <div>
+                    <Label className="text-gray-600 text-xs">Name</Label>
+                    <p className="font-medium">{shareholder.name}</p>
+                  </div>
+                  <div>
+                    <Label className="text-gray-600 text-xs">Nationality</Label>
+                    <p className="font-medium">{shareholder.nationality}</p>
+                  </div>
+                  <div className="col-span-2">
+                    <Label className="text-gray-600 text-xs">Address</Label>
+                    <p className="font-medium">{shareholder.address}, {shareholder.city}, {shareholder.country}</p>
+                  </div>
+                  <div>
+                    <Label className="text-gray-600 text-xs">Percentage (%)</Label>
+                    <p className="font-medium">{shareholder.shareholderPercentage}%</p>
+                  </div>
+                  <div>
+                    <Label className="text-gray-600 text-xs">Shares</Label>
+                    <p className="font-medium">{Math.round(shareholder.shares)}</p>
+                  </div>
+                  <div>
+                    <Label className="text-gray-600 text-xs">Amount (£)</Label>
+                    <p className="font-medium">£{shareholder.amount.toFixed(2)}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
+        </CardContent>
+      </Card>
+
+      {/* PSCs */}
+      {formData.numberOfPSCs > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Persons with Significant Control ({formData.numberOfPSCs})</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {(formData.pscList || []).map((psc, index) => (
+                <div key={psc.id} className="border-l-4 border-green-500 pl-4 py-2">
+                  <h4 className="font-semibold text-sm mb-2">PSC {index + 1}</h4>
+                  <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div>
+                      <Label className="text-gray-600 text-xs">Name</Label>
+                      <p className="font-medium">{psc.shareholderName}</p>
+                    </div>
+                    <div>
+                      <Label className="text-gray-600 text-xs">Nationality</Label>
+                      <p className="font-medium">{psc.nationality}</p>
+                    </div>
+                    <div className="col-span-2">
+                      <Label className="text-gray-600 text-xs">Address</Label>
+                      <p className="font-medium">{psc.address}, {psc.city}, {psc.country}</p>
+                    </div>
+                    <div className="col-span-2">
+                      <Label className="text-gray-600 text-xs">Level of Control</Label>
+                      <div className="flex flex-wrap gap-2 mt-1">
+                        {psc.levelOfControl?.map((level) => (
+                          <Badge key={level} variant="secondary">{level}</Badge>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Company Updates */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">Company Updates</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Name Change */}
           <div>
-            <span className="font-semibold">Documents:</span>
-            <p>{(formData.attachments || []).length} file(s)</p>
+            <Label className="text-gray-600">Change Company Name?</Label>
+            <p className="font-semibold mt-1">{formData.changeCompanyName ? "Yes" : "No"}</p>
+            {formData.changeCompanyName && formData.suggestedNames && (
+              <div className="mt-2 space-y-1">
+                <Label className="text-gray-600 text-xs">Suggested Names:</Label>
+                <div className="space-y-1">
+                  {formData.suggestedNames.map((name, index) => (
+                    name && <p key={index} className="text-sm">• {name}</p>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-        </div>
-      </CardContent>
-    </Card>
+
+          {/* Activities Change */}
+          <div>
+            <Label className="text-gray-600">Change Company Activities?</Label>
+            <p className="font-semibold mt-1">{formData.changeCompanyActivities ? "Yes" : "No"}</p>
+            {formData.changeCompanyActivities && formData.companyActivities && (
+              <div className="mt-2 space-y-1">
+                <Label className="text-gray-600 text-xs">Selected Activities:</Label>
+                <div className="flex flex-wrap gap-2">
+                  {formData.companyActivities.map((code) => {
+                    const activity = COMPANY_ACTIVITIES.find(a => a.code === code);
+                    return (
+                      <Badge key={code} variant="secondary">{activity?.label}</Badge>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Documents */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">Documents</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {(formData.attachments || []).length > 0 ? (
+            <div className="space-y-2">
+              <p className="text-sm text-gray-600 font-semibold">
+                {(formData.attachments || []).length} file(s) uploaded:
+              </p>
+              <ul className="space-y-1">
+                {(formData.attachments || []).map((attachment) => (
+                  <li key={attachment.id} className="text-sm flex items-center">
+                    <span className="text-green-600 mr-2">✓</span>
+                    {attachment.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <p className="text-sm text-gray-600">No documents uploaded</p>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   );
 
   const steps = [
