@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { Order, getAllOrders, getStatusColor, formatOrderId, updateOrderStatus, type OrderStatus } from "@/lib/orders";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Eye, Download, RefreshCw, FileText, Calendar, DollarSign, ChevronDown, Form } from "lucide-react";
+import { Search, Eye, Download, RefreshCw, FileText, Calendar, DollarSign, ChevronDown, Edit2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
