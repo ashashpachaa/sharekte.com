@@ -477,7 +477,39 @@ export function CompanyTransferForm({
           {errors.numberOfShareholders && <p className="text-red-600 text-sm mt-1">{errors.numberOfShareholders}</p>}
         </div>
 
-        {errors.shareholders && <p className="text-red-600 text-sm">{errors.shareholders}</p>}
+        {errors.shareholders && (
+          <div className="bg-red-50 border border-red-200 rounded p-3 mb-4">
+            <p className="text-red-600 text-sm flex items-center gap-2">
+              <AlertCircle className="w-4 h-4" />
+              {errors.shareholders}
+            </p>
+          </div>
+        )}
+
+        {/* Shareholder Percentage Summary */}
+        {(formData.shareholders || []).length > 0 && (
+          <div className="bg-blue-50 border border-blue-200 rounded p-4 mb-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-sm text-blue-700 font-semibold">Total Shareholder %</p>
+                <p className={`text-2xl font-bold ${
+                  Math.abs((formData.shareholders || []).reduce((sum, s) => sum + (s.shareholderPercentage || 0), 0) - 100) < 0.01
+                    ? "text-green-600"
+                    : "text-red-600"
+                }`}>
+                  {((formData.shareholders || []).reduce((sum, s) => sum + (s.shareholderPercentage || 0), 0)).toFixed(2)}%
+                </p>
+              </div>
+              <div>
+                <p className="text-sm text-blue-700 font-semibold">Target</p>
+                <p className="text-2xl font-bold text-blue-600">100%</p>
+              </div>
+            </div>
+            {Math.abs((formData.shareholders || []).reduce((sum, s) => sum + (s.shareholderPercentage || 0), 0) - 100) > 0.01 && (
+              <p className="text-sm text-red-600 mt-2">⚠️ Percentages must add up to exactly 100%</p>
+            )}
+          </div>
+        )}
 
         {(formData.shareholders || []).map((shareholder, index) => (
           <Card key={shareholder.id} className="p-4 bg-gray-50">
