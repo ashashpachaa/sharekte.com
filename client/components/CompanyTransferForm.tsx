@@ -128,7 +128,13 @@ export function CompanyTransferForm({
   const validateStep = (step: number): boolean => {
     const newErrors: FormErrors = {};
 
+    // Step 1 (Company Info) - Auto-filled, no validation needed
     if (step === 1) {
+      // Company info is auto-filled and non-editable, so no validation
+    }
+
+    // Step 2 (Shares Info)
+    if (step === 2) {
       if (!formData.totalShares || formData.totalShares <= 0) {
         newErrors.totalShares = "Total shares must be greater than 0";
       }
@@ -137,7 +143,8 @@ export function CompanyTransferForm({
       }
     }
 
-    if (step === 2) {
+    // Step 3 (Shareholders)
+    if (step === 3) {
       if (!formData.numberOfShareholders || formData.numberOfShareholders <= 0) {
         newErrors.numberOfShareholders = "Number of shareholders must be greater than 0";
       }
@@ -159,7 +166,8 @@ export function CompanyTransferForm({
       }
     }
 
-    if (step === 3) {
+    // Step 4 (PSC)
+    if (step === 4) {
       if (formData.numberOfPSCs && formData.numberOfPSCs > 0) {
         if (!formData.numberOfShareholders || formData.numberOfPSCs > formData.numberOfShareholders) {
           newErrors.numberOfPSCs = "Number of PSCs cannot exceed number of shareholders";
@@ -173,7 +181,8 @@ export function CompanyTransferForm({
       }
     }
 
-    if (step === 4) {
+    // Step 5 (Updates)
+    if (step === 5) {
       if (formData.changeCompanyName) {
         const names = formData.suggestedNames?.filter(n => n && n.trim());
         if (!names || names.length === 0) {
@@ -190,11 +199,14 @@ export function CompanyTransferForm({
       }
     }
 
-    if (step === 5) {
+    // Step 6 (Documents)
+    if (step === 6) {
       if (!formData.attachments || formData.attachments.length === 0) {
         newErrors.attachments = "At least one document is required";
       }
     }
+
+    // Step 7 (Review) - No validation, just confirmation
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
