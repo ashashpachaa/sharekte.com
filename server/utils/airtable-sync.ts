@@ -314,61 +314,39 @@ export async function syncOrderToAirtable(order: Order, airtableRecordId?: strin
 
     console.log(`[syncOrderToAirtable] Syncing order ${order.orderId} to Airtable (table: ${tableId})`);
 
-    // Build the field mapping with all possible field names
-    const fieldMapping: Record<string, any> = {
-      "Order ID": order.orderId,
-      "Order date": order.purchaseDate,
-      "Country": order.country,
-      "Company name": order.companyName,
-      "Company numbers": order.companyNumber,
-      "Company Number": order.companyNumber, // Alternative field name
-      "Statues": order.status, // Note: This is a typo in Airtable but using exact field name
-      "Status": order.status, // Fallback
-      "Customer name": order.customerName,
-      "Customer Email": order.customerEmail,
-      "Customer Mobile number": order.customerPhone || "",
-      "price": order.amount,
-      "currency": order.currency,
-      "Payment Status": order.paymentStatus,
-      "Payment Method": order.paymentMethod,
-      "Transaction ID": order.transactionId || "",
-      "Renewal Date": order.renewalDate,
-      "Renewal Fees": order.renewalFees,
-      "Refund Status": order.refundStatus,
-      "Billing Address": order.billingAddress || "",
-      "Company ID": order.companyId,
-      "Last Update Date": order.lastUpdateDate,
-      "Status History": JSON.stringify(order.statusHistory || []),
-      "Documents": JSON.stringify(order.documents || []),
-      "Admin Notes": order.adminNotes || "",
-      "Internal Notes": order.internalNotes || "",
-      "Created At": order.createdAt,
-      "Updated At": order.updatedAt,
-    };
-
-    // For the POST request, send only essential fields first to avoid field name errors
-    // The server will handle missing optional fields gracefully
-    const essentialFields: Record<string, any> = {
-      "Order ID": order.orderId,
-      "Customer name": order.customerName,
-      "Customer Email": order.customerEmail,
-      "Country": order.country,
-      "Company name": order.companyName,
-      "price": order.amount,
-      "currency": order.currency,
-      "Payment Status": order.paymentStatus,
-    };
-
-    // Add all other fields that have values
-    const allFields = { ...essentialFields };
-    for (const [key, value] of Object.entries(fieldMapping)) {
-      if (value !== undefined && value !== null && value !== "" && !allFields[key]) {
-        allFields[key] = value;
-      }
-    }
-
+    // Send order data to Airtable with field names matching the user's Airtable Orders table
+    // These fields should match what exists in the user's Airtable Orders table
+    // If any field doesn't exist, Airtable will return an error and we'll log it
     const airtableRecord = {
-      fields: allFields,
+      fields: {
+        // Core required fields - adjust these to match your Airtable Orders table
+        "Order ID": order.orderId,
+        "Order date": order.purchaseDate || new Date().toISOString().split("T")[0],
+        "Country": order.country,
+        "Company name": order.companyName,
+        "Company numbers": order.companyNumber,
+        "Statues": order.status, // Note: Airtable has "Statues" not "Status"
+        "Customer name": order.customerName,
+        "Customer Email": order.customerEmail,
+        "Customer Mobile number": order.customerPhone || "",
+
+        // Optional fields - these will be included if they have values
+        ...(order.billingAddress && { "Billing Address": order.billingAddress }),
+        ...(order.paymentMethod && { "Payment Method": order.paymentMethod }),
+        ...(order.paymentStatus && { "Payment Status": order.paymentStatus }),
+        ...(order.transactionId && { "Transaction ID": order.transactionId }),
+        ...(order.amount && { "price": order.amount }),
+        ...(order.currency && { "currency": order.currency }),
+        ...(order.renewalDate && { "Renewal Date": order.renewalDate }),
+        ...(order.renewalFees && { "Renewal Fees": order.renewalFees }),
+        ...(order.refundStatus && { "Refund Status": order.refundStatus }),
+        ...(order.companyId && { "Company ID": order.companyId }),
+        ...(order.lastUpdateDate && { "Last Update Date": order.lastUpdateDate }),
+        ...(order.adminNotes && { "Admin Notes": order.adminNotes }),
+        ...(order.internalNotes && { "Internal Notes": order.internalNotes }),
+        ...(order.createdAt && { "Created At": order.createdAt }),
+        ...(order.updatedAt && { "Updated At": order.updatedAt }),
+      },
     };
 
     const url = airtableRecordId
