@@ -469,19 +469,19 @@ export async function fetchOrdersFromAirtable(): Promise<Order[]> {
 
         // Core Order Fields
         orderId: fields["Order ID"] || "",
-        purchaseDate: fields["Order date"] || now,
+        purchaseDate: fields["Order Date"] || now,
 
         // Customer Info
-        customerName: fields["Customer name"] || "",
+        customerName: fields["Customer Name"] || "",
         customerEmail: fields["Customer Email"] || "",
-        customerPhone: fields["Customer Mobile number"] || "",
+        customerPhone: fields["Customer Phone"] || "",
         billingAddress: fields["Billing Address"] || "",
         country: fields["Country"] || "",
 
         // Company Info
         companyId: fields["Company ID"] || "",
-        companyName: fields["Company name"] || "",
-        companyNumber: fields["Company numbers"] || "",
+        companyName: fields["Company Name"] || "",
+        companyNumber: fields["Company Number"] || "",
 
         // Payment Info
         paymentMethod: fields["Payment Method"] || "credit_card",
@@ -489,10 +489,10 @@ export async function fetchOrdersFromAirtable(): Promise<Order[]> {
         transactionId: fields["Transaction ID"] || "",
         amount: fields["Amount"] ? parseFloat(String(fields["Amount"])) : 0,
         currency: fields["Currency"] || "USD",
-        paymentDate: fields["Payment Date"] || now,
+        paymentDate: fields["Order Date"] || now,
 
         // Order Status
-        status: fields["Statues"] || "pending-payment",
+        status: fields["Status"] || "pending-payment",
         statusChangedDate: fields["Status Changed Date"] || new Date().toISOString().split("T")[0],
         statusHistory: parseJSON(fields["Status History"], []),
 
@@ -508,7 +508,7 @@ export async function fetchOrdersFromAirtable(): Promise<Order[]> {
         refundRequest: parseJSON(fields["Refund Request"]),
 
         // Documents & Transfer Form
-        documents: parseJSON(fields["Customer Document's"], []),
+        documents: parseJSON(fields["Documents"], []),
         transferFormUrl: fields["Transfer Form URL"] || "",
 
         // Admin & Internal Notes
