@@ -495,6 +495,19 @@ function OrderDetailsModal({ order, onClose, onOpenTransferForm }: OrderDetailsM
               </div>
             </div>
           )}
+
+          {/* Transfer Form Action */}
+          {order.status === "transfer-form-pending" && onOpenTransferForm && (
+            <div className="border-t border-border/40 pt-6">
+              <Button
+                onClick={onOpenTransferForm}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                <Form className="w-4 h-4 mr-2" />
+                Fill Company Transfer Form
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </div>
