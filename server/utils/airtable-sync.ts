@@ -365,15 +365,19 @@ export async function syncOrderToAirtable(order: Order, airtableRecordId?: strin
         JSON.stringify(errorData),
         "Order:",
         order.orderId,
+        "Table:",
+        tableId,
         "Fields sent:",
-        Object.keys(airtableRecord.fields)
+        Object.keys(airtableRecord.fields),
+        "Request Body:",
+        JSON.stringify(airtableRecord)
       );
       return null;
     }
 
     const data = await response.json();
     const recordId = data.id || airtableRecordId;
-    console.log(`✓ Order ${order.orderId} synced to Airtable (ID: ${recordId}) - ${airtableRecordId ? "updated" : "created"}`);
+    console.log(`[syncOrderToAirtable] ✓ Order ${order.orderId} synced to Airtable (ID: ${recordId}) - ${airtableRecordId ? "updated" : "created"}`);
     return recordId;
   } catch (error) {
     console.error("Airtable order sync error:", error);
