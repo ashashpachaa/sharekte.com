@@ -16,6 +16,7 @@ import { useSearch } from "@/hooks/use-search";
 import { getPurchasedCompanies, getInvoices, savePurchasedCompany, updatePurchasedCompanyStatus, addInvoice, renewCompany, updateCompanyRenewalStatus, type PurchasedCompanyData } from "@/lib/user-data";
 import { useCurrency } from "@/lib/currency-context";
 import { MyOrders } from "@/components/MyOrders";
+import { CompanyTransferForm } from "@/components/CompanyTransferForm";
 import {
   BarChart3,
   Plus,
