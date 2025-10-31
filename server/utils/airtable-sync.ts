@@ -314,38 +314,21 @@ export async function syncOrderToAirtable(order: Order, airtableRecordId?: strin
 
     console.log(`[syncOrderToAirtable] Syncing order ${order.orderId} to Airtable (table: ${tableId})`);
 
-    // Send order data to Airtable with field names matching the user's Airtable Orders table
-    // These fields should match what exists in the user's Airtable Orders table
-    // If any field doesn't exist, Airtable will return an error and we'll log it
+    // Send order data to Airtable using the field names from the combined Order+Form table
+    // Only order-related fields are synced now; transfer form fields will be added later
     const airtableRecord = {
       fields: {
-        // Core required fields - adjust these to match your Airtable Orders table
-        "Order ID": order.orderId,
-        "Order date": order.purchaseDate || new Date().toISOString().split("T")[0],
-        "Country": order.country,
-        "Company name": order.companyName,
-        "Company numbers": order.companyNumber,
-        "Statues": order.status, // Note: Airtable has "Statues" not "Status"
-        "Customer name": order.customerName,
-        "Customer Email": order.customerEmail,
-        "Customer Mobile number": order.customerPhone || "",
+        // Core order fields from the Airtable form
+        "order_id": order.orderId,
+        "country": order.country,
+        "company_name": order.companyName,
+        "company_numbers": order.companyNumber,
+        "customer_name": order.customerName,
+        "customer_email": order.customerEmail,
+        "customer_mobile_number": order.customerPhone || "",
 
-        // Optional fields - these will be included if they have values
-        ...(order.billingAddress && { "Billing Address": order.billingAddress }),
-        ...(order.paymentMethod && { "Payment Method": order.paymentMethod }),
-        ...(order.paymentStatus && { "Payment Status": order.paymentStatus }),
-        ...(order.transactionId && { "Transaction ID": order.transactionId }),
-        ...(order.amount && { "price": order.amount }),
-        ...(order.currency && { "currency": order.currency }),
-        ...(order.renewalDate && { "Renewal Date": order.renewalDate }),
-        ...(order.renewalFees && { "Renewal Fees": order.renewalFees }),
-        ...(order.refundStatus && { "Refund Status": order.refundStatus }),
-        ...(order.companyId && { "Company ID": order.companyId }),
-        ...(order.lastUpdateDate && { "Last Update Date": order.lastUpdateDate }),
-        ...(order.adminNotes && { "Admin Notes": order.adminNotes }),
-        ...(order.internalNotes && { "Internal Notes": order.internalNotes }),
-        ...(order.createdAt && { "Created At": order.createdAt }),
-        ...(order.updatedAt && { "Updated At": order.updatedAt }),
+        // Optional admin notes field
+        ...(order.adminNotes && { "any_other_notes": order.adminNotes }),
       },
     };
 
