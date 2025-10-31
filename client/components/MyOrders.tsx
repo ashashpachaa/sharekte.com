@@ -2,8 +2,16 @@ import { useState, useEffect, useMemo } from "react";
 import { Order, getAllOrders, getStatusColor, formatOrderId, updateOrderStatus, type OrderStatus } from "@/lib/orders";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Eye, Download, RefreshCw, FileText, Calendar, DollarSign, ChevronDown } from "lucide-react";
+import { Search, Eye, Download, RefreshCw, FileText, Calendar, DollarSign, ChevronDown, Form } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { CompanyTransferForm } from "./CompanyTransferForm";
 
 interface MyOrdersProps {
   userEmail: string;
@@ -16,6 +24,7 @@ export function MyOrders({ userEmail }: MyOrdersProps) {
   const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [showTransferFormModal, setShowTransferFormModal] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
