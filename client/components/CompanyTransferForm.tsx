@@ -216,7 +216,13 @@ export function CompanyTransferForm({
     if (validateStep(currentStep)) {
       setCurrentStep(currentStep + 1);
     } else {
-      toast.error("Please fix the errors before proceeding");
+      // Provide specific error feedback
+      const errorMessages = Object.values(errors);
+      if (errorMessages.length > 0) {
+        toast.error(errorMessages[0]);
+      } else {
+        toast.error("Please fix the errors before proceeding");
+      }
     }
   };
 
