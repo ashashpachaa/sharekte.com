@@ -161,7 +161,7 @@ export const FORM_STATUS_ICONS: Record<FormStatus, string> = {
 };
 
 // Create a new empty form
-export function createEmptyForm(orderId: string, companyId: string, companyName: string, companyNumber: string): TransferFormData {
+export function createEmptyForm(orderId: string, companyId: string, companyName: string, companyNumber: string, incorporationDate?: string, incorporationYear?: number): TransferFormData {
   return {
     id: `form_${Date.now()}`,
     formId: `FORM-${Date.now()}`,
@@ -169,41 +169,28 @@ export function createEmptyForm(orderId: string, companyId: string, companyName:
     companyId,
     companyName,
     companyNumber,
-    
-    sellerName: "",
-    sellerEmail: "",
-    sellerPhone: "",
-    sellerAddress: "",
-    sellerCity: "",
-    sellerState: "",
-    sellerPostalCode: "",
-    sellerCountry: "",
-    
-    buyerName: "",
-    buyerEmail: "",
-    buyerPhone: "",
-    buyerAddress: "",
-    buyerCity: "",
-    buyerState: "",
-    buyerPostalCode: "",
-    buyerCountry: "",
-    
-    directors: [],
+    incorporationDate: incorporationDate || "",
+    incorporationYear: incorporationYear || new Date().getFullYear(),
+
+    totalShares: 0,
+    totalShareCapital: 0,
+    pricePerShare: 0,
+
     shareholders: [],
-    
-    companyType: "",
-    incorporationDate: "",
-    businessDescription: "",
-    
-    transferReason: "",
-    transferDate: new Date().toISOString().split("T")[0],
-    salePrice: undefined,
-    currency: "USD",
-    
+    numberOfShareholders: 0,
+
+    pscList: [],
+    numberOfPSCs: 0,
+
+    changeCompanyName: false,
+    suggestedNames: [],
+    changeCompanyActivities: false,
+    companyActivities: [],
+
     status: "under-review",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    
+
     amendmentsRequiredCount: 0,
     attachments: [],
     comments: [],
