@@ -13,38 +13,74 @@ interface DocumentManagementProps {
 
 export function DocumentManagement({ order, onDocumentsUpdated, isAdmin = false }: DocumentManagementProps) {
   const [uploading, setUploading] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [visibility, setVisibility] = useState<"admin" | "user" | "both">("both");
   const { toast } = useToast();
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      // Validate file size (max 50MB)
-      if (file.size > 50 * 1024 * 1024) {
-        toast.error("File size must be less than 50MB");
-        return;
+    const files = e.target.files;
+    if (files) {
+      const newFiles: File[] = [];
+      let hasError = false;
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        // Validate file size (max 5GB per file)
+        if (file.size > 5 * 1024 * 1024 * 1024) {
+          toast.error(`File "${file.name}" exceeds 5GB limit`);
+          hasError = true;
+          continue;
+        }
+        newFiles.push(file);
       }
-      setSelectedFile(file);
+
+      setSelectedFiles((prev) => [...prev, ...newFiles]);
+
+      if (newFiles.length > 0) {
+        toast.success(`${newFiles.length} file(s) selected`);
+      }
     }
   };
 
+  const removeSelectedFile = (index: number) => {
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const handleUpload = async () => {
-    if (!selectedFile) {
-      toast.error("Please select a file");
+    if (selectedFiles.length === 0) {
+      toast.error("Please select at least one file");
       return;
     }
 
     setUploading(true);
+    let successCount = 0;
+    let failureCount = 0;
+    let currentOrder = order;
+
     try {
-      const updatedOrder = await uploadOrderDocument(order.id, selectedFile, visibility);
-      onDocumentsUpdated(updatedOrder);
-      setSelectedFile(null);
+      for (const file of selectedFiles) {
+        try {
+          const updatedOrder = await uploadOrderDocument(currentOrder.id, file, visibility);
+          currentOrder = updatedOrder;
+          successCount++;
+        } catch (error) {
+          console.error(`Failed to upload ${file.name}:`, error);
+          failureCount++;
+        }
+      }
+
+      onDocumentsUpdated(currentOrder);
+      setSelectedFiles([]);
       setVisibility("both");
-      toast.success("Document uploaded successfully");
+
+      if (failureCount === 0) {
+        toast.success(`${successCount} document(s) uploaded successfully`);
+      } else {
+        toast.error(`Uploaded ${successCount}, failed ${failureCount}`);
+      }
     } catch (error) {
-      console.error("Failed to upload document:", error);
-      toast.error("Failed to upload document");
+      console.error("Failed to upload documents:", error);
+      toast.error("Failed to upload documents");
     } finally {
       setUploading(false);
     }
