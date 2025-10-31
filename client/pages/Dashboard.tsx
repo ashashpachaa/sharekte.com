@@ -1957,49 +1957,56 @@ Generated on: ${new Date().toLocaleDateString()}
                           {/* Transfer Form */}
                           {company.status !== "completed" && (
                             <div>
-                              {showTransferForm === company.id ? (
-                                <div className="border border-border/40 rounded-lg overflow-hidden">
-                                  <CompanyTransferForm
-                                    orderId={`order_${company.id}`}
-                                    companyId={company.id}
-                                    companyName={company.name}
-                                    companyNumber=""
-                                    incorporationDate=""
-                                    incorporationYear={new Date().getFullYear()}
-                                    onSuccess={() => {
-                                      toast.success("Transfer form submitted successfully!");
-                                      setShowTransferForm(null);
-                                    }}
-                                  />
+                              {company.status !== "amend-required" && company.transferFormFilled && (
+                                <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 mb-4">
+                                  <p className="text-blue-700 font-medium text-sm">
+                                    ⏳ Form Under Review
+                                  </p>
+                                  <p className="text-blue-600 text-xs mt-1">
+                                    Your transfer form has been submitted and is currently under review by our admin team. You'll be able to edit it once they request amendments.
+                                  </p>
                                 </div>
-                              ) : (
-                                <>
-                                  {company.status !== "amend-required" && company.transferFormFilled && (
-                                    <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 mb-4">
-                                      <p className="text-blue-700 font-medium text-sm">
-                                        ⏳ Form Under Review
-                                      </p>
-                                      <p className="text-blue-600 text-xs mt-1">
-                                        Your transfer form has been submitted and is currently under review by our admin team. You'll be able to edit it once they request amendments.
-                                      </p>
-                                    </div>
-                                  )}
-                                  <Button
-                                    onClick={() => setShowTransferForm(company.id)}
-                                    disabled={company.status !== "amend-required" && company.transferFormFilled}
-                                    className="w-full bg-primary hover:bg-primary-600 text-white gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                                  >
-                                    <FileUp className="w-4 h-4" />
-                                    {company.status === "amend-required"
-                                      ? "Edit Transfer Form (Amendments Required)"
-                                      : company.transferFormFilled
-                                        ? "Edit Transfer Form"
-                                        : "Fill Transfer Form"}
-                                  </Button>
-                                </>
                               )}
+                              <Button
+                                onClick={() => setShowTransferForm(company.id)}
+                                disabled={company.status !== "amend-required" && company.transferFormFilled}
+                                className="w-full bg-primary hover:bg-primary-600 text-white gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                              >
+                                <FileUp className="w-4 h-4" />
+                                {company.status === "amend-required"
+                                  ? "Edit Transfer Form (Amendments Required)"
+                                  : company.transferFormFilled
+                                    ? "Edit Transfer Form"
+                                    : "Fill Transfer Form"}
+                              </Button>
                             </div>
                           )}
+
+                          {/* Transfer Form Modal */}
+                          <Dialog open={showTransferForm === company.id} onOpenChange={(open) => !open && setShowTransferForm(null)}>
+                            <DialogContent className="max-w-6xl max-h-[95vh] overflow-y-auto w-[95vw] p-0">
+                              <DialogHeader className="sticky top-0 bg-background border-b p-6 z-10">
+                                <DialogTitle>Company Transfer Form</DialogTitle>
+                                <DialogDescription>
+                                  Fill out the comprehensive transfer form for {company.name}
+                                </DialogDescription>
+                              </DialogHeader>
+                              <div className="px-6 pb-6">
+                                <CompanyTransferForm
+                                  orderId={`order_${company.id}`}
+                                  companyId={company.id}
+                                  companyName={company.name}
+                                  companyNumber=""
+                                  incorporationDate=""
+                                  incorporationYear={new Date().getFullYear()}
+                                  onSuccess={() => {
+                                    toast.success("Transfer form submitted successfully!");
+                                    setShowTransferForm(null);
+                                  }}
+                                />
+                              </div>
+                            </DialogContent>
+                          </Dialog>
                         </div>
                       </div>
                           );
