@@ -2007,9 +2007,9 @@ Generated on: ${new Date().toLocaleDateString()}
                                   onSuccess={() => {
                                     toast.success("Transfer form submitted successfully and is now under review!");
                                     // Update company status to under-review and mark form as filled
-                                    updatePurchasedCompanyStatus(company.id, "under-review");
+                                    updatePurchasedCompanyStatus(company.id, "under-review", "Under Review - Transfer Form");
 
-                                    // Update local state to reflect the status change
+                                    // Update local state to reflect the status change immediately
                                     const updatedCompanies = purchasedCompanies.map(c =>
                                       c.id === company.id
                                         ? {
