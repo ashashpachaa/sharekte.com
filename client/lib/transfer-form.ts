@@ -36,49 +36,35 @@ export interface TransferFormData {
   companyId: string;
   companyName: string;
   companyNumber: string;
-  
-  // Seller Information
-  sellerName: string;
-  sellerEmail: string;
-  sellerPhone?: string;
-  sellerAddress: string;
-  sellerCity: string;
-  sellerState: string;
-  sellerPostalCode: string;
-  sellerCountry: string;
-  
-  // Buyer Information
-  buyerName: string;
-  buyerEmail: string;
-  buyerPhone?: string;
-  buyerAddress: string;
-  buyerCity: string;
-  buyerState: string;
-  buyerPostalCode: string;
-  buyerCountry: string;
-  
-  // Directors/Shareholders Information
-  directors: DirectorInfo[];
-  shareholders: ShareholderInfo[];
-  
-  // Company Details
-  companyType: string;
   incorporationDate: string;
-  businessDescription: string;
-  
-  // Transfer Details
-  transferReason: string;
-  transferDate: string;
-  salePrice?: number;
-  currency?: string;
-  
+  incorporationYear: number;
+
+  // Company Shares Information
+  totalShares: number;
+  totalShareCapital: number;
+  pricePerShare: number;
+
+  // Shareholders Information
+  shareholders: ShareholderInfo[];
+  numberOfShareholders: number;
+
+  // PSC Information
+  pscList: PSCInfo[];
+  numberOfPSCs: number;
+
+  // Company Update Section
+  changeCompanyName: boolean;
+  suggestedNames?: string[];
+  changeCompanyActivities: boolean;
+  companyActivities?: string[];
+
   // Form Status & Tracking
   status: FormStatus;
   createdAt: string;
   updatedAt: string;
   submittedAt?: string;
   completedAt?: string;
-  
+
   // Admin Data
   assignedTo?: string;
   assignedDate?: string;
@@ -86,14 +72,14 @@ export interface TransferFormData {
   reviewedDate?: string;
   amendmentsRequiredCount: number;
   lastAmendmentDate?: string;
-  
+
   // Attachments & Documents
   attachments: FormAttachment[];
-  
+
   // Comments & Notes
   comments: FormComment[];
   adminNotes?: string;
-  
+
   // Audit Trail
   statusHistory: FormStatusChange[];
 }
