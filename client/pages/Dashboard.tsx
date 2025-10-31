@@ -1999,9 +1999,9 @@ Generated on: ${new Date().toLocaleDateString()}
                                   orderId={`order_${company.id}`}
                                   companyId={company.id}
                                   companyName={company.name}
-                                  companyNumber=""
-                                  incorporationDate=""
-                                  incorporationYear={new Date().getFullYear()}
+                                  companyNumber={company.number || ""}
+                                  incorporationDate={company.incorporationDate || ""}
+                                  incorporationYear={parseInt(company.incorporationYear) || new Date().getFullYear()}
                                   onSuccess={() => {
                                     toast.success("Transfer form submitted successfully!");
                                     setShowTransferForm(null);
