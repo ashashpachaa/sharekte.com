@@ -325,9 +325,10 @@ function OrderCard({ order, onViewDetails }: OrderCardProps) {
 interface OrderDetailsModalProps {
   order: Order;
   onClose: () => void;
+  onOpenTransferForm?: () => void;
 }
 
-function OrderDetailsModal({ order, onClose }: OrderDetailsModalProps) {
+function OrderDetailsModal({ order, onClose, onOpenTransferForm }: OrderDetailsModalProps) {
   const daysUntilRenewal = Math.ceil(
     (new Date(order.renewalDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
   );
