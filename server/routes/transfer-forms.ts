@@ -61,19 +61,26 @@ export const createTransferForm: RequestHandler = async (req, res) => {
       companyId,
       companyName,
       companyNumber,
-      buyerName,
-      buyerEmail,
-      buyerPhone,
-      buyerAddress,
-      buyerCity,
-      buyerState,
-      buyerPostalCode,
-      buyerCountry,
+      incorporationDate,
+      incorporationYear,
+      totalShares,
+      totalShareCapital,
+      shareholders,
+      numberOfShareholders,
+      pscList,
+      numberOfPSCs,
+      changeCompanyName,
+      suggestedNames,
+      changeCompanyActivities,
+      companyActivities,
+      attachments,
     } = req.body;
 
-    if (!orderId || !companyId || !companyName || !buyerName || !buyerEmail) {
+    if (!orderId || !companyId || !companyName || !totalShares || !totalShareCapital) {
       return res.status(400).json({ error: "Missing required fields" });
     }
+
+    const pricePerShare = totalShareCapital / totalShares;
 
     const newForm: TransferFormData = {
       id: generateId(),
@@ -82,36 +89,30 @@ export const createTransferForm: RequestHandler = async (req, res) => {
       companyId,
       companyName,
       companyNumber: companyNumber || "",
-      sellerName: "",
-      sellerEmail: "",
-      sellerPhone: "",
-      sellerAddress: "",
-      sellerCity: "",
-      sellerState: "",
-      sellerPostalCode: "",
-      sellerCountry: "",
-      buyerName,
-      buyerEmail,
-      buyerPhone: buyerPhone || "",
-      buyerAddress: buyerAddress || "",
-      buyerCity: buyerCity || "",
-      buyerState: buyerState || "",
-      buyerPostalCode: buyerPostalCode || "",
-      buyerCountry: buyerCountry || "",
-      directors: [],
-      shareholders: [],
-      companyType: "",
-      incorporationDate: "",
-      businessDescription: "",
-      transferReason: "",
-      transferDate: getTodayString(),
-      salePrice: undefined,
-      currency: "USD",
+      incorporationDate: incorporationDate || "",
+      incorporationYear: incorporationYear || new Date().getFullYear(),
+
+      totalShares,
+      totalShareCapital,
+      pricePerShare,
+
+      shareholders: shareholders || [],
+      numberOfShareholders: numberOfShareholders || 0,
+
+      pscList: pscList || [],
+      numberOfPSCs: numberOfPSCs || 0,
+
+      changeCompanyName: changeCompanyName || false,
+      suggestedNames: suggestedNames || [],
+      changeCompanyActivities: changeCompanyActivities || false,
+      companyActivities: companyActivities || [],
+
       status: "under-review",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
+
       amendmentsRequiredCount: 0,
-      attachments: [],
+      attachments: attachments || [],
       comments: [],
       statusHistory: [
         {
@@ -126,6 +127,17 @@ export const createTransferForm: RequestHandler = async (req, res) => {
     };
 
     formsDb.push(newForm);
+
+    // Sync to Airtable if configured
+    (async () => {
+      try {
+        const { syncFormToAirtable } = await import("../utils/airtable-sync");
+        await syncFormToAirtable(newForm);
+      } catch (error) {
+        console.error("Error syncing form to Airtable:", error);
+      }
+    })();
+
     res.status(201).json(newForm);
   } catch (error) {
     console.error("Error creating form:", error);
