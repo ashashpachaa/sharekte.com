@@ -590,11 +590,9 @@ export const deleteOrder: RequestHandler = async (req, res) => {
 export const uploadOrderDocument: RequestHandler = async (req, res) => {
   try {
     const { orderId } = req.params;
-    const visibility = (req.body.visibility as "admin" | "user" | "both") || "both";
+    const { file, fileName, fileType, fileSize, visibility = "both" } = req.body;
 
-    // Get the file from FormData
-    const file = (req as any).file;
-    if (!file) {
+    if (!file || !fileName) {
       return res.status(400).json({ error: "No file provided" });
     }
 
@@ -613,15 +611,15 @@ export const uploadOrderDocument: RequestHandler = async (req, res) => {
       return res.status(404).json({ error: "Order not found" });
     }
 
-    // Create document object
+    // Create document object with base64 file data
     const document = {
       id: `doc_${Date.now()}`,
-      name: file.originalname || file.filename || "document",
-      type: file.mimetype || "application/octet-stream",
-      size: file.size || 0,
-      url: file.path ? `/uploads/${orderId}/${file.filename}` : `/api/orders/${orderId}/documents/${file.filename}`,
+      name: fileName,
+      type: fileType || "application/octet-stream",
+      size: fileSize || 0,
+      fileData: file, // Store base64 encoded file data
       uploadedDate: new Date().toISOString(),
-      visibility,
+      visibility: visibility as "admin" | "user" | "both",
     };
 
     // Add document to order
@@ -649,14 +647,20 @@ export const uploadOrderDocument: RequestHandler = async (req, res) => {
           },
           body: JSON.stringify({
             fields: {
-              documents: JSON.stringify(updatedOrder.documents),
+              documents: JSON.stringify(updatedOrder.documents.map((d) => ({
+                id: d.id,
+                name: d.name,
+                type: d.type,
+                size: d.size,
+                uploadedDate: d.uploadedDate,
+                visibility: d.visibility,
+              }))),
               updatedAt: new Date().toISOString(),
             },
           }),
         });
       } catch (airtableError) {
         console.error("Failed to sync document to Airtable:", airtableError);
-        // Don't fail the request if Airtable sync fails
       }
     }
 
