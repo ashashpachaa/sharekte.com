@@ -619,7 +619,9 @@ export const uploadOrderDocument: RequestHandler = async (req, res) => {
       size: fileSize || 0,
       fileData: file, // Store base64 encoded file data
       uploadedDate: new Date().toISOString(),
+      uploadedBy: "user",
       visibility: visibility as "admin" | "user" | "both",
+      version: 1,
     };
 
     // Add document to order
