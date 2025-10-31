@@ -375,6 +375,9 @@ export async function syncOrderToAirtable(order: Order, airtableRecordId?: strin
       ? `${AIRTABLE_API_URL}/${baseId}/${tableId}/${airtableRecordId}`
       : `${AIRTABLE_API_URL}/${baseId}/${tableId}`;
 
+    console.log(`[syncOrderToAirtable] Request URL: ${url}`);
+    console.log(`[syncOrderToAirtable] Fields to sync: ${Object.keys(airtableRecord.fields).join(", ")}`);
+
     const response = await fetch(url, {
       method: airtableRecordId ? "PATCH" : "POST",
       headers: {
@@ -388,16 +391,26 @@ export async function syncOrderToAirtable(order: Order, airtableRecordId?: strin
       const errorData = await response.json().catch(() => ({ error: response.statusText }));
       console.error(
         `[syncOrderToAirtable] FAILED - Status ${response.status}:`,
-        JSON.stringify(errorData),
-        "Order:",
-        order.orderId,
-        "Table:",
-        tableId,
-        "Fields sent:",
-        Object.keys(airtableRecord.fields),
-        "Request Body:",
-        JSON.stringify(airtableRecord)
+        "Error:",
+        JSON.stringify(errorData)
       );
+      console.error(
+        `[syncOrderToAirtable] Details - Order: ${order.orderId}, Table: ${tableId}`
+      );
+      console.error(
+        `[syncOrderToAirtable] Fields attempted: ${Object.keys(airtableRecord.fields).join(", ")}`
+      );
+
+      // If it's an invalid field error, log helpful message
+      if (errorData?.error?.type === "INVALID_REQUEST_UNKNOWN") {
+        console.error(
+          `[syncOrderToAirtable] ⚠️ HINT: One or more field names don't exist in Airtable table ${tableId}`
+        );
+        console.error(
+          `[syncOrderToAirtable] Please verify these fields exist in your Airtable Orders table`
+        );
+      }
+
       return null;
     }
 
