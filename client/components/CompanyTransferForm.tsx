@@ -603,15 +603,21 @@ export function CompanyTransferForm({
 
     setLoading(true);
     try {
+      // Set status to "under-review" when submitting
+      const dataToSubmit = {
+        ...formData,
+        status: "under-review" as const
+      };
+
       const result = isEditing && initialForm?.id
-        ? await updateTransferForm(initialForm.id, formData)
-        : await createTransferForm(formData as Omit<TransferFormData, "id" | "createdAt" | "updatedAt">);
+        ? await updateTransferForm(initialForm.id, dataToSubmit)
+        : await createTransferForm(dataToSubmit as Omit<TransferFormData, "id" | "createdAt" | "updatedAt">);
 
       if (result) {
         setSubmittedForm(result);
         setShowSuccessDialog(true);
         if (onSuccess) onSuccess(result);
-        toast.success(isEditing ? "Form updated successfully" : "Form submitted successfully");
+        toast.success(isEditing ? "Form updated successfully and is now under review" : "Form submitted successfully and is now under review");
       } else {
         toast.error("Failed to submit form");
       }
