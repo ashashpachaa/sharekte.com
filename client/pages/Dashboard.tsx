@@ -16,7 +16,6 @@ import { useSearch } from "@/hooks/use-search";
 import { getPurchasedCompanies, getInvoices, savePurchasedCompany, updatePurchasedCompanyStatus, addInvoice, renewCompany, updateCompanyRenewalStatus, type PurchasedCompanyData } from "@/lib/user-data";
 import { useCurrency } from "@/lib/currency-context";
 import { MyOrders } from "@/components/MyOrders";
-import { CompanyTransferForm } from "@/components/CompanyTransferForm";
 import {
   BarChart3,
   Plus,
@@ -1958,185 +1957,19 @@ Generated on: ${new Date().toLocaleDateString()}
                           {company.status !== "completed" && (
                             <div>
                               {showTransferForm === company.id ? (
-                                <div className="space-y-4 p-6 bg-muted/30 rounded-lg border border-border/40">
-                                  <div className="flex items-start justify-between">
-                                    <h4 className="font-semibold text-foreground">
-                                      Transfer Form
-                                    </h4>
-                                    {company.status !== "amend-required" && company.transferFormFilled && (
-                                      <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-3 text-sm">
-                                        <p className="text-amber-700 font-medium">Form Locked</p>
-                                        <p className="text-amber-600 text-xs mt-1">
-                                          Admin is reviewing your form. You can only edit when admin marks it as "Amend Required".
-                                        </p>
-                                      </div>
-                                    )}
-                                  </div>
-
-                                  <div className="grid md:grid-cols-2 gap-4">
-                                    <div>
-                                      <label className="block text-sm font-medium text-foreground mb-2">
-                                        Director Name *
-                                      </label>
-                                      <input
-                                        type="text"
-                                        value={formData.directorName}
-                                        onChange={(e) =>
-                                          setFormData({
-                                            ...formData,
-                                            directorName: e.target.value,
-                                          })
-                                        }
-                                        disabled={company.status !== "amend-required" && company.transferFormFilled}
-                                        className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-muted"
-                                      />
-                                    </div>
-                                    <div>
-                                      <label className="block text-sm font-medium text-foreground mb-2">
-                                        Director Email *
-                                      </label>
-                                      <input
-                                        type="email"
-                                        value={formData.directorEmail}
-                                        onChange={(e) =>
-                                          setFormData({
-                                            ...formData,
-                                            directorEmail: e.target.value,
-                                          })
-                                        }
-                                        disabled={company.status !== "amend-required" && company.transferFormFilled}
-                                        className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-muted"
-                                      />
-                                    </div>
-                                  </div>
-
-                                  <div className="grid md:grid-cols-2 gap-4">
-                                    <div>
-                                      <label className="block text-sm font-medium text-foreground mb-2">
-                                        Shareholder Name *
-                                      </label>
-                                      <input
-                                        type="text"
-                                        value={formData.shareholderName}
-                                        onChange={(e) =>
-                                          setFormData({
-                                            ...formData,
-                                            shareholderName: e.target.value,
-                                          })
-                                        }
-                                        disabled={company.status !== "amend-required" && company.transferFormFilled}
-                                        className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-muted"
-                                      />
-                                    </div>
-                                    <div>
-                                      <label className="block text-sm font-medium text-foreground mb-2">
-                                        Shareholder Email *
-                                      </label>
-                                      <input
-                                        type="email"
-                                        value={formData.shareholderEmail}
-                                        onChange={(e) =>
-                                          setFormData({
-                                            ...formData,
-                                            shareholderEmail: e.target.value,
-                                          })
-                                        }
-                                        disabled={company.status !== "amend-required" && company.transferFormFilled}
-                                        className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-muted"
-                                      />
-                                    </div>
-                                  </div>
-
-                                  <div>
-                                    <label className="block text-sm font-medium text-foreground mb-2">
-                                      Company Address
-                                    </label>
-                                    <input
-                                      type="text"
-                                      value={formData.companyAddress}
-                                      onChange={(e) =>
-                                        setFormData({
-                                          ...formData,
-                                          companyAddress: e.target.value,
-                                        })
-                                      }
-                                      disabled={company.status !== "amend-required" && company.transferFormFilled}
-                                      className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-muted"
-                                    />
-                                  </div>
-
-                                  <div>
-                                    <label className="block text-sm font-medium text-foreground mb-2">
-                                      Attach Documents
-                                    </label>
-                                    <input
-                                      type="file"
-                                      multiple
-                                      onChange={handleAttachmentChange}
-                                      disabled={company.status !== "amend-required" && company.transferFormFilled}
-                                      className="block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                                      accept="*/*"
-                                    />
-                                    <p className="text-xs text-muted-foreground mt-1">
-                                      Upload multiple files of any type
-                                    </p>
-                                  </div>
-
-                                  {formData.attachments.length > 0 && (
-                                    <div className="space-y-2">
-                                      <p className="text-sm font-medium text-foreground">
-                                        Selected Files ({formData.attachments.length})
-                                      </p>
-                                      <div className="space-y-2">
-                                        {formData.attachments.map((attachment) => (
-                                          <div
-                                            key={attachment.id}
-                                            className="flex items-center justify-between p-3 bg-muted/30 rounded-lg border border-border/40"
-                                          >
-                                            <div className="flex items-center gap-2 flex-1 min-w-0">
-                                              <FileText className="w-4 h-4 text-primary flex-shrink-0" />
-                                              <div className="min-w-0">
-                                                <p className="text-sm font-medium text-foreground truncate">
-                                                  {attachment.name}
-                                                </p>
-                                                <p className="text-xs text-muted-foreground">
-                                                  {(attachment.size / 1024).toFixed(2)} KB
-                                                </p>
-                                              </div>
-                                            </div>
-                                            <Button
-                                              variant="ghost"
-                                              size="sm"
-                                              onClick={() => removeAttachment(attachment.id)}
-                                              disabled={company.status !== "amend-required" && company.transferFormFilled}
-                                              className="text-destructive hover:bg-destructive/10 disabled:opacity-50 disabled:cursor-not-allowed"
-                                            >
-                                              <X className="w-4 h-4" />
-                                            </Button>
-                                          </div>
-                                        ))}
-                                      </div>
-                                    </div>
-                                  )}
-
-                                  <div className="flex gap-3">
-                                    <Button
-                                      onClick={() =>
-                                        handleSubmitTransferForm(company.id)
-                                      }
-                                      disabled={company.status !== "amend-required" && company.transferFormFilled}
-                                      className="bg-primary hover:bg-primary-600 text-white gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                                    >
-                                      <FileUp className="w-4 h-4" />
-                                      {company.status !== "amend-required" && company.transferFormFilled ? "Form Under Review" : "Submit Form"}
-                                    </Button>
-                                    <Button
-                                      variant="outline"
-                                      onClick={() => setShowTransferForm(null)}
-                                    >
-                                      Cancel
-                                    </Button>
-                                  </div>
+                                <div className="border border-border/40 rounded-lg overflow-hidden">
+                                  <CompanyTransferForm
+                                    orderId={`order_${company.id}`}
+                                    companyId={company.id}
+                                    companyName={company.name}
+                                    companyNumber=""
+                                    incorporationDate=""
+                                    incorporationYear={new Date().getFullYear()}
+                                    onSuccess={() => {
+                                      toast.success("Transfer form submitted successfully!");
+                                      setShowTransferForm(null);
+                                    }}
+                                  />
                                 </div>
                               ) : (
                                 <>
