@@ -317,16 +317,59 @@ export async function syncOrderToAirtable(order: Order, airtableRecordId?: strin
     // Send order data to Airtable using the exact field names from the user's Orders table
     const airtableRecord = {
       fields: {
+        // Core Order Fields
         "Order ID": order.orderId,
         "Order date": order.purchaseDate || new Date().toISOString().split("T")[0],
+
+        // Customer Info
+        "Customer name": order.customerName,
+        "Customer Email": order.customerEmail,
+        "Customer Mobile number": order.customerPhone || "",
+        "Billing Address": order.billingAddress || "",
         "Country": order.country,
+
+        // Company Info
+        "Company ID": order.companyId,
         "Company name": order.companyName,
         "Company numbers": order.companyNumber,
+
+        // Payment Info
+        "Payment Method": order.paymentMethod,
+        "Payment Status": order.paymentStatus,
+        "Transaction ID": order.transactionId || "",
+        "Amount": order.amount,
+        "Currency": order.currency,
+        "Payment Date": order.paymentDate || "",
+
+        // Order Status
         "Statues": order.status,
-        "Customer name": order.customerName,
-        "Customer Mobile number": order.customerPhone || "",
-        "price": order.amount,
+        "Status Changed Date": order.statusChangedDate || new Date().toISOString().split("T")[0],
+        "Status History": JSON.stringify(order.statusHistory || []),
+
+        // Renewal
+        "Renewal Date": order.renewalDate || "",
+        "Renewal Fees": order.renewalFees || 0,
+
+        // Refund Info
+        "Refund Status": order.refundStatus,
+        "Refund Request": order.refundRequest ? JSON.stringify(order.refundRequest) : "",
+
+        // Documents & Transfer Form
         "Customer Document's": JSON.stringify(order.documents || []),
+        "Transfer Form URL": order.transferFormUrl || "",
+
+        // Admin & Internal Notes
+        "Admin Notes": order.adminNotes || "",
+        "Internal Notes": order.internalNotes || "",
+
+        // Metadata
+        "Created At": order.createdAt || new Date().toISOString().split("T")[0],
+        "Updated At": order.updatedAt || new Date().toISOString().split("T")[0],
+        "Created By": order.createdBy || "website",
+        "Updated By": order.updatedBy || "website",
+
+        // Additional Fields if needed
+        "Incorporate date": order.purchaseDate || new Date().toISOString().split("T")[0],
       },
     };
 
