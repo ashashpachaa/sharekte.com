@@ -139,7 +139,7 @@ export function DocumentManagement({ order, onDocumentsUpdated, isAdmin = false 
           <h3 className="font-semibold text-foreground mb-4">Upload Documents</h3>
           <div className="bg-muted/30 rounded-lg p-4 space-y-4">
             <div>
-              <label className="text-sm font-medium text-foreground mb-2 block">Select File</label>
+              <label className="text-sm font-medium text-foreground mb-2 block">Select Files</label>
               <div className="relative">
                 <input
                   type="file"
@@ -148,6 +148,7 @@ export function DocumentManagement({ order, onDocumentsUpdated, isAdmin = false 
                   className="hidden"
                   id="file-input"
                   accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.zip"
+                  multiple
                 />
                 <label
                   htmlFor="file-input"
@@ -156,13 +157,46 @@ export function DocumentManagement({ order, onDocumentsUpdated, isAdmin = false 
                   <Upload className="w-5 h-5 text-muted-foreground" />
                   <div className="text-center">
                     <p className="text-sm font-medium text-foreground">
-                      {selectedFile ? selectedFile.name : "Click to select a file"}
+                      Click to select files
                     </p>
-                    <p className="text-xs text-muted-foreground">Max 50MB</p>
+                    <p className="text-xs text-muted-foreground">Max 5GB per file</p>
                   </div>
                 </label>
               </div>
             </div>
+
+            {selectedFiles.length > 0 && (
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-foreground">Selected Files ({selectedFiles.length})</p>
+                <div className="max-h-48 overflow-y-auto space-y-2">
+                  {selectedFiles.map((file, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-2 bg-background rounded border border-border/40"
+                    >
+                      <div className="flex items-center gap-2 flex-1 min-w-0">
+                        <FileIcon className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm text-foreground truncate">{file.name}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {(file.size / (1024 * 1024)).toFixed(2)} MB
+                          </p>
+                        </div>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => removeSelectedFile(index)}
+                        disabled={uploading}
+                        className="flex-shrink-0"
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <div>
               <label className="text-sm font-medium text-foreground mb-2 block">Visibility</label>
@@ -199,10 +233,10 @@ export function DocumentManagement({ order, onDocumentsUpdated, isAdmin = false 
 
             <Button
               onClick={handleUpload}
-              disabled={!selectedFile || uploading}
+              disabled={selectedFiles.length === 0 || uploading}
               className="w-full bg-primary hover:bg-primary-600 text-white"
             >
-              {uploading ? "Uploading..." : "Upload Document"}
+              {uploading ? "Uploading..." : `Upload ${selectedFiles.length} Document(s)`}
             </Button>
           </div>
         </div>
