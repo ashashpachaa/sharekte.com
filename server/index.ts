@@ -14,6 +14,8 @@ import {
   approveRefund,
   rejectRefund,
   deleteOrder,
+  uploadOrderDocument,
+  deleteOrderDocument,
 } from "./routes/orders";
 import { sendEmailNotification, getNotifications } from "./routes/notifications";
 import {
