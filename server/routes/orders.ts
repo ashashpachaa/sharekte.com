@@ -264,18 +264,21 @@ export const createOrder: RequestHandler = async (req, res) => {
       updatedAt: orderData.updatedAt || now,
     };
 
+    console.log("[createOrder] Creating order:", order.orderId, "- Amount:", order.amount, order.currency);
+
     // Try to sync to Airtable
     const airtableId = await syncOrderToAirtable(order);
 
     // If Airtable sync succeeded, add the Airtable ID
     if (airtableId) {
       order.airtableId = airtableId;
+      console.log("[createOrder] ✓ Order synced to Airtable with ID:", airtableId);
       res.status(201).json(order);
       return;
     }
 
     // Fallback to in-memory storage (if Airtable is not configured or failed)
-    console.log("Saving order to in-memory storage");
+    console.log("[createOrder] Airtable sync failed, saving order to in-memory storage");
     inMemoryOrders.push(order);
     res.status(201).json(order);
   } catch (error) {
