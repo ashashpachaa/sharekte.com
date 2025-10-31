@@ -583,3 +583,151 @@ export const deleteOrder: RequestHandler = async (req, res) => {
     res.status(500).json({ error: "Failed to delete order" });
   }
 };
+
+/**
+ * Upload document to order
+ */
+export const uploadOrderDocument: RequestHandler = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const visibility = (req.body.visibility as "admin" | "user" | "both") || "both";
+
+    // Get the file from FormData
+    const file = (req as any).file;
+    if (!file) {
+      return res.status(400).json({ error: "No file provided" });
+    }
+
+    // Find the order
+    let allOrders = getDemoOrders();
+    if (AIRTABLE_API_TOKEN) {
+      const airtableOrders = await fetchOrdersFromAirtable();
+      if (airtableOrders.length > 0) {
+        allOrders = [...airtableOrders, ...inMemoryOrders];
+      }
+    }
+    allOrders = [...allOrders, ...inMemoryOrders];
+
+    const currentOrder = allOrders.find((o) => o.id === orderId || o.orderId === orderId);
+    if (!currentOrder) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+
+    // Create document object
+    const document = {
+      id: `doc_${Date.now()}`,
+      name: file.originalname || file.filename || "document",
+      type: file.mimetype || "application/octet-stream",
+      size: file.size || 0,
+      url: file.path ? `/uploads/${orderId}/${file.filename}` : `/api/orders/${orderId}/documents/${file.filename}`,
+      uploadedDate: new Date().toISOString(),
+      visibility,
+    };
+
+    // Add document to order
+    const updatedOrder: Order = {
+      ...currentOrder,
+      documents: [...(currentOrder.documents || []), document],
+      updatedAt: new Date().toISOString(),
+    };
+
+    // Update in-memory storage
+    const inMemIndex = inMemoryOrders.findIndex((o) => o.id === orderId || o.orderId === orderId);
+    if (inMemIndex >= 0) {
+      inMemoryOrders[inMemIndex] = updatedOrder;
+    }
+
+    // Sync to Airtable if configured and record exists
+    if (currentOrder.airtableId && AIRTABLE_API_TOKEN) {
+      try {
+        const url = `${AIRTABLE_API_URL}/${AIRTABLE_BASE_ID}/${AIRTABLE_ORDERS_TABLE}/${currentOrder.airtableId}`;
+        await fetch(url, {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fields: {
+              documents: JSON.stringify(updatedOrder.documents),
+              updatedAt: new Date().toISOString(),
+            },
+          }),
+        });
+      } catch (airtableError) {
+        console.error("Failed to sync document to Airtable:", airtableError);
+        // Don't fail the request if Airtable sync fails
+      }
+    }
+
+    res.json(updatedOrder);
+  } catch (error) {
+    console.error("Failed to upload document:", error);
+    res.status(500).json({ error: "Failed to upload document" });
+  }
+};
+
+/**
+ * Delete order document
+ */
+export const deleteOrderDocument: RequestHandler = async (req, res) => {
+  try {
+    const { orderId, documentId } = req.params;
+
+    // Find the order
+    let allOrders = getDemoOrders();
+    if (AIRTABLE_API_TOKEN) {
+      const airtableOrders = await fetchOrdersFromAirtable();
+      if (airtableOrders.length > 0) {
+        allOrders = [...airtableOrders, ...inMemoryOrders];
+      }
+    }
+    allOrders = [...allOrders, ...inMemoryOrders];
+
+    const currentOrder = allOrders.find((o) => o.id === orderId || o.orderId === orderId);
+    if (!currentOrder) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+
+    // Remove document from order
+    const updatedOrder: Order = {
+      ...currentOrder,
+      documents: (currentOrder.documents || []).filter((d) => d.id !== documentId),
+      updatedAt: new Date().toISOString(),
+    };
+
+    // Update in-memory storage
+    const inMemIndex = inMemoryOrders.findIndex((o) => o.id === orderId || o.orderId === orderId);
+    if (inMemIndex >= 0) {
+      inMemoryOrders[inMemIndex] = updatedOrder;
+    }
+
+    // Sync to Airtable if configured and record exists
+    if (currentOrder.airtableId && AIRTABLE_API_TOKEN) {
+      try {
+        const url = `${AIRTABLE_API_URL}/${AIRTABLE_BASE_ID}/${AIRTABLE_ORDERS_TABLE}/${currentOrder.airtableId}`;
+        await fetch(url, {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fields: {
+              documents: JSON.stringify(updatedOrder.documents),
+              updatedAt: new Date().toISOString(),
+            },
+          }),
+        });
+      } catch (airtableError) {
+        console.error("Failed to sync document deletion to Airtable:", airtableError);
+        // Don't fail the request if Airtable sync fails
+      }
+    }
+
+    res.json(updatedOrder);
+  } catch (error) {
+    console.error("Failed to delete document:", error);
+    res.status(500).json({ error: "Failed to delete document" });
+  }
+};
