@@ -180,7 +180,19 @@ function useToast() {
 
   return {
     ...state,
-    toast,
+    toast: Object.assign(toast, {
+      success: (description: string, title?: string) =>
+        toast({
+          title: title || "Success",
+          description,
+        }),
+      error: (description: string, title?: string) =>
+        toast({
+          title: title || "Error",
+          description,
+          variant: "destructive" as const,
+        }),
+    }),
     dismiss: (toastId?: string) => dispatch({ type: "DISMISS_TOAST", toastId }),
   };
 }
