@@ -941,6 +941,9 @@ Generated on: ${new Date().toLocaleDateString()}
   const ownedCompanies = purchasedCompanies.map((company) => ({
     id: company.id,
     name: company.name,
+    number: company.number,
+    incorporationDate: company.incorporationDate,
+    incorporationYear: company.incorporationYear,
     revenue: "$0", // Calculate or fetch from company data if available
     monthlyRevenue: "$0",
     growth: "+0%",
