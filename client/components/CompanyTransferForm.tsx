@@ -669,14 +669,22 @@ export function CompanyTransferForm({
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label>Select Shareholder *</Label>
-                <Select value={psc.shareholderId} onValueChange={(value) => {
+                <Select value={psc.shareholderId || ""} onValueChange={(value) => {
                   const selected = (formData.shareholders || []).find(s => s.id === value);
-                  updatePSC(index, "shareholderId", value);
-                  updatePSC(index, "shareholderName", selected?.name || "");
-                  updatePSC(index, "nationality", selected?.nationality || "");
-                  updatePSC(index, "address", selected?.address || "");
-                  updatePSC(index, "city", selected?.city || "");
-                  updatePSC(index, "country", selected?.country || "");
+                  const pscList = [...(formData.pscList || [])];
+                  pscList[index] = {
+                    ...pscList[index],
+                    shareholderId: value,
+                    shareholderName: selected?.name || "",
+                    nationality: selected?.nationality || "",
+                    address: selected?.address || "",
+                    city: selected?.city || "",
+                    country: selected?.country || "",
+                  };
+                  setFormData((prev) => ({
+                    ...prev,
+                    pscList,
+                  }));
                 }}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select a shareholder" />
