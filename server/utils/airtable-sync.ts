@@ -559,7 +559,7 @@ export async function updateOrderStatusInAirtable(
       },
       body: JSON.stringify({
         fields: {
-          "Statues": newStatus,
+          "Status": newStatus,
           "Status Changed Date": updatedAt || new Date().toISOString().split("T")[0],
           "Updated At": updatedAt || new Date().toISOString().split("T")[0],
         },
