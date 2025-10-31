@@ -27,10 +27,11 @@ export interface OrderDocument {
   type: string;
   size: number;
   uploadedDate: string;
-  uploadedBy: string;
+  uploadedBy?: string;
   url?: string;
+  fileData?: string; // base64 encoded file data
   visibility: "admin" | "user" | "both";
-  version: number;
+  version?: number;
 }
 
 export interface RefundRequest {
