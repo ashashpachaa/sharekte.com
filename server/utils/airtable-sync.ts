@@ -440,7 +440,13 @@ export async function fetchOrdersFromAirtable(): Promise<Order[]> {
         renewalFees: fields["Renewal Fees"] ? parseFloat(String(fields["Renewal Fees"])) : 0,
         refundStatus: fields["Refund Status"] || "none",
         refundRequest: undefined,
-        documents: fields["Customer Document's"] ? JSON.parse(String(fields["Customer Document's"])) : [],
+        documents: (() => {
+          try {
+            return fields["Customer Document's"] ? JSON.parse(String(fields["Customer Document's"])) : [];
+          } catch {
+            return [];
+          }
+        })(),
         transferFormUrl: "",
         adminNotes: fields["Admin Notes"] || "",
         internalNotes: "",
