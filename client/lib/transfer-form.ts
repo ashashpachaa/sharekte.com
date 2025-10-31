@@ -116,16 +116,24 @@ export interface DirectorInfo {
 export interface ShareholderInfo {
   id: string;
   name: string;
-  shareholderType: "individual" | "corporate";
-  nationality?: string;
+  nationality: string;
   address: string;
   city: string;
-  state: string;
-  postalCode: string;
   country: string;
-  sharesPercentage: number;
-  email?: string;
-  phone?: string;
+  shareholderPercentage: number;
+  shares: number;
+  amount: number;
+}
+
+export interface PSCInfo {
+  id: string;
+  shareholderId: string;
+  shareholderName: string;
+  nationality: string;
+  address: string;
+  city: string;
+  country: string;
+  levelOfControl: string[];
 }
 
 export interface FormStatusChange {
