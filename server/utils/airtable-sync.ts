@@ -304,7 +304,7 @@ export function getAirtableConfig(): {
 export async function syncOrderToAirtable(order: Order, airtableRecordId?: string): Promise<string | null> {
   try {
     const baseId = process.env.AIRTABLE_BASE_ID || "app0PK34gyJDizR3Q";
-    const tableId = process.env.AIRTABLE_TABLE_ORDERS || "tblXvZ0kjl7p7h9Jq";
+    const tableId = process.env.AIRTABLE_TABLE_ORDERS || "tbl01DTvrGtsAaPfZ";
     const token = process.env.AIRTABLE_API_TOKEN;
 
     if (!token) {
