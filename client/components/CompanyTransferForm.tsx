@@ -806,26 +806,37 @@ export function CompanyTransferForm({
           {formData.changeCompanyActivities && (
             <div className="space-y-2">
               <Label>Select Activities (Max 4) *</Label>
-              <Select multiple value={formData.companyActivities} onValueChange={(value) => {
-                if ((formData.companyActivities || []).length < 4 || (formData.companyActivities || []).includes(value)) {
-                  const activities = (formData.companyActivities || []).includes(value)
-                    ? (formData.companyActivities || []).filter(a => a !== value)
-                    : [...(formData.companyActivities || []), value];
-                  setFormData({ ...formData, companyActivities: activities });
-                }
-              }}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select activities" />
-                </SelectTrigger>
-                <SelectContent>
-                  {COMPANY_ACTIVITIES.slice(0, 10).map((activity) => (
-                    <SelectItem key={activity.code} value={activity.code}>
-                      {activity.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.companyActivities && <p className="text-red-600 text-sm">{errors.companyActivities}</p>}
+              <div className="space-y-2 border border-border/40 rounded-lg p-4 bg-gray-50">
+                {COMPANY_ACTIVITIES.slice(0, 10).map((activity) => (
+                  <label key={activity.code} className="flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={(formData.companyActivities || []).includes(activity.code)}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          if ((formData.companyActivities || []).length < 4) {
+                            setFormData({
+                              ...formData,
+                              companyActivities: [...(formData.companyActivities || []), activity.code]
+                            });
+                          } else {
+                            toast.error("Maximum 4 activities allowed");
+                          }
+                        } else {
+                          setFormData({
+                            ...formData,
+                            companyActivities: (formData.companyActivities || []).filter(a => a !== activity.code)
+                          });
+                        }
+                      }}
+                      className="mr-2"
+                      disabled={(formData.companyActivities || []).length >= 4 && !(formData.companyActivities || []).includes(activity.code)}
+                    />
+                    <span className="text-sm">{activity.label}</span>
+                  </label>
+                ))}
+              </div>
+              {errors.companyActivities && <p className="text-red-600 text-sm mt-2">{errors.companyActivities}</p>}
             </div>
           )}
         </CardContent>
