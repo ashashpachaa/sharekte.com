@@ -245,15 +245,36 @@ export async function uploadOrderDocument(
   file: File,
   visibility: "admin" | "user" | "both"
 ): Promise<Order> {
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("visibility", visibility);
+  // Convert file to base64 for JSON transmission (works better with serverless)
+  const fileData = await new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string;
+      resolve(result);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
 
   const response = await fetch(`/api/orders/${orderId}/documents`, {
     method: "POST",
-    body: formData,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      file: fileData,
+      fileName: file.name,
+      fileType: file.type,
+      fileSize: file.size,
+      visibility,
+    }),
   });
-  if (!response.ok) throw new Error("Failed to upload document");
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ error: "Unknown error" }));
+    throw new Error(errorData.error || "Failed to upload document");
+  }
+
   return response.json();
 }
 
