@@ -457,52 +457,73 @@ export async function fetchOrdersFromAirtable(): Promise<Order[]> {
     const orders: Order[] = data.records.map((record: any) => {
       const fields = record.fields;
       const now = new Date().toISOString();
+
+      // Helper to safely parse JSON
+      const parseJSON = (value: any, defaultValue: any = null) => {
+        if (!value) return defaultValue;
+        try {
+          return JSON.parse(String(value));
+        } catch {
+          return defaultValue;
+        }
+      };
+
       return {
         id: record.id,
+
+        // Core Order Fields
         orderId: fields["Order ID"] || "",
+        purchaseDate: fields["Order date"] || now,
+
+        // Customer Info
         customerName: fields["Customer name"] || "",
         customerEmail: fields["Customer Email"] || "",
         customerPhone: fields["Customer Mobile number"] || "",
         billingAddress: fields["Billing Address"] || "",
         country: fields["Country"] || "",
+
+        // Company Info
         companyId: fields["Company ID"] || "",
         companyName: fields["Company name"] || "",
         companyNumber: fields["Company numbers"] || "",
+
+        // Payment Info
         paymentMethod: fields["Payment Method"] || "credit_card",
         paymentStatus: fields["Payment Status"] || "pending",
         transactionId: fields["Transaction ID"] || "",
-        amount: fields["price"] ? parseFloat(String(fields["price"])) : 0,
+        amount: fields["Amount"] ? parseFloat(String(fields["Amount"])) : 0,
         currency: fields["Currency"] || "USD",
-        paymentDate: fields["Order date"] || now,
+        paymentDate: fields["Payment Date"] || now,
+
+        // Order Status
         status: fields["Statues"] || "pending-payment",
         statusChangedDate: fields["Status Changed Date"] || new Date().toISOString().split("T")[0],
-        statusHistory: (() => {
-          try {
-            return fields["Status History"] ? JSON.parse(String(fields["Status History"])) : [];
-          } catch {
-            return [];
-          }
-        })(),
-        purchaseDate: fields["Order date"] || now,
-        lastUpdateDate: fields["Last Update Date"] || now,
+        statusHistory: parseJSON(fields["Status History"], []),
+
+        // Dates
+        lastUpdateDate: fields["Updated At"] || now,
+
+        // Renewal
         renewalDate: fields["Renewal Date"] || "",
         renewalFees: fields["Renewal Fees"] ? parseFloat(String(fields["Renewal Fees"])) : 0,
+
+        // Refund Info
         refundStatus: fields["Refund Status"] || "none",
-        refundRequest: undefined,
-        documents: (() => {
-          try {
-            return fields["Customer Document's"] ? JSON.parse(String(fields["Customer Document's"])) : [];
-          } catch {
-            return [];
-          }
-        })(),
-        transferFormUrl: "",
+        refundRequest: parseJSON(fields["Refund Request"]),
+
+        // Documents & Transfer Form
+        documents: parseJSON(fields["Customer Document's"], []),
+        transferFormUrl: fields["Transfer Form URL"] || "",
+
+        // Admin & Internal Notes
         adminNotes: fields["Admin Notes"] || "",
-        internalNotes: "",
+        internalNotes: fields["Internal Notes"] || "",
+
+        // Metadata
         createdAt: fields["Created At"] || now,
         updatedAt: fields["Updated At"] || now,
-        createdBy: "airtable",
-        updatedBy: "airtable",
+        createdBy: fields["Created By"] || "airtable",
+        updatedBy: fields["Updated By"] || "airtable",
         airtableId: record.id,
       } as Order;
     });
