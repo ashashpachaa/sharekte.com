@@ -343,6 +343,7 @@ export function CompanyTransferForm({
   const [uploadingFile, setUploadingFile] = useState(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [submittedForm, setSubmittedForm] = useState<TransferFormData | null>(null);
+  const [activitiesSearchTerm, setActivitiesSearchTerm] = useState("");
 
   const [formData, setFormData] = useState<Partial<TransferFormData>>(
     initialForm || {
