@@ -57,45 +57,41 @@ export async function syncFormToAirtable(form: TransferFormData): Promise<boolea
         "Company ID": form.companyId,
         "Company Name": form.companyName,
         "Company Number": form.companyNumber,
-        "Status": form.status,
-        
-        // Seller Info
-        "Seller Name": form.sellerName,
-        "Seller Email": form.sellerEmail,
-        "Seller Phone": form.sellerPhone,
-        "Seller Address": form.sellerAddress,
-        "Seller City": form.sellerCity,
-        "Seller Country": form.sellerCountry,
-        
-        // Buyer Info
-        "Buyer Name": form.buyerName,
-        "Buyer Email": form.buyerEmail,
-        "Buyer Phone": form.buyerPhone,
-        "Buyer Address": form.buyerAddress,
-        "Buyer City": form.buyerCity,
-        "Buyer Country": form.buyerCountry,
-        
-        // Company Details
-        "Company Type": form.companyType,
         "Incorporation Date": form.incorporationDate,
-        "Business Description": form.businessDescription,
-        "Transfer Reason": form.transferReason,
-        "Transfer Date": form.transferDate,
-        "Sale Price": form.salePrice,
-        "Currency": form.currency,
-        
+        "Incorporation Year": form.incorporationYear,
+        "Status": form.status,
+
+        // Company Shares Information
+        "Total Shares": form.totalShares,
+        "Total Share Capital": form.totalShareCapital,
+        "Price per Share": form.pricePerShare,
+
+        // Shareholders Info
+        "Number of Shareholders": form.numberOfShareholders,
+        "Shareholders": JSON.stringify(form.shareholders),
+
+        // PSC Info
+        "Number of PSCs": form.numberOfPSCs,
+        "PSC List": JSON.stringify(form.pscList),
+
+        // Company Updates
+        "Change Company Name": form.changeCompanyName ? "Yes" : "No",
+        "Suggested Names": form.suggestedNames?.join("; ") || "",
+        "Change Company Activities": form.changeCompanyActivities ? "Yes" : "No",
+        "Company Activities": form.companyActivities?.join("; ") || "",
+
         // Status Info
         "Created At": form.createdAt,
         "Updated At": form.updatedAt,
         "Submitted At": form.submittedAt,
         "Completed At": form.completedAt,
-        
+
         // Admin Info
         "Assigned To": form.assignedTo,
         "Reviewed By": form.reviewedBy,
         "Amendments Required Count": form.amendmentsRequiredCount,
         "Admin Notes": form.adminNotes,
-        
+
         // Attachments
         "Attachment Count": form.attachments.length,
         "Attachments": form.attachments
