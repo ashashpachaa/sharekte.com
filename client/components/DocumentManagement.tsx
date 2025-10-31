@@ -22,7 +22,7 @@ export function DocumentManagement({ order, onDocumentsUpdated, isAdmin = false 
     if (file) {
       // Validate file size (max 50MB)
       if (file.size > 50 * 1024 * 1024) {
-        toast({ title: "File too large", description: "File size must be less than 50MB", variant: "destructive" });
+        toast.error("File size must be less than 50MB");
         return;
       }
       setSelectedFile(file);
@@ -31,7 +31,7 @@ export function DocumentManagement({ order, onDocumentsUpdated, isAdmin = false 
 
   const handleUpload = async () => {
     if (!selectedFile) {
-      toast({ title: "No file selected", description: "Please select a file", variant: "destructive" });
+      toast.error("Please select a file");
       return;
     }
 
@@ -41,10 +41,10 @@ export function DocumentManagement({ order, onDocumentsUpdated, isAdmin = false 
       onDocumentsUpdated(updatedOrder);
       setSelectedFile(null);
       setVisibility("both");
-      toast({ title: "Success", description: "Document uploaded successfully" });
+      toast.success("Document uploaded successfully");
     } catch (error) {
       console.error("Failed to upload document:", error);
-      toast({ title: "Upload failed", description: "Failed to upload document", variant: "destructive" });
+      toast.error("Failed to upload document");
     } finally {
       setUploading(false);
     }
@@ -56,10 +56,10 @@ export function DocumentManagement({ order, onDocumentsUpdated, isAdmin = false 
     try {
       const updatedOrder = await deleteOrderDocument(order.id, documentId);
       onDocumentsUpdated(updatedOrder);
-      toast({ title: "Success", description: "Document deleted successfully" });
+      toast.success("Document deleted successfully");
     } catch (error) {
       console.error("Failed to delete document:", error);
-      toast({ title: "Delete failed", description: "Failed to delete document", variant: "destructive" });
+      toast.error("Failed to delete document");
     }
   };
 
@@ -79,13 +79,13 @@ export function DocumentManagement({ order, onDocumentsUpdated, isAdmin = false 
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        toast({ title: "Success", description: "Document downloaded" });
+        toast.success("Document downloaded");
       } else {
-        toast({ title: "Download failed", description: "Document data not available", variant: "destructive" });
+        toast.error("Document data not available");
       }
     } catch (error) {
       console.error("Failed to download document:", error);
-      toast({ title: "Download failed", description: "Failed to download document", variant: "destructive" });
+      toast.error("Failed to download document");
     }
   };
 
