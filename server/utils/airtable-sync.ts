@@ -488,7 +488,7 @@ export async function updateOrderStatusInAirtable(
       body: JSON.stringify({
         fields: {
           "Statues": newStatus,
-          "Last Update Date": updatedAt,
+          "Last Update Date": updatedAt || new Date().toISOString().split("T")[0],
         },
       }),
     });
