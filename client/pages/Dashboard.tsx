@@ -2008,12 +2008,20 @@ Generated on: ${new Date().toLocaleDateString()}
                                     toast.success("Transfer form submitted successfully and is now under review!");
                                     // Update company status to under-review and mark form as filled
                                     updatePurchasedCompanyStatus(company.id, "under-review");
+
+                                    // Update local state to reflect the status change
                                     const updatedCompanies = purchasedCompanies.map(c =>
                                       c.id === company.id
-                                        ? { ...c, status: "under-review", transferFormFilled: true }
+                                        ? {
+                                            ...c,
+                                            status: "under-review" as const,
+                                            transferFormFilled: true,
+                                            statusLabel: "Under Review - Transfer Form"
+                                          }
                                         : c
                                     );
-                                    (updatedCompanies as any); // Update local state if needed
+                                    // Force component to re-render with updated companies
+                                    setPurchasedCompanies(updatedCompanies);
                                     setShowTransferForm(null);
                                   }}
                                 />
