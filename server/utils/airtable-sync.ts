@@ -433,7 +433,13 @@ export async function fetchOrdersFromAirtable(): Promise<Order[]> {
         paymentDate: fields["Order date"] || now,
         status: fields["Statues"] || "pending-payment",
         statusChangedDate: fields["Status Changed Date"] || new Date().toISOString().split("T")[0],
-        statusHistory: fields["Status History"] ? JSON.parse(String(fields["Status History"])) : [],
+        statusHistory: (() => {
+          try {
+            return fields["Status History"] ? JSON.parse(String(fields["Status History"])) : [];
+          } catch {
+            return [];
+          }
+        })(),
         purchaseDate: fields["Order date"] || now,
         lastUpdateDate: fields["Last Update Date"] || now,
         renewalDate: fields["Renewal Date"] || "",
