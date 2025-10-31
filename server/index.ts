@@ -109,6 +109,8 @@ export function createServer() {
   app.post("/api/orders/:orderId/refund-request", requestRefund);
   app.post("/api/orders/:orderId/refund-approve", approveRefund);
   app.post("/api/orders/:orderId/refund-reject", rejectRefund);
+  app.post("/api/orders/:orderId/documents", uploadOrderDocument);
+  app.delete("/api/orders/:orderId/documents/:documentId", deleteOrderDocument);
 
   // Notification routes
   app.post("/api/notifications/email", sendEmailNotification);
