@@ -1059,38 +1059,94 @@ export function CompanyTransferForm({
             </label>
           </div>
           {formData.changeCompanyActivities && (
-            <div className="space-y-2">
+            <div className="space-y-3">
               <Label>Select Activities (Max 4) *</Label>
-              <div className="space-y-2 border border-border/40 rounded-lg p-4 bg-gray-50">
-                {COMPANY_ACTIVITIES.slice(0, 10).map((activity) => (
-                  <label key={activity.code} className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={(formData.companyActivities || []).includes(activity.code)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          if ((formData.companyActivities || []).length < 4) {
-                            setFormData({
-                              ...formData,
-                              companyActivities: [...(formData.companyActivities || []), activity.code]
-                            });
-                          } else {
-                            toast.error("Maximum 4 activities allowed");
-                          }
-                        } else {
-                          setFormData({
-                            ...formData,
-                            companyActivities: (formData.companyActivities || []).filter(a => a !== activity.code)
-                          });
-                        }
-                      }}
-                      className="mr-2"
-                      disabled={(formData.companyActivities || []).length >= 4 && !(formData.companyActivities || []).includes(activity.code)}
-                    />
-                    <span className="text-sm">{activity.label}</span>
-                  </label>
-                ))}
+
+              {/* Search Input */}
+              <Input
+                placeholder="Search activities by code or description..."
+                value={activitiesSearchTerm}
+                onChange={(e) => setActivitiesSearchTerm(e.target.value)}
+                className="w-full"
+              />
+
+              {/* Selected Activities Count */}
+              <div className="text-sm text-gray-600">
+                Selected: <span className="font-semibold">{(formData.companyActivities || []).length}/4</span>
               </div>
+
+              {/* Activities List */}
+              <div className="max-h-96 overflow-y-auto border border-border/40 rounded-lg p-4 bg-gray-50">
+                {COMPANY_ACTIVITIES.filter((activity) =>
+                  activity.code.includes(activitiesSearchTerm.toUpperCase()) ||
+                  activity.label.toLowerCase().includes(activitiesSearchTerm.toLowerCase())
+                ).length > 0 ? (
+                  <div className="space-y-2">
+                    {COMPANY_ACTIVITIES.filter((activity) =>
+                      activity.code.includes(activitiesSearchTerm.toUpperCase()) ||
+                      activity.label.toLowerCase().includes(activitiesSearchTerm.toLowerCase())
+                    ).map((activity) => (
+                      <label key={activity.code} className="flex items-start p-2 hover:bg-gray-100 rounded cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={(formData.companyActivities || []).includes(activity.code)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              if ((formData.companyActivities || []).length < 4) {
+                                setFormData({
+                                  ...formData,
+                                  companyActivities: [...(formData.companyActivities || []), activity.code]
+                                });
+                              } else {
+                                toast.error("Maximum 4 activities allowed");
+                              }
+                            } else {
+                              setFormData({
+                                ...formData,
+                                companyActivities: (formData.companyActivities || []).filter(a => a !== activity.code)
+                              });
+                            }
+                          }}
+                          className="mr-3 mt-1 flex-shrink-0"
+                          disabled={(formData.companyActivities || []).length >= 4 && !(formData.companyActivities || []).includes(activity.code)}
+                        />
+                        <span className="text-sm">{activity.label}</span>
+                      </label>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500 text-sm text-center py-4">No activities found matching "{activitiesSearchTerm}"</p>
+                )}
+              </div>
+
+              {/* Selected Activities Display */}
+              {(formData.companyActivities || []).length > 0 && (
+                <div className="space-y-2">
+                  <Label className="text-sm">Selected Activities:</Label>
+                  <div className="flex flex-wrap gap-2">
+                    {(formData.companyActivities || []).map((code) => {
+                      const activity = COMPANY_ACTIVITIES.find(a => a.code === code);
+                      return (
+                        <div key={code} className="flex items-center gap-2 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+                          <span>{activity?.label}</span>
+                          <button
+                            onClick={() => {
+                              setFormData({
+                                ...formData,
+                                companyActivities: (formData.companyActivities || []).filter(a => a !== code)
+                              });
+                            }}
+                            className="text-blue-600 hover:text-blue-900 font-bold"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
               {errors.companyActivities && <p className="text-red-600 text-sm mt-2">{errors.companyActivities}</p>}
             </div>
           )}
