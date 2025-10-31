@@ -314,35 +314,61 @@ export async function syncOrderToAirtable(order: Order, airtableRecordId?: strin
 
     console.log(`[syncOrderToAirtable] Syncing order ${order.orderId} to Airtable (table: ${tableId})`);
 
+    // Build the field mapping with all possible field names
+    const fieldMapping: Record<string, any> = {
+      "Order ID": order.orderId,
+      "Order date": order.purchaseDate,
+      "Country": order.country,
+      "Company name": order.companyName,
+      "Company numbers": order.companyNumber,
+      "Company Number": order.companyNumber, // Alternative field name
+      "Statues": order.status, // Note: This is a typo in Airtable but using exact field name
+      "Status": order.status, // Fallback
+      "Customer name": order.customerName,
+      "Customer Email": order.customerEmail,
+      "Customer Mobile number": order.customerPhone || "",
+      "price": order.amount,
+      "currency": order.currency,
+      "Payment Status": order.paymentStatus,
+      "Payment Method": order.paymentMethod,
+      "Transaction ID": order.transactionId || "",
+      "Renewal Date": order.renewalDate,
+      "Renewal Fees": order.renewalFees,
+      "Refund Status": order.refundStatus,
+      "Billing Address": order.billingAddress || "",
+      "Company ID": order.companyId,
+      "Last Update Date": order.lastUpdateDate,
+      "Status History": JSON.stringify(order.statusHistory || []),
+      "Documents": JSON.stringify(order.documents || []),
+      "Admin Notes": order.adminNotes || "",
+      "Internal Notes": order.internalNotes || "",
+      "Created At": order.createdAt,
+      "Updated At": order.updatedAt,
+    };
+
+    // For the POST request, send only essential fields first to avoid field name errors
+    // The server will handle missing optional fields gracefully
+    const essentialFields: Record<string, any> = {
+      "Order ID": order.orderId,
+      "Customer name": order.customerName,
+      "Customer Email": order.customerEmail,
+      "Country": order.country,
+      "Company name": order.companyName,
+      "price": order.amount,
+      "currency": order.currency,
+      "Payment Status": order.paymentStatus,
+    };
+
+    // Add all other fields that have values
+    const allFields = { ...essentialFields };
+    for (const [key, value] of Object.entries(fieldMapping)) {
+      if (value !== undefined && value !== null && value !== "" && !allFields[key]) {
+        allFields[key] = value;
+      }
+    }
+
     const airtableRecord = {
-      fields: {
-        "Order ID": order.orderId,
-        "Order date": order.purchaseDate,
-        "Country": order.country,
-        "Company name": order.companyName,
-        "Company numbers": order.companyNumber,
-        "Statues": order.status,
-        "Customer name": order.customerName,
-        "Customer Email": order.customerEmail,
-        "Customer Mobile number": order.customerPhone || "",
-        "price": order.amount,
-        "currency": order.currency,
-        "Payment Status": order.paymentStatus,
-        "Payment Method": order.paymentMethod,
-        "Transaction ID": order.transactionId || "",
-        "Renewal Date": order.renewalDate,
-        "Renewal Fees": order.renewalFees,
-        "Refund Status": order.refundStatus,
-        "Billing Address": order.billingAddress || "",
-        "Company ID": order.companyId,
-        "Last Update Date": order.lastUpdateDate,
-        "Status History": JSON.stringify(order.statusHistory || []),
-        "Documents": JSON.stringify(order.documents || []),
-        "Admin Notes": order.adminNotes || "",
-        "Internal Notes": order.internalNotes || "",
-        "Created At": order.createdAt,
-        "Updated At": order.updatedAt,
-      },
+      fields: allFields,
     };
 
     const url = airtableRecordId
