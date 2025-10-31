@@ -209,8 +209,39 @@ export function MyOrders({ userEmail }: MyOrdersProps) {
         <OrderDetailsModal
           order={selectedOrder}
           onClose={() => setShowDetailsModal(false)}
+          onOpenTransferForm={() => {
+            setShowDetailsModal(false);
+            setShowTransferFormModal(true);
+          }}
         />
       )}
+
+      {/* Transfer Form Modal */}
+      <Dialog open={showTransferFormModal} onOpenChange={setShowTransferFormModal}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Company Transfer Form</DialogTitle>
+            <DialogDescription>
+              Please fill out the transfer form for {selectedOrder?.companyName}
+            </DialogDescription>
+          </DialogHeader>
+          {selectedOrder && (
+            <CompanyTransferForm
+              orderId={selectedOrder.orderId}
+              companyId={selectedOrder.companyId || `company_${selectedOrder.id}`}
+              companyName={selectedOrder.companyName}
+              companyNumber={selectedOrder.companyNumber}
+              incorporationDate=""
+              incorporationYear={new Date().getFullYear()}
+              onSuccess={() => {
+                toast.success("Transfer form submitted successfully!");
+                setShowTransferFormModal(false);
+                loadOrders();
+              }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
