@@ -1972,15 +1972,17 @@ Generated on: ${new Date().toLocaleDateString()}
                               )}
                               <Button
                                 onClick={() => setShowTransferForm(company.id)}
-                                disabled={company.status !== "amend-required" && company.transferFormFilled}
+                                disabled={company.transferFormFilled && company.transferFormStatus !== "amend-required"}
                                 className="w-full bg-primary hover:bg-primary-600 text-white gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                               >
                                 <FileUp className="w-4 h-4" />
-                                {company.status === "amend-required"
+                                {company.transferFormStatus === "amend-required"
                                   ? "Edit Transfer Form (Amendments Required)"
-                                  : company.transferFormFilled
-                                    ? "Edit Transfer Form"
-                                    : "Fill Transfer Form"}
+                                  : company.transferFormStatus === "under-review"
+                                    ? "Form Under Review - Cannot Edit"
+                                    : company.transferFormFilled
+                                      ? "Edit Transfer Form"
+                                      : "Fill Transfer Form"}
                               </Button>
                             </div>
                           )}
