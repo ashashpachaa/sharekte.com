@@ -2005,7 +2005,15 @@ Generated on: ${new Date().toLocaleDateString()}
                                   incorporationDate={company.incorporationDate || ""}
                                   incorporationYear={parseInt(company.incorporationYear) || new Date().getFullYear()}
                                   onSuccess={() => {
-                                    toast.success("Transfer form submitted successfully!");
+                                    toast.success("Transfer form submitted successfully and is now under review!");
+                                    // Update company status to under-review and mark form as filled
+                                    updatePurchasedCompanyStatus(company.id, "under-review");
+                                    const updatedCompanies = purchasedCompanies.map(c =>
+                                      c.id === company.id
+                                        ? { ...c, status: "under-review", transferFormFilled: true }
+                                        : c
+                                    );
+                                    (updatedCompanies as any); // Update local state if needed
                                     setShowTransferForm(null);
                                   }}
                                 />
