@@ -26,16 +26,16 @@ export function Header() {
         {/* Navigation */}
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
           <Link to="/" className="text-foreground hover:text-primary transition-colors">
-            Home
+            {t("header.home")}
           </Link>
           <Link to="/companies" className="text-foreground hover:text-primary transition-colors">
-            Companies
+            {t("header.companies")}
           </Link>
           <a href="#features" className="text-foreground hover:text-primary transition-colors">
             Features
           </a>
           <Link to="/support" className="text-foreground hover:text-primary transition-colors">
-            Support
+            {t("header.support")}
           </Link>
         </nav>
 
