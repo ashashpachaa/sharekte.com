@@ -3,40 +3,48 @@ import { createServer } from "./index";
 import express from "express";
 import fs from "fs";
 
+// Set up global error handlers FIRST
+process.on("uncaughtException", (error) => {
+  console.error("[FATAL] Uncaught exception:", error);
+  process.exit(1);
+});
+
+process.on("unhandledRejection", (reason) => {
+  console.error("[FATAL] Unhandled rejection:", reason);
+  process.exit(1);
+});
+
 // Ensure environment is production
 process.env.NODE_ENV = process.env.NODE_ENV || "production";
 
-console.log("[startup] Creating server...");
+console.log("[startup] STARTING SERVER");
+
+// Get port
+const port = process.env.PORT || 8080;
+console.log("[startup] Port:", port);
+
+// Create server
 let app;
 try {
+  console.log("[startup] Creating Express app...");
   app = createServer();
-  console.log("[startup] Server created successfully");
+  console.log("[startup] Express app created successfully");
 } catch (error) {
   console.error("[startup] FATAL: Failed to create server:", error);
   process.exit(1);
 }
-const port = process.env.PORT || 8080;
 
 // In production, serve the built SPA files
 const __dirname = import.meta.dirname;
 const distPath = path.join(__dirname, "../dist/spa");
 
-// Log startup information
-console.log("[startup] Starting Fusion Starter server");
-console.log(`[startup] Port: ${port}`);
-console.log(`[startup] Node env: ${process.env.NODE_ENV || "development"}`);
-console.log(
-  `[startup] Airtable configured: ${!!process.env.AIRTABLE_API_TOKEN}`,
-);
-console.log(`[startup] SPA path: ${distPath}`);
-console.log(`[startup] SPA exists: ${fs.existsSync(distPath)}`);
+console.log("[startup] SPA path:", distPath);
+console.log("[startup] SPA exists:", fs.existsSync(distPath));
 
 // Serve static files
 if (fs.existsSync(distPath)) {
   app.use(express.static(distPath));
   console.log("[startup] ✓ SPA static files configured");
-} else {
-  console.warn("[startup] ⚠ SPA directory not found at", distPath);
 }
 
 // Handle React Router - serve index.html for all non-API routes
@@ -54,49 +62,39 @@ app.get("*", (req, res) => {
   }
 });
 
+console.log("[startup] About to listen on port", port);
+
+// Start server
 let server;
 try {
-  server = app.listen(port, () => {
-    console.log(`[startup] ✅ Server successfully started`);
-    console.log(`[startup] 🚀 Fusion Starter running on port ${port}`);
-    console.log(`[startup] 📱 Frontend: http://localhost:${port}`);
-    console.log(`[startup] 🔧 API: http://localhost:${port}/api`);
-    console.log(`[startup] 💓 Health: http://localhost:${port}/health`);
+  server = app.listen(port, "0.0.0.0", () => {
+    console.log(`[startup] ✅ SERVER LISTENING ON PORT ${port}`);
+    console.log(`[startup] Health check: http://localhost:${port}/health`);
+    console.log(`[startup] API: http://localhost:${port}/api`);
+  });
+  
+  server.on("error", (error) => {
+    console.error("[startup] Server error:", error);
+    process.exit(1);
   });
 } catch (error) {
-  console.error(
-    "[startup] FATAL: Failed to start server on port",
-    port,
-    ":",
-    error,
-  );
+  console.error("[startup] FATAL: Failed to start server:", error);
   process.exit(1);
 }
 
-// Error handling for server
-server.on("error", (error: any) => {
-  console.error("[startup] ❌ Server error:", error);
-  process.exit(1);
-});
-
 // Graceful shutdown
 process.on("SIGTERM", () => {
-  console.log("[shutdown] 🛑 Received SIGTERM, shutting down gracefully");
-  server.close(() => {
-    console.log("[shutdown] ✅ Server closed");
+  console.log("[shutdown] Received SIGTERM");
+  server?.close(() => {
+    console.log("[shutdown] Server closed");
     process.exit(0);
   });
 });
 
 process.on("SIGINT", () => {
-  console.log("[shutdown] 🛑 Received SIGINT, shutting down gracefully");
-  server.close(() => {
-    console.log("[shutdown] ✅ Server closed");
+  console.log("[shutdown] Received SIGINT");
+  server?.close(() => {
+    console.log("[shutdown] Server closed");
     process.exit(0);
   });
-});
-
-// Unhandled promise rejection
-process.on("unhandledRejection", (reason: any) => {
-  console.error("[error] Unhandled rejection:", reason);
 });
