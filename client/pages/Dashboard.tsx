@@ -2447,7 +2447,7 @@ Generated on: ${new Date().toLocaleDateString()}
             <div className="max-w-3xl space-y-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold text-foreground">
-                  Payment Methods
+                  {t('dashboard.paymentMethods')}
                 </h2>
                 <Button className="bg-primary hover:bg-primary-600 text-white gap-2">
                   <Plus className="w-4 h-4" />
