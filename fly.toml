@@ -1,0 +1,48 @@
+# Fly.io configuration for Sharekte
+app = "sharekte"
+primary_region = "sjc"
+
+[build]
+builder = "heroku"
+
+[env]
+  NODE_ENV = "production"
+  PORT = "8080"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ["app"]
+
+[processes]
+  app = "npm run start"
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 8080
+  processes = ["app"]
+
+  [services.concurrency]
+    type = "connections"
+    hard_limit = 1000
+    soft_limit = 800
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = ["http", "tls"]
+
+  [services.http_checks]
+    enabled = true
+    interval = "15s"
+    timeout = 5
+    grace_period = "10s"
+    method = "get"
+    path = "/health"
