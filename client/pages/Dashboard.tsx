@@ -358,7 +358,7 @@ export default function Dashboard() {
         renewalFees: uc.renewalFees,
         status: uc.status,
         statusLabel: uc.statusLabel,
-        documents: uc.documents,
+        documents: uc.documents || [], // Initialize as empty array if not present
         transferFormFilled: uc.transferFormFilled,
         adminComments: uc.adminComments,
         renewalStatus: currentRenewalStatus,
@@ -366,6 +366,57 @@ export default function Dashboard() {
       };
     });
   });
+
+  // Load order documents and associate with companies
+  useEffect(() => {
+    const loadOrderDocuments = async () => {
+      try {
+        const response = await fetch("/api/orders");
+        if (!response.ok) {
+          console.error("[Dashboard] Failed to fetch orders:", response.status);
+          return;
+        }
+
+        const orders = await response.json();
+        console.log(`[Dashboard] Loaded ${orders.length} orders`);
+
+        // Update companies with documents from their orders
+        setPurchasedCompanies((prevCompanies) =>
+          prevCompanies.map((company) => {
+            // Find the order for this company
+            const companyOrder = orders.find(
+              (order: any) =>
+                order.companyName &&
+                order.companyName.toLowerCase() === company.name.toLowerCase()
+            );
+
+            if (companyOrder && companyOrder.documents && companyOrder.documents.length > 0) {
+              console.log(
+                `[Dashboard] Found ${companyOrder.documents.length} documents for ${company.name}`
+              );
+              return {
+                ...company,
+                documents: companyOrder.documents.map((doc: any) => ({
+                  id: doc.id,
+                  name: doc.name,
+                  type: doc.type,
+                  uploadedDate: doc.uploadedDate,
+                  url: doc.fileData ? undefined : doc.url, // Use fileData as URL if available
+                })),
+              };
+            }
+
+            return company;
+          })
+        );
+      } catch (error) {
+        console.error("[Dashboard] Error loading order documents:", error);
+        // Don't throw - silently fail so dashboard still works
+      }
+    };
+
+    loadOrderDocuments();
+  }, []); // Run once on mount
 
   const [showTransferForm, setShowTransferForm] = useState<string | null>(null);
   const [formData, setFormData] = useState({
