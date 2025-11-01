@@ -8,8 +8,44 @@
     "language": "Language",
     "cart": "Cart",
     "logout": "Logout",
-    "login": "Login",
+    "login": "Sign In",
+    "signup": "Sign Up",
     "settings": "Settings"
+  },
+  "auth": {
+    "login": {
+      "title": "Sign In",
+      "subtitle": "Access your account to manage orders and companies",
+      "button": "Sign In"
+    },
+    "signup": {
+      "title": "Create Account",
+      "subtitle": "Join us to explore and purchase established businesses",
+      "button": "Create Account"
+    },
+    "email": "Email Address",
+    "emailPlaceholder": "you@example.com",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "passwordHint": "Minimum 6 characters",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Re-enter your password",
+    "passwordsMatch": "Passwords match",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "John Doe",
+    "weakness": "Weak",
+    "fair": "Fair",
+    "strong": "Strong",
+    "signingIn": "Signing in...",
+    "creatingAccount": "Creating account...",
+    "noAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?",
+    "createAccount": "Create an Account",
+    "signIn": "Sign In",
+    "agreeToTerms": "I agree to the Terms of Service and Privacy Policy",
+    "demoTitle": "Demo Credentials",
+    "demoEmail": "Email",
+    "demoPassword": "Password"
   },
   "dashboard": {
     "title": "Dashboard",
