@@ -36,6 +36,7 @@ interface CompanyTransferFormProps {
   companyId: string;
   companyName: string;
   companyNumber: string;
+  country: string;
   incorporationDate: string;
   incorporationYear: number;
   onSuccess?: (form: TransferFormData) => void;
