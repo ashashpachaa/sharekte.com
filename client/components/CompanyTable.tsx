@@ -245,7 +245,7 @@ export function CompanyTable({
         <div className="mb-6 flex flex-col sm:flex-row gap-4 p-4 bg-gray-50 rounded-lg border">
           <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Filter by Country
+              {t('table.filterByCountry')}
             </label>
             <select
               value={selectedCountry}
@@ -255,7 +255,7 @@ export function CompanyTable({
               }}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             >
-              <option value="">All Countries</option>
+              <option value="">{t('table.allCountries')}</option>
               {uniqueCountries.map((country) => (
                 <option key={country} value={country}>
                   {country}
@@ -266,7 +266,7 @@ export function CompanyTable({
 
           <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Filter by Incorporation Year
+              {t('table.filterByYear')}
             </label>
             <select
               value={selectedYear}
@@ -276,7 +276,7 @@ export function CompanyTable({
               }}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             >
-              <option value="">All Years</option>
+              <option value="">{t('table.allYears')}</option>
               {uniqueYears.map((year) => (
                 <option key={year} value={year.toString()}>
                   {year}
@@ -296,7 +296,7 @@ export function CompanyTable({
                 }}
                 className="w-full sm:w-auto"
               >
-                Clear Filters
+                {t('table.clearFilters')}
               </Button>
             </div>
           )}
