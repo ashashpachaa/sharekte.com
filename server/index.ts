@@ -82,11 +82,8 @@ export function createServer() {
 
   // Health check endpoint for monitoring
   app.get("/health", (_req, res) => {
-    res.json({
-      status: "ok",
-      timestamp: new Date().toISOString(),
-      airtableConfigured: !!process.env.AIRTABLE_API_TOKEN,
-    });
+    console.log("[health] /health endpoint called");
+    res.status(200).json({ status: "ok" });
   });
 
   // Deep health check with dependencies
