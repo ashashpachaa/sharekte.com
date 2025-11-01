@@ -295,6 +295,30 @@
       "button": "Start Your Journey"
     }
   },
+  "table": {
+    "companyName": "Company Name",
+    "country": "Country",
+    "companyNumber": "Company Number",
+    "incorporateDate": "Incorporate Date",
+    "incorporateYear": "Incorporate Year",
+    "price": "Price",
+    "optionsIncluded": "Options Included",
+    "action": "Action",
+    "filterByCountry": "Filter by Country",
+    "filterByYear": "Filter by Incorporation Year",
+    "allCountries": "All Countries",
+    "allYears": "All Years",
+    "clearFilters": "Clear Filters",
+    "showing": "Showing {{count}} of {{total}} companies",
+    "loadingCompanies": "Loading companies...",
+    "noCompanies": "No companies available",
+    "retry": "Retry",
+    "viewDetails": "View Details",
+    "edit": "Edit",
+    "renew": "Renew",
+    "addToCart": "Add to Cart",
+    "none": "None"
+  },
   "common": {
     "yes": "Yes",
     "no": "No",
