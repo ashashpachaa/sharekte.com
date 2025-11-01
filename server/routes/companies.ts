@@ -28,7 +28,11 @@ function getTodayString(): string {
 
 // Helper function to generate unique ID
 function generateId(): string {
-  return "rec_" + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+  return (
+    "rec_" +
+    Math.random().toString(36).substring(2, 15) +
+    Date.now().toString(36)
+  );
 }
 
 // Helper function to fetch companies data from Airtable (used by multiple endpoints)
@@ -64,7 +68,7 @@ async function fetchCompaniesData(): Promise<CompanyData[]> {
             headers: {
               Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
             },
-          }
+          },
         );
 
         if (!response.ok) {
@@ -76,9 +80,14 @@ async function fetchCompaniesData(): Promise<CompanyData[]> {
         const data = await response.json();
         const companies: CompanyData[] = data.records.map((record: any) => {
           const fields = record.fields;
-          const incorporationDate = fields["Incorporate date"] || getTodayString();
+          const incorporationDate =
+            fields["Incorporate date"] || getTodayString();
           // Try multiple field name variations for status/statues field
-          const rawStatus = fields["Statues "] || fields["Statues"] || fields["Status"] || "active";
+          const rawStatus =
+            fields["Statues "] ||
+            fields["Statues"] ||
+            fields["Status"] ||
+            "active";
           const statusValue = rawStatus.toLowerCase() as CompanyStatus;
 
           return {
@@ -88,13 +97,17 @@ async function fetchCompaniesData(): Promise<CompanyData[]> {
             country: fields["country"] || "",
             type: "LTD" as any,
             incorporationDate: incorporationDate,
-            incorporationYear: parseInt(String(fields["Incorporate Year"] || new Date().getFullYear())),
+            incorporationYear: parseInt(
+              String(fields["Incorporate Year"] || new Date().getFullYear()),
+            ),
             purchasePrice: parseFloat(String(fields["Price"] || "0")),
             renewalFee: parseFloat(String(fields["Renewal fees"] || "0")),
             currency: "USD",
             expiryDate: calculateExpiryDate(incorporationDate),
             renewalDate: calculateExpiryDate(incorporationDate),
-            renewalDaysLeft: calculateRenewalDaysLeft(calculateExpiryDate(incorporationDate)),
+            renewalDaysLeft: calculateRenewalDaysLeft(
+              calculateExpiryDate(incorporationDate),
+            ),
             status: statusValue,
             paymentStatus: "paid" as const,
             refundStatus: "not-refunded" as const,
@@ -105,7 +118,9 @@ async function fetchCompaniesData(): Promise<CompanyData[]> {
             revenue: fields.Revenue,
             adminNotes: fields["Admin Notes"],
             internalNotes: fields["Internal Notes"],
-            optionsInclude: Array.isArray(fields["option include"]) ? fields["option include"] : [],
+            optionsInclude: Array.isArray(fields["option include"])
+              ? fields["option include"]
+              : [],
             createdBy: "airtable",
             createdAt: getTodayString(),
             updatedAt: getTodayString(),
@@ -157,7 +172,7 @@ function createNewCompany(
     currency: string;
     clientName: string;
     clientEmail: string;
-  }
+  },
 ): CompanyData {
   const expiryDate = calculateExpiryDate(data.incorporationDate);
   const renewalDate = calculateExpiryDate(data.incorporationDate);
@@ -227,7 +242,9 @@ export const getCompany: RequestHandler = async (req, res) => {
     const AIRTABLE_TABLE_ID = "tbljtdHPdHnTberDy";
 
     if (!AIRTABLE_API_TOKEN) {
-      return res.status(500).json({ error: "Airtable integration not configured" });
+      return res
+        .status(500)
+        .json({ error: "Airtable integration not configured" });
     }
 
     // Fetch from Airtable
@@ -237,7 +254,7 @@ export const getCompany: RequestHandler = async (req, res) => {
         headers: {
           Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
         },
-      }
+      },
     );
 
     if (!response.ok) {
@@ -256,13 +273,17 @@ export const getCompany: RequestHandler = async (req, res) => {
       country: fields["country"] || fields.country || fields.Country || "",
       type: "LTD" as any,
       incorporationDate: incorporationDate,
-      incorporationYear: parseInt(String(fields["Incorporate Year"] || new Date().getFullYear())),
+      incorporationYear: parseInt(
+        String(fields["Incorporate Year"] || new Date().getFullYear()),
+      ),
       purchasePrice: parseFloat(String(fields["Price"] || "0")),
       renewalFee: parseFloat(String(fields["Renewal fees"] || "0")),
       currency: "USD",
       expiryDate: calculateExpiryDate(incorporationDate),
       renewalDate: calculateExpiryDate(incorporationDate),
-      renewalDaysLeft: calculateRenewalDaysLeft(calculateExpiryDate(incorporationDate)),
+      renewalDaysLeft: calculateRenewalDaysLeft(
+        calculateExpiryDate(incorporationDate),
+      ),
       status: statusValue as CompanyStatus,
       paymentStatus: "paid" as const,
       refundStatus: "not-refunded" as const,
@@ -328,9 +349,7 @@ export const createCompany: RequestHandler = async (req, res) => {
       !clientName ||
       !clientEmail
     ) {
-      return res
-        .status(400)
-        .json({ error: "Missing required fields" });
+      return res.status(400).json({ error: "Missing required fields" });
     }
 
     const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
@@ -338,7 +357,9 @@ export const createCompany: RequestHandler = async (req, res) => {
     const AIRTABLE_TABLE_ID = "tbljtdHPdHnTberDy";
 
     if (!AIRTABLE_API_TOKEN) {
-      return res.status(500).json({ error: "Airtable integration not configured" });
+      return res
+        .status(500)
+        .json({ error: "Airtable integration not configured" });
     }
 
     // Create record in Airtable
@@ -357,14 +378,16 @@ export const createCompany: RequestHandler = async (req, res) => {
                 "Company name": companyName,
                 "Company number": companyNumber,
                 Country: country,
-                "Incorporate date": incorporationDate || new Date().toISOString().split("T")[0],
-                "Incorporate year": incorporationYear || new Date().getFullYear(),
+                "Incorporate date":
+                  incorporationDate || new Date().toISOString().split("T")[0],
+                "Incorporate year":
+                  incorporationYear || new Date().getFullYear(),
                 Price: purchasePrice || 0,
               },
             },
           ],
         }),
-      }
+      },
     );
 
     if (!airtableResponse.ok) {
@@ -372,23 +395,32 @@ export const createCompany: RequestHandler = async (req, res) => {
       console.error("[createCompany] Airtable API error:");
       console.error("[createCompany] Status:", airtableResponse.status);
       console.error("[createCompany] Response:", error);
-      console.error("[createCompany] Request body:", JSON.stringify({
-        records: [
+      console.error(
+        "[createCompany] Request body:",
+        JSON.stringify(
           {
-            fields: {
-              "Company name": companyName,
-              "Company number": companyNumber,
-              Country: country,
-              "Incorporate date": incorporationDate || new Date().toISOString().split("T")[0],
-              "Incorporate year": incorporationYear || new Date().getFullYear(),
-              Price: purchasePrice || 0,
-            },
+            records: [
+              {
+                fields: {
+                  "Company name": companyName,
+                  "Company number": companyNumber,
+                  Country: country,
+                  "Incorporate date":
+                    incorporationDate || new Date().toISOString().split("T")[0],
+                  "Incorporate year":
+                    incorporationYear || new Date().getFullYear(),
+                  Price: purchasePrice || 0,
+                },
+              },
+            ],
           },
-        ],
-      }, null, 2));
+          null,
+          2,
+        ),
+      );
       return res.status(500).json({
         error: "Failed to create company in Airtable",
-        details: error
+        details: error,
       });
     }
 
@@ -403,13 +435,22 @@ export const createCompany: RequestHandler = async (req, res) => {
       country: record.fields.Country || "",
       type: "LTD" as any,
       incorporationDate: record.fields["Incorporate date"] || getTodayString(),
-      incorporationYear: record.fields["Incorporate year"] || new Date().getFullYear(),
+      incorporationYear:
+        record.fields["Incorporate year"] || new Date().getFullYear(),
       purchasePrice: parseFloat(record.fields.Price || "0"),
       renewalFee: parseFloat(String(record.fields["Renewal fees"] || "0")),
       currency: "USD",
-      expiryDate: calculateExpiryDate(record.fields["Incorporate date"] || getTodayString()),
-      renewalDate: calculateExpiryDate(record.fields["Incorporate date"] || getTodayString()),
-      renewalDaysLeft: calculateRenewalDaysLeft(calculateExpiryDate(record.fields["Incorporate date"] || getTodayString())),
+      expiryDate: calculateExpiryDate(
+        record.fields["Incorporate date"] || getTodayString(),
+      ),
+      renewalDate: calculateExpiryDate(
+        record.fields["Incorporate date"] || getTodayString(),
+      ),
+      renewalDaysLeft: calculateRenewalDaysLeft(
+        calculateExpiryDate(
+          record.fields["Incorporate date"] || getTodayString(),
+        ),
+      ),
       status: "active" as const,
       paymentStatus: "paid" as const,
       refundStatus: "not-refunded" as const,
@@ -419,7 +460,9 @@ export const createCompany: RequestHandler = async (req, res) => {
       industry,
       revenue,
       adminNotes,
-      optionsInclude: Array.isArray(record.fields["option include"]) ? record.fields["option include"] : [],
+      optionsInclude: Array.isArray(record.fields["option include"])
+        ? record.fields["option include"]
+        : [],
       createdBy: "airtable",
       createdAt: getTodayString(),
       updatedAt: getTodayString(),
@@ -454,19 +497,26 @@ export const updateCompany: RequestHandler = async (req, res) => {
     const AIRTABLE_TABLE_ID = "tbljtdHPdHnTberDy";
 
     if (!AIRTABLE_API_TOKEN) {
-      return res.status(500).json({ error: "Airtable integration not configured" });
+      return res
+        .status(500)
+        .json({ error: "Airtable integration not configured" });
     }
 
     const updates = req.body;
     const airtableFields: any = {};
 
     // Map fields to Airtable column names
-    if (updates.companyName) airtableFields["Company name"] = updates.companyName;
-    if (updates.companyNumber) airtableFields["Company number"] = updates.companyNumber;
+    if (updates.companyName)
+      airtableFields["Company name"] = updates.companyName;
+    if (updates.companyNumber)
+      airtableFields["Company number"] = updates.companyNumber;
     if (updates.country) airtableFields.Country = updates.country;
-    if (updates.incorporationDate) airtableFields["Incorporate date"] = updates.incorporationDate;
-    if (updates.incorporationYear) airtableFields["Incorporate year"] = updates.incorporationYear;
-    if (updates.purchasePrice !== undefined) airtableFields.Price = updates.purchasePrice;
+    if (updates.incorporationDate)
+      airtableFields["Incorporate date"] = updates.incorporationDate;
+    if (updates.incorporationYear)
+      airtableFields["Incorporate year"] = updates.incorporationYear;
+    if (updates.purchasePrice !== undefined)
+      airtableFields.Price = updates.purchasePrice;
     if (updates.status) airtableFields.Status = updates.status;
 
     // Update in Airtable
@@ -479,7 +529,7 @@ export const updateCompany: RequestHandler = async (req, res) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ fields: airtableFields }),
-      }
+      },
     );
 
     if (!response.ok) {
@@ -498,13 +548,19 @@ export const updateCompany: RequestHandler = async (req, res) => {
       country: fields["country"] || fields.country || fields.Country || "",
       type: "LTD" as any,
       incorporationDate: incorporationDate,
-      incorporationYear: parseInt(String(fields["Incorporate Year"] || new Date().getFullYear())),
+      incorporationYear: parseInt(
+        String(fields["Incorporate Year"] || new Date().getFullYear()),
+      ),
       purchasePrice: parseFloat(String(fields["Price"] || "0")),
-      renewalFee: parseFloat(String(fields["Renewal fees"] || updatedFields["Renewal fees"] || "0")),
+      renewalFee: parseFloat(
+        String(fields["Renewal fees"] || updatedFields["Renewal fees"] || "0"),
+      ),
       currency: "USD",
       expiryDate: calculateExpiryDate(incorporationDate),
       renewalDate: calculateExpiryDate(incorporationDate),
-      renewalDaysLeft: calculateRenewalDaysLeft(calculateExpiryDate(incorporationDate)),
+      renewalDaysLeft: calculateRenewalDaysLeft(
+        calculateExpiryDate(incorporationDate),
+      ),
       status: statusValue as CompanyStatus,
       paymentStatus: "paid" as const,
       refundStatus: "not-refunded" as const,
@@ -515,7 +571,9 @@ export const updateCompany: RequestHandler = async (req, res) => {
       revenue: fields.Revenue,
       adminNotes: fields["Admin Notes"],
       internalNotes: fields["Internal Notes"],
-      optionsInclude: Array.isArray(fields["option include"]) ? fields["option include"] : [],
+      optionsInclude: Array.isArray(fields["option include"])
+        ? fields["option include"]
+        : [],
       createdBy: "airtable",
       createdAt: getTodayString(),
       updatedAt: getTodayString(),
@@ -542,7 +600,9 @@ export const deleteCompany: RequestHandler = async (req, res) => {
     const AIRTABLE_TABLE_ID = "tbljtdHPdHnTberDy";
 
     if (!AIRTABLE_API_TOKEN) {
-      return res.status(500).json({ error: "Airtable integration not configured" });
+      return res
+        .status(500)
+        .json({ error: "Airtable integration not configured" });
     }
 
     // Delete from Airtable
@@ -553,7 +613,7 @@ export const deleteCompany: RequestHandler = async (req, res) => {
         headers: {
           Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
         },
-      }
+      },
     );
 
     if (!response.ok) {
@@ -573,12 +633,16 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
     const { id } = req.params;
     const { status, notes } = req.body;
 
-    console.log(`[updateCompanyStatus] Starting - Airtable ID: ${id}, New Status: ${status}`);
+    console.log(
+      `[updateCompanyStatus] Starting - Airtable ID: ${id}, New Status: ${status}`,
+    );
 
     // Verify Airtable token is configured
     if (!process.env.AIRTABLE_API_TOKEN) {
       console.error("AIRTABLE_API_TOKEN not configured");
-      return res.status(500).json({ error: "Airtable API token not configured" });
+      return res
+        .status(500)
+        .json({ error: "Airtable API token not configured" });
     }
 
     // The ID is the Airtable record ID (rec123456), so we can use it directly
@@ -594,7 +658,11 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
 
     if (!getResponse.ok) {
       const getError = await getResponse.text();
-      console.error(`Airtable GET failed for ${airtableId}:`, getResponse.status, getError);
+      console.error(
+        `Airtable GET failed for ${airtableId}:`,
+        getResponse.status,
+        getError,
+      );
       return res.status(getResponse.status).json({
         error: "Failed to fetch company from Airtable",
         details: getError,
@@ -606,7 +674,8 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
     const companyName = fields["Company name"] || "Unknown Company";
     const incorporationDate = fields["Incorporate date"] || getTodayString();
     // Read from Statues (with space) first, then Status
-    const currentStatusValue = fields["Statues "] || fields["Status"] || "active";
+    const currentStatusValue =
+      fields["Statues "] || fields["Status"] || "active";
 
     // Ensure status is provided
     if (!status) {
@@ -614,9 +683,12 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
     }
 
     // Capitalize first letter: "sold" → "Sold", "active" → "Active"
-    const newStatusValue = status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
+    const newStatusValue =
+      status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
 
-    console.log(`[${airtableId}] Updating "${companyName}": "${currentStatusValue}" → "${newStatusValue}"`);
+    console.log(
+      `[${airtableId}] Updating "${companyName}": "${currentStatusValue}" → "${newStatusValue}"`,
+    );
 
     // Clear cache since we're updating
     serverCache = null;
@@ -628,7 +700,9 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
     let lastError = null;
 
     for (const fieldName of fieldNames) {
-      console.log(`[updateCompanyStatus] Attempting PATCH with field name: "${fieldName}"`);
+      console.log(
+        `[updateCompanyStatus] Attempting PATCH with field name: "${fieldName}"`,
+      );
 
       updateResponse = await fetch(
         `https://api.airtable.com/v0/app0PK34gyJDizR3Q/tbljtdHPdHnTberDy/${airtableId}`,
@@ -643,35 +717,44 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
               [fieldName]: newStatusValue,
             },
           }),
-        }
+        },
       );
 
       if (updateResponse.ok) {
-        console.log(`[updateCompanyStatus] SUCCESS with field name: "${fieldName}"`);
+        console.log(
+          `[updateCompanyStatus] SUCCESS with field name: "${fieldName}"`,
+        );
         break;
       } else {
         const responseText = await updateResponse.text();
         lastError = { fieldName, status: updateResponse.status, responseText };
-        console.warn(`[updateCompanyStatus] FAILED with field name "${fieldName}": Status ${updateResponse.status}, Body: ${responseText}`);
+        console.warn(
+          `[updateCompanyStatus] FAILED with field name "${fieldName}": Status ${updateResponse.status}, Body: ${responseText}`,
+        );
       }
     }
 
     if (!updateResponse || !updateResponse.ok) {
       console.error(
         `[updateCompanyStatus] FAILED for all field names:`,
-        "Company:", companyName,
-        "Airtable ID:", airtableId,
-        "Trying to set value:", newStatusValue,
-        "Last error:", lastError
+        "Company:",
+        companyName,
+        "Airtable ID:",
+        airtableId,
+        "Trying to set value:",
+        newStatusValue,
+        "Last error:",
+        lastError,
       );
       return res.status(500).json({
         error: "Failed to update company status in Airtable",
-        details: "Airtable field name could not be determined or API error occurred",
+        details:
+          "Airtable field name could not be determined or API error occurred",
         lastAttempt: lastError,
         airtableId: airtableId,
         companyName: companyName,
         fieldValue: newStatusValue,
-        help: "Check Airtable field names: try 'Statues', 'Statues ', or 'Status'"
+        help: "Check Airtable field names: try 'Statues', 'Statues ', or 'Status'",
       });
     }
 
@@ -688,13 +771,17 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
       country: updatedFields.country || updatedFields.Country || "",
       type: "LTD" as any,
       incorporationDate: incorporationDate,
-      incorporationYear: parseInt(updatedFields["Incorporate Year"] || new Date().getFullYear()),
+      incorporationYear: parseInt(
+        updatedFields["Incorporate Year"] || new Date().getFullYear(),
+      ),
       purchasePrice: parseFloat(updatedFields.Price || "0"),
       renewalFee: parseFloat(String(updatedFields["Renewal fees"] || "0")),
       currency: "USD",
       expiryDate: calculateExpiryDate(incorporationDate),
       renewalDate: calculateExpiryDate(incorporationDate),
-      renewalDaysLeft: calculateRenewalDaysLeft(calculateExpiryDate(incorporationDate)),
+      renewalDaysLeft: calculateRenewalDaysLeft(
+        calculateExpiryDate(incorporationDate),
+      ),
       status: normalizedStatus,
       paymentStatus: "paid" as const,
       refundStatus: "not-refunded" as const,
@@ -705,7 +792,9 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
       revenue: updatedFields.Revenue,
       adminNotes: updatedFields["Admin Notes"],
       internalNotes: updatedFields["Internal Notes"],
-      optionsInclude: Array.isArray(updatedFields["option include"]) ? updatedFields["option include"] : [],
+      optionsInclude: Array.isArray(updatedFields["option include"])
+        ? updatedFields["option include"]
+        : [],
       createdBy: "airtable",
       createdAt: getTodayString(),
       updatedAt: getTodayString(),
@@ -716,7 +805,9 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
       ownershipHistory: [],
     };
 
-    console.log(`✓ Company ${airtableId} (${companyName}) status updated to ${newStatusValue}`);
+    console.log(
+      `✓ Company ${airtableId} (${companyName}) status updated to ${newStatusValue}`,
+    );
     res.json(updatedCompany);
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);
@@ -747,7 +838,7 @@ export const renewCompany: RequestHandler = async (req, res) => {
         headers: {
           Authorization: `Bearer ${process.env.AIRTABLE_API_TOKEN}`,
         },
-      }
+      },
     );
 
     if (!getResponse.ok) {
@@ -776,7 +867,7 @@ export const renewCompany: RequestHandler = async (req, res) => {
             Status: "active",
           },
         }),
-      }
+      },
     );
 
     if (!updateResponse.ok) {
@@ -793,7 +884,9 @@ export const renewCompany: RequestHandler = async (req, res) => {
       country: updatedFields.country || updatedFields.Country || "",
       type: "LTD" as any,
       incorporationDate: incorporationDate,
-      incorporationYear: parseInt(updatedFields["Incorporate Year"] || new Date().getFullYear()),
+      incorporationYear: parseInt(
+        updatedFields["Incorporate Year"] || new Date().getFullYear(),
+      ),
       purchasePrice: parseFloat(updatedFields.Price || "0"),
       renewalFee: parseFloat(String(updatedFields["Renewal fees"] || "0")),
       currency: "USD",
@@ -810,7 +903,9 @@ export const renewCompany: RequestHandler = async (req, res) => {
       revenue: updatedFields.Revenue,
       adminNotes: updatedFields["Admin Notes"],
       internalNotes: updatedFields["Internal Notes"],
-      optionsInclude: Array.isArray(updatedFields["option include"]) ? updatedFields["option include"] : [],
+      optionsInclude: Array.isArray(updatedFields["option include"])
+        ? updatedFields["option include"]
+        : [],
       createdBy: "airtable",
       createdAt: getTodayString(),
       updatedAt: getTodayString(),
@@ -840,7 +935,7 @@ export const requestRefund: RequestHandler = async (req, res) => {
         headers: {
           Authorization: `Bearer ${process.env.AIRTABLE_API_TOKEN}`,
         },
-      }
+      },
     );
 
     if (!getResponse.ok) {
@@ -868,7 +963,7 @@ export const requestRefund: RequestHandler = async (req, res) => {
             Status: "refund-pending",
           },
         }),
-      }
+      },
     );
 
     if (!updateResponse.ok) {
@@ -885,13 +980,17 @@ export const requestRefund: RequestHandler = async (req, res) => {
       country: updatedFields.country || updatedFields.Country || "",
       type: "LTD" as any,
       incorporationDate: incorporationDate,
-      incorporationYear: parseInt(updatedFields["Incorporate Year"] || new Date().getFullYear()),
+      incorporationYear: parseInt(
+        updatedFields["Incorporate Year"] || new Date().getFullYear(),
+      ),
       purchasePrice: parseFloat(updatedFields.Price || "0"),
       renewalFee: parseFloat(String(updatedFields["Renewal fees"] || "0")),
       currency: "USD",
       expiryDate: calculateExpiryDate(incorporationDate),
       renewalDate: calculateExpiryDate(incorporationDate),
-      renewalDaysLeft: calculateRenewalDaysLeft(calculateExpiryDate(incorporationDate)),
+      renewalDaysLeft: calculateRenewalDaysLeft(
+        calculateExpiryDate(incorporationDate),
+      ),
       status: "refund-pending" as CompanyStatus,
       paymentStatus: "pending" as const,
       refundStatus: "partially-refunded" as const,
@@ -902,7 +1001,9 @@ export const requestRefund: RequestHandler = async (req, res) => {
       revenue: updatedFields.Revenue,
       adminNotes: updatedFields["Admin Notes"],
       internalNotes: updatedFields["Internal Notes"],
-      optionsInclude: Array.isArray(updatedFields["option include"]) ? updatedFields["option include"] : [],
+      optionsInclude: Array.isArray(updatedFields["option include"])
+        ? updatedFields["option include"]
+        : [],
       createdBy: "airtable",
       createdAt: getTodayString(),
       updatedAt: getTodayString(),
@@ -932,7 +1033,7 @@ export const approveRefund: RequestHandler = async (req, res) => {
         headers: {
           Authorization: `Bearer ${process.env.AIRTABLE_API_TOKEN}`,
         },
-      }
+      },
     );
 
     if (!getResponse.ok) {
@@ -960,7 +1061,7 @@ export const approveRefund: RequestHandler = async (req, res) => {
             Status: "refunded",
           },
         }),
-      }
+      },
     );
 
     if (!updateResponse.ok) {
@@ -977,13 +1078,17 @@ export const approveRefund: RequestHandler = async (req, res) => {
       country: updatedFields.country || updatedFields.Country || "",
       type: "LTD" as any,
       incorporationDate: incorporationDate,
-      incorporationYear: parseInt(updatedFields["Incorporate Year"] || new Date().getFullYear()),
+      incorporationYear: parseInt(
+        updatedFields["Incorporate Year"] || new Date().getFullYear(),
+      ),
       purchasePrice: parseFloat(updatedFields.Price || "0"),
       renewalFee: parseFloat(String(updatedFields["Renewal fees"] || "0")),
       currency: "USD",
       expiryDate: calculateExpiryDate(incorporationDate),
       renewalDate: calculateExpiryDate(incorporationDate),
-      renewalDaysLeft: calculateRenewalDaysLeft(calculateExpiryDate(incorporationDate)),
+      renewalDaysLeft: calculateRenewalDaysLeft(
+        calculateExpiryDate(incorporationDate),
+      ),
       status: "refunded" as const,
       paymentStatus: "refunded" as const,
       refundStatus: "fully-refunded" as const,
@@ -994,7 +1099,9 @@ export const approveRefund: RequestHandler = async (req, res) => {
       revenue: updatedFields.Revenue,
       adminNotes: updatedFields["Admin Notes"],
       internalNotes: updatedFields["Internal Notes"],
-      optionsInclude: Array.isArray(updatedFields["option include"]) ? updatedFields["option include"] : [],
+      optionsInclude: Array.isArray(updatedFields["option include"])
+        ? updatedFields["option include"]
+        : [],
       createdBy: "airtable",
       createdAt: getTodayString(),
       updatedAt: getTodayString(),
@@ -1021,7 +1128,9 @@ export const markCompanyAsSold: RequestHandler = async (req, res) => {
     const AIRTABLE_TABLE_ID = "tbljtdHPdHnTberDy";
 
     if (!AIRTABLE_API_TOKEN) {
-      return res.status(500).json({ error: "Airtable integration not configured" });
+      return res
+        .status(500)
+        .json({ error: "Airtable integration not configured" });
     }
 
     // Fetch current company from Airtable
@@ -1031,7 +1140,7 @@ export const markCompanyAsSold: RequestHandler = async (req, res) => {
         headers: {
           Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
         },
-      }
+      },
     );
 
     if (!getResponse.ok) {
@@ -1059,7 +1168,7 @@ export const markCompanyAsSold: RequestHandler = async (req, res) => {
             Status: "sold",
           },
         }),
-      }
+      },
     );
 
     if (!updateResponse.ok) {
@@ -1076,13 +1185,17 @@ export const markCompanyAsSold: RequestHandler = async (req, res) => {
       country: updatedFields.country || updatedFields.Country || "",
       type: "LTD" as any,
       incorporationDate: incorporationDate,
-      incorporationYear: parseInt(String(updatedFields["Incorporate Year"] || new Date().getFullYear())),
+      incorporationYear: parseInt(
+        String(updatedFields["Incorporate Year"] || new Date().getFullYear()),
+      ),
       purchasePrice: parseFloat(String(updatedFields["Price"] || "0")),
       renewalFee: parseFloat(String(updatedFields["Renewal fees"] || "0")),
       currency: "USD",
       expiryDate: calculateExpiryDate(incorporationDate),
       renewalDate: calculateExpiryDate(incorporationDate),
-      renewalDaysLeft: calculateRenewalDaysLeft(calculateExpiryDate(incorporationDate)),
+      renewalDaysLeft: calculateRenewalDaysLeft(
+        calculateExpiryDate(incorporationDate),
+      ),
       status: "sold" as CompanyStatus,
       paymentStatus: "paid" as const,
       refundStatus: "not-refunded" as const,
@@ -1093,7 +1206,9 @@ export const markCompanyAsSold: RequestHandler = async (req, res) => {
       revenue: updatedFields.Revenue,
       adminNotes: updatedFields["Admin Notes"],
       internalNotes: updatedFields["Internal Notes"],
-      optionsInclude: Array.isArray(updatedFields["option include"]) ? updatedFields["option include"] : [],
+      optionsInclude: Array.isArray(updatedFields["option include"])
+        ? updatedFields["option include"]
+        : [],
       createdBy: "airtable",
       createdAt: getTodayString(),
       updatedAt: getTodayString(),
@@ -1141,7 +1256,7 @@ async function syncCompanyToAirtable(company: CompanyData): Promise<void> {
             Price: company.purchasePrice,
           },
         }),
-      }
+      },
     );
 
     if (!response.ok) {
