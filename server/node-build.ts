@@ -64,7 +64,12 @@ try {
     console.log(`[startup] 💓 Health: http://localhost:${port}/health`);
   });
 } catch (error) {
-  console.error("[startup] FATAL: Failed to start server on port", port, ":", error);
+  console.error(
+    "[startup] FATAL: Failed to start server on port",
+    port,
+    ":",
+    error,
+  );
   process.exit(1);
 }
 
