@@ -1053,10 +1053,10 @@ Generated on: ${new Date().toLocaleDateString()}
       <section className="border-b border-border/40 py-8">
         <div className="container max-w-6xl mx-auto px-4">
           <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-            Dashboard
+            {t('dashboard.title')}
           </h1>
           <p className="text-muted-foreground mt-2">
-            Manage your account and portfolio
+            {t('dashboard.subtitle')}
           </p>
         </div>
       </section>
