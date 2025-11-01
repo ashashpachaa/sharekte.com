@@ -61,12 +61,16 @@ interface TransferFormManagementProps {
   orderId?: string;
 }
 
-export function TransferFormManagement({ orderId }: TransferFormManagementProps) {
+export function TransferFormManagement({
+  orderId,
+}: TransferFormManagementProps) {
   const [forms, setForms] = useState<TransferFormData[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("all");
-  const [selectedForm, setSelectedForm] = useState<TransferFormData | null>(null);
+  const [selectedForm, setSelectedForm] = useState<TransferFormData | null>(
+    null,
+  );
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [newStatus, setNewStatus] = useState<FormStatus | "">("");
@@ -101,13 +105,19 @@ export function TransferFormManagement({ orderId }: TransferFormManagementProps)
       });
 
       if (newForms.length > 0) {
-        const message = newForms.length === 1
-          ? `New transfer form: ${newForms[0].formId} for ${newForms[0].companyName}`
-          : `${newForms.length} new transfer forms received`;
+        const message =
+          newForms.length === 1
+            ? `New transfer form: ${newForms[0].formId} for ${newForms[0].companyName}`
+            : `${newForms.length} new transfer forms received`;
 
-        const lastNotificationTime = localStorage.getItem("lastTransferFormNotification");
+        const lastNotificationTime = localStorage.getItem(
+          "lastTransferFormNotification",
+        );
         const now = Date.now();
-        if (!lastNotificationTime || now - parseInt(lastNotificationTime) > 30000) {
+        if (
+          !lastNotificationTime ||
+          now - parseInt(lastNotificationTime) > 30000
+        ) {
           toast.success(message);
           localStorage.setItem("lastTransferFormNotification", now.toString());
         }
@@ -127,7 +137,8 @@ export function TransferFormManagement({ orderId }: TransferFormManagementProps)
       form.formId.toLowerCase().includes(searchQuery.toLowerCase()) ||
       form.companyName.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesStatus = filterStatus === "all" || form.status === filterStatus;
+    const matchesStatus =
+      filterStatus === "all" || form.status === filterStatus;
 
     return matchesSearch && matchesStatus;
   });
@@ -136,9 +147,15 @@ export function TransferFormManagement({ orderId }: TransferFormManagementProps)
     if (!selectedForm || !newStatus) return;
 
     try {
-      const success = await updateFormStatus(selectedForm.id, newStatus as FormStatus, statusNotes);
+      const success = await updateFormStatus(
+        selectedForm.id,
+        newStatus as FormStatus,
+        statusNotes,
+      );
       if (success) {
-        toast.success(`Form status updated to ${formatFormStatus(newStatus as FormStatus)}`);
+        toast.success(
+          `Form status updated to ${formatFormStatus(newStatus as FormStatus)}`,
+        );
         setShowStatusModal(false);
         setNewStatus("");
         setStatusNotes("");
@@ -173,31 +190,41 @@ export function TransferFormManagement({ orderId }: TransferFormManagementProps)
         </Card>
         <Card className="border-blue-200">
           <CardContent className="pt-4">
-            <div className="text-2xl font-bold text-blue-600">{stats.underReview}</div>
+            <div className="text-2xl font-bold text-blue-600">
+              {stats.underReview}
+            </div>
             <p className="text-xs text-gray-600">Under Review</p>
           </CardContent>
         </Card>
         <Card className="border-yellow-200">
           <CardContent className="pt-4">
-            <div className="text-2xl font-bold text-yellow-600">{stats.amendRequired}</div>
+            <div className="text-2xl font-bold text-yellow-600">
+              {stats.amendRequired}
+            </div>
             <p className="text-xs text-gray-600">Amend Required</p>
           </CardContent>
         </Card>
         <Card className="border-orange-200">
           <CardContent className="pt-4">
-            <div className="text-2xl font-bold text-orange-600">{stats.transferring}</div>
+            <div className="text-2xl font-bold text-orange-600">
+              {stats.transferring}
+            </div>
             <p className="text-xs text-gray-600">Transferring</p>
           </CardContent>
         </Card>
         <Card className="border-green-200">
           <CardContent className="pt-4">
-            <div className="text-2xl font-bold text-green-600">{stats.completed}</div>
+            <div className="text-2xl font-bold text-green-600">
+              {stats.completed}
+            </div>
             <p className="text-xs text-gray-600">Completed</p>
           </CardContent>
         </Card>
         <Card className="border-red-200">
           <CardContent className="pt-4">
-            <div className="text-2xl font-bold text-red-600">{stats.canceled}</div>
+            <div className="text-2xl font-bold text-red-600">
+              {stats.canceled}
+            </div>
             <p className="text-xs text-gray-600">Canceled</p>
           </CardContent>
         </Card>
@@ -226,9 +253,13 @@ export function TransferFormManagement({ orderId }: TransferFormManagementProps)
                 <SelectItem value="all">All Statuses</SelectItem>
                 <SelectItem value="under-review">Under Review</SelectItem>
                 <SelectItem value="amend-required">Amend Required</SelectItem>
-                <SelectItem value="confirm-application">Confirm Application</SelectItem>
+                <SelectItem value="confirm-application">
+                  Confirm Application
+                </SelectItem>
                 <SelectItem value="transferring">Transferring</SelectItem>
-                <SelectItem value="complete-transfer">Complete Transfer</SelectItem>
+                <SelectItem value="complete-transfer">
+                  Complete Transfer
+                </SelectItem>
                 <SelectItem value="canceled">Canceled</SelectItem>
               </SelectContent>
             </Select>
@@ -270,8 +301,12 @@ export function TransferFormManagement({ orderId }: TransferFormManagementProps)
                 <TableBody>
                   {filteredForms.map((form) => (
                     <TableRow key={form.id} className="hover:bg-gray-50">
-                      <TableCell className="font-mono text-sm">{form.formId}</TableCell>
-                      <TableCell className="font-medium">{form.companyName}</TableCell>
+                      <TableCell className="font-mono text-sm">
+                        {form.formId}
+                      </TableCell>
+                      <TableCell className="font-medium">
+                        {form.companyName}
+                      </TableCell>
                       <TableCell>{form.country}</TableCell>
                       <TableCell>
                         <Badge className={getFormStatusColor(form.status)}>
@@ -328,13 +363,17 @@ export function TransferFormManagement({ orderId }: TransferFormManagementProps)
       </Card>
 
       {/* Form Details Modal */}
-      <Dialog open={showDetailsModal && !!selectedForm} onOpenChange={setShowDetailsModal}>
+      <Dialog
+        open={showDetailsModal && !!selectedForm}
+        onOpenChange={setShowDetailsModal}
+      >
         {selectedForm && (
           <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Transfer Form: {selectedForm.formId}</DialogTitle>
               <DialogDescription>
-                Company: {selectedForm.companyName} ({selectedForm.companyNumber})
+                Company: {selectedForm.companyName} (
+                {selectedForm.companyNumber})
               </DialogDescription>
             </DialogHeader>
 
@@ -357,11 +396,15 @@ export function TransferFormManagement({ orderId }: TransferFormManagementProps)
                 <h3 className="font-semibold mb-3">Company Information</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-xs text-gray-600">Company Name</Label>
+                    <Label className="text-xs text-gray-600">
+                      Company Name
+                    </Label>
                     <p className="font-medium">{selectedForm.companyName}</p>
                   </div>
                   <div>
-                    <Label className="text-xs text-gray-600">Company Number</Label>
+                    <Label className="text-xs text-gray-600">
+                      Company Number
+                    </Label>
                     <p className="font-medium">{selectedForm.companyNumber}</p>
                   </div>
                   <div>
@@ -369,7 +412,9 @@ export function TransferFormManagement({ orderId }: TransferFormManagementProps)
                     <p className="text-sm">{selectedForm.country}</p>
                   </div>
                   <div>
-                    <Label className="text-xs text-gray-600">Incorporation Year</Label>
+                    <Label className="text-xs text-gray-600">
+                      Incorporation Year
+                    </Label>
                     <p className="text-sm">{selectedForm.incorporationYear}</p>
                   </div>
                 </div>
@@ -377,25 +422,39 @@ export function TransferFormManagement({ orderId }: TransferFormManagementProps)
 
               {/* Shareholders Information */}
               <div>
-                <h3 className="font-semibold mb-3">Shareholders ({selectedForm.numberOfShareholders})</h3>
-                {selectedForm.shareholders && selectedForm.shareholders.length > 0 ? (
+                <h3 className="font-semibold mb-3">
+                  Shareholders ({selectedForm.numberOfShareholders})
+                </h3>
+                {selectedForm.shareholders &&
+                selectedForm.shareholders.length > 0 ? (
                   <div className="space-y-3">
                     {selectedForm.shareholders.map((shareholder, idx) => (
-                      <div key={idx} className="border-l-2 border-blue-200 pl-3 py-2">
-                        <p className="font-medium text-sm">{shareholder.name}</p>
-                        <p className="text-xs text-gray-600">{shareholder.sharePercentage}% shares</p>
+                      <div
+                        key={idx}
+                        className="border-l-2 border-blue-200 pl-3 py-2"
+                      >
+                        <p className="font-medium text-sm">
+                          {shareholder.name}
+                        </p>
+                        <p className="text-xs text-gray-600">
+                          {shareholder.sharePercentage}% shares
+                        </p>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-sm text-gray-500">No shareholders information available</p>
+                  <p className="text-sm text-gray-500">
+                    No shareholders information available
+                  </p>
                 )}
               </div>
 
               {/* Attachments */}
               {selectedForm.attachments.length > 0 && (
                 <div>
-                  <h3 className="font-semibold mb-3">Attachments ({selectedForm.attachments.length})</h3>
+                  <h3 className="font-semibold mb-3">
+                    Attachments ({selectedForm.attachments.length})
+                  </h3>
                   <div className="space-y-2">
                     {selectedForm.attachments.map((attachment) => (
                       <div
@@ -403,9 +462,14 @@ export function TransferFormManagement({ orderId }: TransferFormManagementProps)
                         className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50"
                       >
                         <div>
-                          <p className="font-medium text-sm">{attachment.name}</p>
+                          <p className="font-medium text-sm">
+                            {attachment.name}
+                          </p>
                           <p className="text-xs text-gray-500">
-                            {(attachment.size / 1024 / 1024).toFixed(2)} MB • {new Date(attachment.uploadedDate).toLocaleDateString()}
+                            {(attachment.size / 1024 / 1024).toFixed(2)} MB •{" "}
+                            {new Date(
+                              attachment.uploadedDate,
+                            ).toLocaleDateString()}
                           </p>
                         </div>
                         <Button variant="ghost" size="sm">
@@ -426,11 +490,15 @@ export function TransferFormManagement({ orderId }: TransferFormManagementProps)
                       <div
                         key={comment.id}
                         className={`p-3 rounded-lg border ${
-                          comment.isAdminOnly ? "bg-yellow-50 border-yellow-200" : "bg-gray-50"
+                          comment.isAdminOnly
+                            ? "bg-yellow-50 border-yellow-200"
+                            : "bg-gray-50"
                         }`}
                       >
                         <div className="flex justify-between items-start mb-1">
-                          <p className="font-medium text-sm">{comment.author}</p>
+                          <p className="font-medium text-sm">
+                            {comment.author}
+                          </p>
                           {comment.isAdminOnly && (
                             <Badge variant="outline" className="text-xs">
                               Admin Only
@@ -450,14 +518,21 @@ export function TransferFormManagement({ orderId }: TransferFormManagementProps)
               {/* Admin Notes */}
               {selectedForm.adminNotes && (
                 <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                  <h3 className="font-semibold mb-2 text-blue-900">Admin Notes</h3>
-                  <p className="text-sm text-blue-800">{selectedForm.adminNotes}</p>
+                  <h3 className="font-semibold mb-2 text-blue-900">
+                    Admin Notes
+                  </h3>
+                  <p className="text-sm text-blue-800">
+                    {selectedForm.adminNotes}
+                  </p>
                 </div>
               )}
             </div>
 
             <DialogFooter>
-              <Button variant="outline" onClick={() => setShowDetailsModal(false)}>
+              <Button
+                variant="outline"
+                onClick={() => setShowDetailsModal(false)}
+              >
                 Close
               </Button>
               <Button
@@ -474,13 +549,17 @@ export function TransferFormManagement({ orderId }: TransferFormManagementProps)
       </Dialog>
 
       {/* Status Change Modal */}
-      <Dialog open={showStatusModal && !!selectedForm} onOpenChange={setShowStatusModal}>
+      <Dialog
+        open={showStatusModal && !!selectedForm}
+        onOpenChange={setShowStatusModal}
+      >
         {selectedForm && (
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Change Form Status</DialogTitle>
               <DialogDescription>
-                Form: {selectedForm.formId} • Current: {formatFormStatus(selectedForm.status)}
+                Form: {selectedForm.formId} • Current:{" "}
+                {formatFormStatus(selectedForm.status)}
               </DialogDescription>
             </DialogHeader>
 
@@ -492,11 +571,13 @@ export function TransferFormManagement({ orderId }: TransferFormManagementProps)
                     <SelectValue placeholder="Select new status" />
                   </SelectTrigger>
                   <SelectContent>
-                    {getAvailableStatusTransitions(selectedForm.status).map((status) => (
-                      <SelectItem key={status} value={status}>
-                        {formatFormStatus(status)}
-                      </SelectItem>
-                    ))}
+                    {getAvailableStatusTransitions(selectedForm.status).map(
+                      (status) => (
+                        <SelectItem key={status} value={status}>
+                          {formatFormStatus(status)}
+                        </SelectItem>
+                      ),
+                    )}
                   </SelectContent>
                 </Select>
               </div>
@@ -520,13 +601,17 @@ export function TransferFormManagement({ orderId }: TransferFormManagementProps)
 
               {newStatus === "complete-transfer" && (
                 <div className="bg-green-50 p-3 rounded-lg border border-green-200 text-sm text-green-800">
-                  ✓ Transfer will be marked as complete and client will be notified
+                  ✓ Transfer will be marked as complete and client will be
+                  notified
                 </div>
               )}
             </div>
 
             <DialogFooter>
-              <Button variant="outline" onClick={() => setShowStatusModal(false)}>
+              <Button
+                variant="outline"
+                onClick={() => setShowStatusModal(false)}
+              >
                 Cancel
               </Button>
               <Button onClick={handleStatusChange} disabled={!newStatus}>

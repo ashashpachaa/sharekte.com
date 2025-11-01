@@ -105,9 +105,13 @@ function initializeDemoForms() {
         changeCompanyName: false,
         changeCompanyActivities: false,
         status: "complete-transfer",
-        createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+        createdAt: new Date(
+          Date.now() - 30 * 24 * 60 * 60 * 1000,
+        ).toISOString(),
         updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-        completedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+        completedAt: new Date(
+          Date.now() - 2 * 24 * 60 * 60 * 1000,
+        ).toISOString(),
         amendmentsRequiredCount: 0,
         attachments: [],
         comments: [],

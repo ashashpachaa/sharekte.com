@@ -387,12 +387,16 @@ export default function Dashboard() {
             const companyOrder = orders.find(
               (order: any) =>
                 order.companyName &&
-                order.companyName.toLowerCase() === company.name.toLowerCase()
+                order.companyName.toLowerCase() === company.name.toLowerCase(),
             );
 
-            if (companyOrder && companyOrder.documents && companyOrder.documents.length > 0) {
+            if (
+              companyOrder &&
+              companyOrder.documents &&
+              companyOrder.documents.length > 0
+            ) {
               console.log(
-                `[Dashboard] Found ${companyOrder.documents.length} documents for ${company.name}`
+                `[Dashboard] Found ${companyOrder.documents.length} documents for ${company.name}`,
               );
               return {
                 ...company,
@@ -407,7 +411,7 @@ export default function Dashboard() {
             }
 
             return company;
-          })
+          }),
         );
       } catch (error) {
         console.error("[Dashboard] Error loading order documents:", error);

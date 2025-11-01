@@ -14,7 +14,9 @@ const distPath = path.join(__dirname, "../spa");
 console.log("[startup] Starting Fusion Starter server");
 console.log(`[startup] Port: ${port}`);
 console.log(`[startup] Node env: ${process.env.NODE_ENV || "development"}`);
-console.log(`[startup] Airtable configured: ${!!process.env.AIRTABLE_API_TOKEN}`);
+console.log(
+  `[startup] Airtable configured: ${!!process.env.AIRTABLE_API_TOKEN}`,
+);
 console.log(`[startup] SPA path: ${distPath}`);
 console.log(`[startup] SPA exists: ${fs.existsSync(distPath)}`);
 

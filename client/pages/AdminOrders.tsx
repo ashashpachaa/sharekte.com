@@ -1,7 +1,14 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAdmin } from "@/lib/admin-context";
-import { getAllOrders, updateOrder, updateOrderStatus, getStatusColor, type Order, type OrderStatus } from "@/lib/orders";
+import {
+  getAllOrders,
+  updateOrder,
+  updateOrderStatus,
+  getStatusColor,
+  type Order,
+  type OrderStatus,
+} from "@/lib/orders";
 import { RefundManagement } from "@/components/RefundManagement";
 import { DocumentManagement } from "@/components/DocumentManagement";
 import { TransferFormManagement } from "@/components/TransferFormManagement";
@@ -45,7 +52,9 @@ export default function AdminOrders() {
   const [showRefundModal, setShowRefundModal] = useState(false);
   const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("orders");
-  const [previousOrderStates, setPreviousOrderStates] = useState<Map<string, string>>(new Map());
+  const [previousOrderStates, setPreviousOrderStates] = useState<
+    Map<string, string>
+  >(new Map());
 
   useEffect(() => {
     if (!isAdmin) {
@@ -75,7 +84,11 @@ export default function AdminOrders() {
     try {
       setLoading(true);
       const data = await getAllOrders();
-      const sortedData = data.sort((a, b) => new Date(b.purchaseDate).getTime() - new Date(a.purchaseDate).getTime());
+      const sortedData = data.sort(
+        (a, b) =>
+          new Date(b.purchaseDate).getTime() -
+          new Date(a.purchaseDate).getTime(),
+      );
       setOrders(sortedData);
 
       // Check for new orders and status changes
@@ -87,14 +100,20 @@ export default function AdminOrders() {
 
       if (newOrders.length > 0) {
         setNewOrdersCount(newOrders.length);
-        const message = newOrders.length === 1
-          ? `New order: ${newOrders[0].orderId} from ${newOrders[0].customerName}`
-          : `${newOrders.length} new orders received`;
+        const message =
+          newOrders.length === 1
+            ? `New order: ${newOrders[0].orderId} from ${newOrders[0].customerName}`
+            : `${newOrders.length} new orders received`;
 
         // Only show toast notification if not already shown
-        const lastNotificationTime = localStorage.getItem("lastOrderNotification");
+        const lastNotificationTime = localStorage.getItem(
+          "lastOrderNotification",
+        );
         const now = Date.now();
-        if (!lastNotificationTime || now - parseInt(lastNotificationTime) > 30000) {
+        if (
+          !lastNotificationTime ||
+          now - parseInt(lastNotificationTime) > 30000
+        ) {
           toast.success(message);
           localStorage.setItem("lastOrderNotification", now.toString());
         }
@@ -104,10 +123,14 @@ export default function AdminOrders() {
 
       // Check for status changes from Airtable
       sortedData.forEach((order) => {
-        const previousStatus = previousOrderStates.get(order.id || order.orderId);
+        const previousStatus = previousOrderStates.get(
+          order.id || order.orderId,
+        );
         if (previousStatus && previousStatus !== order.status) {
           // Status changed - show notification
-          toast.info(`Order ${order.orderId}: Status changed to ${order.status}`);
+          toast.info(
+            `Order ${order.orderId}: Status changed to ${order.status}`,
+          );
         }
       });
 
@@ -139,7 +162,7 @@ export default function AdminOrders() {
           o.orderId.toLowerCase().includes(query) ||
           o.customerName.toLowerCase().includes(query) ||
           o.customerEmail.toLowerCase().includes(query) ||
-          o.companyName.toLowerCase().includes(query)
+          o.companyName.toLowerCase().includes(query),
       );
     }
 
@@ -155,16 +178,26 @@ export default function AdminOrders() {
 
     // Date range filter
     if (dateFrom) {
-      result = result.filter((o) => new Date(o.purchaseDate) >= new Date(dateFrom));
+      result = result.filter(
+        (o) => new Date(o.purchaseDate) >= new Date(dateFrom),
+      );
     }
     if (dateTo) {
-      result = result.filter((o) => new Date(o.purchaseDate) <= new Date(dateTo));
+      result = result.filter(
+        (o) => new Date(o.purchaseDate) <= new Date(dateTo),
+      );
     }
 
-    return result.sort((a, b) => new Date(b.purchaseDate).getTime() - new Date(a.purchaseDate).getTime());
+    return result.sort(
+      (a, b) =>
+        new Date(b.purchaseDate).getTime() - new Date(a.purchaseDate).getTime(),
+    );
   }, [orders, searchQuery, filterStatus, filterCountry, dateFrom, dateTo]);
 
-  const handleStatusChange = async (orderId: string, newStatus: OrderStatus) => {
+  const handleStatusChange = async (
+    orderId: string,
+    newStatus: OrderStatus,
+  ) => {
     try {
       await updateOrderStatus(orderId, newStatus);
       loadOrders();
@@ -177,13 +210,19 @@ export default function AdminOrders() {
 
   const orderStats = {
     total: orders.length,
-    paid: orders.filter((o) => o.status === "paid" || o.status === "completed").length,
-    pending: orders.filter((o) => o.status === "pending-payment" || o.status === "transfer-form-pending").length,
+    paid: orders.filter((o) => o.status === "paid" || o.status === "completed")
+      .length,
+    pending: orders.filter(
+      (o) =>
+        o.status === "pending-payment" || o.status === "transfer-form-pending",
+    ).length,
     completed: orders.filter((o) => o.status === "completed").length,
     refunded: orders.filter((o) => o.status === "refunded").length,
   };
 
-  const uniqueCountries = Array.from(new Set(orders.map((o) => o.country))).sort();
+  const uniqueCountries = Array.from(
+    new Set(orders.map((o) => o.country)),
+  ).sort();
 
   const statuses: OrderStatus[] = [
     "pending-payment",
@@ -206,10 +245,16 @@ export default function AdminOrders() {
       <header className="sticky top-0 z-50 border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container max-w-7xl mx-auto flex h-16 items-center justify-between px-4">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" onClick={() => navigate("/admin/dashboard")}>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate("/admin/dashboard")}
+            >
               <ArrowLeft className="w-4 h-4" />
             </Button>
-            <h1 className="text-2xl font-bold text-foreground">Orders Management</h1>
+            <h1 className="text-2xl font-bold text-foreground">
+              Orders Management
+            </h1>
           </div>
           <Button variant="outline" onClick={loadOrders} disabled={loading}>
             {loading ? "Loading..." : "Refresh"}
@@ -246,25 +291,42 @@ export default function AdminOrders() {
             {/* Stats */}
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
               <div className="bg-card border border-border/40 rounded-lg p-4">
-                <p className="text-xs text-muted-foreground mb-1">Total Orders</p>
-                <p className="text-2xl font-bold text-foreground">{orderStats.total}</p>
+                <p className="text-xs text-muted-foreground mb-1">
+                  Total Orders
+                </p>
+                <p className="text-2xl font-bold text-foreground">
+                  {orderStats.total}
+                </p>
               </div>
               <div className="bg-card border border-border/40 rounded-lg p-4">
-                <p className="text-xs text-muted-foreground mb-1">Paid/Completed</p>
-                <p className="text-2xl font-bold text-green-600">{orderStats.paid}</p>
+                <p className="text-xs text-muted-foreground mb-1">
+                  Paid/Completed
+                </p>
+                <p className="text-2xl font-bold text-green-600">
+                  {orderStats.paid}
+                </p>
               </div>
               <div className="bg-card border border-border/40 rounded-lg p-4">
                 <p className="text-xs text-muted-foreground mb-1">Pending</p>
-                <p className="text-2xl font-bold text-yellow-600">{orderStats.pending}</p>
+                <p className="text-2xl font-bold text-yellow-600">
+                  {orderStats.pending}
+                </p>
               </div>
               <div className="bg-card border border-border/40 rounded-lg p-4">
                 <p className="text-xs text-muted-foreground mb-1">Refunded</p>
-                <p className="text-2xl font-bold text-blue-600">{orderStats.refunded}</p>
+                <p className="text-2xl font-bold text-blue-600">
+                  {orderStats.refunded}
+                </p>
               </div>
               <div className="bg-card border border-border/40 rounded-lg p-4">
-                <p className="text-xs text-muted-foreground mb-1">Total Revenue</p>
+                <p className="text-xs text-muted-foreground mb-1">
+                  Total Revenue
+                </p>
                 <p className="text-2xl font-bold text-primary">
-                  £{orders.reduce((sum, o) => sum + o.amount, 0).toLocaleString()}
+                  £
+                  {orders
+                    .reduce((sum, o) => sum + o.amount, 0)
+                    .toLocaleString()}
                 </p>
               </div>
             </div>
@@ -288,7 +350,9 @@ export default function AdminOrders() {
                   {/* Status Filter */}
                   <select
                     value={filterStatus}
-                    onChange={(e) => setFilterStatus(e.target.value as FilterStatus)}
+                    onChange={(e) =>
+                      setFilterStatus(e.target.value as FilterStatus)
+                    }
                     className="px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
                   >
                     <option value="all">All Statuses</option>
@@ -331,7 +395,11 @@ export default function AdminOrders() {
                 </div>
 
                 {/* Clear Filters */}
-                {(searchQuery || filterStatus !== "all" || filterCountry || dateFrom || dateTo) && (
+                {(searchQuery ||
+                  filterStatus !== "all" ||
+                  filterCountry ||
+                  dateFrom ||
+                  dateTo) && (
                   <Button
                     variant="outline"
                     size="sm"
@@ -352,42 +420,73 @@ export default function AdminOrders() {
             {/* Orders Table */}
             <div className="bg-card border border-border/40 rounded-lg overflow-hidden">
               {filteredOrders.length === 0 ? (
-                <div className="p-12 text-center text-muted-foreground">No orders found</div>
+                <div className="p-12 text-center text-muted-foreground">
+                  No orders found
+                </div>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead className="bg-muted/50 border-b border-border/40">
                       <tr>
-                        <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Order</th>
-                        <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Customer</th>
-                        <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Company</th>
-                        <th className="px-6 py-4 text-right text-sm font-semibold text-foreground">Amount</th>
-                        <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Status</th>
-                        <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Date</th>
-                        <th className="px-6 py-4 text-center text-sm font-semibold text-foreground">Actions</th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
+                          Order
+                        </th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
+                          Customer
+                        </th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
+                          Company
+                        </th>
+                        <th className="px-6 py-4 text-right text-sm font-semibold text-foreground">
+                          Amount
+                        </th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
+                          Status
+                        </th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
+                          Date
+                        </th>
+                        <th className="px-6 py-4 text-center text-sm font-semibold text-foreground">
+                          Actions
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border/40">
                       {filteredOrders.map((order) => (
-                        <tr key={order.id} className="hover:bg-muted/50 transition-colors">
+                        <tr
+                          key={order.id}
+                          className="hover:bg-muted/50 transition-colors"
+                        >
                           <td className="px-6 py-4">
                             <div>
-                              <p className="font-semibold text-foreground">{order.orderId}</p>
-                              <p className="text-xs text-muted-foreground">{order.id}</p>
+                              <p className="font-semibold text-foreground">
+                                {order.orderId}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {order.id}
+                              </p>
                             </div>
                           </td>
                           <td className="px-6 py-4">
                             <div className="text-sm">
-                              <p className="font-medium text-foreground">{order.customerName}</p>
-                              <p className="text-xs text-muted-foreground">{order.customerEmail}</p>
+                              <p className="font-medium text-foreground">
+                                {order.customerName}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {order.customerEmail}
+                              </p>
                             </div>
                           </td>
-                          <td className="px-6 py-4 text-sm text-foreground">{order.companyName}</td>
+                          <td className="px-6 py-4 text-sm text-foreground">
+                            {order.companyName}
+                          </td>
                           <td className="px-6 py-4 text-right font-semibold text-foreground">
                             {order.currency} {order.amount.toLocaleString()}
                           </td>
                           <td className="px-6 py-4">
-                            <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(order.status)}`}>
+                            <span
+                              className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(order.status)}`}
+                            >
                               {order.status.replace(/-/g, " ")}
                             </span>
                           </td>
@@ -440,17 +539,19 @@ export default function AdminOrders() {
       )}
 
       {/* Refund Management Modal */}
-      {showRefundModal && selectedOrder && selectedOrder.refundStatus !== "none" && (
-        <RefundManagement
-          order={selectedOrder}
-          onClose={() => setShowRefundModal(false)}
-          onRefundProcessed={(updatedOrder) => {
-            setSelectedOrder(updatedOrder);
-            loadOrders();
-            setShowRefundModal(false);
-          }}
-        />
-      )}
+      {showRefundModal &&
+        selectedOrder &&
+        selectedOrder.refundStatus !== "none" && (
+          <RefundManagement
+            order={selectedOrder}
+            onClose={() => setShowRefundModal(false)}
+            onRefundProcessed={(updatedOrder) => {
+              setSelectedOrder(updatedOrder);
+              loadOrders();
+              setShowRefundModal(false);
+            }}
+          />
+        )}
     </div>
   );
 }
@@ -462,7 +563,11 @@ interface OrderDetailsModalProps {
   onRefundClick?: () => void;
 }
 
-function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModalProps) {
+function OrderDetailsModal({
+  order,
+  onClose,
+  onStatusChange,
+}: OrderDetailsModalProps) {
   const [editedOrder, setEditedOrder] = useState<Order>(order);
   const [isSaving, setIsSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
@@ -518,7 +623,6 @@ function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModal
     }
   };
 
-
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-background rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto">
@@ -533,27 +637,41 @@ function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModal
           {/* Order Info */}
           <div className="grid grid-cols-2 gap-6">
             <div>
-              <p className="text-xs text-muted-foreground font-semibold mb-1">Order ID</p>
+              <p className="text-xs text-muted-foreground font-semibold mb-1">
+                Order ID
+              </p>
               <p className="text-foreground font-mono">{editedOrder.orderId}</p>
             </div>
             <div>
-              <p className="text-xs text-muted-foreground font-semibold mb-1">Order Date</p>
+              <p className="text-xs text-muted-foreground font-semibold mb-1">
+                Order Date
+              </p>
               <input
                 type="date"
                 value={editedOrder.purchaseDate.split("T")[0]}
-                onChange={(e) => handleFieldChange("purchaseDate", e.target.value)}
+                onChange={(e) =>
+                  handleFieldChange("purchaseDate", e.target.value)
+                }
                 className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
               />
             </div>
             <div>
-              <p className="text-xs text-muted-foreground font-semibold mb-1">Last Updated</p>
-              <p className="text-foreground text-sm py-2">{new Date(editedOrder.lastUpdateDate).toLocaleDateString()}</p>
+              <p className="text-xs text-muted-foreground font-semibold mb-1">
+                Last Updated
+              </p>
+              <p className="text-foreground text-sm py-2">
+                {new Date(editedOrder.lastUpdateDate).toLocaleDateString()}
+              </p>
             </div>
             <div>
-              <p className="text-xs text-muted-foreground font-semibold mb-1">Payment Status</p>
+              <p className="text-xs text-muted-foreground font-semibold mb-1">
+                Payment Status
+              </p>
               <select
                 value={editedOrder.paymentStatus}
-                onChange={(e) => handleFieldChange("paymentStatus", e.target.value)}
+                onChange={(e) =>
+                  handleFieldChange("paymentStatus", e.target.value)
+                }
                 className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
               >
                 <option value="pending">Pending</option>
@@ -566,37 +684,53 @@ function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModal
 
           {/* Customer Info */}
           <div className="border-t border-border/40 pt-6">
-            <h3 className="font-semibold text-foreground mb-4">Customer Information</h3>
+            <h3 className="font-semibold text-foreground mb-4">
+              Customer Information
+            </h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-xs text-muted-foreground font-semibold mb-1">Name</p>
+                <p className="text-xs text-muted-foreground font-semibold mb-1">
+                  Name
+                </p>
                 <input
                   type="text"
                   value={editedOrder.customerName}
-                  onChange={(e) => handleFieldChange("customerName", e.target.value)}
+                  onChange={(e) =>
+                    handleFieldChange("customerName", e.target.value)
+                  }
                   className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
                 />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground font-semibold mb-1">Email</p>
+                <p className="text-xs text-muted-foreground font-semibold mb-1">
+                  Email
+                </p>
                 <input
                   type="email"
                   value={editedOrder.customerEmail}
-                  onChange={(e) => handleFieldChange("customerEmail", e.target.value)}
+                  onChange={(e) =>
+                    handleFieldChange("customerEmail", e.target.value)
+                  }
                   className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
                 />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground font-semibold mb-1">Phone</p>
+                <p className="text-xs text-muted-foreground font-semibold mb-1">
+                  Phone
+                </p>
                 <input
                   type="tel"
                   value={editedOrder.customerPhone || ""}
-                  onChange={(e) => handleFieldChange("customerPhone", e.target.value)}
+                  onChange={(e) =>
+                    handleFieldChange("customerPhone", e.target.value)
+                  }
                   className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
                 />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground font-semibold mb-1">Country</p>
+                <p className="text-xs text-muted-foreground font-semibold mb-1">
+                  Country
+                </p>
                 <input
                   type="text"
                   value={editedOrder.country}
@@ -605,11 +739,15 @@ function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModal
                 />
               </div>
               <div className="col-span-2">
-                <p className="text-xs text-muted-foreground font-semibold mb-1">Billing Address</p>
+                <p className="text-xs text-muted-foreground font-semibold mb-1">
+                  Billing Address
+                </p>
                 <input
                   type="text"
                   value={editedOrder.billingAddress || ""}
-                  onChange={(e) => handleFieldChange("billingAddress", e.target.value)}
+                  onChange={(e) =>
+                    handleFieldChange("billingAddress", e.target.value)
+                  }
                   className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
                 />
               </div>
@@ -618,23 +756,33 @@ function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModal
 
           {/* Company Info */}
           <div className="border-t border-border/40 pt-6">
-            <h3 className="font-semibold text-foreground mb-4">Company Information</h3>
+            <h3 className="font-semibold text-foreground mb-4">
+              Company Information
+            </h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-xs text-muted-foreground font-semibold mb-1">Name</p>
+                <p className="text-xs text-muted-foreground font-semibold mb-1">
+                  Name
+                </p>
                 <input
                   type="text"
                   value={editedOrder.companyName}
-                  onChange={(e) => handleFieldChange("companyName", e.target.value)}
+                  onChange={(e) =>
+                    handleFieldChange("companyName", e.target.value)
+                  }
                   className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
                 />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground font-semibold mb-1">Company Number</p>
+                <p className="text-xs text-muted-foreground font-semibold mb-1">
+                  Company Number
+                </p>
                 <input
                   type="text"
                   value={editedOrder.companyNumber}
-                  onChange={(e) => handleFieldChange("companyNumber", e.target.value)}
+                  onChange={(e) =>
+                    handleFieldChange("companyNumber", e.target.value)
+                  }
                   className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
                 />
               </div>
@@ -643,22 +791,32 @@ function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModal
 
           {/* Payment Info */}
           <div className="border-t border-border/40 pt-6">
-            <h3 className="font-semibold text-foreground mb-4">Payment Information</h3>
+            <h3 className="font-semibold text-foreground mb-4">
+              Payment Information
+            </h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-xs text-muted-foreground font-semibold mb-1">Amount</p>
+                <p className="text-xs text-muted-foreground font-semibold mb-1">
+                  Amount
+                </p>
                 <input
                   type="number"
                   value={editedOrder.amount}
-                  onChange={(e) => handleFieldChange("amount", parseFloat(e.target.value))}
+                  onChange={(e) =>
+                    handleFieldChange("amount", parseFloat(e.target.value))
+                  }
                   className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
                 />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground font-semibold mb-1">Currency</p>
+                <p className="text-xs text-muted-foreground font-semibold mb-1">
+                  Currency
+                </p>
                 <select
                   value={editedOrder.currency}
-                  onChange={(e) => handleFieldChange("currency", e.target.value)}
+                  onChange={(e) =>
+                    handleFieldChange("currency", e.target.value)
+                  }
                   className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
                 >
                   <option value="USD">USD</option>
@@ -669,10 +827,14 @@ function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModal
                 </select>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground font-semibold mb-1">Method</p>
+                <p className="text-xs text-muted-foreground font-semibold mb-1">
+                  Method
+                </p>
                 <select
                   value={editedOrder.paymentMethod}
-                  onChange={(e) => handleFieldChange("paymentMethod", e.target.value)}
+                  onChange={(e) =>
+                    handleFieldChange("paymentMethod", e.target.value)
+                  }
                   className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
                 >
                   <option value="credit_card">Credit Card</option>
@@ -682,11 +844,15 @@ function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModal
                 </select>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground font-semibold mb-1">Transaction ID</p>
+                <p className="text-xs text-muted-foreground font-semibold mb-1">
+                  Transaction ID
+                </p>
                 <input
                   type="text"
                   value={editedOrder.transactionId || ""}
-                  onChange={(e) => handleFieldChange("transactionId", e.target.value)}
+                  onChange={(e) =>
+                    handleFieldChange("transactionId", e.target.value)
+                  }
                   className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
                 />
               </div>
@@ -695,23 +861,33 @@ function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModal
 
           {/* Renewal Info */}
           <div className="border-t border-border/40 pt-6">
-            <h3 className="font-semibold text-foreground mb-4">Renewal Information</h3>
+            <h3 className="font-semibold text-foreground mb-4">
+              Renewal Information
+            </h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-xs text-muted-foreground font-semibold mb-1">Renewal Date</p>
+                <p className="text-xs text-muted-foreground font-semibold mb-1">
+                  Renewal Date
+                </p>
                 <input
                   type="date"
                   value={editedOrder.renewalDate.split("T")[0]}
-                  onChange={(e) => handleFieldChange("renewalDate", e.target.value)}
+                  onChange={(e) =>
+                    handleFieldChange("renewalDate", e.target.value)
+                  }
                   className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
                 />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground font-semibold mb-1">Renewal Fees</p>
+                <p className="text-xs text-muted-foreground font-semibold mb-1">
+                  Renewal Fees
+                </p>
                 <input
                   type="number"
                   value={editedOrder.renewalFees}
-                  onChange={(e) => handleFieldChange("renewalFees", parseFloat(e.target.value))}
+                  onChange={(e) =>
+                    handleFieldChange("renewalFees", parseFloat(e.target.value))
+                  }
                   className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
                 />
               </div>
@@ -734,7 +910,9 @@ function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModal
             <h3 className="font-semibold text-foreground mb-4">Order Status</h3>
             <select
               value={editedOrder.status}
-              onChange={(e) => handleFieldChange("status", e.target.value as OrderStatus)}
+              onChange={(e) =>
+                handleFieldChange("status", e.target.value as OrderStatus)
+              }
               className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
             >
               {statuses.map((status) => (
@@ -748,14 +926,18 @@ function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModal
           {/* Refund Management */}
           {editedOrder.refundStatus !== "none" && (
             <div className="border-t border-border/40 pt-6">
-              <h3 className="font-semibold text-foreground mb-4">Refund Management</h3>
+              <h3 className="font-semibold text-foreground mb-4">
+                Refund Management
+              </h3>
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
                 <p className="text-sm text-blue-900 font-medium">
-                  Refund Status: <span className="capitalize">{editedOrder.refundStatus}</span>
+                  Refund Status:{" "}
+                  <span className="capitalize">{editedOrder.refundStatus}</span>
                 </p>
                 {editedOrder.refundRequest && (
                   <p className="text-sm text-blue-800 mt-1">
-                    Amount Requested: {editedOrder.currency} {editedOrder.refundRequest.requestedAmount.toLocaleString()}
+                    Amount Requested: {editedOrder.currency}{" "}
+                    {editedOrder.refundRequest.requestedAmount.toLocaleString()}
                   </p>
                 )}
               </div>
@@ -782,11 +964,7 @@ function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModal
 
           {/* Action Buttons */}
           <div className="border-t border-border/40 pt-6 flex gap-3 sticky bottom-0 bg-background">
-            <Button
-              onClick={onClose}
-              variant="outline"
-              className="flex-1"
-            >
+            <Button onClick={onClose} variant="outline" className="flex-1">
               Close
             </Button>
             <Button
@@ -794,7 +972,11 @@ function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModal
               disabled={!hasChanges || isSaving}
               className="flex-1 bg-green-600 hover:bg-green-700 text-white"
             >
-              {isSaving ? "Saving..." : hasChanges ? "Save Changes" : "No Changes"}
+              {isSaving
+                ? "Saving..."
+                : hasChanges
+                  ? "Save Changes"
+                  : "No Changes"}
             </Button>
           </div>
         </div>

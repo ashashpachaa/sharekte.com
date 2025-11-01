@@ -1,6 +1,15 @@
 import { RequestHandler } from "express";
-import { Order, OrderStatus, RefundStatus, OrderDocument } from "../../client/lib/orders";
-import { syncOrderToAirtable, fetchOrdersFromAirtable, updateOrderStatusInAirtable } from "../utils/airtable-sync";
+import {
+  Order,
+  OrderStatus,
+  RefundStatus,
+  OrderDocument,
+} from "../../client/lib/orders";
+import {
+  syncOrderToAirtable,
+  fetchOrdersFromAirtable,
+  updateOrderStatusInAirtable,
+} from "../utils/airtable-sync";
 
 const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
 const AIRTABLE_BASE_ID = "app0PK34gyJDizR3Q";
@@ -23,13 +32,19 @@ let inMemoryOrders: Order[] = [];
 
 // Helper function to generate unique ID
 function generateOrderId(): string {
-  return "ord_" + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+  return (
+    "ord_" +
+    Math.random().toString(36).substring(2, 15) +
+    Date.now().toString(36)
+  );
 }
 
 // Helper function to create demo orders
 function getDemoOrders(): Order[] {
   const today = new Date().toISOString().split("T")[0];
-  const renewalDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
+  const renewalDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
+    .toISOString()
+    .split("T")[0];
 
   return [
     {
@@ -168,14 +183,18 @@ export const getOrders: RequestHandler = async (req, res) => {
       console.log("[getOrders] Attempting to fetch from Airtable...");
       try {
         allOrders = await fetchOrdersFromAirtable();
-        console.log(`[getOrders] Successfully fetched ${allOrders.length} orders from Airtable`);
+        console.log(
+          `[getOrders] Successfully fetched ${allOrders.length} orders from Airtable`,
+        );
       } catch (airtableError) {
         console.error("[getOrders] Airtable fetch failed:", airtableError);
         // Continue to fallback
         allOrders = [];
       }
     } else {
-      console.log("[getOrders] AIRTABLE_API_TOKEN not configured, using fallback");
+      console.log(
+        "[getOrders] AIRTABLE_API_TOKEN not configured, using fallback",
+      );
     }
 
     // If Airtable is not configured or empty, use demo + in-memory
@@ -189,11 +208,13 @@ export const getOrders: RequestHandler = async (req, res) => {
       const mergedOrders = [...allOrders];
       for (const inMemOrder of inMemoryOrders) {
         const existingIndex = mergedOrders.findIndex(
-          (o) => o.orderId === inMemOrder.orderId || o.id === inMemOrder.id
+          (o) => o.orderId === inMemOrder.orderId || o.id === inMemOrder.id,
         );
         if (existingIndex >= 0) {
           // Replace Airtable order with in-memory version (which has latest documents)
-          console.log(`[getOrders] Merging in-memory order into Airtable result: ${inMemOrder.orderId}`);
+          console.log(
+            `[getOrders] Merging in-memory order into Airtable result: ${inMemOrder.orderId}`,
+          );
           mergedOrders[existingIndex] = inMemOrder;
         } else {
           // Add new in-memory order
@@ -201,7 +222,9 @@ export const getOrders: RequestHandler = async (req, res) => {
         }
       }
       allOrders = mergedOrders;
-      console.log(`[getOrders] Merged ${inMemoryOrders.length} in-memory orders with ${allOrders.length - inMemoryOrders.length} Airtable orders`);
+      console.log(
+        `[getOrders] Merged ${inMemoryOrders.length} in-memory orders with ${allOrders.length - inMemoryOrders.length} Airtable orders`,
+      );
     }
 
     // Apply filters
@@ -215,7 +238,9 @@ export const getOrders: RequestHandler = async (req, res) => {
       filtered = filtered.filter((o) => o.country === country);
     }
 
-    console.log(`[getOrders] Returning ${filtered.length} orders (filtered from ${allOrders.length} total)`);
+    console.log(
+      `[getOrders] Returning ${filtered.length} orders (filtered from ${allOrders.length} total)`,
+    );
     res.json(filtered);
   } catch (error) {
     console.error("[getOrders] Unexpected error:", error);
@@ -235,7 +260,10 @@ export const getOrders: RequestHandler = async (req, res) => {
       console.log(`[getOrders] Fallback returning ${allOrders.length} orders`);
       return res.json(allOrders);
     } catch (fallbackError) {
-      console.error("[getOrders] Failed to return demo + in-memory orders:", fallbackError);
+      console.error(
+        "[getOrders] Failed to return demo + in-memory orders:",
+        fallbackError,
+      );
       res.status(500).json({ error: "Failed to fetch orders" });
     }
   }
@@ -292,7 +320,13 @@ export const createOrder: RequestHandler = async (req, res) => {
       updatedAt: orderData.updatedAt || now,
     };
 
-    console.log("[createOrder] Creating order:", order.orderId, "- Amount:", order.amount, order.currency);
+    console.log(
+      "[createOrder] Creating order:",
+      order.orderId,
+      "- Amount:",
+      order.amount,
+      order.currency,
+    );
 
     // Always store in in-memory first (primary persistence for documents)
     inMemoryOrders.push(order);
@@ -303,10 +337,16 @@ export const createOrder: RequestHandler = async (req, res) => {
       const airtableId = await syncOrderToAirtable(order);
       if (airtableId) {
         order.airtableId = airtableId;
-        console.log("[createOrder] ✓ Order also synced to Airtable with ID:", airtableId);
+        console.log(
+          "[createOrder] ✓ Order also synced to Airtable with ID:",
+          airtableId,
+        );
       }
     } catch (airtableError) {
-      console.error("[createOrder] Airtable sync failed (order safe in-memory):", airtableError);
+      console.error(
+        "[createOrder] Airtable sync failed (order safe in-memory):",
+        airtableError,
+      );
     }
 
     res.status(201).json(order);
@@ -332,7 +372,9 @@ export const updateOrder: RequestHandler = async (req, res) => {
       allOrders = [...airtableOrders, ...inMemoryOrders];
     }
 
-    const existingOrder = allOrders.find((o) => o.id === orderId || o.orderId === orderId);
+    const existingOrder = allOrders.find(
+      (o) => o.id === orderId || o.orderId === orderId,
+    );
     if (!existingOrder) {
       return res.status(404).json({ error: "Order not found" });
     }
@@ -355,7 +397,9 @@ export const updateOrder: RequestHandler = async (req, res) => {
     }
 
     // Update in-memory if exists
-    const inMemIndex = inMemoryOrders.findIndex((o) => o.id === orderId || o.orderId === orderId);
+    const inMemIndex = inMemoryOrders.findIndex(
+      (o) => o.id === orderId || o.orderId === orderId,
+    );
     if (inMemIndex >= 0) {
       inMemoryOrders[inMemIndex] = updatedOrder;
     }
@@ -383,7 +427,9 @@ export const updateOrderStatus: RequestHandler = async (req, res) => {
       allOrders = [...airtableOrders, ...inMemoryOrders];
     }
 
-    const currentOrder = allOrders.find((o) => o.id === orderId || o.orderId === orderId);
+    const currentOrder = allOrders.find(
+      (o) => o.id === orderId || o.orderId === orderId,
+    );
     if (!currentOrder) {
       return res.status(404).json({ error: "Order not found" });
     }
@@ -424,7 +470,9 @@ export const updateOrderStatus: RequestHandler = async (req, res) => {
     }
 
     // Update in-memory if exists
-    const inMemIndex = inMemoryOrders.findIndex((o) => o.id === orderId || o.orderId === orderId);
+    const inMemIndex = inMemoryOrders.findIndex(
+      (o) => o.id === orderId || o.orderId === orderId,
+    );
     if (inMemIndex >= 0) {
       inMemoryOrders[inMemIndex] = updatedOrder;
     }
@@ -514,10 +562,10 @@ export const approveRefund: RequestHandler = async (req, res) => {
       body: JSON.stringify({
         fields: {
           refundStatus: "approved",
-          "refundApprovedAmount": approvedAmount,
-          "refundFee": refundFee || 0,
-          "refundNetAmount": netRefund,
-          "refundApprovedDate": new Date().toISOString(),
+          refundApprovedAmount: approvedAmount,
+          refundFee: refundFee || 0,
+          refundNetAmount: netRefund,
+          refundApprovedDate: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         },
       }),
@@ -626,9 +674,13 @@ export const deleteOrder: RequestHandler = async (req, res) => {
 async function getLatestOrder(orderId: string): Promise<Order | undefined> {
   try {
     // First, check in-memory (most recent)
-    let currentOrder = inMemoryOrders.find((o) => o.id === orderId || o.orderId === orderId);
+    let currentOrder = inMemoryOrders.find(
+      (o) => o.id === orderId || o.orderId === orderId,
+    );
     if (currentOrder) {
-      console.log(`[getLatestOrder] Found in in-memory storage: ${currentOrder.orderId}`);
+      console.log(
+        `[getLatestOrder] Found in in-memory storage: ${currentOrder.orderId}`,
+      );
       return currentOrder;
     }
 
@@ -636,21 +688,32 @@ async function getLatestOrder(orderId: string): Promise<Order | undefined> {
     if (AIRTABLE_API_TOKEN) {
       try {
         const airtableOrders = await fetchOrdersFromAirtable();
-        currentOrder = airtableOrders.find((o) => o.id === orderId || o.orderId === orderId);
+        currentOrder = airtableOrders.find(
+          (o) => o.id === orderId || o.orderId === orderId,
+        );
         if (currentOrder) {
-          console.log(`[getLatestOrder] Found in Airtable: ${currentOrder.orderId}`);
+          console.log(
+            `[getLatestOrder] Found in Airtable: ${currentOrder.orderId}`,
+          );
           return currentOrder;
         }
       } catch (airtableError) {
-        console.error("[getLatestOrder] Failed to fetch from Airtable:", airtableError);
+        console.error(
+          "[getLatestOrder] Failed to fetch from Airtable:",
+          airtableError,
+        );
       }
     }
 
     // Finally, check demo orders
     const demoOrders = getDemoOrders();
-    currentOrder = demoOrders.find((o) => o.id === orderId || o.orderId === orderId);
+    currentOrder = demoOrders.find(
+      (o) => o.id === orderId || o.orderId === orderId,
+    );
     if (currentOrder) {
-      console.log(`[getLatestOrder] Found in demo orders: ${currentOrder.orderId}`);
+      console.log(
+        `[getLatestOrder] Found in demo orders: ${currentOrder.orderId}`,
+      );
     }
 
     return currentOrder;
@@ -663,12 +726,23 @@ async function getLatestOrder(orderId: string): Promise<Order | undefined> {
 export const uploadOrderDocument: RequestHandler = async (req, res) => {
   try {
     const { orderId } = req.params;
-    const { file, fileName, fileType, fileSize, visibility = "both" } = req.body;
+    const {
+      file,
+      fileName,
+      fileType,
+      fileSize,
+      visibility = "both",
+    } = req.body;
 
-    console.log(`[uploadOrderDocument] Uploading document for order: ${orderId}, file: ${fileName}`);
+    console.log(
+      `[uploadOrderDocument] Uploading document for order: ${orderId}, file: ${fileName}`,
+    );
 
     if (!file || !fileName) {
-      console.error("[uploadOrderDocument] Missing file or fileName:", { file: !!file, fileName });
+      console.error("[uploadOrderDocument] Missing file or fileName:", {
+        file: !!file,
+        fileName,
+      });
       return res.status(400).json({ error: "No file provided" });
     }
 
@@ -681,7 +755,10 @@ export const uploadOrderDocument: RequestHandler = async (req, res) => {
     const currentOrder = await getLatestOrder(orderId);
     if (!currentOrder) {
       console.error(`[uploadOrderDocument] Order not found: ${orderId}`);
-      console.error(`[uploadOrderDocument] Available order IDs:`, allOrders.map((o) => o.id || o.orderId));
+      console.error(
+        `[uploadOrderDocument] Available order IDs:`,
+        allOrders.map((o) => o.id || o.orderId),
+      );
       return res.status(404).json({ error: "Order not found" });
     }
 
@@ -707,10 +784,14 @@ export const uploadOrderDocument: RequestHandler = async (req, res) => {
       updatedAt: new Date().toISOString(),
     };
 
-    console.log(`[uploadOrderDocument] Added document to order. Total documents: ${updatedOrder.documents.length}`);
+    console.log(
+      `[uploadOrderDocument] Added document to order. Total documents: ${updatedOrder.documents.length}`,
+    );
 
     // Update in-memory storage FIRST (this is our source of truth for persistence)
-    const inMemIndex = inMemoryOrders.findIndex((o) => o.id === orderId || o.orderId === orderId);
+    const inMemIndex = inMemoryOrders.findIndex(
+      (o) => o.id === orderId || o.orderId === orderId,
+    );
     if (inMemIndex >= 0) {
       // Update existing in-memory order
       inMemoryOrders[inMemIndex] = updatedOrder;
@@ -736,14 +817,16 @@ export const uploadOrderDocument: RequestHandler = async (req, res) => {
           },
           body: JSON.stringify({
             fields: {
-              documents: JSON.stringify(updatedOrder.documents.map((d) => ({
-                id: d.id,
-                name: d.name,
-                type: d.type,
-                size: d.size,
-                uploadedDate: d.uploadedDate,
-                visibility: d.visibility,
-              }))),
+              documents: JSON.stringify(
+                updatedOrder.documents.map((d) => ({
+                  id: d.id,
+                  name: d.name,
+                  type: d.type,
+                  size: d.size,
+                  uploadedDate: d.uploadedDate,
+                  visibility: d.visibility,
+                })),
+              ),
               updatedAt: new Date().toISOString(),
             },
           }),
@@ -753,10 +836,15 @@ export const uploadOrderDocument: RequestHandler = async (req, res) => {
           console.log(`[uploadOrderDocument] ✓ Synced to Airtable`);
           airtableSyncSuccess = true;
         } else {
-          console.error(`[uploadOrderDocument] Airtable sync failed: ${airtableResponse.status} ${airtableResponse.statusText}`);
+          console.error(
+            `[uploadOrderDocument] Airtable sync failed: ${airtableResponse.status} ${airtableResponse.statusText}`,
+          );
         }
       } catch (airtableError) {
-        console.error("[uploadOrderDocument] Failed to sync document to Airtable:", airtableError);
+        console.error(
+          "[uploadOrderDocument] Failed to sync document to Airtable:",
+          airtableError,
+        );
         // Document is safe in in-memory, don't fail the request
       }
     }
@@ -765,7 +853,9 @@ export const uploadOrderDocument: RequestHandler = async (req, res) => {
     res.json(updatedOrder);
   } catch (error) {
     console.error("[uploadOrderDocument] Error:", error);
-    res.status(500).json({ error: "Failed to upload document", details: String(error) });
+    res
+      .status(500)
+      .json({ error: "Failed to upload document", details: String(error) });
   }
 };
 
@@ -776,25 +866,36 @@ export const deleteOrderDocument: RequestHandler = async (req, res) => {
   try {
     const { orderId, documentId } = req.params;
 
-    console.log(`[deleteOrderDocument] Deleting document ${documentId} from order ${orderId}`);
+    console.log(
+      `[deleteOrderDocument] Deleting document ${documentId} from order ${orderId}`,
+    );
 
     // Find the order - check in-memory first since it has the latest state
-    let currentOrder = inMemoryOrders.find((o) => o.id === orderId || o.orderId === orderId);
+    let currentOrder = inMemoryOrders.find(
+      (o) => o.id === orderId || o.orderId === orderId,
+    );
 
     // If not in-memory, try Airtable
     if (!currentOrder && AIRTABLE_API_TOKEN) {
       try {
         const airtableOrders = await fetchOrdersFromAirtable();
-        currentOrder = airtableOrders.find((o) => o.id === orderId || o.orderId === orderId);
+        currentOrder = airtableOrders.find(
+          (o) => o.id === orderId || o.orderId === orderId,
+        );
       } catch (airtableError) {
-        console.error("[deleteOrderDocument] Failed to fetch from Airtable:", airtableError);
+        console.error(
+          "[deleteOrderDocument] Failed to fetch from Airtable:",
+          airtableError,
+        );
       }
     }
 
     // Fallback to demo orders
     if (!currentOrder) {
       const demoOrders = getDemoOrders();
-      currentOrder = demoOrders.find((o) => o.id === orderId || o.orderId === orderId);
+      currentOrder = demoOrders.find(
+        (o) => o.id === orderId || o.orderId === orderId,
+      );
     }
 
     if (!currentOrder) {
@@ -807,12 +908,16 @@ export const deleteOrderDocument: RequestHandler = async (req, res) => {
     // Remove document from order
     const updatedOrder: Order = {
       ...currentOrder,
-      documents: (currentOrder.documents || []).filter((d) => d.id !== documentId),
+      documents: (currentOrder.documents || []).filter(
+        (d) => d.id !== documentId,
+      ),
       updatedAt: new Date().toISOString(),
     };
 
     // Update in-memory storage FIRST (primary persistence)
-    const inMemIndex = inMemoryOrders.findIndex((o) => o.id === orderId || o.orderId === orderId);
+    const inMemIndex = inMemoryOrders.findIndex(
+      (o) => o.id === orderId || o.orderId === orderId,
+    );
     if (inMemIndex >= 0) {
       inMemoryOrders[inMemIndex] = updatedOrder;
       console.log(`[deleteOrderDocument] Updated in-memory order`);
@@ -845,10 +950,15 @@ export const deleteOrderDocument: RequestHandler = async (req, res) => {
         if (airtableResponse.ok) {
           console.log(`[deleteOrderDocument] ✓ Synced to Airtable`);
         } else {
-          console.error(`[deleteOrderDocument] Airtable sync failed: ${airtableResponse.status}`);
+          console.error(
+            `[deleteOrderDocument] Airtable sync failed: ${airtableResponse.status}`,
+          );
         }
       } catch (airtableError) {
-        console.error("[deleteOrderDocument] Failed to sync document deletion to Airtable:", airtableError);
+        console.error(
+          "[deleteOrderDocument] Failed to sync document deletion to Airtable:",
+          airtableError,
+        );
         // Don't fail the request if Airtable sync fails - document is safe in-memory
       }
     }
