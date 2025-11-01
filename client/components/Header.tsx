@@ -111,13 +111,79 @@ export function Header() {
           {/* Cart Dropdown */}
           <CartDropdown />
 
-          <Button
-            variant="default"
-            className="bg-primary hover:bg-primary-600"
-            asChild
-          >
-            <Link to="/dashboard">{t("header.login")}</Link>
-          </Button>
+          {/* Auth Section */}
+          {user && user.authenticated ? (
+            <>
+              {/* User Menu */}
+              <div className="relative group">
+                <Button
+                  variant="outline"
+                  className="gap-2 h-9"
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                >
+                  <User className="w-4 h-4" />
+                  <span className="text-xs hidden sm:inline">
+                    {user.fullName}
+                  </span>
+                </Button>
+                <div
+                  className={`absolute right-0 top-full mt-1 w-48 bg-card border border-border/40 rounded-lg shadow-lg transition-all duration-200 z-50 ${
+                    showUserMenu
+                      ? "opacity-100 visible"
+                      : "opacity-0 invisible"
+                  }`}
+                >
+                  <div className="p-3 space-y-2">
+                    <div className="text-sm">
+                      <p className="font-semibold text-foreground">
+                        {user.fullName}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {user.email}
+                      </p>
+                    </div>
+                    <div className="border-t border-border/40 pt-2">
+                      <button
+                        onClick={() => {
+                          navigate("/dashboard");
+                          setShowUserMenu(false);
+                        }}
+                        className="w-full text-left px-3 py-2 rounded text-sm text-foreground hover:bg-muted transition-colors"
+                      >
+                        {t("header.dashboard") || "Dashboard"}
+                      </button>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full text-left px-3 py-2 rounded text-sm text-foreground hover:bg-muted transition-colors flex items-center gap-2"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        {t("header.logout") || "Sign Out"}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              {/* Login Button */}
+              <Button
+                variant="outline"
+                className="h-9 text-xs"
+                onClick={() => navigate("/login")}
+              >
+                {t("header.login") || "Sign In"}
+              </Button>
+              {/* Signup Button */}
+              <Button
+                variant="default"
+                className="bg-primary hover:bg-primary-600 h-9 text-xs"
+                onClick={() => navigate("/signup")}
+              >
+                {t("header.signup") || "Sign Up"}
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </header>
