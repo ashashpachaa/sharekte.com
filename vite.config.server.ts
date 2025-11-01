@@ -8,7 +8,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   build: {
     lib: {
-      entry: "server/node-build.ts",
+      entry: "./server/node-build.ts",
       name: "server",
       fileName: "production",
       formats: ["es"],
