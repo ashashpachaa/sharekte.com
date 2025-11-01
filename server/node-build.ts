@@ -49,10 +49,12 @@ if (fs.existsSync(spaDir)) {
   console.log("[startup] SPA contents:", spaContents);
 
   // Serve static assets
-  app.use(express.static(spaDir, {
-    maxAge: "1d",
-    etag: false,
-  }));
+  app.use(
+    express.static(spaDir, {
+      maxAge: "1d",
+      etag: false,
+    }),
+  );
   console.log("[startup] ✓ SPA static files configured");
 } else {
   console.warn("[startup] ⚠️  SPA directory not found at:", spaDir);

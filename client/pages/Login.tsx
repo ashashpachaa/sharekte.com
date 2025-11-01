@@ -78,7 +78,8 @@ export default function Login() {
               {t("auth.login.title") || "Sign In"}
             </h1>
             <p className="text-muted-foreground">
-              {t("auth.login.subtitle") || "Access your account to manage orders and companies"}
+              {t("auth.login.subtitle") ||
+                "Access your account to manage orders and companies"}
             </p>
           </div>
 
@@ -86,7 +87,10 @@ export default function Login() {
           <form onSubmit={handleLogin} className="space-y-4">
             {/* Email Field */}
             <div className="space-y-2">
-              <label htmlFor="email" className="block text-sm font-medium text-foreground">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-foreground"
+              >
                 {t("auth.email") || "Email Address"}
               </label>
               <div className="relative">
@@ -105,7 +109,10 @@ export default function Login() {
 
             {/* Password Field */}
             <div className="space-y-2">
-              <label htmlFor="password" className="block text-sm font-medium text-foreground">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-foreground"
+              >
                 {t("auth.password") || "Password"}
               </label>
               <div className="relative">
@@ -115,7 +122,9 @@ export default function Login() {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder={t("auth.passwordPlaceholder") || "Enter your password"}
+                  placeholder={
+                    t("auth.passwordPlaceholder") || "Enter your password"
+                  }
                   className="w-full pl-10 pr-10 py-2 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-background text-foreground"
                   disabled={loading}
                 />

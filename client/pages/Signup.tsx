@@ -4,7 +4,15 @@ import { useNavigate, Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Mail, Lock, User, LogIn, Eye, EyeOff, CheckCircle } from "lucide-react";
+import {
+  Mail,
+  Lock,
+  User,
+  LogIn,
+  Eye,
+  EyeOff,
+  CheckCircle,
+} from "lucide-react";
 import { toast } from "sonner";
 
 export default function Signup() {
@@ -195,8 +203,9 @@ export default function Signup() {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder={t("auth.passwordPlaceholder") ||
-                    "Create a strong password"}
+                  placeholder={
+                    t("auth.passwordPlaceholder") || "Create a strong password"
+                  }
                   className="w-full pl-10 pr-10 py-2 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-background text-foreground"
                   disabled={loading}
                 />
@@ -248,8 +257,10 @@ export default function Signup() {
                   type={showConfirm ? "text" : "password"}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder={t("auth.confirmPasswordPlaceholder") ||
-                    "Re-enter your password"}
+                  placeholder={
+                    t("auth.confirmPasswordPlaceholder") ||
+                    "Re-enter your password"
+                  }
                   className="w-full pl-10 pr-10 py-2 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-background text-foreground"
                   disabled={loading}
                 />

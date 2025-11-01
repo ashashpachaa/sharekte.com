@@ -128,9 +128,7 @@ export function Header() {
                 </Button>
                 <div
                   className={`absolute right-0 top-full mt-1 w-48 bg-card border border-border/40 rounded-lg shadow-lg transition-all duration-200 z-50 ${
-                    showUserMenu
-                      ? "opacity-100 visible"
-                      : "opacity-0 invisible"
+                    showUserMenu ? "opacity-100 visible" : "opacity-0 invisible"
                   }`}
                 >
                   <div className="p-3 space-y-2">
