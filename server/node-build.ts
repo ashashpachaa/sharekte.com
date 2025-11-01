@@ -8,7 +8,7 @@ const port = process.env.PORT || 8080;
 
 // In production, serve the built SPA files
 const __dirname = import.meta.dirname;
-const distPath = path.join(__dirname, "../spa");
+const distPath = path.join(__dirname, "../dist/spa");
 
 // Log startup information
 console.log("[startup] Starting Fusion Starter server");
