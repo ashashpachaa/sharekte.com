@@ -28,33 +28,46 @@ export const getTransferForms: RequestHandler = async (req, res) => {
     const airtableForms = await (async () => {
       try {
         const { fetchFormsFromAirtable } = await import("../utils/airtable-sync");
-        return await fetchFormsFromAirtable();
+        const forms = await fetchFormsFromAirtable();
+        console.log("[getTransferForms] Fetched from Airtable:", forms.length, "forms");
+        return forms;
       } catch (error) {
         console.warn("Could not fetch from Airtable:", error);
         return [];
       }
     })();
 
-    // Merge Airtable status with local forms
-    let result = formsDb.map((form) => {
-      const airtableForm = airtableForms.find(
-        (af) => af.formId === form.formId || af.orderId === form.orderId
-      );
+    // If we have local forms, merge Airtable status with them
+    // Otherwise, use Airtable forms directly (as source of truth)
+    let result: TransferFormData[] = [];
 
-      // If form exists in Airtable, update status from there
-      if (airtableForm) {
-        return {
-          ...form,
-          status: airtableForm.status, // Override with Airtable status
-        };
-      }
-      return form;
-    });
+    if (formsDb.length > 0) {
+      result = formsDb.map((form) => {
+        const airtableForm = airtableForms.find(
+          (af) => af.companyName && af.companyName.toLowerCase() === form.companyName.toLowerCase()
+        );
+
+        // If form exists in Airtable, update status from there
+        if (airtableForm && airtableForm.status) {
+          console.log(`[getTransferForms] Merging Airtable status for ${form.companyName}: ${form.status} → ${airtableForm.status}`);
+          return {
+            ...form,
+            status: airtableForm.status,
+          };
+        }
+        return form;
+      });
+    } else {
+      // Use Airtable forms directly when local DB is empty
+      result = airtableForms;
+      console.log("[getTransferForms] Using Airtable forms directly (no local forms)");
+    }
 
     if (orderId) {
       result = result.filter((f) => f.orderId === orderId);
     }
 
+    console.log(`[getTransferForms] Returning ${result.length} forms`);
     res.json(result);
   } catch (error) {
     console.error("Error fetching forms:", error);
