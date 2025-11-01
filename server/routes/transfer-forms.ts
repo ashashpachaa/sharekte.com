@@ -19,14 +19,40 @@ function getTodayString(): string {
   return new Date().toISOString().split("T")[0];
 }
 
-// Get all transfer forms
+// Get all transfer forms (with Airtable status sync)
 export const getTransferForms: RequestHandler = async (req, res) => {
   try {
     const { orderId } = req.query;
 
-    let result = formsDb;
+    // Fetch latest status from Airtable if available
+    const airtableForms = await (async () => {
+      try {
+        const { fetchFormsFromAirtable } = await import("../utils/airtable-sync");
+        return await fetchFormsFromAirtable();
+      } catch (error) {
+        console.warn("Could not fetch from Airtable:", error);
+        return [];
+      }
+    })();
+
+    // Merge Airtable status with local forms
+    let result = formsDb.map((form) => {
+      const airtableForm = airtableForms.find(
+        (af) => af.formId === form.formId || af.orderId === form.orderId
+      );
+
+      // If form exists in Airtable, update status from there
+      if (airtableForm) {
+        return {
+          ...form,
+          status: airtableForm.status, // Override with Airtable status
+        };
+      }
+      return form;
+    });
+
     if (orderId) {
-      result = formsDb.filter((f) => f.orderId === orderId);
+      result = result.filter((f) => f.orderId === orderId);
     }
 
     res.json(result);
