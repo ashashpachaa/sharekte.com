@@ -140,6 +140,7 @@ export function CompanyTable({
   onStatusChange,
   isAdmin = false,
 }: CompanyTableProps) {
+  const { t } = useTranslation();
   const { addItem } = useCart();
   const { currency, formatPrice: formatWithCurrency, rates } = useCurrency();
   const [showDeleteDialog, setShowDeleteDialog] = useState<string | null>(null);
