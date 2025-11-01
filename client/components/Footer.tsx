@@ -24,11 +24,11 @@ export function Footer() {
 
           {/* Product */}
           <div>
-            <h3 className="font-semibold text-sm mb-4 text-foreground">Product</h3>
+            <h3 className="font-semibold text-sm mb-4 text-foreground">{t('footer.company')}</h3>
             <ul className="space-y-2">
               <li>
                 <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Browse Companies
+                  {t('companies.availableCompanies')}
                 </a>
               </li>
               <li>
@@ -46,16 +46,16 @@ export function Footer() {
 
           {/* Company */}
           <div>
-            <h3 className="font-semibold text-sm mb-4 text-foreground">Company</h3>
+            <h3 className="font-semibold text-sm mb-4 text-foreground">{t('footer.company')}</h3>
             <ul className="space-y-2">
               <li>
                 <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  About
+                  {t('footer.about')}
                 </a>
               </li>
               <li>
                 <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Blog
+                  {t('footer.blog')}
                 </a>
               </li>
               <li>
@@ -68,21 +68,21 @@ export function Footer() {
 
           {/* Legal */}
           <div>
-            <h3 className="font-semibold text-sm mb-4 text-foreground">Legal</h3>
+            <h3 className="font-semibold text-sm mb-4 text-foreground">{t('footer.legal')}</h3>
             <ul className="space-y-2">
               <li>
                 <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Privacy Policy
+                  {t('footer.privacy')}
                 </a>
               </li>
               <li>
                 <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Terms of Service
+                  {t('footer.terms')}
                 </a>
               </li>
               <li>
                 <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Cookie Policy
+                  {t('footer.cookies')}
                 </a>
               </li>
             </ul>
