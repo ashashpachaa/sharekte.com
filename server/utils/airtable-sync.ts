@@ -320,52 +320,6 @@ export async function updateFormStatusInAirtable(
 }
 
 /**
- * Fetch forms from Airtable
- */
-export async function fetchFormsFromAirtable(): Promise<TransferFormData[]> {
-  try {
-    const baseId = process.env.AIRTABLE_BASE_ID;
-    const tableId = process.env.AIRTABLE_TABLE_FORMS;
-
-    if (!baseId || !tableId) {
-      console.warn("Airtable configuration incomplete. Cannot fetch forms.");
-      return [];
-    }
-
-    const url = `${AIRTABLE_API_URL}/${baseId}/${tableId}`;
-    const response = await fetch(url, {
-      method: "GET",
-      headers: getHeaders(),
-    });
-
-    if (!response.ok) {
-      console.error("Airtable fetch failed:", response.statusText);
-      return [];
-    }
-
-    const data = await response.json();
-    const forms: TransferFormData[] = data.records.map((record: any) => ({
-      id: record.id,
-      formId: record.fields["Form ID"],
-      orderId: record.fields["Order ID"],
-      companyId: record.fields["Company ID"],
-      companyName: record.fields["Company Name"],
-      companyNumber: record.fields["Company Number"],
-      // ... map other fields
-      status: record.fields["Status"],
-      createdAt: record.fields["Created At"],
-      updatedAt: record.fields["Updated At"],
-    }));
-
-    console.log(`Fetched ${forms.length} forms from Airtable`);
-    return forms;
-  } catch (error) {
-    console.error("Airtable fetch error:", error);
-    return [];
-  }
-}
-
-/**
  * Sync order completion to Airtable
  */
 export async function syncOrderCompletion(
