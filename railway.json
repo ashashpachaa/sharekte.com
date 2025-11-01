@@ -10,7 +10,7 @@
     "startCommand": "npm run start",
     "numReplicas": 1,
     "sleepApplication": false,
-    "healthcheckPath": "/api/health",
-    "healthcheckTimeout": 10
+    "healthcheckPath": "/health",
+    "healthcheckTimeout": 30
   }
 }
