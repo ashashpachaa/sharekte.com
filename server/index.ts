@@ -185,11 +185,6 @@ export function createServer() {
 
   // Transfer Form routes - Specific routes before parameterized ones
   app.get("/api/transfer-forms/analytics/summary", getFormAnalytics);
-
-  app.get("/api/transfer-forms", getTransferForms);
-  app.post("/api/transfer-forms", createTransferForm);
-
-  // Debug endpoint - Test Airtable connection
   app.get("/api/transfer-forms/debug/airtable-connection", async (req, res) => {
     try {
       const { fetchFormsFromAirtable } = await import("./utils/airtable-sync");
@@ -211,6 +206,9 @@ export function createServer() {
       });
     }
   });
+
+  app.get("/api/transfer-forms", getTransferForms);
+  app.post("/api/transfer-forms", createTransferForm);
 
   app.get("/api/transfer-forms/:id", getTransferForm);
   app.patch("/api/transfer-forms/:id", updateTransferForm);
