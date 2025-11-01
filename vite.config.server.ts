@@ -42,8 +42,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@": path.join(__dirname, "./client"),
-      "@shared": path.join(__dirname, "./shared"),
+      "@": "./client",
+      "@shared": "./shared",
     },
   },
   define: {
