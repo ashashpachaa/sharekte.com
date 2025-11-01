@@ -2094,15 +2094,15 @@ Generated on: ${new Date().toLocaleDateString()}
                           </div>
 
                           {/* Transfer Form */}
-                          {company.status !== "completed" && (
+                          {company.status !== "completed" && company.status !== "complete-transfer" && (
                             <div>
-                              {company.status !== "amend-required" && company.transferFormFilled && (
-                                <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 mb-4">
-                                  <p className="text-blue-700 font-medium text-sm">
-                                    ⏳ Form Under Review
+                              {company.transferFormFilled && getStatusMessage(company.status) && (
+                                <div className={`border rounded-lg p-4 mb-4 ${getStatusMessage(company.status)?.color}`}>
+                                  <p className="font-medium text-sm">
+                                    {getStatusMessage(company.status)?.icon} {getStatusMessage(company.status)?.headline}
                                   </p>
-                                  <p className="text-blue-600 text-xs mt-1">
-                                    Your transfer form has been submitted and is currently under review by our admin team. You'll be able to edit it once they request amendments.
+                                  <p className={`text-xs mt-1 ${getStatusMessage(company.status)?.textColor}`}>
+                                    {getStatusMessage(company.status)?.description}
                                   </p>
                                 </div>
                               )}
