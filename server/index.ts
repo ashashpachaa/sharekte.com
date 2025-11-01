@@ -72,9 +72,11 @@ export function createServer() {
   console.log("[createServer] Express app created");
 
   // Middleware
+  console.log("[createServer] Setting up middleware");
   app.use(cors());
   app.use(express.json({ limit: "5gb" }));
   app.use(express.urlencoded({ extended: true, limit: "5gb" }));
+  console.log("[createServer] Middleware setup complete");
 
   // Example API routes
   app.get("/api/ping", (_req, res) => {
