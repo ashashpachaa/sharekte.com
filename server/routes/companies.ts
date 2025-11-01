@@ -369,8 +369,27 @@ export const createCompany: RequestHandler = async (req, res) => {
 
     if (!airtableResponse.ok) {
       const error = await airtableResponse.text();
-      console.error("Airtable API error:", error);
-      return res.status(500).json({ error: "Failed to create company in Airtable" });
+      console.error("[createCompany] Airtable API error:");
+      console.error("[createCompany] Status:", airtableResponse.status);
+      console.error("[createCompany] Response:", error);
+      console.error("[createCompany] Request body:", JSON.stringify({
+        records: [
+          {
+            fields: {
+              "Company name": companyName,
+              "Company number": companyNumber,
+              Country: country,
+              "Incorporate date": incorporationDate || new Date().toISOString().split("T")[0],
+              "Incorporate year": incorporationYear || new Date().getFullYear(),
+              Price: purchasePrice || 0,
+            },
+          },
+        ],
+      }, null, 2));
+      return res.status(500).json({
+        error: "Failed to create company in Airtable",
+        details: error
+      });
     }
 
     const airtableData = await airtableResponse.json();
