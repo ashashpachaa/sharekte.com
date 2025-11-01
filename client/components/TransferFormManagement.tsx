@@ -352,50 +352,44 @@ export function TransferFormManagement({ orderId }: TransferFormManagementProps)
                 </div>
               </div>
 
-              {/* Buyer Information */}
+              {/* Company Information */}
               <div>
-                <h3 className="font-semibold mb-3">Buyer Information</h3>
+                <h3 className="font-semibold mb-3">Company Information</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-xs text-gray-600">Name</Label>
-                    <p className="font-medium">{selectedForm.buyerName}</p>
+                    <Label className="text-xs text-gray-600">Company Name</Label>
+                    <p className="font-medium">{selectedForm.companyName}</p>
                   </div>
                   <div>
-                    <Label className="text-xs text-gray-600">Email</Label>
-                    <p className="font-medium">{selectedForm.buyerEmail}</p>
-                  </div>
-                  <div>
-                    <Label className="text-xs text-gray-600">Address</Label>
-                    <p className="text-sm">{selectedForm.buyerAddress}</p>
+                    <Label className="text-xs text-gray-600">Company Number</Label>
+                    <p className="font-medium">{selectedForm.companyNumber}</p>
                   </div>
                   <div>
                     <Label className="text-xs text-gray-600">Country</Label>
-                    <p className="text-sm">{selectedForm.buyerCountry}</p>
+                    <p className="text-sm">{selectedForm.country}</p>
+                  </div>
+                  <div>
+                    <Label className="text-xs text-gray-600">Incorporation Year</Label>
+                    <p className="text-sm">{selectedForm.incorporationYear}</p>
                   </div>
                 </div>
               </div>
 
-              {/* Seller Information */}
+              {/* Shareholders Information */}
               <div>
-                <h3 className="font-semibold mb-3">Seller Information</h3>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <Label className="text-xs text-gray-600">Name</Label>
-                    <p className="font-medium">{selectedForm.sellerName}</p>
+                <h3 className="font-semibold mb-3">Shareholders ({selectedForm.numberOfShareholders})</h3>
+                {selectedForm.shareholders && selectedForm.shareholders.length > 0 ? (
+                  <div className="space-y-3">
+                    {selectedForm.shareholders.map((shareholder, idx) => (
+                      <div key={idx} className="border-l-2 border-blue-200 pl-3 py-2">
+                        <p className="font-medium text-sm">{shareholder.name}</p>
+                        <p className="text-xs text-gray-600">{shareholder.sharePercentage}% shares</p>
+                      </div>
+                    ))}
                   </div>
-                  <div>
-                    <Label className="text-xs text-gray-600">Email</Label>
-                    <p className="font-medium">{selectedForm.sellerEmail}</p>
-                  </div>
-                  <div>
-                    <Label className="text-xs text-gray-600">Address</Label>
-                    <p className="text-sm">{selectedForm.sellerAddress}</p>
-                  </div>
-                  <div>
-                    <Label className="text-xs text-gray-600">Country</Label>
-                    <p className="text-sm">{selectedForm.sellerCountry}</p>
-                  </div>
-                </div>
+                ) : (
+                  <p className="text-sm text-gray-500">No shareholders information available</p>
+                )}
               </div>
 
               {/* Attachments */}
