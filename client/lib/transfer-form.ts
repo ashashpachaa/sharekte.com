@@ -162,7 +162,7 @@ export const FORM_STATUS_ICONS: Record<FormStatus, string> = {
 };
 
 // Create a new empty form
-export function createEmptyForm(orderId: string, companyId: string, companyName: string, companyNumber: string, incorporationDate?: string, incorporationYear?: number): TransferFormData {
+export function createEmptyForm(orderId: string, companyId: string, companyName: string, companyNumber: string, country?: string, incorporationDate?: string, incorporationYear?: number): TransferFormData {
   return {
     id: `form_${Date.now()}`,
     formId: `FORM-${Date.now()}`,
@@ -170,6 +170,7 @@ export function createEmptyForm(orderId: string, companyId: string, companyName:
     companyId,
     companyName,
     companyNumber,
+    country: country || "",
     incorporationDate: incorporationDate || "",
     incorporationYear: incorporationYear || new Date().getFullYear(),
 
