@@ -1067,14 +1067,14 @@ Generated on: ${new Date().toLocaleDateString()}
           <div className="flex gap-8 overflow-x-auto">
             <button
               onClick={() => setActiveTab("portfolio")}
-              className={`py-4 px-1 font-semibold transition-colors whitespace-nowrap ${
+              className={`py-4 px-1 font-semibold transition-colors whitespace-nowrap flex items-center gap-2 ${
                 activeTab === "portfolio"
                   ? "text-primary border-b-2 border-primary"
                   : "text-muted-foreground hover:text-foreground border-b-2 border-transparent"
               }`}
             >
-              <BarChart3 className="w-4 h-4 inline mr-2" />
-              Portfolio
+              <BarChart3 className="w-4 h-4 flex-shrink-0" />
+              {t('dashboard.portfolio')}
             </button>
             <button
               onClick={() => setActiveTab("companies")}
@@ -1122,14 +1122,14 @@ Generated on: ${new Date().toLocaleDateString()}
             </button>
             <button
               onClick={() => setActiveTab("account")}
-              className={`py-4 px-1 font-semibold transition-colors whitespace-nowrap ${
+              className={`py-4 px-1 font-semibold transition-colors whitespace-nowrap flex items-center gap-2 ${
                 activeTab === "account"
                   ? "text-primary border-b-2 border-primary"
                   : "text-muted-foreground hover:text-foreground border-b-2 border-transparent"
               }`}
             >
-              <User className="w-4 h-4 inline mr-2" />
-              My Account
+              <User className="w-4 h-4 flex-shrink-0" />
+              {t('dashboard.myAccount')}
             </button>
             <button
               onClick={() => setActiveTab("payments")}
