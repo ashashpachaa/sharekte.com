@@ -1,0 +1,37 @@
+# Spaceship Deployment Configuration
+# This file configures your application for Spaceship deployment
+
+app = "businesscorp"
+primary_region = "lax"
+
+[build]
+  builder = "paketobuildpacks/builder:latest"
+  buildpacks = []
+
+[build.args]
+  NODE_ENV = "production"
+
+[env]
+  NODE_ENV = "production"
+  PORT = "8080"
+
+[[services]]
+  internal_port = 8080
+  protocol = "tcp"
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ["app"]
+
+[[services.ports]]
+  port = 80
+  handlers = ["http"]
+  force_https = true
+
+[[services.ports]]
+  port = 443
+  handlers = ["tls", "http"]
+
+[[statics]]
+  guest_path = "/dist/spa"
+  url_prefix = "/"
