@@ -28,15 +28,14 @@ function expressPlugin(): Plugin {
   return {
     name: "express-plugin",
     apply: "serve",
-    configureServer(server) {
-      // Dynamically load server module only during development
-      let createServer: any;
+    async configureServer(server) {
       try {
-        createServer = eval('require')("./server").createServer;
-        const app = createServer();
+        // Import server module dynamically only during dev serve
+        const serverModule = await import("./server");
+        const app = serverModule.createServer();
         server.middlewares.use(app);
       } catch (e) {
-        console.warn("Could not load Express server:", e);
+        console.warn("Express server not available in dev mode:", e);
       }
     },
   };
