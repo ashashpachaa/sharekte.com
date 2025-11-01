@@ -133,8 +133,13 @@ export const createTransferForm: RequestHandler = async (req, res) => {
     // Sync to Airtable if configured
     (async () => {
       try {
-        const { syncFormToAirtable } = await import("../utils/airtable-sync");
+        const { syncFormToAirtable, syncFormToTransferFormTable } = await import("../utils/airtable-sync");
+
+        // Sync to comprehensive forms table
         await syncFormToAirtable(newForm);
+
+        // Sync to simplified Transfer Forms table (with core fields only)
+        await syncFormToTransferFormTable(newForm);
       } catch (error) {
         console.error("Error syncing form to Airtable:", error);
       }
