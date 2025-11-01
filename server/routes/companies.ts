@@ -649,7 +649,7 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
     const airtableId = id;
 
     // Fetch the current record to get field details
-    const getUrl = `https://api.airtable.com/v0/app0PK34gyJDizR3Q/tbljtdHPdHnTberDy/${airtableId}`;
+    const getUrl = `https://api.airtable.com/v0/app22Bav0LsknYq69/tbljtdHPdHnTberDy/${airtableId}`;
     const getResponse = await fetch(getUrl, {
       headers: {
         Authorization: `Bearer ${process.env.AIRTABLE_API_TOKEN}`,
@@ -682,7 +682,7 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
       return res.status(400).json({ error: "Status value is required" });
     }
 
-    // Capitalize first letter: "sold" → "Sold", "active" → "Active"
+    // Capitalize first letter: "sold" �� "Sold", "active" → "Active"
     const newStatusValue =
       status.charAt(0).toUpperCase() + status.slice(1).toLowerCase();
 
@@ -705,7 +705,7 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
       );
 
       updateResponse = await fetch(
-        `https://api.airtable.com/v0/app0PK34gyJDizR3Q/tbljtdHPdHnTberDy/${airtableId}`,
+        `https://api.airtable.com/v0/app22Bav0LsknYq69/tbljtdHPdHnTberDy/${airtableId}`,
         {
           method: "PATCH",
           headers: {
@@ -833,7 +833,7 @@ export const renewCompany: RequestHandler = async (req, res) => {
 
     // Fetch current company from Airtable
     const getResponse = await fetch(
-      `https://api.airtable.com/v0/app0PK34gyJDizR3Q/tbljtdHPdHnTberDy/${id}`,
+      `https://api.airtable.com/v0/app22Bav0LsknYq69/tbljtdHPdHnTberDy/${id}`,
       {
         headers: {
           Authorization: `Bearer ${process.env.AIRTABLE_API_TOKEN}`,
@@ -855,7 +855,7 @@ export const renewCompany: RequestHandler = async (req, res) => {
 
     // Update in Airtable
     const updateResponse = await fetch(
-      `https://api.airtable.com/v0/app0PK34gyJDizR3Q/tbljtdHPdHnTberDy/${id}`,
+      `https://api.airtable.com/v0/app22Bav0LsknYq69/tbljtdHPdHnTberDy/${id}`,
       {
         method: "PATCH",
         headers: {
@@ -930,7 +930,7 @@ export const requestRefund: RequestHandler = async (req, res) => {
 
     // Fetch current company from Airtable
     const getResponse = await fetch(
-      `https://api.airtable.com/v0/app0PK34gyJDizR3Q/tbljtdHPdHnTberDy/${id}`,
+      `https://api.airtable.com/v0/app22Bav0LsknYq69/tbljtdHPdHnTberDy/${id}`,
       {
         headers: {
           Authorization: `Bearer ${process.env.AIRTABLE_API_TOKEN}`,
@@ -951,7 +951,7 @@ export const requestRefund: RequestHandler = async (req, res) => {
 
     // Update in Airtable
     const updateResponse = await fetch(
-      `https://api.airtable.com/v0/app0PK34gyJDizR3Q/tbljtdHPdHnTberDy/${id}`,
+      `https://api.airtable.com/v0/app22Bav0LsknYq69/tbljtdHPdHnTberDy/${id}`,
       {
         method: "PATCH",
         headers: {
@@ -1028,7 +1028,7 @@ export const approveRefund: RequestHandler = async (req, res) => {
 
     // Fetch current company from Airtable
     const getResponse = await fetch(
-      `https://api.airtable.com/v0/app0PK34gyJDizR3Q/tbljtdHPdHnTberDy/${id}`,
+      `https://api.airtable.com/v0/app22Bav0LsknYq69/tbljtdHPdHnTberDy/${id}`,
       {
         headers: {
           Authorization: `Bearer ${process.env.AIRTABLE_API_TOKEN}`,
@@ -1049,7 +1049,7 @@ export const approveRefund: RequestHandler = async (req, res) => {
 
     // Update in Airtable
     const updateResponse = await fetch(
-      `https://api.airtable.com/v0/app0PK34gyJDizR3Q/tbljtdHPdHnTberDy/${id}`,
+      `https://api.airtable.com/v0/app22Bav0LsknYq69/tbljtdHPdHnTberDy/${id}`,
       {
         method: "PATCH",
         headers: {
