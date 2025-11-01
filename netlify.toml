@@ -1,14 +1,17 @@
 [build]
-  command = "pnpm run build"
+  command = "pnpm install --frozen-lockfile && pnpm run build"
   functions = "netlify/functions"
   publish = "dist/spa"
+  base = "."
 
 [build.environment]
   NODE_VERSION = "20"
+  NPM_FLAGS = "--legacy-peer-deps"
 
 [functions]
   node_bundler = "esbuild"
   directory = "netlify/functions"
+  external_node_modules = ["express", "cors", "nodemailer", "i18next", "react-i18next"]
 
 # API Routes - All requests to /api/* go to the serverless function
 [[redirects]]
