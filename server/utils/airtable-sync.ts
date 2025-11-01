@@ -152,6 +152,16 @@ export async function syncFormToTransferFormTable(form: TransferFormData): Promi
       uploadedBy: att.uploadedBy,
     }));
 
+    // Format date to YYYY-MM-DD format for Airtable date field
+    const formatDateForAirtable = (dateString: string): string => {
+      try {
+        const date = new Date(dateString);
+        return date.toISOString().split('T')[0];
+      } catch {
+        return new Date().toISOString().split('T')[0];
+      }
+    };
+
     const airtableRecord: AirtableRecord = {
       fields: {
         "Order Number": form.orderId,
@@ -160,7 +170,7 @@ export async function syncFormToTransferFormTable(form: TransferFormData): Promi
         "Country": form.country,
         "Status": form.status,
         "Form ID": form.formId,
-        "Submitted Date": form.submittedAt || form.createdAt,
+        "Submitted Date": formatDateForAirtable(form.submittedAt || form.createdAt),
         "Attachment Details": JSON.stringify(attachmentList),
         "Attachment Count": form.attachments.length,
       },
