@@ -29,7 +29,8 @@ This will open a browser to create/login to your Fly.io account.
 
 ```bash
 # Set the Airtable token (REQUIRED)
-fly secrets set AIRTABLE_API_TOKEN=patLkehZ2xg1wRuKr.59e309fed3a49ecc3bee1f2ade0c8603e30f48887c257fb29998547f7e8e3ded -a sharekte-com
+# Replace YOUR_TOKEN with your actual Airtable Personal Access Token
+fly secrets set AIRTABLE_API_TOKEN=YOUR_TOKEN -a sharekte-com
 
 # Verify it's set
 fly secrets list -a sharekte-com
