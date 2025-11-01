@@ -3,6 +3,7 @@ import path from "path";
 
 // Server build configuration
 export default defineConfig({
+  root: ".",
   build: {
     lib: {
       entry: "server/node-build.ts",
