@@ -938,7 +938,7 @@ Generated on: ${new Date().toLocaleDateString()}
     );
   };
 
-  // Get status color and icon
+  // Get status color, icon, and label
   const getStatusConfig = (status: string) => {
     switch (status) {
       case "pending-form":
@@ -946,36 +946,42 @@ Generated on: ${new Date().toLocaleDateString()}
           color: "bg-yellow-100 text-yellow-800",
           icon: Clock,
           bgLight: "bg-yellow-50",
+          label: "Pending Form",
         };
       case "under-review":
         return {
           color: "bg-blue-100 text-blue-800",
           icon: FileText,
           bgLight: "bg-blue-50",
+          label: "Under Review",
         };
       case "amend-required":
         return {
           color: "bg-orange-100 text-orange-800",
           icon: AlertCircle,
           bgLight: "bg-orange-50",
+          label: "Amend Required",
         };
       case "pending-transfer":
         return {
           color: "bg-purple-100 text-purple-800",
           icon: FileUp,
           bgLight: "bg-purple-50",
+          label: "Pending Transfer",
         };
       case "completed":
         return {
           color: "bg-green-100 text-green-800",
           icon: CheckCircle,
           bgLight: "bg-green-50",
+          label: "Completed",
         };
       default:
         return {
           color: "bg-gray-100 text-gray-800",
           icon: Clock,
           bgLight: "bg-gray-50",
+          label: status || "Unknown",
         };
     }
   };
