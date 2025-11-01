@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import {
   Popover,
   PopoverContent,
@@ -9,6 +11,7 @@ import { useCart } from "@/lib/cart-context";
 import { ShoppingCart, Trash2, ArrowRight } from "lucide-react";
 
 export function CartDropdown() {
+  const { t } = useTranslation();
   const { items, removeItem, totalPrice } = useCart();
   const cartCount = items.length;
 
