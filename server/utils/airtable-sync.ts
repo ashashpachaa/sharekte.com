@@ -132,8 +132,14 @@ export async function syncFormToTransferFormTable(form: TransferFormData): Promi
     const baseId = process.env.AIRTABLE_BASE_ID || "app0PK34gyJDizR3Q";
     const tableId = process.env.AIRTABLE_TABLE_TRANSFER_FORMS;
 
+    // Debug: Log environment variables
+    const airtableVars = Object.keys(process.env).filter(k => k.includes('AIRTABLE'));
+    console.log("[syncFormToTransferFormTable] Available AIRTABLE env vars:", airtableVars);
+    console.log("[syncFormToTransferFormTable] tableId value:", tableId);
+    console.log("[syncFormToTransferFormTable] baseId value:", baseId);
+
     if (!tableId) {
-      console.warn("AIRTABLE_TABLE_TRANSFER_FORMS not configured. Skipping sync to Transfer Forms table.");
+      console.warn("[syncFormToTransferFormTable] AIRTABLE_TABLE_TRANSFER_FORMS not configured. Available vars:", airtableVars);
       return false;
     }
 
