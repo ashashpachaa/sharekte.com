@@ -153,24 +153,35 @@ export async function syncFormToTransferFormTable(form: TransferFormData): Promi
       }
     };
 
-    // Build attachments array - includes PDF link and client attachments info
-    const attachmentsArray: Array<{ url: string; filename?: string }> = [];
-
-    // Add form PDF link (client can download from endpoint)
-    attachmentsArray.push({
-      url: `/api/transfer-forms/${form.id}/pdf`,
-      filename: `${form.formId}-complete-form.pdf`
-    });
-
-    // Add client attachment references
-    if (form.attachments && form.attachments.length > 0) {
-      form.attachments.forEach(att => {
-        attachmentsArray.push({
-          url: att.url || `/api/transfer-forms/${form.id}/attachments/${att.id}`,
-          filename: att.name
-        });
-      });
-    }
+    // Build detailed form summary with all attachments information
+    const formSummary = {
+      formId: form.formId,
+      orderId: form.orderId,
+      submittedAt: form.submittedAt || form.createdAt,
+      companyInfo: {
+        name: form.companyName,
+        number: form.companyNumber,
+        incorporationDate: form.incorporationDate,
+        incorporationYear: form.incorporationYear,
+        country: form.country,
+      },
+      shareInfo: {
+        totalShares: form.totalShares,
+        totalShareCapital: form.totalShareCapital,
+        pricePerShare: form.pricePerShare,
+      },
+      shareholderCount: form.numberOfShareholders,
+      pscCount: form.numberOfPSCs,
+      attachmentCount: form.attachments.length,
+      attachmentDetails: form.attachments.map(att => ({
+        name: att.name,
+        type: att.type,
+        size: `${(att.size / 1024 / 1024).toFixed(2)} MB`,
+        uploadedDate: att.uploadedDate,
+        uploadedBy: att.uploadedBy,
+      })),
+      downloadPDFLink: `${process.env.APP_URL || 'http://localhost:8080'}/api/transfer-forms/${form.id}/pdf`,
+    };
 
     const airtableRecord: AirtableRecord = {
       fields: {
@@ -181,7 +192,14 @@ export async function syncFormToTransferFormTable(form: TransferFormData): Promi
         "Status": form.status,
         "Form ID": form.formId,
         "Submitted Date": formatDateForAirtable(form.submittedAt || form.createdAt),
-        "Attachments": attachmentsArray,
+        "Attachments": form.attachments.length > 0
+          ? form.attachments.map(att => ({
+              url: att.url || `attachment: ${att.name} (${att.type})`,
+              filename: att.name
+            }))
+          : [],
+        "Form Summary": JSON.stringify(formSummary, null, 2),
+        "Number of Attachments": form.attachments.length,
       },
     };
 
