@@ -281,5 +281,6 @@ export function createServer() {
     deleteInvoiceAttachment,
   );
 
+  console.log("[createServer] ✅ All routes registered successfully");
   return app;
 }
