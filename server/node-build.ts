@@ -49,7 +49,7 @@ if (fs.existsSync(distPath)) {
 }
 
 // Handle React Router - serve index.html for all non-API routes
-app.get("*", (req, res) => {
+app.get("/*", (req, res) => {
   // Skip API routes and other non-SPA routes
   if (req.path.startsWith("/api/") || req.path.includes(".")) {
     return res.status(404).json({ error: "Not found" });
