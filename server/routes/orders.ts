@@ -619,6 +619,47 @@ export const deleteOrder: RequestHandler = async (req, res) => {
 /**
  * Upload document to order
  */
+/**
+ * Helper function to get the latest merged order
+ * In-memory orders take priority as they have the most recent updates
+ */
+async function getLatestOrder(orderId: string): Promise<Order | undefined> {
+  try {
+    // First, check in-memory (most recent)
+    let currentOrder = inMemoryOrders.find((o) => o.id === orderId || o.orderId === orderId);
+    if (currentOrder) {
+      console.log(`[getLatestOrder] Found in in-memory storage: ${currentOrder.orderId}`);
+      return currentOrder;
+    }
+
+    // Then try Airtable
+    if (AIRTABLE_API_TOKEN) {
+      try {
+        const airtableOrders = await fetchOrdersFromAirtable();
+        currentOrder = airtableOrders.find((o) => o.id === orderId || o.orderId === orderId);
+        if (currentOrder) {
+          console.log(`[getLatestOrder] Found in Airtable: ${currentOrder.orderId}`);
+          return currentOrder;
+        }
+      } catch (airtableError) {
+        console.error("[getLatestOrder] Failed to fetch from Airtable:", airtableError);
+      }
+    }
+
+    // Finally, check demo orders
+    const demoOrders = getDemoOrders();
+    currentOrder = demoOrders.find((o) => o.id === orderId || o.orderId === orderId);
+    if (currentOrder) {
+      console.log(`[getLatestOrder] Found in demo orders: ${currentOrder.orderId}`);
+    }
+
+    return currentOrder;
+  } catch (error) {
+    console.error("[getLatestOrder] Error fetching order:", error);
+    return undefined;
+  }
+}
+
 export const uploadOrderDocument: RequestHandler = async (req, res) => {
   try {
     const { orderId } = req.params;
@@ -636,21 +677,8 @@ export const uploadOrderDocument: RequestHandler = async (req, res) => {
       return res.status(400).json({ error: "File data is empty" });
     }
 
-    // Find the order
-    let allOrders = getDemoOrders();
-    if (AIRTABLE_API_TOKEN) {
-      try {
-        const airtableOrders = await fetchOrdersFromAirtable();
-        if (airtableOrders.length > 0) {
-          allOrders = [...airtableOrders, ...inMemoryOrders];
-        }
-      } catch (airtableError) {
-        console.error("[uploadOrderDocument] Failed to fetch from Airtable, using fallback:", airtableError);
-      }
-    }
-    allOrders = [...allOrders, ...inMemoryOrders];
-
-    const currentOrder = allOrders.find((o) => o.id === orderId || o.orderId === orderId);
+    // Get the latest version of the order
+    const currentOrder = await getLatestOrder(orderId);
     if (!currentOrder) {
       console.error(`[uploadOrderDocument] Order not found: ${orderId}`);
       console.error(`[uploadOrderDocument] Available order IDs:`, allOrders.map((o) => o.id || o.orderId));
