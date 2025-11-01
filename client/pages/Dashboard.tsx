@@ -1118,7 +1118,7 @@ Generated on: ${new Date().toLocaleDateString()}
               }`}
             >
               <Package className="w-4 h-4 inline mr-2" />
-              Marketplace
+              {t('dashboard.marketplace')}
             </button>
             <button
               onClick={() => setActiveTab("account")}
