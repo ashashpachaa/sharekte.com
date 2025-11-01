@@ -70,6 +70,9 @@ export function Header() {
             </div>
           </div>
 
+          {/* Language Switcher */}
+          <LanguageSwitcher />
+
           {/* Notifications */}
           <NotificationBell />
 
@@ -82,7 +85,7 @@ export function Header() {
             asChild
           >
             <Link to="/dashboard">
-              Sign In
+              {t("header.login")}
             </Link>
           </Button>
         </div>
