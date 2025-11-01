@@ -54,13 +54,19 @@ app.get("*", (req, res) => {
   }
 });
 
-const server = app.listen(port, () => {
-  console.log(`[startup] ✅ Server successfully started`);
-  console.log(`[startup] 🚀 Fusion Starter running on port ${port}`);
-  console.log(`[startup] 📱 Frontend: http://localhost:${port}`);
-  console.log(`[startup] 🔧 API: http://localhost:${port}/api`);
-  console.log(`[startup] 💓 Health: http://localhost:${port}/health`);
-});
+let server;
+try {
+  server = app.listen(port, () => {
+    console.log(`[startup] ✅ Server successfully started`);
+    console.log(`[startup] 🚀 Fusion Starter running on port ${port}`);
+    console.log(`[startup] 📱 Frontend: http://localhost:${port}`);
+    console.log(`[startup] 🔧 API: http://localhost:${port}/api`);
+    console.log(`[startup] 💓 Health: http://localhost:${port}/health`);
+  });
+} catch (error) {
+  console.error("[startup] FATAL: Failed to start server on port", port, ":", error);
+  process.exit(1);
+}
 
 // Error handling for server
 server.on("error", (error: any) => {
