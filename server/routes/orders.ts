@@ -184,10 +184,24 @@ export const getOrders: RequestHandler = async (req, res) => {
       const demoOrders = getDemoOrders();
       allOrders = [...demoOrders, ...inMemoryOrders];
     } else {
-      // Add in-memory orders as well (for newly created orders before they sync)
-      allOrders = [...allOrders, ...inMemoryOrders.filter(
-        (inMemOrder) => !allOrders.some((airtableOrder) => airtableOrder.orderId === inMemOrder.orderId)
-      )];
+      // Merge in-memory orders with Airtable orders
+      // In-memory orders take priority (they have the latest documents and updates)
+      const mergedOrders = [...allOrders];
+      for (const inMemOrder of inMemoryOrders) {
+        const existingIndex = mergedOrders.findIndex(
+          (o) => o.orderId === inMemOrder.orderId || o.id === inMemOrder.id
+        );
+        if (existingIndex >= 0) {
+          // Replace Airtable order with in-memory version (which has latest documents)
+          console.log(`[getOrders] Merging in-memory order into Airtable result: ${inMemOrder.orderId}`);
+          mergedOrders[existingIndex] = inMemOrder;
+        } else {
+          // Add new in-memory order
+          mergedOrders.push(inMemOrder);
+        }
+      }
+      allOrders = mergedOrders;
+      console.log(`[getOrders] Merged ${inMemoryOrders.length} in-memory orders with ${allOrders.length - inMemoryOrders.length} Airtable orders`);
     }
 
     // Apply filters
