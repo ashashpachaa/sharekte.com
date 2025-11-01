@@ -774,7 +774,8 @@ function OrderDetailsModal({ order, onClose, onStatusChange }: OrderDetailsModal
           <DocumentManagement
             order={editedOrder}
             onDocumentsUpdated={(updatedOrder) => {
-              // Refresh orders list
+              setEditedOrder(updatedOrder);
+              setHasChanges(true);
             }}
             isAdmin={true}
           />
