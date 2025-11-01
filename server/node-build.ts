@@ -1,6 +1,7 @@
 import path from "path";
 import { createServer } from "./index";
-import * as express from "express";
+import express from "express";
+import fs from "fs";
 
 const app = createServer();
 const port = process.env.PORT || 8080;
@@ -9,8 +10,21 @@ const port = process.env.PORT || 8080;
 const __dirname = import.meta.dirname;
 const distPath = path.join(__dirname, "../spa");
 
+// Log startup information
+console.log("[startup] Starting Fusion Starter server");
+console.log(`[startup] Port: ${port}`);
+console.log(`[startup] Node env: ${process.env.NODE_ENV || "development"}`);
+console.log(`[startup] Airtable configured: ${!!process.env.AIRTABLE_API_TOKEN}`);
+console.log(`[startup] SPA path: ${distPath}`);
+console.log(`[startup] SPA exists: ${fs.existsSync(distPath)}`);
+
 // Serve static files
-app.use(express.static(distPath));
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath));
+  console.log("[startup] ✓ SPA static files configured");
+} else {
+  console.warn("[startup] ⚠ SPA directory not found at", distPath);
+}
 
 // Handle React Router - serve index.html for all non-API routes
 app.get("*", (req, res) => {
@@ -23,22 +37,46 @@ app.get("*", (req, res) => {
     return res.status(404).json({ error: "Not found" });
   }
 
-  res.sendFile(path.join(distPath, "index.html"));
+  const indexPath = path.join(distPath, "index.html");
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    res.status(404).json({ error: "SPA not found" });
+  }
 });
 
-app.listen(port, () => {
-  console.log(`🚀 Fusion Starter server running on port ${port}`);
-  console.log(`📱 Frontend: http://localhost:${port}`);
-  console.log(`🔧 API: http://localhost:${port}/api`);
+const server = app.listen(port, () => {
+  console.log(`[startup] ✅ Server successfully started`);
+  console.log(`[startup] 🚀 Fusion Starter running on port ${port}`);
+  console.log(`[startup] 📱 Frontend: http://localhost:${port}`);
+  console.log(`[startup] 🔧 API: http://localhost:${port}/api`);
+  console.log(`[startup] 💓 Health: http://localhost:${port}/health`);
+});
+
+// Error handling for server
+server.on("error", (error: any) => {
+  console.error("[startup] ❌ Server error:", error);
+  process.exit(1);
 });
 
 // Graceful shutdown
 process.on("SIGTERM", () => {
-  console.log("🛑 Received SIGTERM, shutting down gracefully");
-  process.exit(0);
+  console.log("[shutdown] 🛑 Received SIGTERM, shutting down gracefully");
+  server.close(() => {
+    console.log("[shutdown] ✅ Server closed");
+    process.exit(0);
+  });
 });
 
 process.on("SIGINT", () => {
-  console.log("🛑 Received SIGINT, shutting down gracefully");
-  process.exit(0);
+  console.log("[shutdown] 🛑 Received SIGINT, shutting down gracefully");
+  server.close(() => {
+    console.log("[shutdown] ✅ Server closed");
+    process.exit(0);
+  });
+});
+
+// Unhandled promise rejection
+process.on("unhandledRejection", (reason: any) => {
+  console.error("[error] Unhandled rejection:", reason);
 });
