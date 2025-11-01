@@ -6,7 +6,7 @@ export default defineConfig({
     lib: {
       entry: "./server/node-build.ts",
       name: "server",
-      fileName: "production",
+      fileName: "node-build",
       formats: ["es"],
     },
     outDir: "dist/server",
