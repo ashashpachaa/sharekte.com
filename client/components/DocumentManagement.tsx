@@ -56,16 +56,27 @@ export function DocumentManagement({ order, onDocumentsUpdated, isAdmin = false 
     setUploading(true);
     let successCount = 0;
     let failureCount = 0;
-    let currentOrder = order;
+    let finalOrder = order;
 
     try {
-      for (const file of selectedFiles) {
+      // Upload files sequentially with small delays to prevent race conditions
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
         try {
-          console.log(`[DocumentManagement] Uploading file: ${file.name} (${file.size} bytes)`);
-          const updatedOrder = await uploadOrderDocument(currentOrder.id, file, visibility);
-          currentOrder = updatedOrder;
+          console.log(`[DocumentManagement] Uploading file ${i + 1}/${selectedFiles.length}: ${file.name} (${file.size} bytes)`);
+
+          // Add small delay between uploads to ensure in-memory state is updated
+          if (i > 0) {
+            await new Promise((resolve) => setTimeout(resolve, 100));
+          }
+
+          const updatedOrder = await uploadOrderDocument(finalOrder.id, file, visibility);
+          finalOrder = updatedOrder;
           successCount++;
-          console.log(`[DocumentManagement] ✓ File uploaded: ${file.name}`);
+          console.log(`[DocumentManagement] ✓ File ${i + 1}/${selectedFiles.length} uploaded: ${file.name}`);
+
+          // Show progress
+          toast.success(`Uploaded ${successCount}/${selectedFiles.length} files`);
         } catch (error) {
           console.error(`[DocumentManagement] Failed to upload ${file.name}:`, error);
           toast.error(`Failed to upload ${file.name}: ${String(error)}`);
@@ -73,13 +84,15 @@ export function DocumentManagement({ order, onDocumentsUpdated, isAdmin = false 
         }
       }
 
-      console.log(`[DocumentManagement] Upload complete. Success: ${successCount}, Failed: ${failureCount}`);
-      onDocumentsUpdated(currentOrder);
+      console.log(`[DocumentManagement] All uploads complete. Total: ${successCount} success, ${failureCount} failed, Documents in order: ${finalOrder.documents.length}`);
+
+      // Call callback with final updated order
+      onDocumentsUpdated(finalOrder);
       setSelectedFiles([]);
       setVisibility("both");
 
       if (failureCount === 0) {
-        toast.success(`${successCount} document(s) uploaded successfully`);
+        toast.success(`✓ All ${successCount} document(s) uploaded successfully!`);
       } else {
         toast.error(`Uploaded ${successCount}, failed ${failureCount}`);
       }
