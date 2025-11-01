@@ -165,12 +165,22 @@ export const getOrders: RequestHandler = async (req, res) => {
 
     // Try to fetch from Airtable first
     if (AIRTABLE_API_TOKEN) {
-      allOrders = await fetchOrdersFromAirtable();
+      console.log("[getOrders] Attempting to fetch from Airtable...");
+      try {
+        allOrders = await fetchOrdersFromAirtable();
+        console.log(`[getOrders] Successfully fetched ${allOrders.length} orders from Airtable`);
+      } catch (airtableError) {
+        console.error("[getOrders] Airtable fetch failed:", airtableError);
+        // Continue to fallback
+        allOrders = [];
+      }
+    } else {
+      console.log("[getOrders] AIRTABLE_API_TOKEN not configured, using fallback");
     }
 
     // If Airtable is not configured or empty, use demo + in-memory
     if (allOrders.length === 0) {
-      console.log("Using demo orders + in-memory orders");
+      console.log("[getOrders] Using demo orders + in-memory orders");
       const demoOrders = getDemoOrders();
       allOrders = [...demoOrders, ...inMemoryOrders];
     } else {
@@ -191,10 +201,12 @@ export const getOrders: RequestHandler = async (req, res) => {
       filtered = filtered.filter((o) => o.country === country);
     }
 
+    console.log(`[getOrders] Returning ${filtered.length} orders (filtered from ${allOrders.length} total)`);
     res.json(filtered);
   } catch (error) {
-    console.error("Error fetching orders:", error);
+    console.error("[getOrders] Unexpected error:", error);
     try {
+      console.log("[getOrders] Falling back to demo + in-memory orders");
       const demoOrders = getDemoOrders();
       let allOrders = [...demoOrders, ...inMemoryOrders];
       const { status, country } = req.query;
@@ -206,9 +218,10 @@ export const getOrders: RequestHandler = async (req, res) => {
         allOrders = allOrders.filter((o) => o.country === country);
       }
 
+      console.log(`[getOrders] Fallback returning ${allOrders.length} orders`);
       return res.json(allOrders);
     } catch (fallbackError) {
-      console.error("Failed to return demo + in-memory orders:", fallbackError);
+      console.error("[getOrders] Failed to return demo + in-memory orders:", fallbackError);
       res.status(500).json({ error: "Failed to fetch orders" });
     }
   }
