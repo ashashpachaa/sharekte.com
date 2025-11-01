@@ -143,15 +143,6 @@ export async function syncFormToTransferFormTable(form: TransferFormData): Promi
       return false;
     }
 
-    // Build attachment objects - Airtable expects URL references or base64 encoded data
-    // For now, we'll just reference the attachments by name and count
-    const attachmentList = form.attachments.map(att => ({
-      filename: att.name,
-      size: att.size,
-      uploadedDate: att.uploadedDate,
-      uploadedBy: att.uploadedBy,
-    }));
-
     // Format date to YYYY-MM-DD format for Airtable date field
     const formatDateForAirtable = (dateString: string): string => {
       try {
@@ -162,6 +153,25 @@ export async function syncFormToTransferFormTable(form: TransferFormData): Promi
       }
     };
 
+    // Build attachments array - includes PDF link and client attachments info
+    const attachmentsArray: Array<{ url: string; filename?: string }> = [];
+
+    // Add form PDF link (client can download from endpoint)
+    attachmentsArray.push({
+      url: `/api/transfer-forms/${form.id}/pdf`,
+      filename: `${form.formId}-complete-form.pdf`
+    });
+
+    // Add client attachment references
+    if (form.attachments && form.attachments.length > 0) {
+      form.attachments.forEach(att => {
+        attachmentsArray.push({
+          url: att.url || `/api/transfer-forms/${form.id}/attachments/${att.id}`,
+          filename: att.name
+        });
+      });
+    }
+
     const airtableRecord: AirtableRecord = {
       fields: {
         "Order Number": form.orderId,
@@ -171,8 +181,7 @@ export async function syncFormToTransferFormTable(form: TransferFormData): Promi
         "Status": form.status,
         "Form ID": form.formId,
         "Submitted Date": formatDateForAirtable(form.submittedAt || form.createdAt),
-        "Attachment Details": JSON.stringify(attachmentList),
-        "Attachment Count": form.attachments.length,
+        "Attachments": attachmentsArray,
       },
     };
 
