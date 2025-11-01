@@ -1,45 +1,52 @@
-# Build stage
-FROM node:22-alpine AS builder
+# syntax = docker/dockerfile:1
+
+ARG NODE_VERSION=22
+FROM node:${NODE_VERSION}-alpine AS base
+
+LABEL fly_launch_runtime="Node.js Express + Vite SPA"
 
 WORKDIR /app
+
+# Set production environment
+ENV NODE_ENV="production"
 
 # Install pnpm
 RUN npm install -g pnpm@10.14.0
 
-# Copy package files
-COPY pnpm-lock.yaml package.json ./
 
-# Install dependencies
+# Build stage
+FROM base AS build
+
+# Install build dependencies
+RUN apk add --no-cache python3 make g++
+
+# Copy package files
+COPY package.json pnpm-lock.yaml ./
+
+# Install all dependencies (including dev for build)
 RUN pnpm install --frozen-lockfile
 
-# Copy source code
+# Copy application code
 COPY . .
 
-# Build the application
+# Build both client and server
 RUN pnpm run build
 
-# Production stage
-FROM node:22-alpine
 
-WORKDIR /app
-
-# Install pnpm in production image
-RUN npm install -g pnpm@10.14.0
-
-# Copy package files
-COPY pnpm-lock.yaml package.json ./
-
-# Install only production dependencies
-RUN pnpm install --frozen-lockfile --prod
+# Final production stage
+FROM base
 
 # Copy built application from builder
-COPY --from=builder /app/dist ./dist
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/package.json ./
 
 # Expose port
 EXPOSE 8080
 
-# Set environment
-ENV NODE_ENV=production
+# Health check
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:8080', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
 
-# Start the application
+# Start the Node.js server
 CMD ["node", "dist/server/node-build.mjs"]
