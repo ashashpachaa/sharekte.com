@@ -116,6 +116,68 @@ export function createServer() {
   app.post("/api/notifications/email", sendEmailNotification);
   app.get("/api/notifications", getNotifications);
 
+  // Test endpoint for transfer form Airtable sync
+  app.post("/api/test-transfer-form", async (req, res) => {
+    try {
+      const testForm = {
+        orderId: `test-order-${Date.now()}`,
+        companyId: "test-comp-001",
+        companyName: "Test Company Ltd",
+        companyNumber: "12345678",
+        country: "United Kingdom",
+        incorporationDate: "2020-01-15",
+        incorporationYear: 2020,
+        totalShares: 1000,
+        totalShareCapital: 10000,
+        shareholders: [
+          {
+            id: "sh-1",
+            name: "Test Shareholder",
+            email: "test@example.com",
+            nationality: "British",
+            address: "123 Test St",
+            city: "London",
+            state: "England",
+            postalCode: "SW1A 1AA",
+            country: "United Kingdom",
+            numberOfShares: 1000,
+            levelOfControl: "More than 75%"
+          }
+        ],
+        numberOfShareholders: 1,
+        pscList: [],
+        numberOfPSCs: 0,
+        changeCompanyName: false,
+        changeCompanyActivities: false,
+        attachments: []
+      };
+
+      // Call the createTransferForm handler with the test data
+      const mockRes = {
+        status: (code: number) => ({
+          json: (data: any) => {
+            console.log("[TEST] Response status:", code);
+            console.log("[TEST] Response data:", JSON.stringify(data, null, 2));
+            res.status(code).json(data);
+          }
+        }),
+        json: (data: any) => res.json(data),
+      } as any;
+
+      const mockReq = {
+        body: testForm,
+        params: {},
+        query: {}
+      } as any;
+
+      console.log("[TEST] Submitting test form:", testForm.companyName);
+      await createTransferForm(mockReq, mockRes);
+    } catch (error) {
+      console.error("[TEST] Error:", error);
+      res.status(500).json({ error: "Test form submission failed", details: String(error) });
+    }
+  });
+
   // Transfer Form routes - Specific routes before parameterized ones
   app.get("/api/transfer-forms/analytics/summary", getFormAnalytics);
 
