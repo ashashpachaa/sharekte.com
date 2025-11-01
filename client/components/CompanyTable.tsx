@@ -354,14 +354,14 @@ export function CompanyTable({
           <Table>
           <TableHeader>
             <TableRow className="bg-gray-50">
-              <TableHead className="font-semibold">Company Name</TableHead>
-              <TableHead className="font-semibold">Country</TableHead>
-              <TableHead className="font-semibold">Company Number</TableHead>
-              <TableHead className="font-semibold">Incorporate Date</TableHead>
-              <TableHead className="font-semibold">Incorporate Year</TableHead>
-              <TableHead className="font-semibold">Price</TableHead>
-              <TableHead className="font-semibold">Options Included</TableHead>
-              <TableHead className="text-right font-semibold">Action</TableHead>
+              <TableHead className="font-semibold">{t('table.companyName')}</TableHead>
+              <TableHead className="font-semibold">{t('table.country')}</TableHead>
+              <TableHead className="font-semibold">{t('table.companyNumber')}</TableHead>
+              <TableHead className="font-semibold">{t('table.incorporateDate')}</TableHead>
+              <TableHead className="font-semibold">{t('table.incorporateYear')}</TableHead>
+              <TableHead className="font-semibold">{t('table.price')}</TableHead>
+              <TableHead className="font-semibold">{t('table.optionsIncluded')}</TableHead>
+              <TableHead className="text-right font-semibold">{t('table.action')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
