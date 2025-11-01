@@ -2104,7 +2104,7 @@ Generated on: ${new Date().toLocaleDateString()}
                           {/* Transfer Form */}
                           {company.status !== "completed" && company.status !== "complete-transfer" && (
                             <div>
-                              {company.transferFormFilled && getStatusMessage(company.status) && (
+                              {getStatusMessage(company.status) && (
                                 <div className={`border rounded-lg p-4 mb-4 ${getStatusMessage(company.status)?.color}`}>
                                   <p className="font-medium text-sm">
                                     {getStatusMessage(company.status)?.icon} {getStatusMessage(company.status)?.headline}
