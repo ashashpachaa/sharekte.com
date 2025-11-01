@@ -37,16 +37,24 @@ try {
 
 // In production, serve the built SPA files
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-// distPath should be relative to where the server is running (project root)
-const distPath = path.resolve(process.cwd(), "dist/spa");
+const spaDir = path.resolve(__dirname, "../dist/spa");
 
-console.log("[startup] SPA path:", distPath);
-console.log("[startup] SPA exists:", fs.existsSync(distPath));
+console.log("[startup] SPA directory:", spaDir);
+console.log("[startup] CWD:", process.cwd());
+console.log("[startup] SPA exists:", fs.existsSync(spaDir));
+
+// List contents of dist if it exists
+const distDir = path.resolve(__dirname, "../dist");
+if (fs.existsSync(distDir)) {
+  console.log("[startup] dist/ contents:", fs.readdirSync(distDir));
+}
 
 // Serve static files
-if (fs.existsSync(distPath)) {
-  app.use(express.static(distPath));
+if (fs.existsSync(spaDir)) {
+  app.use(express.static(spaDir));
   console.log("[startup] ✓ SPA static files configured");
+} else {
+  console.warn("[startup] ⚠️  SPA directory not found");
 }
 
 // Handle React Router - serve index.html for all non-API routes
