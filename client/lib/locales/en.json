@@ -234,6 +234,67 @@
     "transferring": "Transferring",
     "completeTransfer": "Complete Transfer"
   },
+  "homepage": {
+    "hero": {
+      "title1": "Buy Established",
+      "title2": "Businesses Today",
+      "description": "Discover and acquire proven, revenue-generating companies globally. Skip the startup phase and step into profitability.",
+      "browseButton": "Start Browsing",
+      "watchDemo": "Watch Demo",
+      "businessesListed": "Businesses Listed",
+      "gmv": "GMV in 2024",
+      "buyerSatisfaction": "Buyer Satisfaction",
+      "annualRevenue": "Annual Revenue",
+      "teamSize": "Team Size",
+      "averageRoi": "Average ROI"
+    },
+    "browseSection": {
+      "title": "Browse All Companies",
+      "description": "Explore our complete marketplace of verified businesses. Filter by country and incorporation year to find your perfect match."
+    },
+    "featuredSection": {
+      "title": "Featured Businesses",
+      "description": "Handpicked, profitable companies ready for immediate acquisition",
+      "revenue": "Revenue",
+      "industry": "Industry",
+      "roi": "ROI",
+      "viewDetails": "View Details",
+      "browseAll": "Browse All Companies"
+    },
+    "featuresSection": {
+      "title": "Everything You Need",
+      "description": "Comprehensive tools and support for acquiring and managing your businesses",
+      "feature1Title": "Global Marketplace",
+      "feature1Desc": "Access thousands of verified, revenue-generating businesses from around the world.",
+      "feature2Title": "Transparent Metrics",
+      "feature2Desc": "Real financial data, growth trajectories, and proven business models you can analyze.",
+      "feature3Title": "Secure Transactions",
+      "feature3Desc": "Escrow protection, legal documentation, and buyer safeguards on every purchase.",
+      "feature4Title": "Expert Support",
+      "feature4Desc": "Dedicated advisors guide you through due diligence and acquisition process.",
+      "feature5Title": "Business Dashboard",
+      "feature5Desc": "Comprehensive analytics and management tools for the companies you own.",
+      "feature6Title": "Instant Onboarding",
+      "feature6Desc": "Quick handoff and transition support to get your business running smoothly."
+    },
+    "howitworks": {
+      "title": "How It Works",
+      "description": "Simple steps to acquire your next business",
+      "step1": "Browse",
+      "step1Desc": "Explore our marketplace of verified, profitable businesses",
+      "step2": "Analyze",
+      "step2Desc": "Review detailed financials, metrics, and business models",
+      "step3": "Negotiate",
+      "step3Desc": "Work with our advisors to finalize terms with sellers",
+      "step4": "Manage",
+      "step4Desc": "Access your dashboard and scale your business portfolio"
+    },
+    "cta": {
+      "title": "Ready to Own Your Next Business?",
+      "description": "Join thousands of entrepreneurs building their portfolio of profitable companies",
+      "button": "Start Your Journey"
+    }
+  },
   "common": {
     "yes": "Yes",
     "no": "No",
