@@ -127,3 +127,63 @@
     white-space: pre;
   }
 }
+
+/* RTL Support */
+html.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+html.rtl body {
+  direction: rtl;
+}
+
+html.ltr {
+  direction: ltr;
+  text-align: left;
+}
+
+html.ltr body {
+  direction: ltr;
+}
+
+/* Flexbox RTL adjustments */
+html.rtl .flex {
+  flex-direction: row-reverse;
+}
+
+html.rtl [class*="gap-"] {
+  gap: var(--gap);
+}
+
+/* Margin/Padding RTL */
+html.rtl [class*="ml-"] {
+  margin-left: unset !important;
+  margin-right: var(--margin);
+}
+
+html.rtl [class*="mr-"] {
+  margin-right: unset !important;
+  margin-left: var(--margin);
+}
+
+html.rtl [class*="pl-"] {
+  padding-left: unset !important;
+  padding-right: var(--padding);
+}
+
+html.rtl [class*="pr-"] {
+  padding-right: unset !important;
+  padding-left: var(--padding);
+}
+
+/* Border RTL */
+html.rtl [class*="border-l-"] {
+  border-left: none !important;
+  border-right: var(--border-width) solid var(--border);
+}
+
+html.rtl [class*="border-r-"] {
+  border-right: none !important;
+  border-left: var(--border-width) solid var(--border);
+}
