@@ -1,6 +1,7 @@
 # Fly.io Deployment Guide - Complete Setup
 
 ## ✅ Code Changes Made
+
 - ✅ Fixed port from 3000 to 8080 (Fly.io requirement)
 - ✅ Verified all API calls use relative URLs `/api/...`
 - ✅ Verified Airtable token handling
@@ -48,6 +49,7 @@ fly deploy -a sharekte-com
 ```
 
 The app will:
+
 1. Pull code from GitHub
 2. Build Docker image
 3. Deploy to Fly.io
@@ -56,6 +58,7 @@ The app will:
 ### Option B: Redeploy Existing App
 
 If already deployed:
+
 ```bash
 fly redeploy -a sharekte-com
 ```
@@ -78,11 +81,13 @@ fly open -a sharekte-com
 ### App crashes on startup
 
 Check logs:
+
 ```bash
 fly logs -a sharekte-com
 ```
 
 Look for errors like:
+
 - `Port 8080 in use` → Restart: `fly restart -a sharekte-com`
 - `Airtable token not configured` → Set via: `fly secrets set AIRTABLE_API_TOKEN=... -a sharekte-com`
 - `Build failed` → Check Docker build with: `fly logs --instance <id> -a sharekte-com`
@@ -90,6 +95,7 @@ Look for errors like:
 ### 502 Bad Gateway
 
 This means the Node server isn't responding. Check:
+
 ```bash
 fly checks status -a sharekte-com
 fly logs -a sharekte-com
@@ -110,11 +116,13 @@ fly redeploy -a sharekte-com
 ## 📊 Monitoring
 
 View real-time metrics:
+
 ```bash
 fly metrics -a sharekte-com
 ```
 
 ### CPU/Memory Usage
+
 - Current config: 1 CPU, 1GB RAM
 - If you get memory errors, increase:
   ```bash
@@ -122,6 +130,7 @@ fly metrics -a sharekte-com
   ```
 
 ### Auto-scaling
+
 The app is configured to scale to 0 machines when idle to save costs.
 It will automatically start when someone visits.
 
@@ -159,11 +168,13 @@ https://sharekte-com.fly.dev
 ## 💡 Cost Optimization
 
 Current setup costs ~$0.30/month:
+
 - 1 shared CPU: $0.10/month
 - 1GB RAM: $0.20/month
 - Auto-scale to 0 saves when idle
 
 To reduce further:
+
 ```bash
 fly scale memory 512 -a sharekte-com  # Minimum 512MB
 ```
