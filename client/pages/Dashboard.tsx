@@ -349,13 +349,26 @@ export default function Dashboard() {
     attachments: [] as Array<{ id: string; name: string; size: number; type: string; uploadedDate: string; base64Data: string }>,
   });
 
-  // Auto-refresh transfer form status from Airtable every 3 seconds
+  // Auto-refresh transfer form status from Airtable every 10 seconds
   useEffect(() => {
-    const refreshInterval = setInterval(async () => {
+    let refreshInterval: NodeJS.Timeout;
+    let retryCount = 0;
+    const maxRetries = 3;
+
+    const syncForms = async () => {
       try {
-        const response = await fetch("/api/transfer-forms");
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
+        const response = await fetch("/api/transfer-forms", {
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
         if (response.ok) {
           const forms = await response.json();
+          retryCount = 0; // Reset retry count on success
           console.log("[Dashboard Auto-Sync] Fetched forms:", forms.map(f => ({ name: f.companyName, status: f.status, orderId: f.orderId })));
 
           // Update purchasedCompanies status if any form status changed in Airtable
@@ -383,13 +396,30 @@ export default function Dashboard() {
               return company;
             })
           );
+        } else {
+          console.warn(`[Dashboard Auto-Sync] Received status ${response.status}`);
         }
       } catch (error) {
-        console.error("[Dashboard Auto-Sync] Error:", error);
+        retryCount++;
+        if (retryCount <= maxRetries) {
+          console.warn(`[Dashboard Auto-Sync] Attempt ${retryCount}/${maxRetries} failed:`, error instanceof Error ? error.message : String(error));
+        } else {
+          console.warn("[Dashboard Auto-Sync] Max retries exceeded, stopping sync");
+          clearInterval(refreshInterval);
+        }
       }
-    }, 3000); // Auto-refresh every 3 seconds
+    };
 
-    return () => clearInterval(refreshInterval);
+    // Start sync after a short delay to avoid immediate fetch
+    const startTimer = setTimeout(() => {
+      syncForms(); // Initial sync
+      refreshInterval = setInterval(syncForms, 10000); // Auto-refresh every 10 seconds
+    }, 1000);
+
+    return () => {
+      clearTimeout(startTimer);
+      if (refreshInterval) clearInterval(refreshInterval);
+    };
   }, []);
 
   // Services state (Marketplace)
