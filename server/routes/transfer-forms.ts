@@ -15,6 +15,112 @@ function generateId(): string {
   return `form_${idCounter++}`;
 }
 
+// Initialize with demo transfer forms
+function initializeDemoForms() {
+  if (formsDb.length === 0) {
+    formsDb = [
+      {
+        id: generateId(),
+        formId: "TF001",
+        orderId: "order_1",
+        companyId: "comp_1",
+        companyName: "Tech Solutions Ltd",
+        companyNumber: "12345678",
+        country: "UK",
+        incorporationDate: "2020-01-15",
+        incorporationYear: 2020,
+        totalShares: 1000,
+        totalShareCapital: 100000,
+        pricePerShare: 100,
+        shareholders: [
+          {
+            id: "sh_1",
+            name: "John Smith",
+            nationality: "British",
+            address: "123 Main St",
+            city: "London",
+            state: "England",
+            postalCode: "SW1A 1AA",
+            country: "UK",
+            sharePercentage: 50,
+          },
+        ],
+        numberOfShareholders: 1,
+        pscList: [],
+        numberOfPSCs: 0,
+        changeCompanyName: false,
+        changeCompanyActivities: false,
+        status: "under-review",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        amendmentsRequiredCount: 0,
+        attachments: [],
+        comments: [],
+        statusHistory: [],
+      },
+      {
+        id: generateId(),
+        formId: "TF002",
+        orderId: "order_2",
+        companyId: "comp_2",
+        companyName: "Nordic Business AB",
+        companyNumber: "87654321",
+        country: "Sweden",
+        incorporationDate: "2019-06-20",
+        incorporationYear: 2019,
+        totalShares: 500,
+        totalShareCapital: 50000,
+        pricePerShare: 100,
+        shareholders: [],
+        numberOfShareholders: 0,
+        pscList: [],
+        numberOfPSCs: 0,
+        changeCompanyName: false,
+        changeCompanyActivities: false,
+        status: "amend-required",
+        createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+        updatedAt: new Date().toISOString(),
+        amendmentsRequiredCount: 1,
+        attachments: [],
+        comments: [],
+        statusHistory: [],
+      },
+      {
+        id: generateId(),
+        formId: "TF003",
+        orderId: "order_3",
+        companyId: "comp_3",
+        companyName: "Dubai Trade FZCO",
+        companyNumber: "FZCO123",
+        country: "UAE",
+        incorporationDate: "2021-03-10",
+        incorporationYear: 2021,
+        totalShares: 2000,
+        totalShareCapital: 200000,
+        pricePerShare: 100,
+        shareholders: [],
+        numberOfShareholders: 0,
+        pscList: [],
+        numberOfPSCs: 0,
+        changeCompanyName: false,
+        changeCompanyActivities: false,
+        status: "complete-transfer",
+        createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+        updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+        completedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+        amendmentsRequiredCount: 0,
+        attachments: [],
+        comments: [],
+        statusHistory: [],
+      },
+    ];
+    console.log("[Transfer Forms] Initialized with 3 demo forms");
+  }
+}
+
+// Call initialization on module load
+initializeDemoForms();
+
 function getTodayString(): string {
   return new Date().toISOString().split("T")[0];
 }
