@@ -1,0 +1,28 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/spa",
+  "serverlessFunctionRegion": "iad1",
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/api"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "functions": {
+    "api.ts": {
+      "memory": 3008,
+      "maxDuration": 30
+    }
+  },
+  "env": {
+    "AIRTABLE_API_TOKEN": "@airtable_api_token",
+    "AIRTABLE_BASE_ID": "@airtable_base_id",
+    "AIRTABLE_TABLE_ORDERS": "@airtable_table_orders",
+    "AIRTABLE_TABLE_COMPANIES": "@airtable_table_companies",
+    "AIRTABLE_TABLE_TRANSFER_FORMS": "@airtable_table_transfer_forms"
+  }
+}
