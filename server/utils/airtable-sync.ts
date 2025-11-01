@@ -183,6 +183,14 @@ export async function syncFormToTransferFormTable(form: TransferFormData): Promi
       downloadPDFLink: `${process.env.APP_URL || 'http://localhost:8080'}/api/transfer-forms/${form.id}/pdf`,
     };
 
+    // Create download link for the complete form
+    const downloadLink = `${process.env.APP_URL || 'http://localhost:8080'}/api/transfer-forms/${form.id}/pdf`;
+
+    // Build attachments information as text
+    const attachmentsInfo = form.attachments.length > 0
+      ? `Download Link: ${downloadLink}\n\nClient Attachments:\n${form.attachments.map(att => `- ${att.name} (${att.type}, ${(att.size / 1024 / 1024).toFixed(2)} MB)`).join('\n')}`
+      : `Download Link: ${downloadLink}\n\nNo additional client attachments`;
+
     const airtableRecord: AirtableRecord = {
       fields: {
         "Order Number": form.orderId,
@@ -192,6 +200,7 @@ export async function syncFormToTransferFormTable(form: TransferFormData): Promi
         "Status": form.status,
         "Form ID": form.formId,
         "Submitted Date": formatDateForAirtable(form.submittedAt || form.createdAt),
+        "Attachments": attachmentsInfo,
       },
     };
 
