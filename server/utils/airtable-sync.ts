@@ -124,6 +124,64 @@ export async function syncFormToAirtable(form: TransferFormData): Promise<boolea
 }
 
 /**
+ * Sync transfer form to simplified Transfer Forms table
+ * Only syncs core fields: Order Number, Company Name, Company Number, Country, Status, Attachments
+ */
+export async function syncFormToTransferFormTable(form: TransferFormData): Promise<boolean> {
+  try {
+    const baseId = process.env.AIRTABLE_BASE_ID || "app0PK34gyJDizR3Q";
+    const tableId = process.env.AIRTABLE_TABLE_TRANSFER_FORMS;
+
+    if (!tableId) {
+      console.warn("AIRTABLE_TABLE_TRANSFER_FORMS not configured. Skipping sync to Transfer Forms table.");
+      return false;
+    }
+
+    // Build attachment objects - Airtable expects URL references or base64 encoded data
+    // For now, we'll just reference the attachments by name and count
+    const attachmentList = form.attachments.map(att => ({
+      filename: att.name,
+      size: att.size,
+      uploadedDate: att.uploadedDate,
+      uploadedBy: att.uploadedBy,
+    }));
+
+    const airtableRecord: AirtableRecord = {
+      fields: {
+        "Order Number": form.orderId,
+        "Company Name": form.companyName,
+        "Company Number": form.companyNumber,
+        "Country": form.country,
+        "Status": form.status,
+        "Form ID": form.formId,
+        "Submitted Date": form.submittedAt || form.createdAt,
+        "Attachment Details": JSON.stringify(attachmentList),
+        "Attachment Count": form.attachments.length,
+      },
+    };
+
+    const url = `${AIRTABLE_API_URL}/${baseId}/${tableId}`;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: getHeaders(),
+      body: JSON.stringify(airtableRecord),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`[syncFormToTransferFormTable] Airtable sync failed: Status ${response.status}, Body: ${errorText}`);
+      return false;
+    }
+
+    console.log(`[syncFormToTransferFormTable] ✓ Form ${form.formId} (Order: ${form.orderId}) synced to Transfer Forms table`);
+    return true;
+  } catch (error) {
+    console.error("[syncFormToTransferFormTable] Error:", error);
+    return false;
+  }
+}
+
+/**
  * Update form status in Airtable
  */
 export async function updateFormStatusInAirtable(
