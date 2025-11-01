@@ -36,12 +36,7 @@ export function CartDropdown() {
             <div className="p-6 text-center space-y-4">
               <ShoppingCart className="w-12 h-12 text-muted-foreground/50 mx-auto" />
               <p className="text-muted-foreground">Your cart is empty</p>
-              <Button
-                size="sm"
-                variant="outline"
-                className="w-full"
-                asChild
-              >
+              <Button size="sm" variant="outline" className="w-full" asChild>
                 <Link to="/">Continue Shopping</Link>
               </Button>
             </div>
@@ -79,7 +74,9 @@ export function CartDropdown() {
               {/* Cart Footer */}
               <div className="bg-muted/30 p-4 border-t border-border/40 space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Subtotal</span>
+                  <span className="text-sm text-muted-foreground">
+                    Subtotal
+                  </span>
                   <span className="text-lg font-bold text-primary">
                     £{totalPrice.toLocaleString()}
                   </span>
@@ -96,12 +93,7 @@ export function CartDropdown() {
                   </Link>
                 </Button>
 
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="w-full"
-                  asChild
-                >
+                <Button size="sm" variant="outline" className="w-full" asChild>
                   <Link to="/">Continue Shopping</Link>
                 </Button>
               </div>

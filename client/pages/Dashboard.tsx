@@ -14,7 +14,16 @@ import {
 } from "@/components/ui/dialog";
 import { Search, X, ShoppingCart } from "lucide-react";
 import { useSearch } from "@/hooks/use-search";
-import { getPurchasedCompanies, getInvoices, savePurchasedCompany, updatePurchasedCompanyStatus, addInvoice, renewCompany, updateCompanyRenewalStatus, type PurchasedCompanyData } from "@/lib/user-data";
+import {
+  getPurchasedCompanies,
+  getInvoices,
+  savePurchasedCompany,
+  updatePurchasedCompanyStatus,
+  addInvoice,
+  renewCompany,
+  updateCompanyRenewalStatus,
+  type PurchasedCompanyData,
+} from "@/lib/user-data";
 import { useCurrency } from "@/lib/currency-context";
 import { MyOrders } from "@/components/MyOrders";
 import { CompanyTransferForm } from "@/components/CompanyTransferForm";
@@ -51,7 +60,15 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-type DashboardTab = "portfolio" | "companies" | "orders" | "invoices" | "marketplace" | "account" | "payments" | "security";
+type DashboardTab =
+  | "portfolio"
+  | "companies"
+  | "orders"
+  | "invoices"
+  | "marketplace"
+  | "account"
+  | "payments"
+  | "security";
 
 interface Service {
   id: string;
@@ -107,7 +124,12 @@ interface PurchasedCompany {
   purchasedDate: string;
   renewalDate: string;
   renewalFees: number;
-  status: "pending-form" | "under-review" | "amend-required" | "pending-transfer" | "completed";
+  status:
+    | "pending-form"
+    | "under-review"
+    | "amend-required"
+    | "pending-transfer"
+    | "completed";
   statusLabel: string;
   renewalStatus: "active" | "expired" | "cancelled";
   documents: Document[];
@@ -156,7 +178,7 @@ interface LoginHistory {
 function formatPriceWithCurrency(
   amount: number,
   currency: string,
-  rates: Record<string, { symbol: string; rate: number }>
+  rates: Record<string, { symbol: string; rate: number }>,
 ): string {
   const currencyInfo = rates[currency as keyof typeof rates];
   if (!currencyInfo) return `${amount.toLocaleString()}`;
@@ -288,9 +310,11 @@ export default function Dashboard() {
   };
 
   // Purchased companies state - fetch user-specific data
-  const [purchasedCompanies, setPurchasedCompanies] = useState<PurchasedCompany[]>(() => {
+  const [purchasedCompanies, setPurchasedCompanies] = useState<
+    PurchasedCompany[]
+  >(() => {
     const userCompanies = getPurchasedCompanies();
-    return userCompanies.map(uc => {
+    return userCompanies.map((uc) => {
       // Ensure renewalStatus exists
       if (!uc.renewalStatus) {
         uc.renewalStatus = "active";
@@ -309,7 +333,11 @@ export default function Dashboard() {
       if (currentRenewalStatus !== "cancelled" && daysRemaining <= -15) {
         currentRenewalStatus = "cancelled";
         updateCompanyRenewalStatus(uc.id, "cancelled");
-      } else if (currentRenewalStatus !== "cancelled" && daysRemaining <= 0 && daysRemaining > -15) {
+      } else if (
+        currentRenewalStatus !== "cancelled" &&
+        daysRemaining <= 0 &&
+        daysRemaining > -15
+      ) {
         currentRenewalStatus = "expired";
         updateCompanyRenewalStatus(uc.id, "expired");
       } else if (currentRenewalStatus === "expired" && daysRemaining > 0) {
@@ -346,7 +374,14 @@ export default function Dashboard() {
     shareholderName: "",
     shareholderEmail: "",
     companyAddress: "",
-    attachments: [] as Array<{ id: string; name: string; size: number; type: string; uploadedDate: string; base64Data: string }>,
+    attachments: [] as Array<{
+      id: string;
+      name: string;
+      size: number;
+      type: string;
+      uploadedDate: string;
+      base64Data: string;
+    }>,
   });
 
   // Auto-refresh transfer form status from Airtable every 10 seconds
@@ -369,20 +404,40 @@ export default function Dashboard() {
         if (response.ok) {
           const forms = await response.json();
           retryCount = 0; // Reset retry count on success
-          console.log("[Dashboard Auto-Sync] Fetched forms:", forms.map(f => ({ name: f.companyName, status: f.status, orderId: f.orderId })));
+          console.log(
+            "[Dashboard Auto-Sync] Fetched forms:",
+            forms.map((f) => ({
+              name: f.companyName,
+              status: f.status,
+              orderId: f.orderId,
+            })),
+          );
 
           // Update purchasedCompanies status if any form status changed in Airtable
           setPurchasedCompanies((prevCompanies) =>
             prevCompanies.map((company) => {
               // Find corresponding form - match by company name (most reliable)
               const correspondingForm = forms.find(
-                (f) => f.companyName && f.companyName.toLowerCase() === company.name.toLowerCase()
+                (f) =>
+                  f.companyName &&
+                  f.companyName.toLowerCase() === company.name.toLowerCase(),
               );
 
-              console.log(`[Dashboard Auto-Sync] Looking for form for "${company.name}", found:`, correspondingForm?.companyName, "status:", correspondingForm?.status);
+              console.log(
+                `[Dashboard Auto-Sync] Looking for form for "${company.name}", found:`,
+                correspondingForm?.companyName,
+                "status:",
+                correspondingForm?.status,
+              );
 
-              if (correspondingForm && correspondingForm.status && correspondingForm.status !== company.status) {
-                console.log(`[Dashboard Auto-Sync] Status change detected for ${company.name}: "${company.status}" → "${correspondingForm.status}"`);
+              if (
+                correspondingForm &&
+                correspondingForm.status &&
+                correspondingForm.status !== company.status
+              ) {
+                console.log(
+                  `[Dashboard Auto-Sync] Status change detected for ${company.name}: "${company.status}" → "${correspondingForm.status}"`,
+                );
                 // Update local state with new status
                 const updatedCompany = {
                   ...company,
@@ -394,17 +449,24 @@ export default function Dashboard() {
               }
 
               return company;
-            })
+            }),
           );
         } else {
-          console.warn(`[Dashboard Auto-Sync] Received status ${response.status}`);
+          console.warn(
+            `[Dashboard Auto-Sync] Received status ${response.status}`,
+          );
         }
       } catch (error) {
         retryCount++;
         if (retryCount <= maxRetries) {
-          console.warn(`[Dashboard Auto-Sync] Attempt ${retryCount}/${maxRetries} failed:`, error instanceof Error ? error.message : String(error));
+          console.warn(
+            `[Dashboard Auto-Sync] Attempt ${retryCount}/${maxRetries} failed:`,
+            error instanceof Error ? error.message : String(error),
+          );
         } else {
-          console.warn("[Dashboard Auto-Sync] Max retries exceeded, stopping sync");
+          console.warn(
+            "[Dashboard Auto-Sync] Max retries exceeded, stopping sync",
+          );
           clearInterval(refreshInterval);
         }
       }
@@ -532,7 +594,7 @@ export default function Dashboard() {
   // Invoices state - fetch user-specific data
   const [invoices, setInvoices] = useState<Invoice[]>(() => {
     const userInvoices = getInvoices();
-    return userInvoices.map(ui => ({
+    return userInvoices.map((ui) => ({
       id: ui.id,
       invoiceNumber: ui.invoiceNumber,
       date: ui.date,
@@ -641,7 +703,7 @@ export default function Dashboard() {
   const removeAttachment = (attachmentId: string) => {
     setFormData({
       ...formData,
-      attachments: formData.attachments.filter(a => a.id !== attachmentId),
+      attachments: formData.attachments.filter((a) => a.id !== attachmentId),
     });
   };
 
@@ -658,7 +720,7 @@ export default function Dashboard() {
     }
 
     // Update in user-specific storage
-    const company = purchasedCompanies.find(c => c.id === companyId);
+    const company = purchasedCompanies.find((c) => c.id === companyId);
     if (company) {
       const updatedCompany: PurchasedCompanyData = {
         id: company.id,
@@ -690,7 +752,11 @@ export default function Dashboard() {
       savePurchasedCompany(updatedCompany);
     }
 
-    updatePurchasedCompanyStatus(companyId, "under-review", "Under Review Transfer Form");
+    updatePurchasedCompanyStatus(
+      companyId,
+      "under-review",
+      "Under Review Transfer Form",
+    );
 
     const updated = purchasedCompanies.map((c) =>
       c.id === companyId
@@ -700,7 +766,7 @@ export default function Dashboard() {
             statusLabel: "Under Review Transfer Form",
             transferFormFilled: true,
           }
-        : c
+        : c,
     );
 
     setPurchasedCompanies(updated);
@@ -745,7 +811,7 @@ ${invoice.items
       `${item.description}
 Quantity: ${item.quantity}
 Unit Price: £${item.unitPrice.toLocaleString()}
-Total: £${item.total.toLocaleString()}`
+Total: £${item.total.toLocaleString()}`,
   )
   .join("\n\n")}
 
@@ -855,7 +921,7 @@ Generated on: ${new Date().toLocaleDateString()}
                   <td>£${item.unitPrice.toLocaleString()}</td>
                   <td>£${item.total.toLocaleString()}</td>
                 </tr>
-              `
+              `,
                 )
                 .join("")}
             </tbody>
@@ -966,7 +1032,7 @@ Generated on: ${new Date().toLocaleDateString()}
     localStorage.removeItem("serviceCart");
 
     toast.success(
-      `Order completed! ${cartItems.length} service(s) added to your account.`
+      `Order completed! ${cartItems.length} service(s) added to your account.`,
     );
   };
 
@@ -1032,7 +1098,8 @@ Generated on: ${new Date().toLocaleDateString()}
         return {
           icon: "📋",
           headline: "Form Pending",
-          description: "Your transfer form is awaiting submission. Please fill out all required fields and submit to begin the review process.",
+          description:
+            "Your transfer form is awaiting submission. Please fill out all required fields and submit to begin the review process.",
           color: "bg-yellow-500/10 border-yellow-500/30 text-yellow-700",
           textColor: "text-yellow-600",
         };
@@ -1040,7 +1107,8 @@ Generated on: ${new Date().toLocaleDateString()}
         return {
           icon: "⏳",
           headline: "Form Under Review",
-          description: "Your transfer form has been submitted and is currently under review by our admin team. You'll be able to edit it once they request amendments.",
+          description:
+            "Your transfer form has been submitted and is currently under review by our admin team. You'll be able to edit it once they request amendments.",
           color: "bg-blue-500/10 border-blue-500/30 text-blue-700",
           textColor: "text-blue-600",
         };
@@ -1048,7 +1116,8 @@ Generated on: ${new Date().toLocaleDateString()}
         return {
           icon: "✏️",
           headline: "Amendments Required",
-          description: "The admin team has requested amendments to your transfer form. Please review their comments and update the form accordingly.",
+          description:
+            "The admin team has requested amendments to your transfer form. Please review their comments and update the form accordingly.",
           color: "bg-orange-500/10 border-orange-500/30 text-orange-700",
           textColor: "text-orange-600",
         };
@@ -1056,7 +1125,8 @@ Generated on: ${new Date().toLocaleDateString()}
         return {
           icon: "✔️",
           headline: "Application Ready for Confirmation",
-          description: "Your transfer application has passed the review process and is ready for final confirmation. Our team will process the confirmation and initiate the transfer within 1-2 business days.",
+          description:
+            "Your transfer application has passed the review process and is ready for final confirmation. Our team will process the confirmation and initiate the transfer within 1-2 business days.",
           color: "bg-blue-500/10 border-blue-500/30 text-blue-700",
           textColor: "text-blue-600",
         };
@@ -1064,7 +1134,8 @@ Generated on: ${new Date().toLocaleDateString()}
         return {
           icon: "📤",
           headline: "Pending Transfer",
-          description: "Your transfer form has been approved and is now pending final transfer processing. The transfer should complete within 3-5 business days.",
+          description:
+            "Your transfer form has been approved and is now pending final transfer processing. The transfer should complete within 3-5 business days.",
           color: "bg-purple-500/10 border-purple-500/30 text-purple-700",
           textColor: "text-purple-600",
         };
@@ -1072,7 +1143,8 @@ Generated on: ${new Date().toLocaleDateString()}
         return {
           icon: "🔄",
           headline: "Transfer in Progress",
-          description: "Your company transfer is currently in progress. The process typically takes 3-5 business days. You'll receive a notification once the transfer is complete.",
+          description:
+            "Your company transfer is currently in progress. The process typically takes 3-5 business days. You'll receive a notification once the transfer is complete.",
           color: "bg-purple-500/10 border-purple-500/30 text-purple-700",
           textColor: "text-purple-600",
         };
@@ -1080,7 +1152,8 @@ Generated on: ${new Date().toLocaleDateString()}
         return {
           icon: "✅",
           headline: "Transfer Successfully Completed",
-          description: "The company ownership transfer has been successfully finalized. All documentation has been processed and filed with the relevant authorities. You now have full ownership and control of the company.",
+          description:
+            "The company ownership transfer has been successfully finalized. All documentation has been processed and filed with the relevant authorities. You now have full ownership and control of the company.",
           color: "bg-green-500/10 border-green-500/30 text-green-700",
           textColor: "text-green-600",
         };
@@ -1088,7 +1161,8 @@ Generated on: ${new Date().toLocaleDateString()}
         return {
           icon: "✅",
           headline: "Transfer Completed",
-          description: "The company transfer process has been completed successfully.",
+          description:
+            "The company transfer process has been completed successfully.",
           color: "bg-green-500/10 border-green-500/30 text-green-700",
           textColor: "text-green-600",
         };
@@ -1096,7 +1170,8 @@ Generated on: ${new Date().toLocaleDateString()}
         return {
           icon: "❌",
           headline: "Transfer Canceled",
-          description: "The transfer process for this company has been canceled. Please contact support if you need further assistance.",
+          description:
+            "The transfer process for this company has been canceled. Please contact support if you need further assistance.",
           color: "bg-red-500/10 border-red-500/30 text-red-700",
           textColor: "text-red-600",
         };
@@ -1125,7 +1200,7 @@ Generated on: ${new Date().toLocaleDateString()}
 
   // Calculate portfolio metrics
   const pendingTransferCount = purchasedCompanies.filter(
-    (c) => c.status === "pending-form" || c.status === "under-review"
+    (c) => c.status === "pending-form" || c.status === "under-review",
   ).length;
 
   const expireSoonCount = purchasedCompanies.filter((c) => {
@@ -1170,10 +1245,10 @@ Generated on: ${new Date().toLocaleDateString()}
       <section className="border-b border-border/40 py-8">
         <div className="container max-w-6xl mx-auto px-4">
           <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-            {t('dashboard.title')}
+            {t("dashboard.title")}
           </h1>
           <p className="text-muted-foreground mt-2">
-            {t('dashboard.subtitle')}
+            {t("dashboard.subtitle")}
           </p>
         </div>
       </section>
@@ -1191,7 +1266,7 @@ Generated on: ${new Date().toLocaleDateString()}
               }`}
             >
               <BarChart3 className="w-4 h-4 flex-shrink-0" />
-              {t('dashboard.portfolio')}
+              {t("dashboard.portfolio")}
             </button>
             <button
               onClick={() => setActiveTab("companies")}
@@ -1202,7 +1277,7 @@ Generated on: ${new Date().toLocaleDateString()}
               }`}
             >
               <Building2 className="w-4 h-4 flex-shrink-0" />
-              {t('dashboard.myCompanies')}
+              {t("dashboard.myCompanies")}
             </button>
             <button
               onClick={() => setActiveTab("orders")}
@@ -1213,7 +1288,7 @@ Generated on: ${new Date().toLocaleDateString()}
               }`}
             >
               <ShoppingCart className="w-4 h-4 flex-shrink-0" />
-              {t('dashboard.myOrders')}
+              {t("dashboard.myOrders")}
             </button>
             <button
               onClick={() => setActiveTab("invoices")}
@@ -1224,7 +1299,7 @@ Generated on: ${new Date().toLocaleDateString()}
               }`}
             >
               <FileText className="w-4 h-4 flex-shrink-0" />
-              {t('dashboard.invoices')}
+              {t("dashboard.invoices")}
             </button>
             <button
               onClick={() => setActiveTab("marketplace")}
@@ -1235,7 +1310,7 @@ Generated on: ${new Date().toLocaleDateString()}
               }`}
             >
               <Package className="w-4 h-4 flex-shrink-0" />
-              {t('dashboard.marketplace')}
+              {t("dashboard.marketplace")}
             </button>
             <button
               onClick={() => setActiveTab("account")}
@@ -1246,7 +1321,7 @@ Generated on: ${new Date().toLocaleDateString()}
               }`}
             >
               <User className="w-4 h-4 flex-shrink-0" />
-              {t('dashboard.myAccount')}
+              {t("dashboard.myAccount")}
             </button>
             <button
               onClick={() => setActiveTab("payments")}
@@ -1257,7 +1332,7 @@ Generated on: ${new Date().toLocaleDateString()}
               }`}
             >
               <CreditCard className="w-4 h-4 flex-shrink-0" />
-              {t('dashboard.paymentMethods')}
+              {t("dashboard.paymentMethods")}
             </button>
             <button
               onClick={() => setActiveTab("security")}
@@ -1293,7 +1368,9 @@ Generated on: ${new Date().toLocaleDateString()}
                 {cartItems.length > 0 && (
                   <div className="bg-primary/10 border border-primary/30 rounded-lg p-4 space-y-3">
                     <div>
-                      <p className="text-sm text-muted-foreground">Cart Total</p>
+                      <p className="text-sm text-muted-foreground">
+                        Cart Total
+                      </p>
                       <p className="text-2xl font-bold text-primary">
                         £{cartTotal.toLocaleString()}
                       </p>
@@ -1317,7 +1394,9 @@ Generated on: ${new Date().toLocaleDateString()}
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {services.map((service) => {
                   const ServiceIcon = service.icon;
-                  const isInCart = cartItems.some((item) => item.id === service.id);
+                  const isInCart = cartItems.some(
+                    (item) => item.id === service.id,
+                  );
 
                   return (
                     <div
@@ -1386,9 +1465,7 @@ Generated on: ${new Date().toLocaleDateString()}
                               <Button
                                 variant="outline"
                                 className="w-full text-destructive hover:bg-destructive/10"
-                                onClick={() =>
-                                  handleRemoveFromCart(service.id)
-                                }
+                                onClick={() => handleRemoveFromCart(service.id)}
                               >
                                 Remove
                               </Button>
@@ -1415,9 +1492,7 @@ Generated on: ${new Date().toLocaleDateString()}
           {activeTab === "invoices" && (
             <div className="space-y-6">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <h2 className="text-2xl font-bold text-foreground">
-                  Invoices
-                </h2>
+                <h2 className="text-2xl font-bold text-foreground">Invoices</h2>
                 <div className="flex-1 md:flex-initial md:w-64 relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
@@ -1470,7 +1545,7 @@ Generated on: ${new Date().toLocaleDateString()}
                           <div
                             key={invoice.id}
                             className="bg-card border border-border/40 rounded-lg overflow-hidden hover:shadow-lg transition-shadow flex flex-col h-full"
-                    >
+                          >
                             {/* Invoice Header */}
                             <div className="p-4 border-b border-border/40 bg-muted/30">
                               <div className="space-y-3">
@@ -1492,7 +1567,8 @@ Generated on: ${new Date().toLocaleDateString()}
                                   >
                                     {invoice.status === "paid" && "�� Paid"}
                                     {invoice.status === "unpaid" && "⏳ Unpaid"}
-                                    {invoice.status === "canceled" && "✗ Canceled"}
+                                    {invoice.status === "canceled" &&
+                                      "✗ Canceled"}
                                   </div>
                                 </div>
                                 <p className="text-xs text-muted-foreground line-clamp-2">
@@ -1526,21 +1602,35 @@ Generated on: ${new Date().toLocaleDateString()}
                               {/* Dates */}
                               <div className="space-y-2 text-xs border-t border-border/40 pt-3">
                                 <div className="flex justify-between">
-                                  <span className="text-muted-foreground">Invoice:</span>
-                                  <span className="font-medium text-foreground">{invoice.date}</span>
+                                  <span className="text-muted-foreground">
+                                    Invoice:
+                                  </span>
+                                  <span className="font-medium text-foreground">
+                                    {invoice.date}
+                                  </span>
                                 </div>
                                 <div className="flex justify-between">
-                                  <span className="text-muted-foreground">Due:</span>
-                                  <span className="font-medium text-foreground">{invoice.dueDate}</span>
+                                  <span className="text-muted-foreground">
+                                    Due:
+                                  </span>
+                                  <span className="font-medium text-foreground">
+                                    {invoice.dueDate}
+                                  </span>
                                 </div>
                               </div>
 
                               {/* Total */}
                               <div className="flex justify-end pt-3 border-t border-border/40 mt-auto">
                                 <div className="text-right">
-                                  <p className="text-xs text-muted-foreground mb-1">Amount</p>
+                                  <p className="text-xs text-muted-foreground mb-1">
+                                    Amount
+                                  </p>
                                   <p className="text-lg font-bold text-primary">
-                                    {formatPriceWithCurrency(invoice.amount, invoice.currency, rates)}
+                                    {formatPriceWithCurrency(
+                                      invoice.amount,
+                                      invoice.currency,
+                                      rates,
+                                    )}
                                   </p>
                                 </div>
                               </div>
@@ -1582,8 +1672,7 @@ Generated on: ${new Date().toLocaleDateString()}
                         ))}
                       </div>
                     );
-                  })()
-                }
+                  })()}
                 </div>
               )}
             </div>
@@ -1594,7 +1683,9 @@ Generated on: ${new Date().toLocaleDateString()}
             <Dialog open={showInvoiceModal} onOpenChange={setShowInvoiceModal}>
               <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle>Invoice {selectedInvoice.invoiceNumber}</DialogTitle>
+                  <DialogTitle>
+                    Invoice {selectedInvoice.invoiceNumber}
+                  </DialogTitle>
                   <DialogDescription>
                     {selectedInvoice.description}
                   </DialogDescription>
@@ -1631,7 +1722,9 @@ Generated on: ${new Date().toLocaleDateString()}
                   {/* Company & Client Info */}
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <p className="text-xs text-muted-foreground mb-1">Company</p>
+                      <p className="text-xs text-muted-foreground mb-1">
+                        Company
+                      </p>
                       <p className="font-semibold text-foreground">
                         {selectedInvoice.companyName}
                       </p>
@@ -1640,7 +1733,9 @@ Generated on: ${new Date().toLocaleDateString()}
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs text-muted-foreground mb-1">Client</p>
+                      <p className="text-xs text-muted-foreground mb-1">
+                        Client
+                      </p>
                       <p className="font-semibold text-foreground">
                         {selectedInvoice.clientName}
                       </p>
@@ -1653,13 +1748,17 @@ Generated on: ${new Date().toLocaleDateString()}
                   {/* Dates */}
                   <div className="grid md:grid-cols-2 gap-6 border-t pt-4">
                     <div>
-                      <p className="text-xs text-muted-foreground mb-1">Invoice Date</p>
+                      <p className="text-xs text-muted-foreground mb-1">
+                        Invoice Date
+                      </p>
                       <p className="font-semibold text-foreground">
                         {selectedInvoice.date}
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs text-muted-foreground mb-1">Due Date</p>
+                      <p className="text-xs text-muted-foreground mb-1">
+                        Due Date
+                      </p>
                       <p className="font-semibold text-foreground">
                         {selectedInvoice.dueDate}
                       </p>
@@ -1678,13 +1777,24 @@ Generated on: ${new Date().toLocaleDateString()}
                           className="flex justify-between items-center py-2 border-b text-sm"
                         >
                           <div className="flex-1">
-                            <p className="text-foreground">{item.description}</p>
+                            <p className="text-foreground">
+                              {item.description}
+                            </p>
                             <p className="text-xs text-muted-foreground">
-                              Qty: {item.quantity} × {formatPriceWithCurrency(item.unitPrice, selectedInvoice.currency, rates)}
+                              Qty: {item.quantity} ×{" "}
+                              {formatPriceWithCurrency(
+                                item.unitPrice,
+                                selectedInvoice.currency,
+                                rates,
+                              )}
                             </p>
                           </div>
                           <p className="font-semibold text-foreground">
-                            {formatPriceWithCurrency(item.total, selectedInvoice.currency, rates)}
+                            {formatPriceWithCurrency(
+                              item.total,
+                              selectedInvoice.currency,
+                              rates,
+                            )}
                           </p>
                         </div>
                       ))}
@@ -1696,15 +1806,27 @@ Generated on: ${new Date().toLocaleDateString()}
                     <div className="flex justify-end">
                       <div className="w-48">
                         <div className="flex justify-between mb-2">
-                          <span className="text-sm text-muted-foreground">Subtotal</span>
+                          <span className="text-sm text-muted-foreground">
+                            Subtotal
+                          </span>
                           <span className="text-sm font-medium">
-                            {formatPriceWithCurrency(selectedInvoice.amount, selectedInvoice.currency, rates)}
+                            {formatPriceWithCurrency(
+                              selectedInvoice.amount,
+                              selectedInvoice.currency,
+                              rates,
+                            )}
                           </span>
                         </div>
                         <div className="flex justify-between pt-2 border-t">
-                          <span className="font-semibold text-foreground">Total</span>
+                          <span className="font-semibold text-foreground">
+                            Total
+                          </span>
                           <span className="text-lg font-bold text-primary">
-                            {formatPriceWithCurrency(selectedInvoice.amount, selectedInvoice.currency, rates)}
+                            {formatPriceWithCurrency(
+                              selectedInvoice.amount,
+                              selectedInvoice.currency,
+                              rates,
+                            )}
                           </span>
                         </div>
                       </div>
@@ -1797,7 +1919,9 @@ Generated on: ${new Date().toLocaleDateString()}
                         {filtered.map((company) => {
                           const statusConfig = getStatusConfig(company.status);
                           const StatusIcon = statusConfig.icon;
-                          const daysRemaining = calculateDaysRemaining(company.renewalDate);
+                          const daysRemaining = calculateDaysRemaining(
+                            company.renewalDate,
+                          );
 
                           return (
                             <div
@@ -1805,7 +1929,9 @@ Generated on: ${new Date().toLocaleDateString()}
                               className="bg-card border border-border/40 rounded-lg overflow-hidden hover:shadow-lg transition-shadow flex flex-col h-full"
                             >
                               {/* Company Header */}
-                              <div className={`${statusConfig.bgLight} p-4 border-b border-border/40`}>
+                              <div
+                                className={`${statusConfig.bgLight} p-4 border-b border-border/40`}
+                              >
                                 <div className="space-y-3">
                                   <h3 className="text-lg font-bold text-foreground">
                                     {company.name}
@@ -1813,7 +1939,9 @@ Generated on: ${new Date().toLocaleDateString()}
                                   <p className="text-xs text-muted-foreground">
                                     {company.number}
                                   </p>
-                                  <div className={`${statusConfig.color} inline-flex items-center gap-1 px-2 py-1 rounded-full font-semibold text-xs`}>
+                                  <div
+                                    className={`${statusConfig.color} inline-flex items-center gap-1 px-2 py-1 rounded-full font-semibold text-xs`}
+                                  >
                                     <StatusIcon className="w-3 h-3" />
                                     {statusConfig.label}
                                   </div>
@@ -1877,48 +2005,57 @@ Generated on: ${new Date().toLocaleDateString()}
                                 </div>
 
                                 {/* Renewal History */}
-                                {company.renewalHistory && company.renewalHistory.length > 0 && (
-                                  <div className="space-y-2">
-                                    <p className="text-xs font-semibold text-foreground">
-                                      Renewal History
-                                    </p>
-                                    <div className="space-y-1 max-h-32 overflow-y-auto">
-                                      {company.renewalHistory.map((renewal) => (
-                                        <div
-                                          key={renewal.id}
-                                          className="text-xs p-2 bg-muted/30 rounded border border-border/40"
-                                        >
-                                          <div className="flex justify-between mb-1">
-                                            <span className="text-muted-foreground">
-                                              {renewal.renewalDate}
-                                            </span>
-                                            <span
-                                              className={`font-semibold ${
-                                                renewal.status === "on-time"
-                                                  ? "text-green-600"
-                                                  : "text-amber-600"
-                                              }`}
+                                {company.renewalHistory &&
+                                  company.renewalHistory.length > 0 && (
+                                    <div className="space-y-2">
+                                      <p className="text-xs font-semibold text-foreground">
+                                        Renewal History
+                                      </p>
+                                      <div className="space-y-1 max-h-32 overflow-y-auto">
+                                        {company.renewalHistory.map(
+                                          (renewal) => (
+                                            <div
+                                              key={renewal.id}
+                                              className="text-xs p-2 bg-muted/30 rounded border border-border/40"
                                             >
-                                              {renewal.status === "on-time"
-                                                ? "✓ On Time"
-                                                : `⚠ ${renewal.daysLate}d Late`}
-                                            </span>
-                                          </div>
-                                          <p className="text-muted-foreground text-xs">
-                                            Renewed: {renewal.renewedDate}
-                                          </p>
-                                        </div>
-                                      ))}
+                                              <div className="flex justify-between mb-1">
+                                                <span className="text-muted-foreground">
+                                                  {renewal.renewalDate}
+                                                </span>
+                                                <span
+                                                  className={`font-semibold ${
+                                                    renewal.status === "on-time"
+                                                      ? "text-green-600"
+                                                      : "text-amber-600"
+                                                  }`}
+                                                >
+                                                  {renewal.status === "on-time"
+                                                    ? "✓ On Time"
+                                                    : `⚠ ${renewal.daysLate}d Late`}
+                                                </span>
+                                              </div>
+                                              <p className="text-muted-foreground text-xs">
+                                                Renewed: {renewal.renewedDate}
+                                              </p>
+                                            </div>
+                                          ),
+                                        )}
+                                      </div>
                                     </div>
-                                  </div>
-                                )}
+                                  )}
 
                                 {/* Renewal Countdown Section */}
                                 {(() => {
-                            const daysRemaining = calculateDaysRemaining(company.renewalDate);
-                            const isRenewalNeeded = daysRemaining <= 15 && daysRemaining > -15 && company.renewalStatus === "active";
-                            const isExpired = daysRemaining <= 0 && daysRemaining > -15;
-                            const isCancelled = daysRemaining <= -15;
+                                  const daysRemaining = calculateDaysRemaining(
+                                    company.renewalDate,
+                                  );
+                                  const isRenewalNeeded =
+                                    daysRemaining <= 15 &&
+                                    daysRemaining > -15 &&
+                                    company.renewalStatus === "active";
+                                  const isExpired =
+                                    daysRemaining <= 0 && daysRemaining > -15;
+                                  const isCancelled = daysRemaining <= -15;
 
                                   return (
                                     <>
@@ -1932,284 +2069,378 @@ Generated on: ${new Date().toLocaleDateString()}
                                                 {daysRemaining} days to renew
                                               </p>
                                               <p className="text-xs text-red-800 leading-tight">
-                                                Renew now to prevent cancellation
+                                                Renew now to prevent
+                                                cancellation
                                               </p>
                                             </div>
                                           </div>
                                           <Button
-                                      onClick={() => {
-                                        renewCompany(company.id);
-                                        setPurchasedCompanies(prev => prev.map(c =>
-                                          c.id === company.id
-                                            ? {...c, renewalDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split("T")[0], renewalStatus: "active"}
-                                            : c
-                                        ));
-                                        toast.success(`Company renewed! New renewal date set to 1 year from today`);
-                                      }}
-                                      className="w-full bg-red-600 hover:bg-red-700 text-white gap-2"
-                                    >
-                                      <Zap className="w-4 h-4" />
-                                      Renew Now
-                                    </Button>
-                                  </div>
-                                )}
+                                            onClick={() => {
+                                              renewCompany(company.id);
+                                              setPurchasedCompanies((prev) =>
+                                                prev.map((c) =>
+                                                  c.id === company.id
+                                                    ? {
+                                                        ...c,
+                                                        renewalDate: new Date(
+                                                          Date.now() +
+                                                            365 *
+                                                              24 *
+                                                              60 *
+                                                              60 *
+                                                              1000,
+                                                        )
+                                                          .toISOString()
+                                                          .split("T")[0],
+                                                        renewalStatus: "active",
+                                                      }
+                                                    : c,
+                                                ),
+                                              );
+                                              toast.success(
+                                                `Company renewed! New renewal date set to 1 year from today`,
+                                              );
+                                            }}
+                                            className="w-full bg-red-600 hover:bg-red-700 text-white gap-2"
+                                          >
+                                            <Zap className="w-4 h-4" />
+                                            Renew Now
+                                          </Button>
+                                        </div>
+                                      )}
 
-                                {/* Expired Status */}
-                                {isExpired && (
-                                  <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg space-y-3">
-                                    <div className="flex items-start gap-3">
-                                      <AlertCircle className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
-                                      <div className="flex-1">
-                                        <p className="text-sm font-semibold text-orange-900 mb-1">
-                                          Expired - {Math.abs(daysRemaining)} days overdue
-                                        </p>
-                                        <p className="text-sm text-orange-800">
-                                          Your company ownership has expired. Renew immediately to prevent cancellation.
-                                        </p>
-                                      </div>
+                                      {/* Expired Status */}
+                                      {isExpired && (
+                                        <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg space-y-3">
+                                          <div className="flex items-start gap-3">
+                                            <AlertCircle className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
+                                            <div className="flex-1">
+                                              <p className="text-sm font-semibold text-orange-900 mb-1">
+                                                Expired -{" "}
+                                                {Math.abs(daysRemaining)} days
+                                                overdue
+                                              </p>
+                                              <p className="text-sm text-orange-800">
+                                                Your company ownership has
+                                                expired. Renew immediately to
+                                                prevent cancellation.
+                                              </p>
+                                            </div>
+                                          </div>
+                                          <Button
+                                            onClick={() => {
+                                              renewCompany(company.id);
+                                              setPurchasedCompanies((prev) =>
+                                                prev.map((c) =>
+                                                  c.id === company.id
+                                                    ? {
+                                                        ...c,
+                                                        renewalDate: new Date(
+                                                          Date.now() +
+                                                            365 *
+                                                              24 *
+                                                              60 *
+                                                              60 *
+                                                              1000,
+                                                        )
+                                                          .toISOString()
+                                                          .split("T")[0],
+                                                        renewalStatus: "active",
+                                                      }
+                                                    : c,
+                                                ),
+                                              );
+                                              toast.success(
+                                                `Company renewed! New renewal date set to 1 year from today`,
+                                              );
+                                            }}
+                                            className="w-full bg-orange-600 hover:bg-orange-700 text-white gap-2"
+                                          >
+                                            <Zap className="w-4 h-4" />
+                                            Renew Now
+                                          </Button>
+                                        </div>
+                                      )}
+
+                                      {/* Cancelled Status */}
+                                      {isCancelled && (
+                                        <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                                          <div className="flex items-start gap-3">
+                                            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                                            <div className="flex-1">
+                                              <p className="text-sm font-semibold text-red-900 mb-1">
+                                                Ownership Cancelled
+                                              </p>
+                                              <p className="text-sm text-red-800">
+                                                Your company ownership has been
+                                                cancelled due to renewal
+                                                expiration. Unfortunately,
+                                                renewal is no longer available
+                                                for this company.
+                                              </p>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      )}
+
+                                      {/* Active Status - Show Days Remaining */}
+                                      {daysRemaining > 15 &&
+                                        company.renewalStatus === "active" && (
+                                          <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                                            <div className="flex items-start gap-3">
+                                              <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                                              <div className="flex-1">
+                                                <p className="text-sm font-semibold text-green-900">
+                                                  Active - {daysRemaining} days
+                                                  until renewal required
+                                                </p>
+                                                <p className="text-sm text-green-800">
+                                                  Your company is active and in
+                                                  good standing
+                                                </p>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        )}
+                                    </>
+                                  );
+                                })()}
+
+                                {/* Transfer Workflow Status */}
+                                <div>
+                                  <h4 className="font-semibold text-foreground mb-4">
+                                    Transfer Workflow
+                                  </h4>
+                                  <div className="flex items-center gap-2 mb-4">
+                                    <div className="flex-1 h-2 bg-border/40 rounded-full overflow-hidden">
+                                      <div
+                                        className="h-full bg-primary transition-all"
+                                        style={{
+                                          width: `${
+                                            {
+                                              "pending-form": "20%",
+                                              "under-review": "40%",
+                                              "amend-required": "40%",
+                                              "pending-transfer": "80%",
+                                              completed: "100%",
+                                            }[company.status] || "0%"
+                                          }`,
+                                        }}
+                                      />
                                     </div>
-                                    <Button
-                                      onClick={() => {
-                                        renewCompany(company.id);
-                                        setPurchasedCompanies(prev => prev.map(c =>
-                                          c.id === company.id
-                                            ? {...c, renewalDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split("T")[0], renewalStatus: "active"}
-                                            : c
-                                        ));
-                                        toast.success(`Company renewed! New renewal date set to 1 year from today`);
-                                      }}
-                                      className="w-full bg-orange-600 hover:bg-orange-700 text-white gap-2"
-                                    >
-                                      <Zap className="w-4 h-4" />
-                                      Renew Now
-                                    </Button>
                                   </div>
-                                )}
-
-                                {/* Cancelled Status */}
-                                {isCancelled && (
-                                  <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-                                    <div className="flex items-start gap-3">
-                                      <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                                      <div className="flex-1">
-                                        <p className="text-sm font-semibold text-red-900 mb-1">
-                                          Ownership Cancelled
-                                        </p>
-                                        <p className="text-sm text-red-800">
-                                          Your company ownership has been cancelled due to renewal expiration. Unfortunately, renewal is no longer available for this company.
-                                        </p>
-                                      </div>
-                                    </div>
+                                  <div className="text-sm text-muted-foreground">
+                                    <p>
+                                      {company.status === "pending-form" &&
+                                        "⏳ Waiting for you to complete the transfer form"}
+                                      {company.status === "under-review" &&
+                                        "👀 Admin is reviewing your submitted form"}
+                                      {company.status === "amend-required" &&
+                                        "✏️ Please review admin comments and make amendments"}
+                                      {company.status === "pending-transfer" &&
+                                        "🔄 Form approved! Ownership transfer is in progress"}
+                                      {company.status === "completed" &&
+                                        "✅ Ownership transfer completed successfully"}
+                                    </p>
                                   </div>
-                                )}
-
-                                {/* Active Status - Show Days Remaining */}
-                                {daysRemaining > 15 && company.renewalStatus === "active" && (
-                                  <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                                    <div className="flex items-start gap-3">
-                                      <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                                      <div className="flex-1">
-                                        <p className="text-sm font-semibold text-green-900">
-                                          Active - {daysRemaining} days until renewal required
-                                        </p>
-                                        <p className="text-sm text-green-800">
-                                          Your company is active and in good standing
-                                        </p>
-                                      </div>
-                                    </div>
-                                  </div>
-                                )}
-                              </>
-                            );
-                          })()}
-
-                          {/* Transfer Workflow Status */}
-                          <div>
-                            <h4 className="font-semibold text-foreground mb-4">
-                              Transfer Workflow
-                            </h4>
-                            <div className="flex items-center gap-2 mb-4">
-                              <div className="flex-1 h-2 bg-border/40 rounded-full overflow-hidden">
-                                <div
-                                  className="h-full bg-primary transition-all"
-                                  style={{
-                                    width: `${
-                                      {
-                                        "pending-form": "20%",
-                                        "under-review": "40%",
-                                        "amend-required": "40%",
-                                        "pending-transfer": "80%",
-                                        completed: "100%",
-                                      }[company.status] || "0%"
-                                    }`,
-                                  }}
-                                />
-                              </div>
-                            </div>
-                            <div className="text-sm text-muted-foreground">
-                              <p>
-                                {company.status === "pending-form" &&
-                                  "⏳ Waiting for you to complete the transfer form"}
-                                {company.status === "under-review" &&
-                                  "👀 Admin is reviewing your submitted form"}
-                                {company.status === "amend-required" &&
-                                  "✏️ Please review admin comments and make amendments"}
-                                {company.status === "pending-transfer" &&
-                                  "🔄 Form approved! Ownership transfer is in progress"}
-                                {company.status === "completed" &&
-                                  "✅ Ownership transfer completed successfully"}
-                              </p>
-                            </div>
-                          </div>
-
-                          {/* Admin Comments */}
-                          {company.adminComments && (
-                            <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg">
-                              <p className="text-sm font-semibold text-orange-900 mb-2">
-                                Admin Comments
-                              </p>
-                              <p className="text-sm text-orange-800">
-                                {company.adminComments}
-                              </p>
-                            </div>
-                          )}
-
-                          {/* Documents Section */}
-                          <div>
-                            <h4 className="font-semibold text-foreground mb-4">
-                              Documents
-                            </h4>
-                            {company.documents.length > 0 ? (
-                              <div className="space-y-3">
-                                {company.documents.map((doc) => (
-                                  <div
-                                    key={doc.id}
-                                    className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border border-border/40"
-                                  >
-                                    <div className="flex items-center gap-3">
-                                      <FileText className="w-5 h-5 text-primary" />
-                                      <div>
-                                        <p className="font-semibold text-foreground">
-                                          {doc.name}
-                                        </p>
-                                        <p className="text-sm text-muted-foreground">
-                                          Uploaded {doc.uploadedDate}
-                                        </p>
-                                      </div>
-                                    </div>
-                                    <Button
-                                      variant="outline"
-                                      size="sm"
-                                      className="gap-2"
-                                      onClick={() => {
-                                        if (doc.url) {
-                                          const a = document.createElement("a");
-                                          a.href = doc.url;
-                                          a.download = doc.name;
-                                          a.click();
-                                        }
-                                      }}
-                                    >
-                                      <Download className="w-4 h-4" />
-                                      Download
-                                    </Button>
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <div className="p-4 bg-muted/30 rounded-lg border border-border/40 text-center">
-                                <p className="text-sm text-muted-foreground">
-                                  No documents uploaded yet. Admin will upload your company documents here.
-                                </p>
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Transfer Form */}
-                          {company.status !== "completed" && (
-                            <div>
-                              {getStatusMessage(company.status) && (
-                                <div className={`border rounded-lg p-4 mb-4 ${getStatusMessage(company.status)?.color}`}>
-                                  <p className="font-medium text-sm">
-                                    {getStatusMessage(company.status)?.icon} {getStatusMessage(company.status)?.headline}
-                                  </p>
-                                  <p className={`text-xs mt-1 ${getStatusMessage(company.status)?.textColor}`}>
-                                    {getStatusMessage(company.status)?.description}
-                                  </p>
                                 </div>
-                              )}
-                              <Button
-                                onClick={() => setShowTransferForm(company.id)}
-                                disabled={company.transferFormFilled && company.status !== "amend-required" || company.status === "complete-transfer" || company.status === "completed"}
-                                className="w-full bg-primary hover:bg-primary-600 text-white gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                              >
-                                <FileUp className="w-4 h-4" />
-                                {company.status === "amend-required"
-                                  ? "Edit Transfer Form (Amendments Required)"
-                                  : company.status === "under-review"
-                                    ? "Form Under Review - Cannot Edit"
-                                    : company.status === "pending-transfer"
-                                      ? "Transfer in Progress - Cannot Edit"
-                                      : company.status === "complete-transfer" || company.status === "completed"
-                                        ? "Transfer Completed - View Form"
-                                        : company.transferFormFilled
-                                          ? "Edit Transfer Form"
-                                          : "Fill Transfer Form"}
-                              </Button>
-                            </div>
-                          )}
 
-                          {/* Transfer Form Modal */}
-                          <Dialog open={showTransferForm === company.id} onOpenChange={(open) => !open && setShowTransferForm(null)}>
-                            <DialogContent className="max-w-6xl max-h-[95vh] overflow-y-auto w-[95vw] p-0">
-                              <DialogHeader className="sticky top-0 bg-background border-b p-6 z-10">
-                                <DialogTitle>Company Transfer Form</DialogTitle>
-                                <DialogDescription>
-                                  Fill out the comprehensive transfer form for {company.name}
-                                </DialogDescription>
-                              </DialogHeader>
-                              <div className="px-6 pb-6">
-                                <CompanyTransferForm
-                                  orderId={`order_${company.id}`}
-                                  companyId={company.id}
-                                  companyName={company.name}
-                                  companyNumber={company.number || ""}
-                                  country={company.country || ""}
-                                  incorporationDate={company.incorporationDate || ""}
-                                  incorporationYear={parseInt(company.incorporationYear) || new Date().getFullYear()}
-                                  onSuccess={() => {
-                                    toast.success("Transfer form submitted successfully and is now under review!");
-                                    // Update company object with new status and form filled flag
-                                    const updatedCompany = {
-                                      ...company,
-                                      status: "under-review" as const,
-                                      transferFormFilled: true,
-                                      statusLabel: "Under Review - Transfer Form"
-                                    };
+                                {/* Admin Comments */}
+                                {company.adminComments && (
+                                  <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                                    <p className="text-sm font-semibold text-orange-900 mb-2">
+                                      Admin Comments
+                                    </p>
+                                    <p className="text-sm text-orange-800">
+                                      {company.adminComments}
+                                    </p>
+                                  </div>
+                                )}
 
-                                    // Save the updated company to localStorage to persist both status and transferFormFilled
-                                    savePurchasedCompany(updatedCompany);
+                                {/* Documents Section */}
+                                <div>
+                                  <h4 className="font-semibold text-foreground mb-4">
+                                    Documents
+                                  </h4>
+                                  {company.documents.length > 0 ? (
+                                    <div className="space-y-3">
+                                      {company.documents.map((doc) => (
+                                        <div
+                                          key={doc.id}
+                                          className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border border-border/40"
+                                        >
+                                          <div className="flex items-center gap-3">
+                                            <FileText className="w-5 h-5 text-primary" />
+                                            <div>
+                                              <p className="font-semibold text-foreground">
+                                                {doc.name}
+                                              </p>
+                                              <p className="text-sm text-muted-foreground">
+                                                Uploaded {doc.uploadedDate}
+                                              </p>
+                                            </div>
+                                          </div>
+                                          <Button
+                                            variant="outline"
+                                            size="sm"
+                                            className="gap-2"
+                                            onClick={() => {
+                                              if (doc.url) {
+                                                const a =
+                                                  document.createElement("a");
+                                                a.href = doc.url;
+                                                a.download = doc.name;
+                                                a.click();
+                                              }
+                                            }}
+                                          >
+                                            <Download className="w-4 h-4" />
+                                            Download
+                                          </Button>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  ) : (
+                                    <div className="p-4 bg-muted/30 rounded-lg border border-border/40 text-center">
+                                      <p className="text-sm text-muted-foreground">
+                                        No documents uploaded yet. Admin will
+                                        upload your company documents here.
+                                      </p>
+                                    </div>
+                                  )}
+                                </div>
 
-                                    // Update local state to reflect the status change immediately
-                                    const updatedCompanies = purchasedCompanies.map(c =>
-                                      c.id === company.id ? updatedCompany : c
-                                    );
-                                    // Force component to re-render with updated companies
-                                    setPurchasedCompanies(updatedCompanies);
-                                    setShowTransferForm(null);
-                                  }}
-                                />
+                                {/* Transfer Form */}
+                                {company.status !== "completed" && (
+                                  <div>
+                                    {getStatusMessage(company.status) && (
+                                      <div
+                                        className={`border rounded-lg p-4 mb-4 ${getStatusMessage(company.status)?.color}`}
+                                      >
+                                        <p className="font-medium text-sm">
+                                          {
+                                            getStatusMessage(company.status)
+                                              ?.icon
+                                          }{" "}
+                                          {
+                                            getStatusMessage(company.status)
+                                              ?.headline
+                                          }
+                                        </p>
+                                        <p
+                                          className={`text-xs mt-1 ${getStatusMessage(company.status)?.textColor}`}
+                                        >
+                                          {
+                                            getStatusMessage(company.status)
+                                              ?.description
+                                          }
+                                        </p>
+                                      </div>
+                                    )}
+                                    <Button
+                                      onClick={() =>
+                                        setShowTransferForm(company.id)
+                                      }
+                                      disabled={
+                                        (company.transferFormFilled &&
+                                          company.status !==
+                                            "amend-required") ||
+                                        company.status ===
+                                          "complete-transfer" ||
+                                        company.status === "completed"
+                                      }
+                                      className="w-full bg-primary hover:bg-primary-600 text-white gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                      <FileUp className="w-4 h-4" />
+                                      {company.status === "amend-required"
+                                        ? "Edit Transfer Form (Amendments Required)"
+                                        : company.status === "under-review"
+                                          ? "Form Under Review - Cannot Edit"
+                                          : company.status ===
+                                              "pending-transfer"
+                                            ? "Transfer in Progress - Cannot Edit"
+                                            : company.status ===
+                                                  "complete-transfer" ||
+                                                company.status === "completed"
+                                              ? "Transfer Completed - View Form"
+                                              : company.transferFormFilled
+                                                ? "Edit Transfer Form"
+                                                : "Fill Transfer Form"}
+                                    </Button>
+                                  </div>
+                                )}
+
+                                {/* Transfer Form Modal */}
+                                <Dialog
+                                  open={showTransferForm === company.id}
+                                  onOpenChange={(open) =>
+                                    !open && setShowTransferForm(null)
+                                  }
+                                >
+                                  <DialogContent className="max-w-6xl max-h-[95vh] overflow-y-auto w-[95vw] p-0">
+                                    <DialogHeader className="sticky top-0 bg-background border-b p-6 z-10">
+                                      <DialogTitle>
+                                        Company Transfer Form
+                                      </DialogTitle>
+                                      <DialogDescription>
+                                        Fill out the comprehensive transfer form
+                                        for {company.name}
+                                      </DialogDescription>
+                                    </DialogHeader>
+                                    <div className="px-6 pb-6">
+                                      <CompanyTransferForm
+                                        orderId={`order_${company.id}`}
+                                        companyId={company.id}
+                                        companyName={company.name}
+                                        companyNumber={company.number || ""}
+                                        country={company.country || ""}
+                                        incorporationDate={
+                                          company.incorporationDate || ""
+                                        }
+                                        incorporationYear={
+                                          parseInt(company.incorporationYear) ||
+                                          new Date().getFullYear()
+                                        }
+                                        onSuccess={() => {
+                                          toast.success(
+                                            "Transfer form submitted successfully and is now under review!",
+                                          );
+                                          // Update company object with new status and form filled flag
+                                          const updatedCompany = {
+                                            ...company,
+                                            status: "under-review" as const,
+                                            transferFormFilled: true,
+                                            statusLabel:
+                                              "Under Review - Transfer Form",
+                                          };
+
+                                          // Save the updated company to localStorage to persist both status and transferFormFilled
+                                          savePurchasedCompany(updatedCompany);
+
+                                          // Update local state to reflect the status change immediately
+                                          const updatedCompanies =
+                                            purchasedCompanies.map((c) =>
+                                              c.id === company.id
+                                                ? updatedCompany
+                                                : c,
+                                            );
+                                          // Force component to re-render with updated companies
+                                          setPurchasedCompanies(
+                                            updatedCompanies,
+                                          );
+                                          setShowTransferForm(null);
+                                        }}
+                                      />
+                                    </div>
+                                  </DialogContent>
+                                </Dialog>
                               </div>
-                            </DialogContent>
-                          </Dialog>
-                        </div>
-                      </div>
+                            </div>
                           );
                         })}
                       </div>
                     );
-                  })()
-                }
+                  })()}
                 </div>
               )}
             </div>
@@ -2568,7 +2799,7 @@ Generated on: ${new Date().toLocaleDateString()}
             <div className="max-w-3xl space-y-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold text-foreground">
-                  {t('dashboard.paymentMethods')}
+                  {t("dashboard.paymentMethods")}
                 </h2>
                 <Button className="bg-primary hover:bg-primary-600 text-white gap-2">
                   <Plus className="w-4 h-4" />

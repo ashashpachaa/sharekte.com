@@ -15,7 +15,10 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-6xl items-center justify-between">
         {/* Logo and Brand */}
-        <Link to="/" className="flex items-center gap-2 font-bold text-xl text-primary">
+        <Link
+          to="/"
+          className="flex items-center gap-2 font-bold text-xl text-primary"
+        >
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white font-bold">
             BC
           </div>
@@ -24,16 +27,28 @@ export function Header() {
 
         {/* Navigation */}
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium whitespace-nowrap">
-          <Link to="/" className="text-foreground hover:text-primary transition-colors truncate">
+          <Link
+            to="/"
+            className="text-foreground hover:text-primary transition-colors truncate"
+          >
             {t("header.home")}
           </Link>
-          <Link to="/companies" className="text-foreground hover:text-primary transition-colors truncate">
+          <Link
+            to="/companies"
+            className="text-foreground hover:text-primary transition-colors truncate"
+          >
             {t("header.companies")}
           </Link>
-          <a href="#features" className="text-foreground hover:text-primary transition-colors truncate">
+          <a
+            href="#features"
+            className="text-foreground hover:text-primary transition-colors truncate"
+          >
             Features
           </a>
-          <Link to="/support" className="text-foreground hover:text-primary transition-colors truncate">
+          <Link
+            to="/support"
+            className="text-foreground hover:text-primary transition-colors truncate"
+          >
             {t("header.support")}
           </Link>
         </nav>
@@ -42,10 +57,7 @@ export function Header() {
         <div className="flex items-center gap-2">
           {/* Currency Selector */}
           <div className="relative group">
-            <Button
-              variant="outline"
-              className="gap-2 text-xs h-9"
-            >
+            <Button variant="outline" className="gap-2 text-xs h-9">
               <Globe className="w-4 h-4" />
               <span>{rates[currency]?.symbol || "$"}</span>
             </Button>
@@ -62,7 +74,9 @@ export function Header() {
                     }`}
                   >
                     <span className="font-medium">{rate.symbol}</span>
-                    <span className="ml-2 text-muted-foreground">{rate.name}</span>
+                    <span className="ml-2 text-muted-foreground">
+                      {rate.name}
+                    </span>
                   </button>
                 ))}
               </div>
@@ -83,9 +97,7 @@ export function Header() {
             className="bg-primary hover:bg-primary-600"
             asChild
           >
-            <Link to="/dashboard">
-              {t("header.login")}
-            </Link>
+            <Link to="/dashboard">{t("header.login")}</Link>
           </Button>
         </div>
       </div>

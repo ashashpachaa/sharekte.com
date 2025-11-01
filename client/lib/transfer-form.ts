@@ -3,7 +3,7 @@
  * Handles company ownership transfer forms with attachments, status tracking, and notifications
  */
 
-export type FormStatus = 
+export type FormStatus =
   | "under-review"
   | "amend-required"
   | "confirm-application"
@@ -138,31 +138,39 @@ export const FORM_STATUS_COLORS: Record<FormStatus, string> = {
   "under-review": "bg-blue-100 text-blue-800",
   "amend-required": "bg-yellow-100 text-yellow-800",
   "confirm-application": "bg-purple-100 text-purple-800",
-  "transferring": "bg-orange-100 text-orange-800",
+  transferring: "bg-orange-100 text-orange-800",
   "complete-transfer": "bg-green-100 text-green-800",
-  "canceled": "bg-red-100 text-red-800",
+  canceled: "bg-red-100 text-red-800",
 };
 
 export const FORM_STATUS_LABELS: Record<FormStatus, string> = {
   "under-review": "Under Review",
   "amend-required": "Amend Required",
   "confirm-application": "Confirm Application",
-  "transferring": "Transferring",
+  transferring: "Transferring",
   "complete-transfer": "Complete Transfer",
-  "canceled": "Canceled",
+  canceled: "Canceled",
 };
 
 export const FORM_STATUS_ICONS: Record<FormStatus, string> = {
   "under-review": "👀",
   "amend-required": "🔄",
   "confirm-application": "📝",
-  "transferring": "🚚",
+  transferring: "🚚",
   "complete-transfer": "🎉",
-  "canceled": "❌",
+  canceled: "❌",
 };
 
 // Create a new empty form
-export function createEmptyForm(orderId: string, companyId: string, companyName: string, companyNumber: string, country?: string, incorporationDate?: string, incorporationYear?: number): TransferFormData {
+export function createEmptyForm(
+  orderId: string,
+  companyId: string,
+  companyName: string,
+  companyNumber: string,
+  country?: string,
+  incorporationDate?: string,
+  incorporationYear?: number,
+): TransferFormData {
   return {
     id: `form_${Date.now()}`,
     formId: `FORM-${Date.now()}`,
@@ -201,9 +209,13 @@ export function createEmptyForm(orderId: string, companyId: string, companyName:
 }
 
 // API Functions
-export async function fetchTransferForms(orderId?: string): Promise<TransferFormData[]> {
+export async function fetchTransferForms(
+  orderId?: string,
+): Promise<TransferFormData[]> {
   try {
-    const url = orderId ? `/api/transfer-forms?orderId=${orderId}` : "/api/transfer-forms";
+    const url = orderId
+      ? `/api/transfer-forms?orderId=${orderId}`
+      : "/api/transfer-forms";
     const response = await fetch(url);
     if (!response.ok) throw new Error("Failed to fetch forms");
     return await response.json();
@@ -213,7 +225,9 @@ export async function fetchTransferForms(orderId?: string): Promise<TransferForm
   }
 }
 
-export async function getTransferForm(formId: string): Promise<TransferFormData | null> {
+export async function getTransferForm(
+  formId: string,
+): Promise<TransferFormData | null> {
   try {
     const response = await fetch(`/api/transfer-forms/${formId}`);
     if (!response.ok) throw new Error("Failed to fetch form");
@@ -224,7 +238,9 @@ export async function getTransferForm(formId: string): Promise<TransferFormData 
   }
 }
 
-export async function createTransferForm(form: Omit<TransferFormData, "id" | "createdAt" | "updatedAt">): Promise<TransferFormData | null> {
+export async function createTransferForm(
+  form: Omit<TransferFormData, "id" | "createdAt" | "updatedAt">,
+): Promise<TransferFormData | null> {
   try {
     const response = await fetch("/api/transfer-forms", {
       method: "POST",
@@ -241,7 +257,7 @@ export async function createTransferForm(form: Omit<TransferFormData, "id" | "cr
 
 export async function updateTransferForm(
   formId: string,
-  updates: Partial<TransferFormData>
+  updates: Partial<TransferFormData>,
 ): Promise<TransferFormData | null> {
   try {
     const response = await fetch(`/api/transfer-forms/${formId}`, {
@@ -261,7 +277,7 @@ export async function updateFormStatus(
   formId: string,
   newStatus: FormStatus,
   notes?: string,
-  reason?: string
+  reason?: string,
 ): Promise<boolean> {
   try {
     const response = await fetch(`/api/transfer-forms/${formId}/status`, {
@@ -278,13 +294,13 @@ export async function updateFormStatus(
 
 export async function uploadFormAttachment(
   formId: string,
-  file: File
+  file: File,
 ): Promise<FormAttachment | null> {
   try {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("formId", formId);
-    
+
     const response = await fetch("/api/transfer-forms/attachments/upload", {
       method: "POST",
       body: formData,
@@ -297,11 +313,17 @@ export async function uploadFormAttachment(
   }
 }
 
-export async function deleteFormAttachment(formId: string, attachmentId: string): Promise<boolean> {
+export async function deleteFormAttachment(
+  formId: string,
+  attachmentId: string,
+): Promise<boolean> {
   try {
-    const response = await fetch(`/api/transfer-forms/${formId}/attachments/${attachmentId}`, {
-      method: "DELETE",
-    });
+    const response = await fetch(
+      `/api/transfer-forms/${formId}/attachments/${attachmentId}`,
+      {
+        method: "DELETE",
+      },
+    );
     return response.ok;
   } catch (error) {
     console.error("Error deleting attachment:", error);
@@ -312,7 +334,7 @@ export async function deleteFormAttachment(formId: string, attachmentId: string)
 export async function addFormComment(
   formId: string,
   text: string,
-  isAdminOnly: boolean = false
+  isAdminOnly: boolean = false,
 ): Promise<FormComment | null> {
   try {
     const response = await fetch(`/api/transfer-forms/${formId}/comments`, {
@@ -370,28 +392,33 @@ export function isFormEditable(status: FormStatus): boolean {
   return ["under-review", "amend-required"].includes(status);
 }
 
-export function canChangeStatus(currentStatus: FormStatus, newStatus: FormStatus): boolean {
+export function canChangeStatus(
+  currentStatus: FormStatus,
+  newStatus: FormStatus,
+): boolean {
   const transitions: Record<FormStatus, FormStatus[]> = {
     "under-review": ["amend-required", "confirm-application", "canceled"],
     "amend-required": ["under-review", "canceled"],
     "confirm-application": ["transferring", "canceled"],
-    "transferring": ["complete-transfer", "canceled"],
+    transferring: ["complete-transfer", "canceled"],
     "complete-transfer": [],
-    "canceled": ["under-review"],
+    canceled: ["under-review"],
   };
-  
+
   return transitions[currentStatus]?.includes(newStatus) ?? false;
 }
 
-export function getAvailableStatusTransitions(currentStatus: FormStatus): FormStatus[] {
+export function getAvailableStatusTransitions(
+  currentStatus: FormStatus,
+): FormStatus[] {
   const transitions: Record<FormStatus, FormStatus[]> = {
     "under-review": ["amend-required", "confirm-application", "canceled"],
     "amend-required": ["under-review", "canceled"],
     "confirm-application": ["transferring", "canceled"],
-    "transferring": ["complete-transfer", "canceled"],
+    transferring: ["complete-transfer", "canceled"],
     "complete-transfer": [],
-    "canceled": ["under-review"],
+    canceled: ["under-review"],
   };
-  
+
   return transitions[currentStatus] ?? [];
 }

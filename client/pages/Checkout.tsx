@@ -8,7 +8,12 @@ import { useCart } from "@/lib/cart-context";
 import { useCurrency } from "@/lib/currency-context";
 import { ArrowLeft, CheckCircle, Loader, Mail, Lock, User } from "lucide-react";
 import { toast } from "sonner";
-import { savePurchasedCompany, addInvoice, type PurchasedCompanyData, type InvoiceData } from "@/lib/user-data";
+import {
+  savePurchasedCompany,
+  addInvoice,
+  type PurchasedCompanyData,
+  type InvoiceData,
+} from "@/lib/user-data";
 import { createOrder } from "@/lib/orders";
 
 export default function Checkout() {
@@ -37,13 +42,10 @@ export default function Checkout() {
         <Header />
         <div className="flex-1 flex items-center justify-center py-20 px-4">
           <div className="text-center space-y-8 max-w-lg">
-            <p className="text-muted-foreground">{t('cart.empty')}</p>
-            <Button
-              onClick={() => navigate("/")}
-              className="gap-2"
-            >
+            <p className="text-muted-foreground">{t("cart.empty")}</p>
+            <Button onClick={() => navigate("/")} className="gap-2">
               <ArrowLeft className="w-4 h-4" />
-              {t('cart.continueShopping')}
+              {t("cart.continueShopping")}
             </Button>
           </div>
         </div>
@@ -59,7 +61,10 @@ export default function Checkout() {
       return;
     }
 
-    if (authMode === "signup" && (!fullName || !signupEmail || !signupPassword || !company)) {
+    if (
+      authMode === "signup" &&
+      (!fullName || !signupEmail || !signupPassword || !company)
+    ) {
       toast.error("Please create an account to complete your order");
       return;
     }
@@ -68,7 +73,8 @@ export default function Checkout() {
     try {
       // Determine user email and data
       const userEmail = authMode === "signin" ? email : signupEmail;
-      const userFullName = authMode === "signin" ? email.split("@")[0] : fullName;
+      const userFullName =
+        authMode === "signin" ? email.split("@")[0] : fullName;
       const userCompany = authMode === "signup" ? company : "Not specified";
 
       // Store user info in localStorage (simple auth)
@@ -88,7 +94,8 @@ export default function Checkout() {
         .split("T")[0];
 
       // Convert prices for all items upfront
-      const priceConverter = (price: number) => currency !== "USD" ? convertPrice(price) : price;
+      const priceConverter = (price: number) =>
+        currency !== "USD" ? convertPrice(price) : price;
 
       const orderPromises = items.map(async (item, index) => {
         // Convert price to selected currency
@@ -101,7 +108,8 @@ export default function Checkout() {
           number: item.companyNumber,
           price: convertedAmount,
           incorporationDate: item.incorporationDate || today,
-          incorporationYear: item.incorporationYear || new Date().getFullYear().toString(),
+          incorporationYear:
+            item.incorporationYear || new Date().getFullYear().toString(),
           country: item.country || "",
           purchasedDate: today,
           renewalDate: oneYearLater,
@@ -208,19 +216,28 @@ export default function Checkout() {
           });
 
           if (!response.ok) {
-            const errorData = await response.json().catch(() => ({ error: response.statusText }));
-            const errorMessage = typeof errorData === 'object' ? JSON.stringify(errorData) : String(errorData);
+            const errorData = await response
+              .json()
+              .catch(() => ({ error: response.statusText }));
+            const errorMessage =
+              typeof errorData === "object"
+                ? JSON.stringify(errorData)
+                : String(errorData);
             console.error(
               `Failed to update company ${item.id} (${item.name}) status:`,
               `Status: ${response.status}`,
-              `Error:`, errorMessage
+              `Error:`,
+              errorMessage,
             );
             toast.error(`Failed to update ${item.name}: ${response.status}`);
             return false;
           }
 
           const responseData = await response.json().catch(() => ({}));
-          console.log(`✓ Company ${item.id} (${item.name}) status updated to sold`, responseData);
+          console.log(
+            `✓ Company ${item.id} (${item.name}) status updated to sold`,
+            responseData,
+          );
           return true;
         } catch (error) {
           console.error(`Error updating company ${item.id} status:`, error);
@@ -236,13 +253,17 @@ export default function Checkout() {
 
       if (failureCount > 0) {
         console.warn(
-          `Warning: ${failureCount} company/companies failed to update status. ${successCount} succeeded.`
+          `Warning: ${failureCount} company/companies failed to update status. ${successCount} succeeded.`,
         );
-        toast.warning(`${failureCount} company status updates failed. Check admin dashboard.`);
+        toast.warning(
+          `${failureCount} company status updates failed. Check admin dashboard.`,
+        );
       }
 
       // Log completion for debugging
-      console.log(`Order completed: ${successCount}/${items.length} companies status updated`);
+      console.log(
+        `Order completed: ${successCount}/${items.length} companies status updated`,
+      );
 
       toast.success("Order completed successfully! 🎉");
       setOrderCompleted(true);
@@ -277,7 +298,8 @@ export default function Checkout() {
                 Order Completed!
               </h1>
               <p className="text-muted-foreground">
-                Thank you for your purchase. Your companies have been marked as sold and removed from the marketplace.
+                Thank you for your purchase. Your companies have been marked as
+                sold and removed from the marketplace.
               </p>
             </div>
             <p className="text-sm text-muted-foreground">
@@ -293,7 +315,13 @@ export default function Checkout() {
   const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!fullName || !signupEmail || !signupPassword || !confirmPassword || !company) {
+    if (
+      !fullName ||
+      !signupEmail ||
+      !signupPassword ||
+      !confirmPassword ||
+      !company
+    ) {
       toast.error("Please fill in all fields");
       return;
     }
@@ -328,7 +356,7 @@ export default function Checkout() {
     toast.success("Signed in successfully! Ready to checkout.");
     setEmail("");
     setPassword("");
-  }
+  };
 
   const taxAmount = Math.round(totalPrice * 0.2);
   const finalTotal = totalPrice + taxAmount;
@@ -341,7 +369,7 @@ export default function Checkout() {
       <section className="border-b border-border/40 py-8">
         <div className="container max-w-6xl mx-auto px-4">
           <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-            {t('checkout.title')}
+            {t("checkout.title")}
           </h1>
         </div>
       </section>
@@ -354,7 +382,7 @@ export default function Checkout() {
             <div className="lg:col-span-2 space-y-6">
               <div>
                 <h2 className="text-xl font-bold text-foreground mb-4">
-                  {t('checkout.orderSummary')}
+                  {t("checkout.orderSummary")}
                 </h2>
                 <div className="space-y-3 bg-card border border-border/40 rounded-lg p-6">
                   {items.map((item) => (
@@ -395,7 +423,7 @@ export default function Checkout() {
                       }`}
                     >
                       <Mail className="w-4 h-4 inline mr-2" />
-                      {t('auth.signIn')}
+                      {t("auth.signIn")}
                     </button>
                     <button
                       onClick={() => setAuthMode("signup")}
@@ -406,7 +434,7 @@ export default function Checkout() {
                       }`}
                     >
                       <User className="w-4 h-4 inline mr-2" />
-                      {t('auth.signUp')}
+                      {t("auth.signUp")}
                     </button>
                   </div>
 
@@ -587,18 +615,22 @@ export default function Checkout() {
             {/* Order Summary Sidebar */}
             <div className="bg-card border border-border/40 rounded-lg p-6 h-fit sticky top-20">
               <h2 className="text-xl font-bold text-foreground mb-6">
-                {t('checkout.orderSummary')}
+                {t("checkout.orderSummary")}
               </h2>
 
               <div className="space-y-4 border-b border-border/40 pb-6 mb-6">
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">{t('checkout.subtotal')}</span>
+                  <span className="text-muted-foreground">
+                    {t("checkout.subtotal")}
+                  </span>
                   <span className="font-semibold text-foreground">
                     {formatPrice(totalPrice)}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">{t('checkout.tax')}</span>
+                  <span className="text-muted-foreground">
+                    {t("checkout.tax")}
+                  </span>
                   <span className="font-semibold text-foreground">
                     {formatPrice(taxAmount)}
                   </span>
@@ -606,7 +638,9 @@ export default function Checkout() {
               </div>
 
               <div className="flex justify-between mb-6">
-                <span className="text-lg font-bold text-foreground">{t('checkout.total')}</span>
+                <span className="text-lg font-bold text-foreground">
+                  {t("checkout.total")}
+                </span>
                 <span className="text-2xl font-bold text-primary">
                   {formatPrice(finalTotal)}
                 </span>

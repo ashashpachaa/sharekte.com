@@ -22,7 +22,8 @@ export default function LanguageSwitcher() {
         <Button variant="ghost" size="sm" className="gap-2">
           <Globe className="w-4 h-4" />
           <span className="hidden sm:inline text-sm">
-            {languages.find((l) => l.code === i18n.language)?.name || "Language"}
+            {languages.find((l) => l.code === i18n.language)?.name ||
+              "Language"}
           </span>
         </Button>
       </DropdownMenuTrigger>
@@ -35,9 +36,7 @@ export default function LanguageSwitcher() {
           >
             <span className="mr-2">{lang.flag}</span>
             {lang.name}
-            {i18n.language === lang.code && (
-              <span className="ml-auto">✓</span>
-            )}
+            {i18n.language === lang.code && <span className="ml-auto">✓</span>}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

@@ -40,7 +40,9 @@ interface AirtableRecord {
 /**
  * Sync transfer form to Airtable
  */
-export async function syncFormToAirtable(form: TransferFormData): Promise<boolean> {
+export async function syncFormToAirtable(
+  form: TransferFormData,
+): Promise<boolean> {
   try {
     const baseId = process.env.AIRTABLE_BASE_ID;
     const tableId = process.env.AIRTABLE_TABLE_FORMS;
@@ -59,7 +61,7 @@ export async function syncFormToAirtable(form: TransferFormData): Promise<boolea
         "Company Number": form.companyNumber,
         "Incorporation Date": form.incorporationDate,
         "Incorporation Year": form.incorporationYear,
-        "Status": form.status,
+        Status: form.status,
 
         // Company Shares Information
         "Total Shares": form.totalShares,
@@ -68,7 +70,7 @@ export async function syncFormToAirtable(form: TransferFormData): Promise<boolea
 
         // Shareholders Info
         "Number of Shareholders": form.numberOfShareholders,
-        "Shareholders": JSON.stringify(form.shareholders),
+        Shareholders: JSON.stringify(form.shareholders),
 
         // PSC Info
         "Number of PSCs": form.numberOfPSCs,
@@ -77,7 +79,9 @@ export async function syncFormToAirtable(form: TransferFormData): Promise<boolea
         // Company Updates
         "Change Company Name": form.changeCompanyName ? "Yes" : "No",
         "Suggested Names": form.suggestedNames?.join("; ") || "",
-        "Change Company Activities": form.changeCompanyActivities ? "Yes" : "No",
+        "Change Company Activities": form.changeCompanyActivities
+          ? "Yes"
+          : "No",
         "Company Activities": form.companyActivities?.join("; ") || "",
 
         // Status Info
@@ -94,10 +98,10 @@ export async function syncFormToAirtable(form: TransferFormData): Promise<boolea
 
         // Attachments
         "Attachment Count": form.attachments.length,
-        "Attachments": form.attachments
+        Attachments: form.attachments
           .map((a) => `${a.name} (${(a.size / 1024 / 1024).toFixed(2)} MB)`)
           .join("; "),
-        
+
         // Comments
         "Comment Count": form.comments.length,
       },
@@ -127,19 +131,29 @@ export async function syncFormToAirtable(form: TransferFormData): Promise<boolea
  * Sync transfer form to simplified Transfer Forms table
  * Only syncs core fields: Order Number, Company Name, Company Number, Country, Status, Attachments
  */
-export async function syncFormToTransferFormTable(form: TransferFormData): Promise<boolean> {
+export async function syncFormToTransferFormTable(
+  form: TransferFormData,
+): Promise<boolean> {
   try {
     const baseId = process.env.AIRTABLE_BASE_ID || "app0PK34gyJDizR3Q";
     const tableId = process.env.AIRTABLE_TABLE_TRANSFER_FORMS;
 
     // Debug: Log environment variables
-    const airtableVars = Object.keys(process.env).filter(k => k.includes('AIRTABLE'));
-    console.log("[syncFormToTransferFormTable] Available AIRTABLE env vars:", airtableVars);
+    const airtableVars = Object.keys(process.env).filter((k) =>
+      k.includes("AIRTABLE"),
+    );
+    console.log(
+      "[syncFormToTransferFormTable] Available AIRTABLE env vars:",
+      airtableVars,
+    );
     console.log("[syncFormToTransferFormTable] tableId value:", tableId);
     console.log("[syncFormToTransferFormTable] baseId value:", baseId);
 
     if (!tableId) {
-      console.warn("[syncFormToTransferFormTable] AIRTABLE_TABLE_TRANSFER_FORMS not configured. Available vars:", airtableVars);
+      console.warn(
+        "[syncFormToTransferFormTable] AIRTABLE_TABLE_TRANSFER_FORMS not configured. Available vars:",
+        airtableVars,
+      );
       return false;
     }
 
@@ -147,9 +161,9 @@ export async function syncFormToTransferFormTable(form: TransferFormData): Promi
     const formatDateForAirtable = (dateString: string): string => {
       try {
         const date = new Date(dateString);
-        return date.toISOString().split('T')[0];
+        return date.toISOString().split("T")[0];
       } catch {
-        return new Date().toISOString().split('T')[0];
+        return new Date().toISOString().split("T")[0];
       }
     };
 
@@ -173,34 +187,37 @@ export async function syncFormToTransferFormTable(form: TransferFormData): Promi
       shareholderCount: form.numberOfShareholders,
       pscCount: form.numberOfPSCs,
       attachmentCount: form.attachments.length,
-      attachmentDetails: form.attachments.map(att => ({
+      attachmentDetails: form.attachments.map((att) => ({
         name: att.name,
         type: att.type,
         size: `${(att.size / 1024 / 1024).toFixed(2)} MB`,
         uploadedDate: att.uploadedDate,
         uploadedBy: att.uploadedBy,
       })),
-      downloadPDFLink: `${process.env.APP_URL || 'http://localhost:8080'}/api/transfer-forms/${form.id}/pdf`,
+      downloadPDFLink: `${process.env.APP_URL || "http://localhost:8080"}/api/transfer-forms/${form.id}/pdf`,
     };
 
     // Create download link for the complete form
-    const downloadLink = `${process.env.APP_URL || 'http://localhost:8080'}/api/transfer-forms/${form.id}/pdf`;
+    const downloadLink = `${process.env.APP_URL || "http://localhost:8080"}/api/transfer-forms/${form.id}/pdf`;
 
     // Build attachments information as text
-    const attachmentsInfo = form.attachments.length > 0
-      ? `Download Link: ${downloadLink}\n\nClient Attachments:\n${form.attachments.map(att => `- ${att.name} (${att.type}, ${(att.size / 1024 / 1024).toFixed(2)} MB)`).join('\n')}`
-      : `Download Link: ${downloadLink}\n\nNo additional client attachments`;
+    const attachmentsInfo =
+      form.attachments.length > 0
+        ? `Download Link: ${downloadLink}\n\nClient Attachments:\n${form.attachments.map((att) => `- ${att.name} (${att.type}, ${(att.size / 1024 / 1024).toFixed(2)} MB)`).join("\n")}`
+        : `Download Link: ${downloadLink}\n\nNo additional client attachments`;
 
     const airtableRecord: AirtableRecord = {
       fields: {
         "Order Number": form.orderId,
         "Company Name": form.companyName,
         "Company Number": form.companyNumber,
-        "Country": form.country,
-        "Status": form.status,
+        Country: form.country,
+        Status: form.status,
         "Form ID": form.formId,
-        "Submitted Date": formatDateForAirtable(form.submittedAt || form.createdAt),
-        "Attachments": attachmentsInfo,
+        "Submitted Date": formatDateForAirtable(
+          form.submittedAt || form.createdAt,
+        ),
+        Attachments: attachmentsInfo,
       },
     };
 
@@ -213,11 +230,15 @@ export async function syncFormToTransferFormTable(form: TransferFormData): Promi
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error(`[syncFormToTransferFormTable] Airtable sync failed: Status ${response.status}, Body: ${errorText}`);
+      console.error(
+        `[syncFormToTransferFormTable] Airtable sync failed: Status ${response.status}, Body: ${errorText}`,
+      );
       return false;
     }
 
-    console.log(`[syncFormToTransferFormTable] ✓ Form ${form.formId} (Order: ${form.orderId}) synced to Transfer Forms table`);
+    console.log(
+      `[syncFormToTransferFormTable] ✓ Form ${form.formId} (Order: ${form.orderId}) synced to Transfer Forms table`,
+    );
     return true;
   } catch (error) {
     console.error("[syncFormToTransferFormTable] Error:", error);
@@ -235,7 +256,9 @@ export async function fetchFormsFromAirtable(): Promise<TransferFormData[]> {
     const tableId = process.env.AIRTABLE_TABLE_TRANSFER_FORMS;
 
     if (!tableId) {
-      console.warn("[fetchFormsFromAirtable] AIRTABLE_TABLE_TRANSFER_FORMS not configured");
+      console.warn(
+        "[fetchFormsFromAirtable] AIRTABLE_TABLE_TRANSFER_FORMS not configured",
+      );
       return [];
     }
 
@@ -246,14 +269,18 @@ export async function fetchFormsFromAirtable(): Promise<TransferFormData[]> {
     });
 
     if (!response.ok) {
-      console.error(`[fetchFormsFromAirtable] Failed to fetch: Status ${response.status}`);
+      console.error(
+        `[fetchFormsFromAirtable] Failed to fetch: Status ${response.status}`,
+      );
       return [];
     }
 
-    const data = await response.json() as any;
+    const data = (await response.json()) as any;
     const records = data.records || [];
 
-    console.log(`[fetchFormsFromAirtable] ✓ Fetched ${records.length} forms from Airtable`);
+    console.log(
+      `[fetchFormsFromAirtable] ✓ Fetched ${records.length} forms from Airtable`,
+    );
 
     // Map Airtable records to TransferFormData structure
     return records.map((record: any) => {
@@ -283,7 +310,7 @@ export async function updateFormStatusInAirtable(
   formId: string,
   airtableRecordId: string,
   newStatus: FormStatus,
-  updatedAt: string
+  updatedAt: string,
 ): Promise<boolean> {
   try {
     const baseId = process.env.AIRTABLE_BASE_ID;
@@ -300,7 +327,7 @@ export async function updateFormStatusInAirtable(
       headers: getHeaders(),
       body: JSON.stringify({
         fields: {
-          "Status": newStatus,
+          Status: newStatus,
           "Updated At": updatedAt,
         },
       }),
@@ -327,7 +354,7 @@ export async function syncOrderCompletion(
   airtableOrderRecordId: string,
   formId: string,
   buyerName: string,
-  buyerEmail: string
+  buyerEmail: string,
 ): Promise<boolean> {
   try {
     const baseId = process.env.AIRTABLE_BASE_ID;
@@ -404,7 +431,10 @@ export function getAirtableConfig(): {
 /**
  * Sync order to Airtable (create or update)
  */
-export async function syncOrderToAirtable(order: Order, airtableRecordId?: string): Promise<string | null> {
+export async function syncOrderToAirtable(
+  order: Order,
+  airtableRecordId?: string,
+): Promise<string | null> {
   try {
     const baseId = process.env.AIRTABLE_BASE_ID || "app0PK34gyJDizR3Q";
     const tableId = process.env.AIRTABLE_TABLE_ORDERS || "tbl01DTvrGtsAaPfZ";
@@ -415,21 +445,24 @@ export async function syncOrderToAirtable(order: Order, airtableRecordId?: strin
       return null;
     }
 
-    console.log(`[syncOrderToAirtable] Syncing order ${order.orderId} to Airtable (table: ${tableId})`);
+    console.log(
+      `[syncOrderToAirtable] Syncing order ${order.orderId} to Airtable (table: ${tableId})`,
+    );
 
     // Send order data to Airtable using the exact field names from the user's Orders table
     const airtableRecord = {
       fields: {
         // Core Order Fields
         "Order ID": order.orderId,
-        "Order Date": order.purchaseDate || new Date().toISOString().split("T")[0],
+        "Order Date":
+          order.purchaseDate || new Date().toISOString().split("T")[0],
 
         // Customer Info
         "Customer Name": order.customerName,
         "Customer Email": order.customerEmail,
         "Customer Phone": order.customerPhone || "",
         "Billing Address": order.billingAddress || "",
-        "Country": order.country,
+        Country: order.country,
 
         // Company Info
         "Company ID": order.companyId,
@@ -440,12 +473,13 @@ export async function syncOrderToAirtable(order: Order, airtableRecordId?: strin
         "Payment Method": order.paymentMethod,
         "Payment Status": order.paymentStatus,
         "Transaction ID": order.transactionId || "",
-        "Amount": order.amount,
-        "Currency": order.currency,
+        Amount: order.amount,
+        Currency: order.currency,
 
         // Order Status
-        "Status": order.status,
-        "Status Changed Date": order.statusChangedDate || new Date().toISOString().split("T")[0],
+        Status: order.status,
+        "Status Changed Date":
+          order.statusChangedDate || new Date().toISOString().split("T")[0],
         "Status History": JSON.stringify(order.statusHistory || []),
 
         // Renewal
@@ -454,10 +488,12 @@ export async function syncOrderToAirtable(order: Order, airtableRecordId?: strin
 
         // Refund Info
         "Refund Status": order.refundStatus,
-        "Refund Request": order.refundRequest ? JSON.stringify(order.refundRequest) : "",
+        "Refund Request": order.refundRequest
+          ? JSON.stringify(order.refundRequest)
+          : "",
 
         // Documents & Transfer Form
-        "Documents": JSON.stringify(order.documents || []),
+        Documents: JSON.stringify(order.documents || []),
         "Transfer Form URL": order.transferFormUrl || "",
 
         // Admin & Internal Notes
@@ -477,7 +513,9 @@ export async function syncOrderToAirtable(order: Order, airtableRecordId?: strin
       : `${AIRTABLE_API_URL}/${baseId}/${tableId}`;
 
     console.log(`[syncOrderToAirtable] Request URL: ${url}`);
-    console.log(`[syncOrderToAirtable] Fields to sync: ${Object.keys(airtableRecord.fields).join(", ")}`);
+    console.log(
+      `[syncOrderToAirtable] Fields to sync: ${Object.keys(airtableRecord.fields).join(", ")}`,
+    );
 
     const response = await fetch(url, {
       method: airtableRecordId ? "PATCH" : "POST",
@@ -489,26 +527,28 @@ export async function syncOrderToAirtable(order: Order, airtableRecordId?: strin
     });
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ error: response.statusText }));
+      const errorData = await response
+        .json()
+        .catch(() => ({ error: response.statusText }));
       console.error(
         `[syncOrderToAirtable] FAILED - Status ${response.status}:`,
         "Error:",
-        JSON.stringify(errorData)
+        JSON.stringify(errorData),
       );
       console.error(
-        `[syncOrderToAirtable] Details - Order: ${order.orderId}, Table: ${tableId}`
+        `[syncOrderToAirtable] Details - Order: ${order.orderId}, Table: ${tableId}`,
       );
       console.error(
-        `[syncOrderToAirtable] Fields attempted: ${Object.keys(airtableRecord.fields).join(", ")}`
+        `[syncOrderToAirtable] Fields attempted: ${Object.keys(airtableRecord.fields).join(", ")}`,
       );
 
       // If it's an invalid field error, log helpful message
       if (errorData?.error?.type === "INVALID_REQUEST_UNKNOWN") {
         console.error(
-          `[syncOrderToAirtable] ⚠️ HINT: One or more field names don't exist in Airtable table ${tableId}`
+          `[syncOrderToAirtable] ⚠️ HINT: One or more field names don't exist in Airtable table ${tableId}`,
         );
         console.error(
-          `[syncOrderToAirtable] Please verify these fields exist in your Airtable Orders table`
+          `[syncOrderToAirtable] Please verify these fields exist in your Airtable Orders table`,
         );
       }
 
@@ -517,7 +557,9 @@ export async function syncOrderToAirtable(order: Order, airtableRecordId?: strin
 
     const data = await response.json();
     const recordId = data.id || airtableRecordId;
-    console.log(`[syncOrderToAirtable] ✓ Order ${order.orderId} synced to Airtable (ID: ${recordId}) - ${airtableRecordId ? "updated" : "created"}`);
+    console.log(
+      `[syncOrderToAirtable] ✓ Order ${order.orderId} synced to Airtable (ID: ${recordId}) - ${airtableRecordId ? "updated" : "created"}`,
+    );
     return recordId;
   } catch (error) {
     console.error("Airtable order sync error:", error);
@@ -535,7 +577,9 @@ export async function fetchOrdersFromAirtable(): Promise<Order[]> {
     const token = process.env.AIRTABLE_API_TOKEN;
 
     if (!token) {
-      console.warn("AIRTABLE_API_TOKEN not configured. Cannot fetch orders from Airtable.");
+      console.warn(
+        "AIRTABLE_API_TOKEN not configured. Cannot fetch orders from Airtable.",
+      );
       return [];
     }
 
@@ -548,7 +592,9 @@ export async function fetchOrdersFromAirtable(): Promise<Order[]> {
     });
 
     if (!response.ok) {
-      console.error(`Airtable fetch failed: ${response.status} ${response.statusText}`);
+      console.error(
+        `Airtable fetch failed: ${response.status} ${response.statusText}`,
+      );
       return [];
     }
 
@@ -596,7 +642,9 @@ export async function fetchOrdersFromAirtable(): Promise<Order[]> {
 
         // Order Status
         status: fields["Status"] || "pending-payment",
-        statusChangedDate: fields["Status Changed Date"] || new Date().toISOString().split("T")[0],
+        statusChangedDate:
+          fields["Status Changed Date"] ||
+          new Date().toISOString().split("T")[0],
         statusHistory: parseJSON(fields["Status History"], []),
 
         // Dates
@@ -604,7 +652,9 @@ export async function fetchOrdersFromAirtable(): Promise<Order[]> {
 
         // Renewal
         renewalDate: fields["Renewal Date"] || "",
-        renewalFees: fields["Renewal Fees"] ? parseFloat(String(fields["Renewal Fees"])) : 0,
+        renewalFees: fields["Renewal Fees"]
+          ? parseFloat(String(fields["Renewal Fees"]))
+          : 0,
 
         // Refund Info
         refundStatus: fields["Refund Status"] || "none",
@@ -641,7 +691,7 @@ export async function fetchOrdersFromAirtable(): Promise<Order[]> {
 export async function updateOrderStatusInAirtable(
   airtableRecordId: string,
   newStatus: string,
-  updatedAt: string
+  updatedAt: string,
 ): Promise<boolean> {
   try {
     const baseId = process.env.AIRTABLE_BASE_ID || "app0PK34gyJDizR3Q";
@@ -649,7 +699,9 @@ export async function updateOrderStatusInAirtable(
     const token = process.env.AIRTABLE_API_TOKEN;
 
     if (!token) {
-      console.warn("AIRTABLE_API_TOKEN not configured. Skipping status update.");
+      console.warn(
+        "AIRTABLE_API_TOKEN not configured. Skipping status update.",
+      );
       return false;
     }
 
@@ -662,8 +714,9 @@ export async function updateOrderStatusInAirtable(
       },
       body: JSON.stringify({
         fields: {
-          "Status": newStatus,
-          "Status Changed Date": updatedAt || new Date().toISOString().split("T")[0],
+          Status: newStatus,
+          "Status Changed Date":
+            updatedAt || new Date().toISOString().split("T")[0],
           "Updated At": updatedAt || new Date().toISOString().split("T")[0],
         },
       }),

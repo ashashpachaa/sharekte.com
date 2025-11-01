@@ -17,7 +17,10 @@ import {
   uploadOrderDocument,
   deleteOrderDocument,
 } from "./routes/orders";
-import { sendEmailNotification, getNotifications } from "./routes/notifications";
+import {
+  sendEmailNotification,
+  getNotifications,
+} from "./routes/notifications";
 import {
   getCompanies,
   getCompany,
@@ -141,15 +144,15 @@ export function createServer() {
             postalCode: "SW1A 1AA",
             country: "United Kingdom",
             numberOfShares: 1000,
-            levelOfControl: "More than 75%"
-          }
+            levelOfControl: "More than 75%",
+          },
         ],
         numberOfShareholders: 1,
         pscList: [],
         numberOfPSCs: 0,
         changeCompanyName: false,
         changeCompanyActivities: false,
-        attachments: []
+        attachments: [],
       };
 
       // Call the createTransferForm handler with the test data
@@ -159,7 +162,7 @@ export function createServer() {
             console.log("[TEST] Response status:", code);
             console.log("[TEST] Response data:", JSON.stringify(data, null, 2));
             res.status(code).json(data);
-          }
+          },
         }),
         json: (data: any) => res.json(data),
       } as any;
@@ -167,14 +170,16 @@ export function createServer() {
       const mockReq = {
         body: testForm,
         params: {},
-        query: {}
+        query: {},
       } as any;
 
       console.log("[TEST] Submitting test form:", testForm.companyName);
       await createTransferForm(mockReq, mockRes);
     } catch (error) {
       console.error("[TEST] Error:", error);
-      res.status(500).json({ error: "Test form submission failed", details: String(error) });
+      res
+        .status(500)
+        .json({ error: "Test form submission failed", details: String(error) });
     }
   });
 
@@ -216,7 +221,10 @@ export function createServer() {
   app.post("/api/transfer-forms/:id/shareholders", addShareholder);
   app.post("/api/transfer-forms/:id/comments", addComment);
   app.post("/api/transfer-forms/:id/attachments", uploadAttachment);
-  app.delete("/api/transfer-forms/:id/attachments/:attachmentId", deleteAttachment);
+  app.delete(
+    "/api/transfer-forms/:id/attachments/:attachmentId",
+    deleteAttachment,
+  );
   app.get("/api/transfer-forms/:id/pdf", generatePDF);
 
   // Invoice routes - Specific routes before parameterized ones
@@ -235,7 +243,10 @@ export function createServer() {
   app.post("/api/invoices/:id/send-email", sendInvoiceEmail);
   app.get("/api/invoices/:id/pdf", generateInvoicePDF);
   app.post("/api/invoices/:id/attachments", uploadInvoiceAttachment);
-  app.delete("/api/invoices/:id/attachments/:attachmentId", deleteInvoiceAttachment);
+  app.delete(
+    "/api/invoices/:id/attachments/:attachmentId",
+    deleteInvoiceAttachment,
+  );
 
   return app;
 }

@@ -100,7 +100,7 @@ async function fetchCompaniesWithRetry(): Promise<CompanyData[]> {
           // Rate limited - exponential backoff
           const waitTime = Math.pow(2, retries) * 1000; // 1s, 2s, 4s
           console.warn(
-            `Rate limited (429). Retry ${retries + 1}/${maxRetries} after ${waitTime}ms`
+            `Rate limited (429). Retry ${retries + 1}/${maxRetries} after ${waitTime}ms`,
           );
           await new Promise((resolve) => setTimeout(resolve, waitTime));
           retries++;
@@ -114,7 +114,7 @@ async function fetchCompaniesWithRetry(): Promise<CompanyData[]> {
         if (retries < maxRetries) {
           const waitTime = Math.pow(2, retries - 1) * 1000;
           console.warn(
-            `Fetch failed. Retry ${retries}/${maxRetries} after ${waitTime}ms`
+            `Fetch failed. Retry ${retries}/${maxRetries} after ${waitTime}ms`,
           );
           await new Promise((resolve) => setTimeout(resolve, waitTime));
         }
@@ -123,8 +123,7 @@ async function fetchCompaniesWithRetry(): Promise<CompanyData[]> {
 
     pendingFetch = null;
     throw (
-      lastError ||
-      new Error("Failed to fetch companies after maximum retries")
+      lastError || new Error("Failed to fetch companies after maximum retries")
     );
   })();
 
@@ -144,8 +143,11 @@ export function CompanyTable({
   const { addItem } = useCart();
   const { currency, formatPrice: formatWithCurrency, rates } = useCurrency();
   const [showDeleteDialog, setShowDeleteDialog] = useState<string | null>(null);
-  const [loadedCompanies, setLoadedCompanies] = useState<CompanyData[]>(companies);
-  const [isLoading, setIsLoading] = useState(!companies || companies.length === 0);
+  const [loadedCompanies, setLoadedCompanies] =
+    useState<CompanyData[]>(companies);
+  const [isLoading, setIsLoading] = useState(
+    !companies || companies.length === 0,
+  );
   const [error, setError] = useState<string | null>(null);
   const [selectedCountry, setSelectedCountry] = useState<string>("");
   const [selectedYear, setSelectedYear] = useState<string>("");
@@ -185,7 +187,7 @@ export function CompanyTable({
         .catch((err) => {
           console.error("Error fetching companies:", err);
           setError(
-            err instanceof Error ? err.message : "Failed to load companies"
+            err instanceof Error ? err.message : "Failed to load companies",
           );
           setLoadedCompanies([]);
         })
@@ -217,8 +219,10 @@ export function CompanyTable({
 
   // Filter companies based on selected criteria
   const filteredCompanies = safeCompanies.filter((company) => {
-    const countryMatch = !selectedCountry || company.country === selectedCountry;
-    const yearMatch = !selectedYear || company.incorporationYear === parseInt(selectedYear);
+    const countryMatch =
+      !selectedCountry || company.country === selectedCountry;
+    const yearMatch =
+      !selectedYear || company.incorporationYear === parseInt(selectedYear);
     const isActive = company.status === "active"; // Only show active companies
     return countryMatch && yearMatch && isActive;
   });
@@ -227,11 +231,11 @@ export function CompanyTable({
   const availableCompanies = safeCompanies.filter((c) => c.status !== "sold");
 
   const uniqueCountries = Array.from(
-    new Set(availableCompanies.map((c) => c.country).filter(Boolean))
+    new Set(availableCompanies.map((c) => c.country).filter(Boolean)),
   ).sort();
 
   const uniqueYears = Array.from(
-    new Set(availableCompanies.map((c) => c.incorporationYear).filter(Boolean))
+    new Set(availableCompanies.map((c) => c.incorporationYear).filter(Boolean)),
   ).sort((a, b) => b - a);
 
   // Display only the first `displayCount` items
@@ -245,7 +249,7 @@ export function CompanyTable({
         <div className="mb-6 flex flex-col sm:flex-row gap-4 p-4 bg-gray-50 rounded-lg border">
           <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('table.filterByCountry')}
+              {t("table.filterByCountry")}
             </label>
             <select
               value={selectedCountry}
@@ -255,7 +259,7 @@ export function CompanyTable({
               }}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             >
-              <option value="">{t('table.allCountries')}</option>
+              <option value="">{t("table.allCountries")}</option>
               {uniqueCountries.map((country) => (
                 <option key={country} value={country}>
                   {country}
@@ -266,7 +270,7 @@ export function CompanyTable({
 
           <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('table.filterByYear')}
+              {t("table.filterByYear")}
             </label>
             <select
               value={selectedYear}
@@ -276,7 +280,7 @@ export function CompanyTable({
               }}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             >
-              <option value="">{t('table.allYears')}</option>
+              <option value="">{t("table.allYears")}</option>
               {uniqueYears.map((year) => (
                 <option key={year} value={year.toString()}>
                   {year}
@@ -296,7 +300,7 @@ export function CompanyTable({
                 }}
                 className="w-full sm:w-auto"
               >
-                {t('table.clearFilters')}
+                {t("table.clearFilters")}
               </Button>
             </div>
           )}
@@ -304,14 +308,15 @@ export function CompanyTable({
 
         {/* Results info */}
         <div className="mb-4 text-sm text-gray-600 px-4">
-          {displayedCompanies.length} {t('table.showing')} {filteredCompanies.length}
+          {displayedCompanies.length} {t("table.showing")}{" "}
+          {filteredCompanies.length}
         </div>
       </div>
 
       <div className="border rounded-lg overflow-hidden bg-white">
         {isLoading ? (
           <div className="p-8 text-center">
-            <p className="text-gray-500">{t('table.loadingCompanies')}</p>
+            <p className="text-gray-500">{t("table.loadingCompanies")}</p>
           </div>
         ) : error ? (
           <div className="p-8 text-center">
@@ -333,7 +338,9 @@ export function CompanyTable({
                   .catch((err) => {
                     console.error("Error fetching companies:", err);
                     setError(
-                      err instanceof Error ? err.message : "Failed to load companies"
+                      err instanceof Error
+                        ? err.message
+                        : "Failed to load companies",
                     );
                     setLoadedCompanies([]);
                   })
@@ -343,125 +350,144 @@ export function CompanyTable({
               }}
             >
               <RefreshCw className="w-4 h-4 mr-2" />
-              {t('table.retry')}
+              {t("table.retry")}
             </Button>
           </div>
         ) : safeCompanies.length === 0 ? (
           <div className="p-8 text-center">
-            <p className="text-gray-500">{t('table.noCompanies')}</p>
+            <p className="text-gray-500">{t("table.noCompanies")}</p>
           </div>
         ) : (
           <Table>
-          <TableHeader>
-            <TableRow className="bg-gray-50">
-              <TableHead className="font-semibold">{t('table.companyName')}</TableHead>
-              <TableHead className="font-semibold">{t('table.country')}</TableHead>
-              <TableHead className="font-semibold">{t('table.companyNumber')}</TableHead>
-              <TableHead className="font-semibold">{t('table.incorporateDate')}</TableHead>
-              <TableHead className="font-semibold">{t('table.incorporateYear')}</TableHead>
-              <TableHead className="font-semibold">{t('table.price')}</TableHead>
-              <TableHead className="font-semibold">{t('table.optionsIncluded')}</TableHead>
-              <TableHead className="text-right font-semibold">{t('table.action')}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {displayedCompanies.map((company) => (
-              <TableRow
-                key={company.id}
-                className="hover:bg-gray-50 transition-colors"
-              >
-                <TableCell className="font-medium">
-                  <button
-                    onClick={() => onViewDetails?.(company)}
-                    className="text-blue-600 hover:underline"
-                  >
-                    {company.companyName}
-                  </button>
-                </TableCell>
-                <TableCell className="text-sm">{company.country}</TableCell>
-                <TableCell className="text-sm text-gray-600">
-                  {company.companyNumber}
-                </TableCell>
-                <TableCell className="text-sm">
-                  {formatDate(company.incorporationDate)}
-                </TableCell>
-                <TableCell className="text-sm">{company.incorporationYear}</TableCell>
-                <TableCell className="text-sm font-medium">
-                  {formatWithCurrency(company.purchasePrice)}
-                </TableCell>
-                <TableCell className="text-sm">
-                  {company.optionsInclude && company.optionsInclude.length > 0 ? (
-                    <span className="text-gray-700">
-                      {company.optionsInclude.join(", ")}
-                    </span>
-                  ) : (
-                    <span className="text-gray-400">{t('table.none')}</span>
-                  )}
-                </TableCell>
-                <TableCell className="text-right">
-                  {isAdmin ? (
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="sm">
-                          <MoreHorizontal className="w-4 h-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem
-                          onClick={() => onViewDetails?.(company)}
-                        >
-                          <Eye className="w-4 h-4 mr-2" />
-                          {t('table.viewDetails')}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => onEdit?.(company)}>
-                          <Edit2 className="w-4 h-4 mr-2" />
-                          {t('table.edit')}
-                        </DropdownMenuItem>
-                        {company.status !== "expired" &&
-                          company.status !== "cancelled" && (
+            <TableHeader>
+              <TableRow className="bg-gray-50">
+                <TableHead className="font-semibold">
+                  {t("table.companyName")}
+                </TableHead>
+                <TableHead className="font-semibold">
+                  {t("table.country")}
+                </TableHead>
+                <TableHead className="font-semibold">
+                  {t("table.companyNumber")}
+                </TableHead>
+                <TableHead className="font-semibold">
+                  {t("table.incorporateDate")}
+                </TableHead>
+                <TableHead className="font-semibold">
+                  {t("table.incorporateYear")}
+                </TableHead>
+                <TableHead className="font-semibold">
+                  {t("table.price")}
+                </TableHead>
+                <TableHead className="font-semibold">
+                  {t("table.optionsIncluded")}
+                </TableHead>
+                <TableHead className="text-right font-semibold">
+                  {t("table.action")}
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {displayedCompanies.map((company) => (
+                <TableRow
+                  key={company.id}
+                  className="hover:bg-gray-50 transition-colors"
+                >
+                  <TableCell className="font-medium">
+                    <button
+                      onClick={() => onViewDetails?.(company)}
+                      className="text-blue-600 hover:underline"
+                    >
+                      {company.companyName}
+                    </button>
+                  </TableCell>
+                  <TableCell className="text-sm">{company.country}</TableCell>
+                  <TableCell className="text-sm text-gray-600">
+                    {company.companyNumber}
+                  </TableCell>
+                  <TableCell className="text-sm">
+                    {formatDate(company.incorporationDate)}
+                  </TableCell>
+                  <TableCell className="text-sm">
+                    {company.incorporationYear}
+                  </TableCell>
+                  <TableCell className="text-sm font-medium">
+                    {formatWithCurrency(company.purchasePrice)}
+                  </TableCell>
+                  <TableCell className="text-sm">
+                    {company.optionsInclude &&
+                    company.optionsInclude.length > 0 ? (
+                      <span className="text-gray-700">
+                        {company.optionsInclude.join(", ")}
+                      </span>
+                    ) : (
+                      <span className="text-gray-400">{t("table.none")}</span>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {isAdmin ? (
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="sm">
+                            <MoreHorizontal className="w-4 h-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem
+                            onClick={() => onViewDetails?.(company)}
+                          >
+                            <Eye className="w-4 h-4 mr-2" />
+                            {t("table.viewDetails")}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => onEdit?.(company)}>
+                            <Edit2 className="w-4 h-4 mr-2" />
+                            {t("table.edit")}
+                          </DropdownMenuItem>
+                          {company.status !== "expired" &&
+                            company.status !== "cancelled" && (
+                              <DropdownMenuItem
+                                onClick={() => handleRenew(company.id)}
+                              >
+                                <RefreshCw className="w-4 h-4 mr-2" />
+                                {t("table.renew")}
+                              </DropdownMenuItem>
+                            )}
+                          {(company.status === "refunded" ||
+                            company.status === "cancelled") && (
                             <DropdownMenuItem
-                              onClick={() => handleRenew(company.id)}
+                              onClick={() =>
+                                onStatusChange?.(company.id, "available")
+                              }
                             >
-                              <RefreshCw className="w-4 h-4 mr-2" />
-                              {t('table.renew')}
+                              <TrendingUp className="w-4 h-4 mr-2" />
+                              Reactivate
                             </DropdownMenuItem>
                           )}
-                        {(company.status === "refunded" ||
-                          company.status === "cancelled") && (
                           <DropdownMenuItem
-                            onClick={() =>
-                              onStatusChange?.(company.id, "available")
-                            }
+                            onClick={() => setShowDeleteDialog(company.id)}
+                            className="text-red-600"
                           >
-                            <TrendingUp className="w-4 h-4 mr-2" />
-                            Reactivate
+                            <Trash2 className="w-4 h-4 mr-2" />
+                            Delete
                           </DropdownMenuItem>
-                        )}
-                        <DropdownMenuItem
-                          onClick={() => setShowDeleteDialog(company.id)}
-                          className="text-red-600"
-                        >
-                          <Trash2 className="w-4 h-4 mr-2" />
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  ) : (
-                    <Button
-                      variant="default"
-                      size="sm"
-                      onClick={() => handleAddToCart(company)}
-                      className="gap-1"
-                    >
-                      <ShoppingCart className="w-4 h-4" />
-                      {t('table.addToCart')}
-                    </Button>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    ) : (
+                      <Button
+                        variant="default"
+                        size="sm"
+                        onClick={() => handleAddToCart(company)}
+                        className="gap-1"
+                      >
+                        <ShoppingCart className="w-4 h-4" />
+                        {t("table.addToCart")}
+                      </Button>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         )}
 
         {/* Show More Button */}
@@ -492,10 +518,7 @@ export function CompanyTable({
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setShowDeleteDialog(null)}
-            >
+            <Button variant="outline" onClick={() => setShowDeleteDialog(null)}>
               Cancel
             </Button>
             <Button

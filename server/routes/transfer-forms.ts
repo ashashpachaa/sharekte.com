@@ -27,9 +27,15 @@ export const getTransferForms: RequestHandler = async (req, res) => {
     // Fetch latest status from Airtable if available
     const airtableForms = await (async () => {
       try {
-        const { fetchFormsFromAirtable } = await import("../utils/airtable-sync");
+        const { fetchFormsFromAirtable } = await import(
+          "../utils/airtable-sync"
+        );
         const forms = await fetchFormsFromAirtable();
-        console.log("[getTransferForms] Fetched from Airtable:", forms.length, "forms");
+        console.log(
+          "[getTransferForms] Fetched from Airtable:",
+          forms.length,
+          "forms",
+        );
         return forms;
       } catch (error) {
         console.warn("Could not fetch from Airtable:", error);
@@ -44,12 +50,16 @@ export const getTransferForms: RequestHandler = async (req, res) => {
     if (formsDb.length > 0) {
       result = formsDb.map((form) => {
         const airtableForm = airtableForms.find(
-          (af) => af.companyName && af.companyName.toLowerCase() === form.companyName.toLowerCase()
+          (af) =>
+            af.companyName &&
+            af.companyName.toLowerCase() === form.companyName.toLowerCase(),
         );
 
         // If form exists in Airtable, update status from there
         if (airtableForm && airtableForm.status) {
-          console.log(`[getTransferForms] Merging Airtable status for ${form.companyName}: ${form.status} → ${airtableForm.status}`);
+          console.log(
+            `[getTransferForms] Merging Airtable status for ${form.companyName}: ${form.status} → ${airtableForm.status}`,
+          );
           return {
             ...form,
             status: airtableForm.status,
@@ -60,13 +70,18 @@ export const getTransferForms: RequestHandler = async (req, res) => {
     } else {
       // Use Airtable forms directly when local DB is empty
       result = airtableForms;
-      console.log("[getTransferForms] Using Airtable forms directly (no local forms)");
-      console.log("[getTransferForms] Forms data:", result.map(f => ({
-        id: f.id,
-        companyName: f.companyName,
-        status: f.status,
-        orderId: f.orderId
-      })));
+      console.log(
+        "[getTransferForms] Using Airtable forms directly (no local forms)",
+      );
+      console.log(
+        "[getTransferForms] Forms data:",
+        result.map((f) => ({
+          id: f.id,
+          companyName: f.companyName,
+          status: f.status,
+          orderId: f.orderId,
+        })),
+      );
     }
 
     if (orderId) {
@@ -122,7 +137,13 @@ export const createTransferForm: RequestHandler = async (req, res) => {
       attachments,
     } = req.body;
 
-    if (!orderId || !companyId || !companyName || !totalShares || !totalShareCapital) {
+    if (
+      !orderId ||
+      !companyId ||
+      !companyName ||
+      !totalShares ||
+      !totalShareCapital
+    ) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
@@ -178,7 +199,8 @@ export const createTransferForm: RequestHandler = async (req, res) => {
     // Sync to Airtable if configured
     (async () => {
       try {
-        const { syncFormToAirtable, syncFormToTransferFormTable } = await import("../utils/airtable-sync");
+        const { syncFormToAirtable, syncFormToTransferFormTable } =
+          await import("../utils/airtable-sync");
 
         // Sync to comprehensive forms table
         await syncFormToAirtable(newForm);
@@ -250,7 +272,10 @@ export const updateFormStatus: RequestHandler = async (req, res) => {
       ...form,
       status: status as FormStatus,
       amendmentsRequiredCount: amendmentCount,
-      lastAmendmentDate: status === "amend-required" ? new Date().toISOString() : form.lastAmendmentDate,
+      lastAmendmentDate:
+        status === "amend-required"
+          ? new Date().toISOString()
+          : form.lastAmendmentDate,
       updatedAt: new Date().toISOString(),
       statusHistory: [
         ...form.statusHistory,
@@ -272,8 +297,15 @@ export const updateFormStatus: RequestHandler = async (req, res) => {
     // Send status notification email (async - don't wait for response)
     (async () => {
       try {
-        const { sendFormStatusNotification } = await import("../utils/form-notifications");
-        await sendFormStatusNotification(updated, status as FormStatus, notes, reason);
+        const { sendFormStatusNotification } = await import(
+          "../utils/form-notifications"
+        );
+        await sendFormStatusNotification(
+          updated,
+          status as FormStatus,
+          notes,
+          reason,
+        );
       } catch (error) {
         console.error("Error sending notification:", error);
         // Don't fail the request if notification fails
@@ -407,7 +439,9 @@ export const addComment: RequestHandler = async (req, res) => {
     if (!isAdminOnly) {
       (async () => {
         try {
-          const { sendCommentNotification } = await import("../utils/form-notifications");
+          const { sendCommentNotification } = await import(
+            "../utils/form-notifications"
+          );
           await sendCommentNotification(form, text, isAdminOnly);
         } catch (error) {
           console.error("Error sending comment notification:", error);
@@ -529,9 +563,10 @@ export const getFormAnalytics: RequestHandler = async (req, res) => {
     const analytics = {
       total: formsDb.length,
       underReview: formsDb.filter((f) => f.status === "under-review").length,
-      amendRequired: formsDb.filter((f) => f.status === "amend-required").length,
+      amendRequired: formsDb.filter((f) => f.status === "amend-required")
+        .length,
       confirmApplication: formsDb.filter(
-        (f) => f.status === "confirm-application"
+        (f) => f.status === "confirm-application",
       ).length,
       transferring: formsDb.filter((f) => f.status === "transferring").length,
       completed: formsDb.filter((f) => f.status === "complete-transfer").length,
@@ -552,7 +587,7 @@ function calculateAverageProcessingTime(): number {
   if (formsDb.length === 0) return 0;
 
   const completedForms = formsDb.filter(
-    (f) => f.status === "complete-transfer" && f.completedAt
+    (f) => f.status === "complete-transfer" && f.completedAt,
   );
   if (completedForms.length === 0) return 0;
 

@@ -11,33 +11,48 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           {/* Brand */}
           <div>
-            <Link to="/" className="flex items-center gap-2 font-bold text-lg text-primary mb-4">
+            <Link
+              to="/"
+              className="flex items-center gap-2 font-bold text-lg text-primary mb-4"
+            >
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white font-bold">
                 BC
               </div>
               <span>BusinessCorp</span>
             </Link>
             <p className="text-sm text-muted-foreground">
-              Global marketplace for buying and selling established, revenue-generating businesses.
+              Global marketplace for buying and selling established,
+              revenue-generating businesses.
             </p>
           </div>
 
           {/* Product */}
           <div>
-            <h3 className="font-semibold text-sm mb-4 text-foreground">{t('footer.company')}</h3>
+            <h3 className="font-semibold text-sm mb-4 text-foreground">
+              {t("footer.company")}
+            </h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  {t('companies.availableCompanies')}
+                <a
+                  href="#"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  {t("companies.availableCompanies")}
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <a
+                  href="#"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
                   How It Works
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <a
+                  href="#"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
                   Pricing
                 </a>
               </li>
@@ -46,20 +61,31 @@ export function Footer() {
 
           {/* Company */}
           <div>
-            <h3 className="font-semibold text-sm mb-4 text-foreground">{t('footer.company')}</h3>
+            <h3 className="font-semibold text-sm mb-4 text-foreground">
+              {t("footer.company")}
+            </h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  {t('footer.about')}
+                <a
+                  href="#"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  {t("footer.about")}
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  {t('footer.blog')}
+                <a
+                  href="#"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  {t("footer.blog")}
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                <a
+                  href="#"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
                   Contact
                 </a>
               </li>
@@ -68,21 +94,32 @@ export function Footer() {
 
           {/* Legal */}
           <div>
-            <h3 className="font-semibold text-sm mb-4 text-foreground">{t('footer.legal')}</h3>
+            <h3 className="font-semibold text-sm mb-4 text-foreground">
+              {t("footer.legal")}
+            </h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  {t('footer.privacy')}
+                <a
+                  href="#"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  {t("footer.privacy")}
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  {t('footer.terms')}
+                <a
+                  href="#"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  {t("footer.terms")}
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  {t('footer.cookies')}
+                <a
+                  href="#"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  {t("footer.cookies")}
                 </a>
               </li>
             </ul>
@@ -92,16 +129,26 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-border/40 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            © {currentYear} BusinessCorp. {t('common.all')} {t('common.search')}.
+            © {currentYear} BusinessCorp. {t("common.all")}{" "}
+            {t("common.search")}.
           </p>
           <div className="flex items-center gap-6">
-            <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+            <a
+              href="#"
+              className="text-sm text-muted-foreground hover:text-primary transition-colors"
+            >
               Twitter
             </a>
-            <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+            <a
+              href="#"
+              className="text-sm text-muted-foreground hover:text-primary transition-colors"
+            >
               LinkedIn
             </a>
-            <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+            <a
+              href="#"
+              className="text-sm text-muted-foreground hover:text-primary transition-colors"
+            >
               Facebook
             </a>
           </div>
