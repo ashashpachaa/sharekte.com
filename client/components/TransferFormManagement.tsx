@@ -272,7 +272,7 @@ export function TransferFormManagement({ orderId }: TransferFormManagementProps)
                     <TableRow key={form.id} className="hover:bg-gray-50">
                       <TableCell className="font-mono text-sm">{form.formId}</TableCell>
                       <TableCell className="font-medium">{form.companyName}</TableCell>
-                      <TableCell>{form.buyerName}</TableCell>
+                      <TableCell>{form.country}</TableCell>
                       <TableCell>
                         <Badge className={getFormStatusColor(form.status)}>
                           {formatFormStatus(form.status)}
