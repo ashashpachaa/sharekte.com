@@ -3,13 +3,34 @@
   functions = "netlify/functions"
   publish = "dist/spa"
 
+[build.environment]
+  NODE_VERSION = "20"
 
 [functions]
-  external_node_modules = ["express"]
+  external_node_modules = ["express", "cors", "dotenv"]
   node_bundler = "esbuild"
-  
+  directory = "netlify/functions"
+
+# API Routes - All requests to /api/* go to the serverless function
 [[redirects]]
-  force = true
   from = "/api/*"
-  status = 200
   to = "/.netlify/functions/api/:splat"
+  status = 200
+  force = true
+
+# Catch-all for SPA routing - all other requests go to index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
+
+# Environment variables configuration
+[context.production.environment]
+  NODE_ENV = "production"
+
+[context.deploy-preview.environment]
+  NODE_ENV = "development"
+
+[context.branch-deploy.environment]
+  NODE_ENV = "development"
