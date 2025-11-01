@@ -36,7 +36,7 @@ try {
 }
 
 // In production, serve the built SPA files
-const __dirname = import.meta.dirname;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distPath = path.join(__dirname, "../dist/spa");
 
 console.log("[startup] SPA path:", distPath);
