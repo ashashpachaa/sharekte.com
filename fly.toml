@@ -5,14 +5,7 @@ app = "businesscorp"
 primary_region = "dfw"
 
 [build]
-  builder = "paketobuildpacks"
-  buildpacks = [
-    { "id" = "gcr.io/paketo-buildpacks/nodejs" }
-  ]
-
-[build.env]
-  # Use pnpm as the package manager
-  NPM_CONFIG_UPDATE_NOTIFIER = "false"
+  dockerfile = "Dockerfile"
 
 [env]
   # Production environment variables
