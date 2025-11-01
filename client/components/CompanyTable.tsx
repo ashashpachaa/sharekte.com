@@ -304,14 +304,14 @@ export function CompanyTable({
 
         {/* Results info */}
         <div className="mb-4 text-sm text-gray-600 px-4">
-          Showing {displayedCompanies.length} of {filteredCompanies.length} companies
+          {displayedCompanies.length} {t('table.showing')} {filteredCompanies.length}
         </div>
       </div>
 
       <div className="border rounded-lg overflow-hidden bg-white">
         {isLoading ? (
           <div className="p-8 text-center">
-            <p className="text-gray-500">Loading companies...</p>
+            <p className="text-gray-500">{t('table.loadingCompanies')}</p>
           </div>
         ) : error ? (
           <div className="p-8 text-center">
@@ -348,7 +348,7 @@ export function CompanyTable({
           </div>
         ) : safeCompanies.length === 0 ? (
           <div className="p-8 text-center">
-            <p className="text-gray-500">No companies available</p>
+            <p className="text-gray-500">{t('table.noCompanies')}</p>
           </div>
         ) : (
           <Table>
