@@ -9,6 +9,8 @@
     "restartPolicyMaxRetries": 5,
     "startCommand": "npm run start",
     "numReplicas": 1,
-    "sleepApplication": false
+    "sleepApplication": false,
+    "healthcheckPath": "/health",
+    "healthcheckTimeout": 30
   }
 }
