@@ -748,20 +748,33 @@ export const deleteOrderDocument: RequestHandler = async (req, res) => {
   try {
     const { orderId, documentId } = req.params;
 
-    // Find the order
-    let allOrders = getDemoOrders();
-    if (AIRTABLE_API_TOKEN) {
-      const airtableOrders = await fetchOrdersFromAirtable();
-      if (airtableOrders.length > 0) {
-        allOrders = [...airtableOrders, ...inMemoryOrders];
+    console.log(`[deleteOrderDocument] Deleting document ${documentId} from order ${orderId}`);
+
+    // Find the order - check in-memory first since it has the latest state
+    let currentOrder = inMemoryOrders.find((o) => o.id === orderId || o.orderId === orderId);
+
+    // If not in-memory, try Airtable
+    if (!currentOrder && AIRTABLE_API_TOKEN) {
+      try {
+        const airtableOrders = await fetchOrdersFromAirtable();
+        currentOrder = airtableOrders.find((o) => o.id === orderId || o.orderId === orderId);
+      } catch (airtableError) {
+        console.error("[deleteOrderDocument] Failed to fetch from Airtable:", airtableError);
       }
     }
-    allOrders = [...allOrders, ...inMemoryOrders];
 
-    const currentOrder = allOrders.find((o) => o.id === orderId || o.orderId === orderId);
+    // Fallback to demo orders
     if (!currentOrder) {
+      const demoOrders = getDemoOrders();
+      currentOrder = demoOrders.find((o) => o.id === orderId || o.orderId === orderId);
+    }
+
+    if (!currentOrder) {
+      console.error(`[deleteOrderDocument] Order not found: ${orderId}`);
       return res.status(404).json({ error: "Order not found" });
     }
+
+    console.log(`[deleteOrderDocument] Found order: ${currentOrder.orderId}`);
 
     // Remove document from order
     const updatedOrder: Order = {
@@ -770,17 +783,24 @@ export const deleteOrderDocument: RequestHandler = async (req, res) => {
       updatedAt: new Date().toISOString(),
     };
 
-    // Update in-memory storage
+    // Update in-memory storage FIRST (primary persistence)
     const inMemIndex = inMemoryOrders.findIndex((o) => o.id === orderId || o.orderId === orderId);
     if (inMemIndex >= 0) {
       inMemoryOrders[inMemIndex] = updatedOrder;
+      console.log(`[deleteOrderDocument] Updated in-memory order`);
+    } else {
+      // Add to in-memory if not found
+      inMemoryOrders.push(updatedOrder);
+      console.log(`[deleteOrderDocument] Added order to in-memory storage`);
     }
 
     // Sync to Airtable if configured and record exists
     if (currentOrder.airtableId && AIRTABLE_API_TOKEN) {
       try {
         const url = `${AIRTABLE_API_URL}/${AIRTABLE_BASE_ID}/${AIRTABLE_ORDERS_TABLE}/${currentOrder.airtableId}`;
-        await fetch(url, {
+        console.log(`[deleteOrderDocument] Syncing to Airtable: ${url}`);
+
+        const airtableResponse = await fetch(url, {
           method: "PATCH",
           headers: {
             Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
@@ -793,15 +813,22 @@ export const deleteOrderDocument: RequestHandler = async (req, res) => {
             },
           }),
         });
+
+        if (airtableResponse.ok) {
+          console.log(`[deleteOrderDocument] ✓ Synced to Airtable`);
+        } else {
+          console.error(`[deleteOrderDocument] Airtable sync failed: ${airtableResponse.status}`);
+        }
       } catch (airtableError) {
-        console.error("Failed to sync document deletion to Airtable:", airtableError);
-        // Don't fail the request if Airtable sync fails
+        console.error("[deleteOrderDocument] Failed to sync document deletion to Airtable:", airtableError);
+        // Don't fail the request if Airtable sync fails - document is safe in-memory
       }
     }
 
+    console.log(`[deleteOrderDocument] ✓ Document deleted successfully`);
     res.json(updatedOrder);
   } catch (error) {
-    console.error("Failed to delete document:", error);
+    console.error("[deleteOrderDocument] Error:", error);
     res.status(500).json({ error: "Failed to delete document" });
   }
 };
