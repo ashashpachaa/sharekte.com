@@ -27,37 +27,39 @@ const queryClient = new QueryClient();
 
 export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <AdminProvider>
-          <CurrencyProvider>
-            <NotificationsProvider>
-              <CartProvider>
-              <Toaster />
-              <Sonner />
-              <BrowserRouter>
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/support" element={<Support />} />
-                  <Route path="/companies" element={<Companies />} />
-                  <Route path="/cart" element={<Cart />} />
-                  <Route path="/checkout" element={<Checkout />} />
-                  <Route path="/admin/login" element={<AdminLogin />} />
-                  <Route path="/admin/dashboard" element={<AdminDashboard />} />
-                  <Route path="/admin/users" element={<AdminUsers />} />
-                  <Route path="/admin/orders" element={<AdminOrders />} />
-                  <Route path="/admin/invoices" element={<AdminInvoices />} />
-                  <Route path="/admin/settings" element={<AdminSettings />} />
-                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </BrowserRouter>
-              </CartProvider>
-            </NotificationsProvider>
-          </CurrencyProvider>
-        </AdminProvider>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <I18nextProvider i18n={i18n}>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <AdminProvider>
+            <CurrencyProvider>
+              <NotificationsProvider>
+                <CartProvider>
+                  <Toaster />
+                  <Sonner />
+                  <BrowserRouter>
+                    <Routes>
+                      <Route path="/" element={<Index />} />
+                      <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/support" element={<Support />} />
+                      <Route path="/companies" element={<Companies />} />
+                      <Route path="/cart" element={<Cart />} />
+                      <Route path="/checkout" element={<Checkout />} />
+                      <Route path="/admin/login" element={<AdminLogin />} />
+                      <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                      <Route path="/admin/users" element={<AdminUsers />} />
+                      <Route path="/admin/orders" element={<AdminOrders />} />
+                      <Route path="/admin/invoices" element={<AdminInvoices />} />
+                      <Route path="/admin/settings" element={<AdminSettings />} />
+                      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </BrowserRouter>
+                </CartProvider>
+              </NotificationsProvider>
+            </CurrencyProvider>
+          </AdminProvider>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </I18nextProvider>
   );
 }
