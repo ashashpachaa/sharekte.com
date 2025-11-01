@@ -1,11 +1,10 @@
 import { defineConfig } from "vite";
-import path from "path";
 
 // Server build configuration
 export default defineConfig({
   build: {
     lib: {
-      entry: path.join(process.cwd(), "server/node-build.ts"),
+      entry: "server/node-build.ts",
       name: "server",
       fileName: "node-build",
       formats: ["es"],
