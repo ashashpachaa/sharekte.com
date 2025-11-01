@@ -1696,7 +1696,7 @@ Generated on: ${new Date().toLocaleDateString()}
                                   </p>
                                   <div className={`${statusConfig.color} inline-flex items-center gap-1 px-2 py-1 rounded-full font-semibold text-xs`}>
                                     <StatusIcon className="w-3 h-3" />
-                                    {company.statusLabel}
+                                    {statusConfig.label}
                                   </div>
                                 </div>
                               </div>
