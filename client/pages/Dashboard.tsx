@@ -1028,6 +1028,14 @@ Generated on: ${new Date().toLocaleDateString()}
   // Get status-specific message for transfer form status alerts
   const getStatusMessage = (status: string) => {
     switch (status) {
+      case "pending-form":
+        return {
+          icon: "📋",
+          headline: "Form Pending",
+          description: "Your transfer form is awaiting submission. Please fill out all required fields and submit to begin the review process.",
+          color: "bg-yellow-500/10 border-yellow-500/30 text-yellow-700",
+          textColor: "text-yellow-600",
+        };
       case "under-review":
         return {
           icon: "⏳",
