@@ -1,12 +1,6 @@
 app = "sharekte"
 primary_region = "sjc"
 
-[build]
-builder = "heroku"
-
-[build.args]
-  NODE_ENV = "production"
-
 [env]
   NODE_ENV = "production"
   PORT = "8080"
