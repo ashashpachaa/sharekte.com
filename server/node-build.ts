@@ -6,7 +6,15 @@ import fs from "fs";
 // Ensure environment is production
 process.env.NODE_ENV = process.env.NODE_ENV || "production";
 
-const app = createServer();
+console.log("[startup] Creating server...");
+let app;
+try {
+  app = createServer();
+  console.log("[startup] Server created successfully");
+} catch (error) {
+  console.error("[startup] FATAL: Failed to create server:", error);
+  process.exit(1);
+}
 const port = process.env.PORT || 8080;
 
 // In production, serve the built SPA files
