@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
 import {
   Popover,
   PopoverContent,
@@ -9,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/cart-context";
 import { ShoppingCart, Trash2, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export function CartDropdown() {
   const { t } = useTranslation();
