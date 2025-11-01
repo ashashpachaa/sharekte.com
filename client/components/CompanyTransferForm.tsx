@@ -332,6 +332,7 @@ export function CompanyTransferForm({
   companyId,
   companyName,
   companyNumber,
+  country,
   incorporationDate,
   incorporationYear,
   onSuccess,
@@ -352,6 +353,7 @@ export function CompanyTransferForm({
       companyId,
       companyName,
       companyNumber,
+      country,
       incorporationDate,
       incorporationYear,
       
