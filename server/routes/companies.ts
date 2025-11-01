@@ -52,7 +52,7 @@ async function fetchCompaniesData(): Promise<CompanyData[]> {
     }
 
     const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
-    const AIRTABLE_BASE_ID = "app0PK34gyJDizR3Q";
+    const AIRTABLE_BASE_ID = "app22Bav0LsknYq69"; // Updated to user's new Airtable base
     const AIRTABLE_TABLE_ID = "tbljtdHPdHnTberDy";
 
     if (!AIRTABLE_API_TOKEN) {
@@ -238,7 +238,7 @@ export const getCompany: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
     const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
-    const AIRTABLE_BASE_ID = "app0PK34gyJDizR3Q";
+    const AIRTABLE_BASE_ID = "app22Bav0LsknYq69"; // Updated to user's new Airtable base
     const AIRTABLE_TABLE_ID = "tbljtdHPdHnTberDy";
 
     if (!AIRTABLE_API_TOKEN) {
@@ -353,7 +353,7 @@ export const createCompany: RequestHandler = async (req, res) => {
     }
 
     const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
-    const AIRTABLE_BASE_ID = "app0PK34gyJDizR3Q";
+    const AIRTABLE_BASE_ID = "app22Bav0LsknYq69"; // Updated to user's new Airtable base
     const AIRTABLE_TABLE_ID = "tbljtdHPdHnTberDy";
 
     if (!AIRTABLE_API_TOKEN) {
@@ -493,7 +493,7 @@ export const updateCompany: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
     const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
-    const AIRTABLE_BASE_ID = "app0PK34gyJDizR3Q";
+    const AIRTABLE_BASE_ID = "app22Bav0LsknYq69"; // Updated to user's new Airtable base
     const AIRTABLE_TABLE_ID = "tbljtdHPdHnTberDy";
 
     if (!AIRTABLE_API_TOKEN) {
@@ -596,7 +596,7 @@ export const deleteCompany: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
     const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
-    const AIRTABLE_BASE_ID = "app0PK34gyJDizR3Q";
+    const AIRTABLE_BASE_ID = "app22Bav0LsknYq69"; // Updated to user's new Airtable base
     const AIRTABLE_TABLE_ID = "tbljtdHPdHnTberDy";
 
     if (!AIRTABLE_API_TOKEN) {
@@ -1124,7 +1124,7 @@ export const markCompanyAsSold: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
     const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
-    const AIRTABLE_BASE_ID = "app0PK34gyJDizR3Q";
+    const AIRTABLE_BASE_ID = "app22Bav0LsknYq69"; // Updated to user's new Airtable base
     const AIRTABLE_TABLE_ID = "tbljtdHPdHnTberDy";
 
     if (!AIRTABLE_API_TOKEN) {
@@ -1229,7 +1229,7 @@ export const markCompanyAsSold: RequestHandler = async (req, res) => {
 // Helper: Sync company to Airtable (using original table and field mappings)
 async function syncCompanyToAirtable(company: CompanyData): Promise<void> {
   const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
-  const AIRTABLE_BASE_ID = "app0PK34gyJDizR3Q";
+  const AIRTABLE_BASE_ID = "app22Bav0LsknYq69"; // Updated to user's new Airtable base
   const AIRTABLE_TABLE_ID = "tbljtdHPdHnTberDy"; // Original table ID from user's Airtable
 
   if (!AIRTABLE_API_TOKEN) {
