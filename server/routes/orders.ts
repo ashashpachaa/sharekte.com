@@ -131,6 +131,7 @@ function getDemoOrders(): Order[] {
       transactionId: "",
       amount: 600,
       currency: "AED",
+      paymentDate: today,
       status: "pending-payment",
       statusChangedDate: today,
       statusHistory: [
