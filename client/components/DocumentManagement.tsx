@@ -52,6 +52,7 @@ export function DocumentManagement({ order, onDocumentsUpdated, isAdmin = false 
       return;
     }
 
+    console.log(`[DocumentManagement] Starting upload of ${selectedFiles.length} files for order ${order.id}`);
     setUploading(true);
     let successCount = 0;
     let failureCount = 0;
@@ -60,15 +61,19 @@ export function DocumentManagement({ order, onDocumentsUpdated, isAdmin = false 
     try {
       for (const file of selectedFiles) {
         try {
+          console.log(`[DocumentManagement] Uploading file: ${file.name} (${file.size} bytes)`);
           const updatedOrder = await uploadOrderDocument(currentOrder.id, file, visibility);
           currentOrder = updatedOrder;
           successCount++;
+          console.log(`[DocumentManagement] ✓ File uploaded: ${file.name}`);
         } catch (error) {
-          console.error(`Failed to upload ${file.name}:`, error);
+          console.error(`[DocumentManagement] Failed to upload ${file.name}:`, error);
+          toast.error(`Failed to upload ${file.name}: ${String(error)}`);
           failureCount++;
         }
       }
 
+      console.log(`[DocumentManagement] Upload complete. Success: ${successCount}, Failed: ${failureCount}`);
       onDocumentsUpdated(currentOrder);
       setSelectedFiles([]);
       setVisibility("both");
@@ -79,8 +84,8 @@ export function DocumentManagement({ order, onDocumentsUpdated, isAdmin = false 
         toast.error(`Uploaded ${successCount}, failed ${failureCount}`);
       }
     } catch (error) {
-      console.error("Failed to upload documents:", error);
-      toast.error("Failed to upload documents");
+      console.error("[DocumentManagement] Failed to upload documents:", error);
+      toast.error(`Failed to upload documents: ${String(error)}`);
     } finally {
       setUploading(false);
     }
