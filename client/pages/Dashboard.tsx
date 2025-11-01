@@ -1096,7 +1096,7 @@ Generated on: ${new Date().toLocaleDateString()}
               }`}
             >
               <ShoppingCart className="w-4 h-4 inline mr-2" />
-              My Orders
+              {t('dashboard.myOrders')}
             </button>
             <button
               onClick={() => setActiveTab("invoices")}
