@@ -343,7 +343,7 @@ export function CompanyTable({
               }}
             >
               <RefreshCw className="w-4 h-4 mr-2" />
-              Retry
+              {t('table.retry')}
             </Button>
           </div>
         ) : safeCompanies.length === 0 ? (
@@ -395,7 +395,7 @@ export function CompanyTable({
                       {company.optionsInclude.join(", ")}
                     </span>
                   ) : (
-                    <span className="text-gray-400">None</span>
+                    <span className="text-gray-400">{t('table.none')}</span>
                   )}
                 </TableCell>
                 <TableCell className="text-right">
@@ -411,11 +411,11 @@ export function CompanyTable({
                           onClick={() => onViewDetails?.(company)}
                         >
                           <Eye className="w-4 h-4 mr-2" />
-                          View Details
+                          {t('table.viewDetails')}
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => onEdit?.(company)}>
                           <Edit2 className="w-4 h-4 mr-2" />
-                          Edit
+                          {t('table.edit')}
                         </DropdownMenuItem>
                         {company.status !== "expired" &&
                           company.status !== "cancelled" && (
@@ -423,7 +423,7 @@ export function CompanyTable({
                               onClick={() => handleRenew(company.id)}
                             >
                               <RefreshCw className="w-4 h-4 mr-2" />
-                              Renew
+                              {t('table.renew')}
                             </DropdownMenuItem>
                           )}
                         {(company.status === "refunded" ||
@@ -454,7 +454,7 @@ export function CompanyTable({
                       className="gap-1"
                     >
                       <ShoppingCart className="w-4 h-4" />
-                      Add to Cart
+                      {t('table.addToCart')}
                     </Button>
                   )}
                 </TableCell>
