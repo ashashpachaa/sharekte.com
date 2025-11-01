@@ -226,6 +226,57 @@ export async function syncFormToTransferFormTable(form: TransferFormData): Promi
 }
 
 /**
+ * Fetch transfer forms from Airtable
+ * Returns forms with current status from Airtable
+ */
+export async function fetchFormsFromAirtable(): Promise<TransferFormData[]> {
+  try {
+    const baseId = process.env.AIRTABLE_BASE_ID || "app0PK34gyJDizR3Q";
+    const tableId = process.env.AIRTABLE_TABLE_TRANSFER_FORMS;
+
+    if (!tableId) {
+      console.warn("[fetchFormsFromAirtable] AIRTABLE_TABLE_TRANSFER_FORMS not configured");
+      return [];
+    }
+
+    const url = `${AIRTABLE_API_URL}/${baseId}/${tableId}`;
+    const response = await fetch(url, {
+      method: "GET",
+      headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+      console.error(`[fetchFormsFromAirtable] Failed to fetch: Status ${response.status}`);
+      return [];
+    }
+
+    const data = await response.json() as any;
+    const records = data.records || [];
+
+    console.log(`[fetchFormsFromAirtable] ✓ Fetched ${records.length} forms from Airtable`);
+
+    // Map Airtable records to TransferFormData structure
+    return records.map((record: any) => {
+      const fields = record.fields || {};
+      return {
+        id: record.id, // Use Airtable record ID as form ID
+        formId: fields["Form ID"] || "",
+        orderId: fields["Order Number"] || "",
+        status: fields["Status"] || "under-review",
+        companyName: fields["Company Name"] || "",
+        companyNumber: fields["Company Number"] || "",
+        country: fields["Country"] || "",
+        submittedAt: fields["Submitted Date"] || new Date().toISOString(),
+        // Note: Other fields are read from local DB, only status is synced from Airtable
+      };
+    });
+  } catch (error) {
+    console.error("[fetchFormsFromAirtable] Error:", error);
+    return [];
+  }
+}
+
+/**
  * Update form status in Airtable
  */
 export async function updateFormStatusInAirtable(
