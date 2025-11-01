@@ -354,17 +354,20 @@ export default function Dashboard() {
         const response = await fetch("/api/transfer-forms");
         if (response.ok) {
           const forms = await response.json();
+          console.log("[Dashboard Auto-Sync] Fetched forms:", forms.map(f => ({ name: f.companyName, status: f.status, orderId: f.orderId })));
 
           // Update purchasedCompanies status if any form status changed in Airtable
           setPurchasedCompanies((prevCompanies) =>
             prevCompanies.map((company) => {
-              // Find corresponding form for this company
+              // Find corresponding form - match by company name (most reliable)
               const correspondingForm = forms.find(
-                (f) => f.orderId === `order_${company.id}` || f.companyName === company.name
+                (f) => f.companyName && f.companyName.toLowerCase() === company.name.toLowerCase()
               );
 
-              if (correspondingForm && correspondingForm.status !== company.status) {
-                console.log(`[Auto-sync] Form status updated for ${company.name}: ${company.status} → ${correspondingForm.status}`);
+              console.log(`[Dashboard Auto-Sync] Looking for form for "${company.name}", found:`, correspondingForm?.companyName, "status:", correspondingForm?.status);
+
+              if (correspondingForm && correspondingForm.status && correspondingForm.status !== company.status) {
+                console.log(`[Dashboard Auto-Sync] Status change detected for ${company.name}: "${company.status}" → "${correspondingForm.status}"`);
                 // Update local state with new status
                 const updatedCompany = {
                   ...company,
@@ -380,7 +383,7 @@ export default function Dashboard() {
           );
         }
       } catch (error) {
-        // Silently fail on connection errors - don't spam console
+        console.error("[Dashboard Auto-Sync] Error:", error);
       }
     }, 3000); // Auto-refresh every 3 seconds
 
