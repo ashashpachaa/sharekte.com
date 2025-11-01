@@ -1,11 +1,15 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { CartDropdown } from "./CartDropdown";
 import { NotificationBell } from "./NotificationBell";
+import LanguageSwitcher from "./LanguageSwitcher";
 import { useCurrency } from "@/lib/currency-context";
 import { Globe } from "lucide-react";
 
 export function Header() {
+  const { t } = useTranslation();
   const { currency, setCurrency, rates } = useCurrency();
 
   return (
