@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { Order, OrderStatus, RefundStatus } from "../../client/lib/orders";
+import { Order, OrderStatus, RefundStatus, OrderDocument } from "../../client/lib/orders";
 import { syncOrderToAirtable, fetchOrdersFromAirtable, updateOrderStatusInAirtable } from "../utils/airtable-sync";
 
 const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
