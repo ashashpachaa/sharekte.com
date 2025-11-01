@@ -1052,6 +1052,14 @@ Generated on: ${new Date().toLocaleDateString()}
           color: "bg-purple-500/10 border-purple-500/30 text-purple-700",
           textColor: "text-purple-600",
         };
+      case "transferring":
+        return {
+          icon: "🔄",
+          headline: "Transfer in Progress",
+          description: "Your company transfer is currently in progress. The process typically takes 3-5 business days. You'll receive a notification once the transfer is complete.",
+          color: "bg-purple-500/10 border-purple-500/30 text-purple-700",
+          textColor: "text-purple-600",
+        };
       case "complete-transfer":
         return {
           icon: "✅",
