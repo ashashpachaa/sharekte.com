@@ -61,6 +61,7 @@ export const createTransferForm: RequestHandler = async (req, res) => {
       companyId,
       companyName,
       companyNumber,
+      country,
       incorporationDate,
       incorporationYear,
       totalShares,
@@ -89,6 +90,7 @@ export const createTransferForm: RequestHandler = async (req, res) => {
       companyId,
       companyName,
       companyNumber: companyNumber || "",
+      country: country || "",
       incorporationDate: incorporationDate || "",
       incorporationYear: incorporationYear || new Date().getFullYear(),
 
