@@ -1044,6 +1044,14 @@ Generated on: ${new Date().toLocaleDateString()}
           color: "bg-orange-500/10 border-orange-500/30 text-orange-700",
           textColor: "text-orange-600",
         };
+      case "confirm-application":
+        return {
+          icon: "⏳",
+          headline: "Awaiting Confirmation",
+          description: "Your transfer application is awaiting final confirmation. The admin team will review and confirm the application details shortly.",
+          color: "bg-blue-500/10 border-blue-500/30 text-blue-700",
+          textColor: "text-blue-600",
+        };
       case "pending-transfer":
         return {
           icon: "📤",
