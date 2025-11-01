@@ -23,10 +23,7 @@ WORKDIR /app
 # Copy package files
 COPY package.json pnpm-lock.yaml .npmrc /app/
 
-# Install pnpm and production dependencies
-RUN npm install -g pnpm && pnpm install --frozen-lockfile --prod
-
-# Copy built files and node_modules from builder
+# Copy everything from builder (dist + node_modules)
 COPY --from=builder /app/dist /app/dist
 COPY --from=builder /app/node_modules /app/node_modules
 
