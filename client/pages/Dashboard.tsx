@@ -2126,7 +2126,7 @@ Generated on: ${new Date().toLocaleDateString()}
                           </div>
 
                           {/* Transfer Form */}
-                          {company.status !== "completed" && company.status !== "complete-transfer" && (
+                          {company.status !== "completed" && (
                             <div>
                               {getStatusMessage(company.status) && (
                                 <div className={`border rounded-lg p-4 mb-4 ${getStatusMessage(company.status)?.color}`}>
