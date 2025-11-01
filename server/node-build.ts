@@ -64,11 +64,12 @@ app.get(/.*/, (req, res) => {
     return res.status(404).json({ error: "Not found" });
   }
 
-  const indexPath = path.join(distPath, "index.html");
+  const indexPath = path.join(spaDir, "index.html");
   if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath);
   } else {
-    res.status(404).json({ error: "SPA not found" });
+    console.warn("[startup] index.html not found at:", indexPath);
+    res.status(404).json({ error: "SPA index.html not found" });
   }
 });
 
