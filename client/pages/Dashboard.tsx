@@ -347,6 +347,46 @@ export default function Dashboard() {
     attachments: [] as Array<{ id: string; name: string; size: number; type: string; uploadedDate: string; base64Data: string }>,
   });
 
+  // Auto-refresh transfer form status from Airtable every 3 seconds
+  useEffect(() => {
+    const refreshInterval = setInterval(async () => {
+      try {
+        const response = await fetch("/api/transfer-forms");
+        if (response.ok) {
+          const forms = await response.json();
+
+          // Update purchasedCompanies status if any form status changed in Airtable
+          setPurchasedCompanies((prevCompanies) =>
+            prevCompanies.map((company) => {
+              // Find corresponding form for this company
+              const correspondingForm = forms.find(
+                (f) => f.orderId === `order_${company.id}` || f.companyName === company.name
+              );
+
+              if (correspondingForm && correspondingForm.status !== company.status) {
+                console.log(`[Auto-sync] Form status updated for ${company.name}: ${company.status} → ${correspondingForm.status}`);
+                // Update local state with new status
+                const updatedCompany = {
+                  ...company,
+                  status: correspondingForm.status,
+                };
+                // Persist to localStorage
+                savePurchasedCompany(updatedCompany);
+                return updatedCompany;
+              }
+
+              return company;
+            })
+          );
+        }
+      } catch (error) {
+        // Silently fail on connection errors - don't spam console
+      }
+    }, 3000); // Auto-refresh every 3 seconds
+
+    return () => clearInterval(refreshInterval);
+  }, []);
+
   // Services state (Marketplace)
   const [services] = useState<Service[]>([
     {
