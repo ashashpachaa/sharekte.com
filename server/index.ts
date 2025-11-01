@@ -219,29 +219,6 @@ export function createServer() {
   app.delete("/api/transfer-forms/:id/attachments/:attachmentId", deleteAttachment);
   app.get("/api/transfer-forms/:id/pdf", generatePDF);
 
-  // Debug endpoint - Test Airtable connection
-  app.get("/api/transfer-forms/debug/airtable-connection", async (req, res) => {
-    try {
-      const { fetchFormsFromAirtable } = await import("./utils/airtable-sync");
-      console.log("[DEBUG] Testing Airtable connection...");
-      const forms = await fetchFormsFromAirtable();
-      console.log("[DEBUG] Fetched forms from Airtable:", forms);
-      res.json({
-        success: true,
-        count: forms.length,
-        forms: forms,
-        timestamp: new Date().toISOString(),
-      });
-    } catch (error) {
-      console.error("[DEBUG] Error:", error);
-      res.status(500).json({
-        success: false,
-        error: String(error),
-        timestamp: new Date().toISOString(),
-      });
-    }
-  });
-
   // Invoice routes - Specific routes before parameterized ones
   app.get("/api/invoices/analytics/summary", getInvoiceAnalytics);
   app.get("/api/invoices/export/csv", exportCSV);
