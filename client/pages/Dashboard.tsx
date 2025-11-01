@@ -1025,6 +1025,54 @@ Generated on: ${new Date().toLocaleDateString()}
     }
   };
 
+  // Get status-specific message for transfer form status alerts
+  const getStatusMessage = (status: string) => {
+    switch (status) {
+      case "under-review":
+        return {
+          icon: "⏳",
+          headline: "Form Under Review",
+          description: "Your transfer form has been submitted and is currently under review by our admin team. You'll be able to edit it once they request amendments.",
+          color: "bg-blue-500/10 border-blue-500/30 text-blue-700",
+          textColor: "text-blue-600",
+        };
+      case "amend-required":
+        return {
+          icon: "✏️",
+          headline: "Amendments Required",
+          description: "The admin team has requested amendments to your transfer form. Please review their comments and update the form accordingly.",
+          color: "bg-orange-500/10 border-orange-500/30 text-orange-700",
+          textColor: "text-orange-600",
+        };
+      case "pending-transfer":
+        return {
+          icon: "📤",
+          headline: "Pending Transfer",
+          description: "Your transfer form has been approved and is now pending final transfer processing. The transfer should complete within 3-5 business days.",
+          color: "bg-purple-500/10 border-purple-500/30 text-purple-700",
+          textColor: "text-purple-600",
+        };
+      case "complete-transfer":
+        return {
+          icon: "✅",
+          headline: "Transfer Completed",
+          description: "Congratulations! The transfer of ownership has been completed successfully. Your company is now fully transferred.",
+          color: "bg-green-500/10 border-green-500/30 text-green-700",
+          textColor: "text-green-600",
+        };
+      case "completed":
+        return {
+          icon: "✅",
+          headline: "Transfer Completed",
+          description: "The company transfer process has been completed successfully.",
+          color: "bg-green-500/10 border-green-500/30 text-green-700",
+          textColor: "text-green-600",
+        };
+      default:
+        return null;
+    }
+  };
+
   // Portfolio data from actual purchased companies
   const ownedCompanies = purchasedCompanies.map((company) => ({
     id: company.id,
