@@ -37,13 +37,13 @@ export default function Checkout() {
         <Header />
         <div className="flex-1 flex items-center justify-center py-20 px-4">
           <div className="text-center space-y-8 max-w-lg">
-            <p className="text-muted-foreground">Your cart is empty</p>
+            <p className="text-muted-foreground">{t('cart.empty')}</p>
             <Button
               onClick={() => navigate("/")}
               className="gap-2"
             >
               <ArrowLeft className="w-4 h-4" />
-              Back to Shopping
+              {t('cart.continueShopping')}
             </Button>
           </div>
         </div>
@@ -341,7 +341,7 @@ export default function Checkout() {
       <section className="border-b border-border/40 py-8">
         <div className="container max-w-6xl mx-auto px-4">
           <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-            Checkout
+            {t('checkout.title')}
           </h1>
         </div>
       </section>
@@ -354,7 +354,7 @@ export default function Checkout() {
             <div className="lg:col-span-2 space-y-6">
               <div>
                 <h2 className="text-xl font-bold text-foreground mb-4">
-                  Order Summary
+                  {t('checkout.orderSummary')}
                 </h2>
                 <div className="space-y-3 bg-card border border-border/40 rounded-lg p-6">
                   {items.map((item) => (
@@ -395,7 +395,7 @@ export default function Checkout() {
                       }`}
                     >
                       <Mail className="w-4 h-4 inline mr-2" />
-                      Sign In
+                      {t('auth.signIn')}
                     </button>
                     <button
                       onClick={() => setAuthMode("signup")}
@@ -406,7 +406,7 @@ export default function Checkout() {
                       }`}
                     >
                       <User className="w-4 h-4 inline mr-2" />
-                      Create Account
+                      {t('auth.signUp')}
                     </button>
                   </div>
 
@@ -587,18 +587,18 @@ export default function Checkout() {
             {/* Order Summary Sidebar */}
             <div className="bg-card border border-border/40 rounded-lg p-6 h-fit sticky top-20">
               <h2 className="text-xl font-bold text-foreground mb-6">
-                Order Total
+                {t('checkout.orderSummary')}
               </h2>
 
               <div className="space-y-4 border-b border-border/40 pb-6 mb-6">
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Subtotal</span>
+                  <span className="text-muted-foreground">{t('checkout.subtotal')}</span>
                   <span className="font-semibold text-foreground">
                     {formatPrice(totalPrice)}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground">Tax (20%)</span>
+                  <span className="text-muted-foreground">{t('checkout.tax')}</span>
                   <span className="font-semibold text-foreground">
                     {formatPrice(taxAmount)}
                   </span>
@@ -606,7 +606,7 @@ export default function Checkout() {
               </div>
 
               <div className="flex justify-between mb-6">
-                <span className="text-lg font-bold text-foreground">Total</span>
+                <span className="text-lg font-bold text-foreground">{t('checkout.total')}</span>
                 <span className="text-2xl font-bold text-primary">
                   {formatPrice(finalTotal)}
                 </span>
