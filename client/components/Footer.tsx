@@ -92,7 +92,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-border/40 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            © {currentYear} BusinessCorp. All rights reserved.
+            © {currentYear} BusinessCorp. {t('common.all')} {t('common.search')}.
           </p>
           <div className="flex items-center gap-6">
             <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
