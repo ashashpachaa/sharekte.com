@@ -3,6 +3,9 @@ import { createServer } from "./index";
 import express from "express";
 import fs from "fs";
 
+// Ensure environment is production
+process.env.NODE_ENV = process.env.NODE_ENV || "production";
+
 const app = createServer();
 const port = process.env.PORT || 8080;
 
