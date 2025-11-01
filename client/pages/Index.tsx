@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
@@ -6,6 +7,8 @@ import { CompanyTable } from "@/components/CompanyTable";
 import { ArrowRight, TrendingUp, Users, Zap, Shield, BarChart3, Globe, CheckCircle2 } from "lucide-react";
 
 export default function Index() {
+  const { t } = useTranslation();
+
   const featuredCompanies = [
     {
       id: 1,
@@ -56,33 +59,56 @@ export default function Index() {
   const features = [
     {
       icon: Globe,
-      title: "Global Marketplace",
-      description: "Access thousands of verified, revenue-generating businesses from around the world."
+      title: t('homepage.featuresSection.feature1Title'),
+      description: t('homepage.featuresSection.feature1Desc')
     },
     {
       icon: TrendingUp,
-      title: "Transparent Metrics",
-      description: "Real financial data, growth trajectories, and proven business models you can analyze."
+      title: t('homepage.featuresSection.feature2Title'),
+      description: t('homepage.featuresSection.feature2Desc')
     },
     {
       icon: Shield,
-      title: "Secure Transactions",
-      description: "Escrow protection, legal documentation, and buyer safeguards on every purchase."
+      title: t('homepage.featuresSection.feature3Title'),
+      description: t('homepage.featuresSection.feature3Desc')
     },
     {
       icon: Users,
-      title: "Expert Support",
-      description: "Dedicated advisors guide you through due diligence and acquisition process."
+      title: t('homepage.featuresSection.feature4Title'),
+      description: t('homepage.featuresSection.feature4Desc')
     },
     {
       icon: BarChart3,
-      title: "Business Dashboard",
-      description: "Comprehensive analytics and management tools for the companies you own."
+      title: t('homepage.featuresSection.feature5Title'),
+      description: t('homepage.featuresSection.feature5Desc')
     },
     {
       icon: Zap,
-      title: "Instant Onboarding",
-      description: "Quick handoff and transition support to get your business running smoothly."
+      title: t('homepage.featuresSection.feature6Title'),
+      description: t('homepage.featuresSection.feature6Desc')
+    }
+  ];
+
+  const steps = [
+    {
+      step: "01",
+      title: t('homepage.howitworks.step1'),
+      description: t('homepage.howitworks.step1Desc')
+    },
+    {
+      step: "02",
+      title: t('homepage.howitworks.step2'),
+      description: t('homepage.howitworks.step2Desc')
+    },
+    {
+      step: "03",
+      title: t('homepage.howitworks.step3'),
+      description: t('homepage.howitworks.step3Desc')
+    },
+    {
+      step: "04",
+      title: t('homepage.howitworks.step4'),
+      description: t('homepage.howitworks.step4Desc')
     }
   ];
 
@@ -98,11 +124,11 @@ export default function Index() {
             <div className="space-y-8">
               <div className="space-y-4">
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
-                  Buy Established
-                  <span className="block text-primary">Businesses Today</span>
+                  {t('homepage.hero.title1')}
+                  <span className="block text-primary">{t('homepage.hero.title2')}</span>
                 </h1>
                 <p className="text-lg md:text-xl text-muted-foreground max-w-lg leading-relaxed">
-                  Discover and acquire proven, revenue-generating companies globally. Skip the startup phase and step into profitability.
+                  {t('homepage.hero.description')}
                 </p>
               </div>
 
@@ -113,7 +139,7 @@ export default function Index() {
                   asChild
                 >
                   <Link to="/dashboard" className="flex items-center gap-2">
-                    Start Browsing
+                    {t('homepage.hero.browseButton')}
                     <ArrowRight className="w-5 h-5" />
                   </Link>
                 </Button>
@@ -122,22 +148,22 @@ export default function Index() {
                   variant="outline"
                   className="h-12 px-8 rounded-lg font-semibold text-base"
                 >
-                  Watch Demo
+                  {t('homepage.hero.watchDemo')}
                 </Button>
               </div>
 
               <div className="grid grid-cols-3 gap-6 pt-8 border-t border-border/40">
                 <div>
                   <p className="text-2xl md:text-3xl font-bold text-primary">2500+</p>
-                  <p className="text-sm text-muted-foreground">Businesses Listed</p>
+                  <p className="text-sm text-muted-foreground">{t('homepage.hero.businessesListed')}</p>
                 </div>
                 <div>
                   <p className="text-2xl md:text-3xl font-bold text-primary">$4.2B</p>
-                  <p className="text-sm text-muted-foreground">GMV in 2024</p>
+                  <p className="text-sm text-muted-foreground">{t('homepage.hero.gmv')}</p>
                 </div>
                 <div>
                   <p className="text-2xl md:text-3xl font-bold text-primary">85%</p>
-                  <p className="text-sm text-muted-foreground">Buyer Satisfaction</p>
+                  <p className="text-sm text-muted-foreground">{t('homepage.hero.buyerSatisfaction')}</p>
                 </div>
               </div>
             </div>
@@ -153,7 +179,7 @@ export default function Index() {
                         <TrendingUp className="w-6 h-6" />
                       </div>
                       <div>
-                        <p className="font-semibold">Annual Revenue</p>
+                        <p className="font-semibold">{t('homepage.hero.annualRevenue')}</p>
                         <p className="text-2xl font-bold">$2.5M+</p>
                       </div>
                     </div>
@@ -162,7 +188,7 @@ export default function Index() {
                         <Users className="w-6 h-6" />
                       </div>
                       <div>
-                        <p className="font-semibold">Team Size</p>
+                        <p className="font-semibold">{t('homepage.hero.teamSize')}</p>
                         <p className="text-2xl font-bold">15+ Employees</p>
                       </div>
                     </div>
@@ -171,7 +197,7 @@ export default function Index() {
                         <BarChart3 className="w-6 h-6" />
                       </div>
                       <div>
-                        <p className="font-semibold">Average ROI</p>
+                        <p className="font-semibold">{t('homepage.hero.averageRoi')}</p>
                         <p className="text-2xl font-bold">44%</p>
                       </div>
                     </div>
@@ -188,10 +214,10 @@ export default function Index() {
         <div className="container max-w-6xl mx-auto px-4">
           <div className="text-center space-y-4 mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-              Browse All Companies
+              {t('homepage.browseSection.title')}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Explore our complete marketplace of verified businesses. Filter by country and incorporation year to find your perfect match.
+              {t('homepage.browseSection.description')}
             </p>
           </div>
           <CompanyTable />
@@ -203,10 +229,10 @@ export default function Index() {
         <div className="container max-w-6xl mx-auto px-4">
           <div className="text-center space-y-4 mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-              Featured Businesses
+              {t('homepage.featuredSection.title')}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Handpicked, profitable companies ready for immediate acquisition
+              {t('homepage.featuredSection.description')}
             </p>
           </div>
 
@@ -226,15 +252,15 @@ export default function Index() {
 
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Revenue</span>
+                      <span className="text-muted-foreground">{t('homepage.featuredSection.revenue')}</span>
                       <span className="font-semibold text-foreground">{company.revenue}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Industry</span>
+                      <span className="text-muted-foreground">{t('homepage.featuredSection.industry')}</span>
                       <span className="font-semibold text-foreground">{company.industry}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">ROI</span>
+                      <span className="text-muted-foreground">{t('homepage.featuredSection.roi')}</span>
                       <span className="font-semibold text-primary">{company.roi}</span>
                     </div>
                   </div>
@@ -243,7 +269,7 @@ export default function Index() {
                     className="w-full bg-primary hover:bg-primary-600 text-white"
                     asChild
                   >
-                    <Link to="/dashboard">View Details</Link>
+                    <Link to="/dashboard">{t('homepage.featuredSection.viewDetails')}</Link>
                   </Button>
                 </div>
               </div>
@@ -258,7 +284,7 @@ export default function Index() {
               asChild
             >
               <Link to="/dashboard" className="flex items-center gap-2">
-                Browse All Companies
+                {t('homepage.featuredSection.browseAll')}
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </Button>
@@ -271,10 +297,10 @@ export default function Index() {
         <div className="container max-w-6xl mx-auto px-4">
           <div className="text-center space-y-4 mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-              Everything You Need
+              {t('homepage.featuresSection.title')}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Comprehensive tools and support for acquiring and managing your businesses
+              {t('homepage.featuresSection.description')}
             </p>
           </div>
 
@@ -300,36 +326,15 @@ export default function Index() {
         <div className="container max-w-6xl mx-auto px-4">
           <div className="text-center space-y-4 mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-              How It Works
+              {t('homepage.howitworks.title')}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Simple steps to acquire your next business
+              {t('homepage.howitworks.description')}
             </p>
           </div>
 
           <div className="grid md:grid-cols-4 gap-6">
-            {[
-              {
-                step: "01",
-                title: "Browse",
-                description: "Explore our marketplace of verified, profitable businesses"
-              },
-              {
-                step: "02",
-                title: "Analyze",
-                description: "Review detailed financials, metrics, and business models"
-              },
-              {
-                step: "03",
-                title: "Negotiate",
-                description: "Work with our advisors to finalize terms with sellers"
-              },
-              {
-                step: "04",
-                title: "Manage",
-                description: "Access your dashboard and scale your business portfolio"
-              }
-            ].map((item, index) => (
+            {steps.map((item, index) => (
               <div key={index} className="relative">
                 <div className="space-y-4">
                   <div className="text-4xl font-bold text-primary/20">{item.step}</div>
@@ -353,10 +358,10 @@ export default function Index() {
           <div className="bg-gradient-to-r from-primary to-primary-600 rounded-2xl p-12 md:p-16 text-white text-center space-y-8">
             <div className="space-y-4">
               <h2 className="text-3xl md:text-4xl font-bold">
-                Ready to Own Your Next Business?
+                {t('homepage.cta.title')}
               </h2>
               <p className="text-lg text-white/90 max-w-2xl mx-auto">
-                Join thousands of entrepreneurs building their portfolio of profitable companies
+                {t('homepage.cta.description')}
               </p>
             </div>
 
@@ -366,7 +371,7 @@ export default function Index() {
               asChild
             >
               <Link to="/dashboard" className="flex items-center gap-2">
-                Start Your Journey
+                {t('homepage.cta.button')}
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </Button>
