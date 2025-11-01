@@ -102,7 +102,7 @@ export function TransferFormManagement({ orderId }: TransferFormManagementProps)
 
       if (newForms.length > 0) {
         const message = newForms.length === 1
-          ? `New transfer form: ${newForms[0].formId} from ${newForms[0].buyerName}`
+          ? `New transfer form: ${newForms[0].formId} for ${newForms[0].companyName}`
           : `${newForms.length} new transfer forms received`;
 
         const lastNotificationTime = localStorage.getItem("lastTransferFormNotification");
