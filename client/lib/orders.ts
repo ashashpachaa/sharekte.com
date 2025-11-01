@@ -246,17 +246,24 @@ export async function uploadOrderDocument(
   file: File,
   visibility: "admin" | "user" | "both"
 ): Promise<Order> {
+  console.log(`[uploadOrderDocument] Converting file to base64: ${file.name}`);
+
   // Convert file to base64 for JSON transmission (works better with serverless)
   const fileData = await new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => {
       const result = reader.result as string;
+      console.log(`[uploadOrderDocument] File converted, size: ${result.length} bytes`);
       resolve(result);
     };
-    reader.onerror = reject;
+    reader.onerror = () => {
+      console.error(`[uploadOrderDocument] Failed to read file: ${file.name}`);
+      reject(new Error("Failed to read file"));
+    };
     reader.readAsDataURL(file);
   });
 
+  console.log(`[uploadOrderDocument] Sending POST request to /api/orders/${orderId}/documents`);
   const response = await fetch(`/api/orders/${orderId}/documents`, {
     method: "POST",
     headers: {
@@ -271,12 +278,17 @@ export async function uploadOrderDocument(
     }),
   });
 
+  console.log(`[uploadOrderDocument] Response status: ${response.status}`);
+
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({ error: "Unknown error" }));
-    throw new Error(errorData.error || "Failed to upload document");
+    console.error(`[uploadOrderDocument] Upload failed:`, errorData);
+    throw new Error(errorData.error || `Failed to upload document: ${response.statusText}`);
   }
 
-  return response.json();
+  const result = await response.json();
+  console.log(`[uploadOrderDocument] ✓ Document uploaded successfully`);
+  return result;
 }
 
 /**
