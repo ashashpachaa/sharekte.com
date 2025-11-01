@@ -1079,8 +1079,8 @@ Generated on: ${new Date().toLocaleDateString()}
       case "complete-transfer":
         return {
           icon: "✅",
-          headline: "Transfer Completed",
-          description: "Congratulations! The transfer of ownership has been completed successfully. Your company is now fully transferred.",
+          headline: "Transfer Successfully Completed",
+          description: "The company ownership transfer has been successfully finalized. All documentation has been processed and filed with the relevant authorities. You now have full ownership and control of the company.",
           color: "bg-green-500/10 border-green-500/30 text-green-700",
           textColor: "text-green-600",
         };
