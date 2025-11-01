@@ -978,6 +978,13 @@ Generated on: ${new Date().toLocaleDateString()}
           bgLight: "bg-green-50",
           label: "Completed",
         };
+      case "complete-transfer":
+        return {
+          color: "bg-green-100 text-green-800",
+          icon: CheckCircle,
+          bgLight: "bg-green-50",
+          label: "Completed Transfer",
+        };
       default:
         return {
           color: "bg-gray-100 text-gray-800",
@@ -1373,7 +1380,7 @@ Generated on: ${new Date().toLocaleDateString()}
                                           : "bg-red-100 text-red-800"
                                     }`}
                                   >
-                                    {invoice.status === "paid" && "✓ Paid"}
+                                    {invoice.status === "paid" && "�� Paid"}
                                     {invoice.status === "unpaid" && "⏳ Unpaid"}
                                     {invoice.status === "canceled" && "✗ Canceled"}
                                   </div>
