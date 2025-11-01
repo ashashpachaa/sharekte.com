@@ -1,15 +1,34 @@
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { Button } from "./ui/button";
 import { CartDropdown } from "./CartDropdown";
 import { NotificationBell } from "./NotificationBell";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useCurrency } from "@/lib/currency-context";
-import { Globe } from "lucide-react";
+import { Globe, LogOut, User } from "lucide-react";
 
 export function Header() {
   const { t } = useTranslation();
   const { currency, setCurrency, rates } = useCurrency();
+  const navigate = useNavigate();
+  const [showUserMenu, setShowUserMenu] = useState(false);
+
+  // Get user from localStorage
+  const user = (() => {
+    try {
+      const stored = localStorage.getItem("user");
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
+  })();
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setShowUserMenu(false);
+    navigate("/");
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
