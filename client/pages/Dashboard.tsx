@@ -2006,19 +2006,20 @@ Generated on: ${new Date().toLocaleDateString()}
                                   incorporationYear={parseInt(company.incorporationYear) || new Date().getFullYear()}
                                   onSuccess={() => {
                                     toast.success("Transfer form submitted successfully and is now under review!");
-                                    // Update company status to under-review and mark form as filled
-                                    updatePurchasedCompanyStatus(company.id, "under-review", "Under Review - Transfer Form");
+                                    // Update company object with new status and form filled flag
+                                    const updatedCompany = {
+                                      ...company,
+                                      status: "under-review" as const,
+                                      transferFormFilled: true,
+                                      statusLabel: "Under Review - Transfer Form"
+                                    };
+
+                                    // Save the updated company to localStorage to persist both status and transferFormFilled
+                                    savePurchasedCompany(updatedCompany);
 
                                     // Update local state to reflect the status change immediately
                                     const updatedCompanies = purchasedCompanies.map(c =>
-                                      c.id === company.id
-                                        ? {
-                                            ...c,
-                                            status: "under-review" as const,
-                                            transferFormFilled: true,
-                                            statusLabel: "Under Review - Transfer Form"
-                                          }
-                                        : c
+                                      c.id === company.id ? updatedCompany : c
                                     );
                                     // Force component to re-render with updated companies
                                     setPurchasedCompanies(updatedCompanies);
