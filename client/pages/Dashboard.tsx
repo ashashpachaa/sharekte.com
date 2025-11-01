@@ -1084,6 +1084,14 @@ Generated on: ${new Date().toLocaleDateString()}
           color: "bg-green-500/10 border-green-500/30 text-green-700",
           textColor: "text-green-600",
         };
+      case "canceled":
+        return {
+          icon: "❌",
+          headline: "Transfer Canceled",
+          description: "The transfer process for this company has been canceled. Please contact support if you need further assistance.",
+          color: "bg-red-500/10 border-red-500/30 text-red-700",
+          textColor: "text-red-600",
+        };
       default:
         return null;
     }
