@@ -7,7 +7,7 @@ WORKDIR /app
 RUN npm install -g pnpm@10.14.0
 
 # Copy package files
-COPY pnpm-lock.yaml package.json .pnpmfile.cjs ./
+COPY pnpm-lock.yaml package.json ./
 
 # Install dependencies
 RUN pnpm install --frozen-lockfile
@@ -27,7 +27,7 @@ WORKDIR /app
 RUN npm install -g pnpm@10.14.0
 
 # Copy package files
-COPY pnpm-lock.yaml package.json .pnpmfile.cjs ./
+COPY pnpm-lock.yaml package.json ./
 
 # Install only production dependencies
 RUN pnpm install --frozen-lockfile --prod
