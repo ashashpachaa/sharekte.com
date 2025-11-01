@@ -609,34 +609,50 @@ export const uploadOrderDocument: RequestHandler = async (req, res) => {
     const { orderId } = req.params;
     const { file, fileName, fileType, fileSize, visibility = "both" } = req.body;
 
+    console.log(`[uploadOrderDocument] Uploading document for order: ${orderId}, file: ${fileName}`);
+
     if (!file || !fileName) {
+      console.error("[uploadOrderDocument] Missing file or fileName:", { file: !!file, fileName });
       return res.status(400).json({ error: "No file provided" });
+    }
+
+    if (!file.trim()) {
+      console.error("[uploadOrderDocument] File data is empty");
+      return res.status(400).json({ error: "File data is empty" });
     }
 
     // Find the order
     let allOrders = getDemoOrders();
     if (AIRTABLE_API_TOKEN) {
-      const airtableOrders = await fetchOrdersFromAirtable();
-      if (airtableOrders.length > 0) {
-        allOrders = [...airtableOrders, ...inMemoryOrders];
+      try {
+        const airtableOrders = await fetchOrdersFromAirtable();
+        if (airtableOrders.length > 0) {
+          allOrders = [...airtableOrders, ...inMemoryOrders];
+        }
+      } catch (airtableError) {
+        console.error("[uploadOrderDocument] Failed to fetch from Airtable, using fallback:", airtableError);
       }
     }
     allOrders = [...allOrders, ...inMemoryOrders];
 
     const currentOrder = allOrders.find((o) => o.id === orderId || o.orderId === orderId);
     if (!currentOrder) {
+      console.error(`[uploadOrderDocument] Order not found: ${orderId}`);
+      console.error(`[uploadOrderDocument] Available order IDs:`, allOrders.map((o) => o.id || o.orderId));
       return res.status(404).json({ error: "Order not found" });
     }
 
+    console.log(`[uploadOrderDocument] Found order: ${currentOrder.orderId}`);
+
     // Create document object with base64 file data
-    const document = {
+    const document: OrderDocument = {
       id: `doc_${Date.now()}`,
       name: fileName,
       type: fileType || "application/octet-stream",
       size: fileSize || 0,
       fileData: file, // Store base64 encoded file data
       uploadedDate: new Date().toISOString(),
-      uploadedBy: "user",
+      uploadedBy: "admin",
       visibility: visibility as "admin" | "user" | "both",
       version: 1,
     };
@@ -648,16 +664,21 @@ export const uploadOrderDocument: RequestHandler = async (req, res) => {
       updatedAt: new Date().toISOString(),
     };
 
+    console.log(`[uploadOrderDocument] Added document to order. Total documents: ${updatedOrder.documents.length}`);
+
     // Update in-memory storage
     const inMemIndex = inMemoryOrders.findIndex((o) => o.id === orderId || o.orderId === orderId);
     if (inMemIndex >= 0) {
       inMemoryOrders[inMemIndex] = updatedOrder;
+      console.log(`[uploadOrderDocument] Updated in-memory order`);
     }
 
     // Sync to Airtable if configured and record exists
     if (currentOrder.airtableId && AIRTABLE_API_TOKEN) {
       try {
         const url = `${AIRTABLE_API_URL}/${AIRTABLE_BASE_ID}/${AIRTABLE_ORDERS_TABLE}/${currentOrder.airtableId}`;
+        console.log(`[uploadOrderDocument] Syncing to Airtable: ${url}`);
+
         await fetch(url, {
           method: "PATCH",
           headers: {
@@ -678,15 +699,18 @@ export const uploadOrderDocument: RequestHandler = async (req, res) => {
             },
           }),
         });
+        console.log(`[uploadOrderDocument] ✓ Synced to Airtable`);
       } catch (airtableError) {
-        console.error("Failed to sync document to Airtable:", airtableError);
+        console.error("[uploadOrderDocument] Failed to sync document to Airtable:", airtableError);
+        // Don't fail the request, Airtable sync is optional
       }
     }
 
+    console.log(`[uploadOrderDocument] ✓ Document uploaded successfully`);
     res.json(updatedOrder);
   } catch (error) {
-    console.error("Failed to upload document:", error);
-    res.status(500).json({ error: "Failed to upload document" });
+    console.error("[uploadOrderDocument] Error:", error);
+    res.status(500).json({ error: "Failed to upload document", details: String(error) });
   }
 };
 
