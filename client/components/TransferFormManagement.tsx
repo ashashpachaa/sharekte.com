@@ -123,14 +123,12 @@ export function TransferFormManagement({ orderId }: TransferFormManagementProps)
   };
 
   const filteredForms = forms.filter((form) => {
-    const matchesSearch = 
+    const matchesSearch =
       form.formId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      form.companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      form.buyerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      form.buyerEmail.toLowerCase().includes(searchQuery.toLowerCase());
-    
+      form.companyName.toLowerCase().includes(searchQuery.toLowerCase());
+
     const matchesStatus = filterStatus === "all" || form.status === filterStatus;
-    
+
     return matchesSearch && matchesStatus;
   });
 
