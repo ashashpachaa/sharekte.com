@@ -192,9 +192,6 @@ export async function syncFormToTransferFormTable(form: TransferFormData): Promi
         "Status": form.status,
         "Form ID": form.formId,
         "Submitted Date": formatDateForAirtable(form.submittedAt || form.createdAt),
-        // Store form data as readable text for Airtable
-        "Form Data": JSON.stringify(formSummary, null, 2),
-        "Download Link": `${process.env.APP_URL || 'http://localhost:8080'}/api/transfer-forms/${form.id}/pdf`,
       },
     };
 
