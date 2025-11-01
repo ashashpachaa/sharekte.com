@@ -61,6 +61,12 @@ export const getTransferForms: RequestHandler = async (req, res) => {
       // Use Airtable forms directly when local DB is empty
       result = airtableForms;
       console.log("[getTransferForms] Using Airtable forms directly (no local forms)");
+      console.log("[getTransferForms] Forms data:", result.map(f => ({
+        id: f.id,
+        companyName: f.companyName,
+        status: f.status,
+        orderId: f.orderId
+      })));
     }
 
     if (orderId) {
