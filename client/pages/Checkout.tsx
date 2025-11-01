@@ -12,6 +12,7 @@ import { savePurchasedCompany, addInvoice, type PurchasedCompanyData, type Invoi
 import { createOrder } from "@/lib/orders";
 
 export default function Checkout() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { formatPrice, convertPrice, currency } = useCurrency();
   const { items, clearCart, totalPrice } = useCart();
