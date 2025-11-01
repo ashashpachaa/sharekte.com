@@ -2002,6 +2002,7 @@ Generated on: ${new Date().toLocaleDateString()}
                                   companyId={company.id}
                                   companyName={company.name}
                                   companyNumber={company.number || ""}
+                                  country={company.country || ""}
                                   incorporationDate={company.incorporationDate || ""}
                                   incorporationYear={parseInt(company.incorporationYear) || new Date().getFullYear()}
                                   onSuccess={() => {
