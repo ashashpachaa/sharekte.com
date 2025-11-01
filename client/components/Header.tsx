@@ -23,17 +23,17 @@ export function Header() {
         </Link>
 
         {/* Navigation */}
-        <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-          <Link to="/" className="text-foreground hover:text-primary transition-colors">
+        <nav className="hidden md:flex items-center gap-6 text-sm font-medium whitespace-nowrap">
+          <Link to="/" className="text-foreground hover:text-primary transition-colors truncate">
             {t("header.home")}
           </Link>
-          <Link to="/companies" className="text-foreground hover:text-primary transition-colors">
+          <Link to="/companies" className="text-foreground hover:text-primary transition-colors truncate">
             {t("header.companies")}
           </Link>
-          <a href="#features" className="text-foreground hover:text-primary transition-colors">
+          <a href="#features" className="text-foreground hover:text-primary transition-colors truncate">
             Features
           </a>
-          <Link to="/support" className="text-foreground hover:text-primary transition-colors">
+          <Link to="/support" className="text-foreground hover:text-primary transition-colors truncate">
             {t("header.support")}
           </Link>
         </nav>
