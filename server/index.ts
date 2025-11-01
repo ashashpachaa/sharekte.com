@@ -67,7 +67,9 @@ import {
 } from "./routes/invoices";
 
 export function createServer() {
+  console.log("[createServer] Initializing Express app");
   const app = express();
+  console.log("[createServer] Express app created");
 
   // Middleware
   app.use(cors());
