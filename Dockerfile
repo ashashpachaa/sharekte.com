@@ -20,12 +20,10 @@ FROM node:22-alpine
 
 WORKDIR /app
 
-# Copy package files and dist from builder
-COPY package.json pnpm-lock.yaml .npmrc /app/
+# Copy everything from builder
+COPY --from=builder /app/package.json /app/pnpm-lock.yaml /app/.npmrc /app/
 COPY --from=builder /app/dist /app/dist
-
-# Install pnpm and production dependencies only
-RUN npm install -g pnpm && pnpm install --frozen-lockfile --prod
+COPY --from=builder /app/node_modules /app/node_modules
 
 # Set environment
 ENV NODE_ENV=production
