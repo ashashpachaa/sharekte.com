@@ -1054,9 +1054,9 @@ Generated on: ${new Date().toLocaleDateString()}
         };
       case "confirm-application":
         return {
-          icon: "⏳",
-          headline: "Awaiting Confirmation",
-          description: "Your transfer application is awaiting final confirmation. The admin team will review and confirm the application details shortly.",
+          icon: "✔️",
+          headline: "Application Ready for Confirmation",
+          description: "Your transfer application has passed the review process and is ready for final confirmation. Our team will process the confirmation and initiate the transfer within 1-2 business days.",
           color: "bg-blue-500/10 border-blue-500/30 text-blue-700",
           textColor: "text-blue-600",
         };
