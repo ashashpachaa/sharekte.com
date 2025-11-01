@@ -72,7 +72,7 @@ try {
     console.log(`[startup] Health check: http://localhost:${port}/health`);
     console.log(`[startup] API: http://localhost:${port}/api`);
   });
-  
+
   server.on("error", (error) => {
     console.error("[startup] Server error:", error);
     process.exit(1);
