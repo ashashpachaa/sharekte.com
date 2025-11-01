@@ -2108,7 +2108,7 @@ Generated on: ${new Date().toLocaleDateString()}
                               )}
                               <Button
                                 onClick={() => setShowTransferForm(company.id)}
-                                disabled={company.transferFormFilled && company.status !== "amend-required"}
+                                disabled={company.transferFormFilled && company.status !== "amend-required" || company.status === "complete-transfer" || company.status === "completed"}
                                 className="w-full bg-primary hover:bg-primary-600 text-white gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                               >
                                 <FileUp className="w-4 h-4" />
@@ -2116,9 +2116,13 @@ Generated on: ${new Date().toLocaleDateString()}
                                   ? "Edit Transfer Form (Amendments Required)"
                                   : company.status === "under-review"
                                     ? "Form Under Review - Cannot Edit"
-                                    : company.transferFormFilled
-                                      ? "Edit Transfer Form"
-                                      : "Fill Transfer Form"}
+                                    : company.status === "pending-transfer"
+                                      ? "Transfer in Progress - Cannot Edit"
+                                      : company.status === "complete-transfer" || company.status === "completed"
+                                        ? "Transfer Completed - View Form"
+                                        : company.transferFormFilled
+                                          ? "Edit Transfer Form"
+                                          : "Fill Transfer Form"}
                               </Button>
                             </div>
                           )}
