@@ -666,20 +666,26 @@ export const uploadOrderDocument: RequestHandler = async (req, res) => {
 
     console.log(`[uploadOrderDocument] Added document to order. Total documents: ${updatedOrder.documents.length}`);
 
-    // Update in-memory storage
+    // Update in-memory storage FIRST (this is our source of truth for persistence)
     const inMemIndex = inMemoryOrders.findIndex((o) => o.id === orderId || o.orderId === orderId);
     if (inMemIndex >= 0) {
+      // Update existing in-memory order
       inMemoryOrders[inMemIndex] = updatedOrder;
-      console.log(`[uploadOrderDocument] Updated in-memory order`);
+      console.log(`[uploadOrderDocument] Updated existing in-memory order`);
+    } else {
+      // Add new in-memory order if not found
+      inMemoryOrders.push(updatedOrder);
+      console.log(`[uploadOrderDocument] Added new in-memory order`);
     }
 
     // Sync to Airtable if configured and record exists
+    let airtableSyncSuccess = false;
     if (currentOrder.airtableId && AIRTABLE_API_TOKEN) {
       try {
         const url = `${AIRTABLE_API_URL}/${AIRTABLE_BASE_ID}/${AIRTABLE_ORDERS_TABLE}/${currentOrder.airtableId}`;
         console.log(`[uploadOrderDocument] Syncing to Airtable: ${url}`);
 
-        await fetch(url, {
+        const airtableResponse = await fetch(url, {
           method: "PATCH",
           headers: {
             Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
@@ -699,10 +705,16 @@ export const uploadOrderDocument: RequestHandler = async (req, res) => {
             },
           }),
         });
-        console.log(`[uploadOrderDocument] ✓ Synced to Airtable`);
+
+        if (airtableResponse.ok) {
+          console.log(`[uploadOrderDocument] ✓ Synced to Airtable`);
+          airtableSyncSuccess = true;
+        } else {
+          console.error(`[uploadOrderDocument] Airtable sync failed: ${airtableResponse.status} ${airtableResponse.statusText}`);
+        }
       } catch (airtableError) {
         console.error("[uploadOrderDocument] Failed to sync document to Airtable:", airtableError);
-        // Don't fail the request, Airtable sync is optional
+        // Document is safe in in-memory, don't fail the request
       }
     }
 
