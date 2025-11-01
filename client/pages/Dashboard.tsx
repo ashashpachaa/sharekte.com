@@ -1111,13 +1111,13 @@ Generated on: ${new Date().toLocaleDateString()}
             </button>
             <button
               onClick={() => setActiveTab("marketplace")}
-              className={`py-4 px-1 font-semibold transition-colors whitespace-nowrap ${
+              className={`py-4 px-1 font-semibold transition-colors whitespace-nowrap flex items-center gap-2 ${
                 activeTab === "marketplace"
                   ? "text-primary border-b-2 border-primary"
                   : "text-muted-foreground hover:text-foreground border-b-2 border-transparent"
               }`}
             >
-              <Package className="w-4 h-4 inline mr-2" />
+              <Package className="w-4 h-4 flex-shrink-0" />
               {t('dashboard.marketplace')}
             </button>
             <button
