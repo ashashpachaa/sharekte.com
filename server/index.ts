@@ -80,6 +80,40 @@ export function createServer() {
     res.json({ message: ping });
   });
 
+  // Health check endpoint for monitoring
+  app.get("/health", (_req, res) => {
+    res.json({
+      status: "ok",
+      timestamp: new Date().toISOString(),
+      airtableConfigured: !!process.env.AIRTABLE_API_TOKEN,
+    });
+  });
+
+  // Deep health check with dependencies
+  app.get("/api/health", async (_req, res) => {
+    try {
+      const airtableConfigured = !!process.env.AIRTABLE_API_TOKEN;
+      const health = {
+        status: "ok",
+        timestamp: new Date().toISOString(),
+        server: "running",
+        airtableConfigured,
+        environment: {
+          NODE_ENV: process.env.NODE_ENV || "development",
+          PORT: process.env.PORT || 8080,
+        },
+      };
+      res.json(health);
+    } catch (error) {
+      console.error("[/api/health] Error:", error);
+      res.status(500).json({
+        status: "error",
+        error: "Health check failed",
+        timestamp: new Date().toISOString(),
+      });
+    }
+  });
+
   app.get("/api/demo", handleDemo);
 
   // Company routes
