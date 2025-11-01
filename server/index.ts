@@ -184,6 +184,29 @@ export function createServer() {
   app.get("/api/transfer-forms", getTransferForms);
   app.post("/api/transfer-forms", createTransferForm);
 
+  // Debug endpoint - Test Airtable connection
+  app.get("/api/transfer-forms/debug/airtable-connection", async (req, res) => {
+    try {
+      const { fetchFormsFromAirtable } = await import("./utils/airtable-sync");
+      console.log("[DEBUG] Testing Airtable connection...");
+      const forms = await fetchFormsFromAirtable();
+      console.log("[DEBUG] Fetched forms from Airtable:", forms);
+      res.json({
+        success: true,
+        count: forms.length,
+        forms: forms,
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error) {
+      console.error("[DEBUG] Error:", error);
+      res.status(500).json({
+        success: false,
+        error: String(error),
+        timestamp: new Date().toISOString(),
+      });
+    }
+  });
+
   app.get("/api/transfer-forms/:id", getTransferForm);
   app.patch("/api/transfer-forms/:id", updateTransferForm);
   app.delete("/api/transfer-forms/:id", deleteTransferForm);
