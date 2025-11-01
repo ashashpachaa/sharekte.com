@@ -1089,13 +1089,13 @@ Generated on: ${new Date().toLocaleDateString()}
             </button>
             <button
               onClick={() => setActiveTab("orders")}
-              className={`py-4 px-1 font-semibold transition-colors whitespace-nowrap ${
+              className={`py-4 px-1 font-semibold transition-colors whitespace-nowrap flex items-center gap-2 ${
                 activeTab === "orders"
                   ? "text-primary border-b-2 border-primary"
                   : "text-muted-foreground hover:text-foreground border-b-2 border-transparent"
               }`}
             >
-              <ShoppingCart className="w-4 h-4 inline mr-2" />
+              <ShoppingCart className="w-4 h-4 flex-shrink-0" />
               {t('dashboard.myOrders')}
             </button>
             <button
