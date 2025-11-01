@@ -37,7 +37,8 @@ try {
 
 // In production, serve the built SPA files
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const distPath = path.join(__dirname, "../dist/spa");
+// distPath should be relative to where the server is running (project root)
+const distPath = path.resolve(process.cwd(), "dist/spa");
 
 console.log("[startup] SPA path:", distPath);
 console.log("[startup] SPA exists:", fs.existsSync(distPath));
