@@ -1085,7 +1085,7 @@ Generated on: ${new Date().toLocaleDateString()}
               }`}
             >
               <Building2 className="w-4 h-4 inline mr-2" />
-              My Companies
+              {t('dashboard.myCompanies')}
             </button>
             <button
               onClick={() => setActiveTab("orders")}
