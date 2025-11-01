@@ -1107,7 +1107,7 @@ Generated on: ${new Date().toLocaleDateString()}
               }`}
             >
               <FileText className="w-4 h-4 inline mr-2" />
-              Invoices
+              {t('dashboard.invoices')}
             </button>
             <button
               onClick={() => setActiveTab("marketplace")}
