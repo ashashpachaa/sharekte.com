@@ -6,9 +6,17 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { formatDistanceToNow } from "date-fns";
 
 export function NotificationBell() {
-  const { notifications, unreadCount, markAsRead, markAllAsRead, clearAll } =
+  const { notifications, unreadCount, markAsRead, markAllAsRead, clearAll, removeNotification } =
     useNotifications();
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleNotificationClick = (id: string) => {
+    markAsRead(id);
+    // Remove notification after 300ms (smooth UX)
+    setTimeout(() => {
+      removeNotification(id);
+    }, 300);
+  };
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
@@ -85,7 +93,7 @@ export function NotificationBell() {
                       className={`p-4 hover:bg-muted/50 transition-colors cursor-pointer ${
                         !notification.read ? "bg-primary/5" : ""
                       }`}
-                      onClick={() => markAsRead(notification.id)}
+                      onClick={() => handleNotificationClick(notification.id)}
                     >
                       <div className="flex items-start gap-3">
                         {getNotificationIcon(notification.type)}
