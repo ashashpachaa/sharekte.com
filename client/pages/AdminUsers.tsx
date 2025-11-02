@@ -376,6 +376,29 @@ export default function AdminUsers() {
                 </div>
               </div>
 
+              {/* Role */}
+              <div className="space-y-3">
+                <h3 className="font-semibold text-foreground">User Role</h3>
+                <select
+                  value={selectedUser.role}
+                  onChange={(e) => {
+                    updateUserRole(selectedUser.id, e.target.value as any);
+                    refreshUsers();
+                    const updated = getAllUsers().find((u) => u.id === selectedUser.id);
+                    if (updated) setSelectedUser(updated);
+                    toast.success("Role updated");
+                  }}
+                  className="w-full px-3 py-2 border border-input rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                >
+                  <option value="client">Client</option>
+                  <option value="admin">Admin</option>
+                  <option value="super-admin">Super Admin</option>
+                  <option value="administrations">Administrations</option>
+                  <option value="operations">Operations</option>
+                  <option value="accounting">Accounting</option>
+                </select>
+              </div>
+
               {/* Status */}
               <div className="space-y-3">
                 <h3 className="font-semibold text-foreground">Account Status</h3>
