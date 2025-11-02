@@ -528,15 +528,12 @@ export default function AdminOrders() {
                               onClick={() => {
                                 setSelectedOrder(order);
                                 setShowDetailsModal(true);
-                                // Mark notification as read when viewing details
-                                if (isOrderNew(order.id)) {
-                                  markAsRead(`order-${order.id}`);
-                                  setNotifiedOrderIds((prev) => {
-                                    const updated = new Set(prev);
-                                    updated.delete(order.id);
-                                    return updated;
-                                  });
-                                }
+                                // Hide notification badge when viewing order
+                                setNotifiedOrderIds((prev) => {
+                                  const updated = new Set(prev);
+                                  updated.delete(order.id);
+                                  return updated;
+                                });
                               }}
                             >
                               <Eye className="w-4 h-4" />
