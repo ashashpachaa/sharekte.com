@@ -17,9 +17,13 @@ i18n.use(initReactI18next).init({
   resources,
   lng: localStorage.getItem("language") || "en",
   fallbackLng: "en",
+  ns: ["translation"],
+  defaultNS: "translation",
   interpolation: {
     escapeValue: false,
   },
+  returnNull: false,
+  returnEmptyString: false,
 });
 
 // Handle language change - update HTML attributes for RTL
