@@ -141,6 +141,7 @@ export function createUser(userData: Partial<UserAccount>): UserAccount {
     company: userData.company,
     companyLinks: userData.companyLinks || [],
     accountStatus: "active",
+    role: userData.role || "client",
     registrationDate: userData.registrationDate || now,
     notes: userData.notes,
     invoices: userData.invoices || [],
@@ -151,4 +152,19 @@ export function createUser(userData: Partial<UserAccount>): UserAccount {
 
   saveUser(user);
   return user;
+}
+
+/**
+ * Update user role
+ */
+export function updateUserRole(
+  userId: string,
+  role: "client" | "super-admin" | "admin" | "administrations" | "operations" | "accounting"
+): void {
+  const user = getUser(userId);
+  if (user) {
+    user.role = role;
+    user.updatedAt = new Date().toISOString();
+    saveUser(user);
+  }
 }
