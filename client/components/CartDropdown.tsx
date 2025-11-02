@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 export function CartDropdown() {
   const { t } = useTranslation();
   const { items, removeItem, totalPrice } = useCart();
-  const { currency } = useCurrency();
+  const { formatPrice } = useCurrency();
   const cartCount = items.length;
 
   return (
