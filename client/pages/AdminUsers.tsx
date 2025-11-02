@@ -50,6 +50,7 @@ export default function AdminUsers() {
     email: "",
     phone: "",
     company: "",
+    role: "client" as const,
   });
 
   useEffect(() => {
