@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAdmin } from "@/lib/admin-context";
 import { getAllUsers, searchUsers } from "@/lib/user-management";
 import { Button } from "@/components/ui/button";
-import { Users, Settings, LogOut, BarChart3, AlertCircle, Building2, ShoppingCart, FileText, Shield } from "lucide-react";
+import { Users, Settings, LogOut, BarChart3, AlertCircle, Building2, ShoppingCart, FileText, Shield, Mail } from "lucide-react";
 
 export default function AdminDashboard() {
   const { currentAdmin, isAdmin, logout } = useAdmin();
@@ -214,6 +214,25 @@ export default function AdminDashboard() {
             >
               <Link to="/admin/roles">
                 Manage Roles
+              </Link>
+            </Button>
+          </div>
+
+          {/* Email Templates */}
+          <div className="bg-card border border-border/40 rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <Mail className="w-5 h-5" />
+              Email Templates
+            </h3>
+            <p className="text-muted-foreground text-sm mb-4">
+              Manage and preview all system email templates
+            </p>
+            <Button
+              className="w-full bg-cyan-600 hover:bg-cyan-700 text-white"
+              asChild
+            >
+              <Link to="/admin/email-templates">
+                Manage Templates
               </Link>
             </Button>
           </div>
