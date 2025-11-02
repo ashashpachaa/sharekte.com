@@ -36,19 +36,37 @@ try {
 }
 
 // In production, serve the built SPA files
+// Try multiple possible paths for SPA directory (works in all environments)
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const spaDir = path.resolve(__dirname, "../dist/spa");
+const possiblePaths = [
+  // Path 1: Relative to server directory (dist/server/../spa = dist/spa)
+  path.resolve(__dirname, "../spa"),
+  // Path 2: Relative to cwd (for Docker, Hostinger, Fly.io)
+  path.resolve(process.cwd(), "dist/spa"),
+  // Path 3: Absolute in case cwd is different
+  path.resolve("/var/www/sharekte.com/dist/spa"),
+  path.resolve("/app/dist/spa"),
+];
+
+let spaDir = null;
+for (const p of possiblePaths) {
+  if (fs.existsSync(p)) {
+    spaDir = p;
+    console.log(`[startup] ✓ Found SPA at: ${p}`);
+    break;
+  }
+}
 
 console.log("[startup] NODE_ENV:", process.env.NODE_ENV);
-console.log("[startup] SPA directory:", spaDir);
-console.log("[startup] SPA exists:", fs.existsSync(spaDir));
+console.log("[startup] CWD:", process.cwd());
+console.log("[startup] Tried SPA paths:", possiblePaths);
+console.log("[startup] SPA directory found:", spaDir ? "YES" : "NO");
 
-// Check what's in SPA directory
-if (fs.existsSync(spaDir)) {
+// Serve static assets
+if (spaDir && fs.existsSync(spaDir)) {
   const spaContents = fs.readdirSync(spaDir);
   console.log("[startup] SPA contents:", spaContents);
 
-  // Serve static assets
   app.use(
     express.static(spaDir, {
       maxAge: "1d",
@@ -57,7 +75,8 @@ if (fs.existsSync(spaDir)) {
   );
   console.log("[startup] ✓ SPA static files configured");
 } else {
-  console.warn("[startup] ⚠️  SPA directory not found at:", spaDir);
+  console.warn("[startup] ⚠️  SPA directory not found!");
+  console.warn("[startup] Tried paths:", possiblePaths);
 }
 
 // Handle React Router - serve index.html for all non-API routes
@@ -67,12 +86,20 @@ app.get(/.*/, (req, res) => {
     return res.status(404).json({ error: "Not found" });
   }
 
+  if (!spaDir) {
+    console.error("[get/*] SPA directory not found!");
+    return res.status(503).json({ error: "SPA directory not configured" });
+  }
+
   const indexPath = path.join(spaDir, "index.html");
+  console.log(`[get/${req.path}] Serving SPA from: ${indexPath}`);
+
   if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath);
   } else {
-    console.warn("[startup] index.html not found at:", indexPath);
-    res.status(404).json({ error: "SPA index.html not found" });
+    console.error("[get/*] index.html not found at:", indexPath);
+    console.error("[get/*] SPA directory contents:", fs.readdirSync(spaDir));
+    res.status(404).json({ error: "SPA index.html not found at " + indexPath });
   }
 });
 
