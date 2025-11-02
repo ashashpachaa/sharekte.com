@@ -91,7 +91,18 @@ async function getDemoResponse(messages: GroqMessage[]): Promise<string> {
       (userMessage.includes("where is") && userMessage.includes("order")) ||
       userMessage.includes("track order") ||
       (userMessage.includes("already have") && userMessage.includes("order"))) {
-    return "Great! You already have an order with us. 🎉\n\nWhat would you like to do?\n• Check order status\n• Track your order\n• Modify order details\n• Ask about next steps\n• Or anything else?\n\nLet me know how I can help!";
+
+    // Check if we already have order number and email in conversation
+    const hasOrderNumber = messages.some(m => /order.*number|order.*id|order.*#|#\d{6,}|\d{6,}/i.test(m.content));
+    const hasEmail = messages.some(m => /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/.test(m.content));
+
+    if (!hasOrderNumber) {
+      return "Great! I can help you with your order. 📦\n\nFirst, could you please provide your **order number**? (It usually looks like: ORD-123456)";
+    } else if (!hasEmail) {
+      return "Thank you! Now, could you please provide the **email address** associated with your order? This will help me look up the details.";
+    } else {
+      return "Perfect! I have your order number and email. Let me look that up for you...\n\nWhat would you like to know about your order?\n• Order status\n• Delivery/Timeline\n• Order details\n• Make changes\n• Or anything else?";
+    }
   }
 
   // Fetch real company data for intelligent responses
