@@ -5,7 +5,13 @@ import { Input } from "@/components/ui/input";
 import { X, Send, MessageCircle, Loader, Plus } from "lucide-react";
 
 export function AIChat() {
-  const { currentSession, isLoading, sendMessage, startNewSession, addMessage } = useAIChat();
+  const {
+    currentSession,
+    isLoading,
+    sendMessage,
+    startNewSession,
+    addMessage,
+  } = useAIChat();
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -42,7 +48,7 @@ export function AIChat() {
 
     addMessage(
       `My information:\nName: ${customerData.name}\nEmail: ${customerData.email}\nPhone: ${customerData.phone}`,
-      "user"
+      "user",
     );
     setShowCustomerForm(false);
     setCustomerData({ name: "", email: "", phone: "" });
@@ -106,7 +112,9 @@ export function AIChat() {
                   : "bg-muted text-foreground rounded-bl-none"
               }`}
             >
-              <p className="text-sm whitespace-pre-wrap break-words">{msg.content}</p>
+              <p className="text-sm whitespace-pre-wrap break-words">
+                {msg.content}
+              </p>
               <p className="text-xs opacity-70 mt-1">
                 {msg.timestamp.toLocaleTimeString([], {
                   hour: "2-digit",
@@ -162,11 +170,7 @@ export function AIChat() {
               className="text-sm"
             />
             <div className="flex gap-2">
-              <Button
-                type="submit"
-                size="sm"
-                className="flex-1 text-xs"
-              >
+              <Button type="submit" size="sm" className="flex-1 text-xs">
                 Save
               </Button>
               <Button

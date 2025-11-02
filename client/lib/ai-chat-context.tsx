@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, useCallback, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  ReactNode,
+} from "react";
 
 export interface Message {
   id: string;
@@ -25,7 +31,7 @@ interface AIChatContextType {
   currentSession: ChatSession | null;
   isLoading: boolean;
   error: string | null;
-  
+
   // Actions
   startNewSession: (title?: string) => void;
   selectSession: (sessionId: string) => void;
@@ -45,7 +51,8 @@ export function AIChatProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const currentSession = sessions.find((s) => s.id === currentSessionId) || null;
+  const currentSession =
+    sessions.find((s) => s.id === currentSessionId) || null;
 
   const startNewSession = useCallback((title?: string) => {
     const newSession: ChatSession = {
@@ -92,10 +99,10 @@ export function AIChatProvider({ children }: { children: ReactNode }) {
             };
           }
           return session;
-        })
+        }),
       );
     },
-    [currentSessionId]
+    [currentSessionId],
   );
 
   const sendMessage = useCallback(
@@ -137,7 +144,7 @@ export function AIChatProvider({ children }: { children: ReactNode }) {
         setIsLoading(false);
       }
     },
-    [currentSessionId, currentSession, addMessage]
+    [currentSessionId, currentSession, addMessage],
   );
 
   const updateCustomerData = useCallback(
@@ -155,10 +162,10 @@ export function AIChatProvider({ children }: { children: ReactNode }) {
             };
           }
           return session;
-        })
+        }),
       );
     },
-    [currentSessionId]
+    [currentSessionId],
   );
 
   const saveSession = useCallback(async () => {
@@ -191,12 +198,15 @@ export function AIChatProvider({ children }: { children: ReactNode }) {
     }
   }, [currentSession]);
 
-  const deleteSession = useCallback((sessionId: string) => {
-    setSessions((prev) => prev.filter((s) => s.id !== sessionId));
-    if (currentSessionId === sessionId) {
-      setCurrentSessionId(sessions[0]?.id || null);
-    }
-  }, [currentSessionId, sessions]);
+  const deleteSession = useCallback(
+    (sessionId: string) => {
+      setSessions((prev) => prev.filter((s) => s.id !== sessionId));
+      if (currentSessionId === sessionId) {
+        setCurrentSessionId(sessions[0]?.id || null);
+      }
+    },
+    [currentSessionId, sessions],
+  );
 
   const clearError = useCallback(() => {
     setError(null);

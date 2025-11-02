@@ -46,20 +46,23 @@ async function callGroqAPI(messages: GroqMessage[]): Promise<string> {
   }
 
   try {
-    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${GROQ_API_KEY}`,
-        "Content-Type": "application/json",
+    const response = await fetch(
+      "https://api.groq.com/openai/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${GROQ_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: GROQ_MODEL,
+          messages,
+          temperature: 0.7,
+          max_tokens: 1024,
+          top_p: 1,
+        }),
       },
-      body: JSON.stringify({
-        model: GROQ_MODEL,
-        messages,
-        temperature: 0.7,
-        max_tokens: 1024,
-        top_p: 1,
-      }),
-    });
+    );
 
     if (!response.ok) {
       const error = await response.text();
@@ -80,21 +83,27 @@ async function callGroqAPI(messages: GroqMessage[]): Promise<string> {
 }
 
 async function getDemoResponse(messages: GroqMessage[]): Promise<string> {
-  const userMessage = messages[messages.length - 1]?.content.toLowerCase() || "";
+  const userMessage =
+    messages[messages.length - 1]?.content.toLowerCase() || "";
 
   // Check if user is talking about an EXISTING order
-  if ((userMessage.includes("i have") && userMessage.includes("order")) ||
-      (userMessage.includes("i got") && userMessage.includes("order")) ||
-      userMessage.includes("my order") ||
-      userMessage.includes("order status") ||
-      userMessage.includes("check my order") ||
-      (userMessage.includes("where is") && userMessage.includes("order")) ||
-      userMessage.includes("track order") ||
-      (userMessage.includes("already have") && userMessage.includes("order"))) {
-
+  if (
+    (userMessage.includes("i have") && userMessage.includes("order")) ||
+    (userMessage.includes("i got") && userMessage.includes("order")) ||
+    userMessage.includes("my order") ||
+    userMessage.includes("order status") ||
+    userMessage.includes("check my order") ||
+    (userMessage.includes("where is") && userMessage.includes("order")) ||
+    userMessage.includes("track order") ||
+    (userMessage.includes("already have") && userMessage.includes("order"))
+  ) {
     // Check if we already have order number and email in conversation
-    const hasOrderNumber = messages.some(m => /order.*number|order.*id|order.*#|#\d{6,}|\d{6,}/i.test(m.content));
-    const hasEmail = messages.some(m => /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/.test(m.content));
+    const hasOrderNumber = messages.some((m) =>
+      /order.*number|order.*id|order.*#|#\d{6,}|\d{6,}/i.test(m.content),
+    );
+    const hasEmail = messages.some((m) =>
+      /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/.test(m.content),
+    );
 
     if (!hasOrderNumber) {
       return "Great! I can help you with your order. 📦\n\nFirst, could you please provide your **order number**? (It usually looks like: ORD-123456)";
@@ -120,7 +129,9 @@ async function getDemoResponse(messages: GroqMessage[]): Promise<string> {
     }>;
 
     if (Array.isArray(companies) && companies.length > 0) {
-      const countries = [...new Set(companies.map(c => c.country).filter(Boolean))];
+      const countries = [
+        ...new Set(companies.map((c) => c.country).filter(Boolean)),
+      ];
 
       companyContext = `Available countries: ${countries.join(", ")}. Total companies: ${companies.length}`;
 
@@ -138,11 +149,19 @@ async function getDemoResponse(messages: GroqMessage[]): Promise<string> {
         // Look back in conversation to find which country was asked about
         for (let i = messages.length - 2; i >= 0; i--) {
           const prevMsg = messages[i].content.toLowerCase();
-          if (prevMsg.includes("which **incorporation year**") || prevMsg.includes("incorporation year")) {
+          if (
+            prevMsg.includes("which **incorporation year**") ||
+            prevMsg.includes("incorporation year")
+          ) {
             // Found the question message, now look before it for country
             for (let j = i - 1; j >= 0; j--) {
               const countryMsg = messages[j].content.toLowerCase();
-              if (countryMsg.includes("united kingdom") || countryMsg.includes("uk") || countryMsg.includes("england") || countryMsg.includes("britain")) {
+              if (
+                countryMsg.includes("united kingdom") ||
+                countryMsg.includes("uk") ||
+                countryMsg.includes("england") ||
+                countryMsg.includes("britain")
+              ) {
                 targetCountry = "United Kingdom";
                 break;
               }
@@ -160,14 +179,18 @@ async function getDemoResponse(messages: GroqMessage[]): Promise<string> {
 
         // If we found country and year, show a random company matching both
         if (targetCountry && targetYear) {
-          const matchingCompanies = companies.filter(c =>
-            (c.country?.toLowerCase().includes(targetCountry.toLowerCase()) ||
-             c.country?.toLowerCase() === targetCountry.toLowerCase()) &&
-            c.incorporationYear === targetYear
+          const matchingCompanies = companies.filter(
+            (c) =>
+              (c.country?.toLowerCase().includes(targetCountry.toLowerCase()) ||
+                c.country?.toLowerCase() === targetCountry.toLowerCase()) &&
+              c.incorporationYear === targetYear,
           );
 
           if (matchingCompanies.length > 0) {
-            const company = matchingCompanies[Math.floor(Math.random() * matchingCompanies.length)];
+            const company =
+              matchingCompanies[
+                Math.floor(Math.random() * matchingCompanies.length)
+              ];
             const symbol = targetCountry === "United Kingdom" ? "£" : "$";
             return `Perfect! Here's an available company from ${targetYear} in ${targetCountry}:\n\n💼 **${company.companyName}**\n📌 Company Number: ${company.companyNumber}\n💰 Price: ${symbol}${company.purchasePrice || "Contact for quote"}\n\n⚡ **Do you want to buy it now?** It will take only **1 minute** to start the transfer and take ownership of this company!`;
           }
@@ -175,16 +198,26 @@ async function getDemoResponse(messages: GroqMessage[]): Promise<string> {
       }
 
       // Check for country-specific queries
-      if (userMessage.includes("united kingdom") || userMessage.includes(" uk") || userMessage.includes("england") || userMessage.includes("britain")) {
-        const ukCompanies = companies.filter(c =>
-          c.country?.toLowerCase().includes("united kingdom") ||
-          c.country?.toLowerCase().includes("uk") ||
-          c.country?.toLowerCase().includes("england")
+      if (
+        userMessage.includes("united kingdom") ||
+        userMessage.includes(" uk") ||
+        userMessage.includes("england") ||
+        userMessage.includes("britain")
+      ) {
+        const ukCompanies = companies.filter(
+          (c) =>
+            c.country?.toLowerCase().includes("united kingdom") ||
+            c.country?.toLowerCase().includes("uk") ||
+            c.country?.toLowerCase().includes("england"),
         );
 
         if (ukCompanies.length > 0) {
           // Get available years in UK companies
-          const availableYears = [...new Set(ukCompanies.map(c => c.incorporationYear).filter(Boolean))].sort((a, b) => (b as number) - (a as number));
+          const availableYears = [
+            ...new Set(
+              ukCompanies.map((c) => c.incorporationYear).filter(Boolean),
+            ),
+          ].sort((a, b) => (b as number) - (a as number));
 
           return `Yes, we have! 🎯\n\nWhich **incorporation year** are you looking for?\n\nAvailable years: ${availableYears.join(", ")}`;
         } else {
@@ -195,10 +228,18 @@ async function getDemoResponse(messages: GroqMessage[]): Promise<string> {
       // Check for other country queries
       for (const country of countries) {
         if (userMessage.includes(country.toLowerCase())) {
-          const countryCompanies = companies.filter(c => c.country?.toLowerCase() === country.toLowerCase());
+          const countryCompanies = companies.filter(
+            (c) => c.country?.toLowerCase() === country.toLowerCase(),
+          );
           if (countryCompanies.length > 0) {
             // Get available years
-            const availableYears = [...new Set(countryCompanies.map(c => c.incorporationYear).filter(Boolean))].sort((a, b) => (b as number) - (a as number));
+            const availableYears = [
+              ...new Set(
+                countryCompanies
+                  .map((c) => c.incorporationYear)
+                  .filter(Boolean),
+              ),
+            ].sort((a, b) => (b as number) - (a as number));
 
             return `Yes, we have! 🎯\n\nWhich **incorporation year** are you looking for?\n\nAvailable years: ${availableYears.join(", ")}`;
           }
@@ -211,15 +252,19 @@ async function getDemoResponse(messages: GroqMessage[]): Promise<string> {
 
   // Fallback responses if no specific country match
   const demoResponses: Record<string, string> = {
-    "hello": "Hello! 👋 Welcome to Sharekte. I'm an AI sales assistant here to help you explore our company marketplace. What are you looking for today?",
-    "company": `We have a great selection of ready-made companies for sale. ${companyContext ? `Currently available in: ${companyContext}. ` : ""}Which country interests you?`,
-    "price": "Our companies range from $500 to $100,000+ depending on the company type and jurisdiction. Would you like to see some options in a specific country?",
-    "yes": "Excellent! 🎉 Let me help you get started.\n\nPlease provide your contact information using the form above (name, email, phone), and I'll guide you through the quick 1-minute transfer process.\n\nOnce you confirm, we'll begin the ownership transfer immediately!",
-    "buy": "Great choice! 🚀 This is an excellent opportunity.\n\nClick the **'Add to Cart'** button or tell me your email, and I'll prepare everything for your transfer. The entire process takes just 1 minute!",
-    "order": "I can help you place a new order! Which country are you interested in?",
-    "checkout": "To proceed with checkout, I'll need your contact information first. Please fill out the form above with your name, email, and phone number.",
-    "how": "Our process is simple: 1) Choose a country, 2) Pick incorporation year, 3) Select company, 4) Add to cart, 5) Provide info, 6) Complete payment (1 min transfer!). Ready to start?",
-    "help": "I'm here to help! Ask me about: companies by country, incorporation years, pricing, how buying works, or anything else. What interests you?",
+    hello:
+      "Hello! 👋 Welcome to Sharekte. I'm an AI sales assistant here to help you explore our company marketplace. What are you looking for today?",
+    company: `We have a great selection of ready-made companies for sale. ${companyContext ? `Currently available in: ${companyContext}. ` : ""}Which country interests you?`,
+    price:
+      "Our companies range from $500 to $100,000+ depending on the company type and jurisdiction. Would you like to see some options in a specific country?",
+    yes: "Excellent! 🎉 Let me help you get started.\n\nPlease provide your contact information using the form above (name, email, phone), and I'll guide you through the quick 1-minute transfer process.\n\nOnce you confirm, we'll begin the ownership transfer immediately!",
+    buy: "Great choice! 🚀 This is an excellent opportunity.\n\nClick the **'Add to Cart'** button or tell me your email, and I'll prepare everything for your transfer. The entire process takes just 1 minute!",
+    order:
+      "I can help you place a new order! Which country are you interested in?",
+    checkout:
+      "To proceed with checkout, I'll need your contact information first. Please fill out the form above with your name, email, and phone number.",
+    how: "Our process is simple: 1) Choose a country, 2) Pick incorporation year, 3) Select company, 4) Add to cart, 5) Provide info, 6) Complete payment (1 min transfer!). Ready to start?",
+    help: "I'm here to help! Ask me about: companies by country, incorporation years, pricing, how buying works, or anything else. What interests you?",
   };
 
   for (const [keyword, response] of Object.entries(demoResponses)) {
@@ -249,7 +294,7 @@ async function fetchCompaniesContext(): Promise<string> {
       .slice(0, 10)
       .map(
         (c) =>
-          `- ${c.companyName || c.id}: Located in ${c.country}, Price: $${c.purchasePrice || "Contact for price"}`
+          `- ${c.companyName || c.id}: Located in ${c.country}, Price: $${c.purchasePrice || "Contact for price"}`,
       )
       .join("\n");
 
@@ -265,7 +310,7 @@ async function saveConversationToAirtable(
   customerEmail: string,
   customerName: string,
   customerPhone: string,
-  messages: ChatMessage[]
+  messages: ChatMessage[],
 ): Promise<void> {
   const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
   const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID || "app0PK34gyJDizR3Q";
@@ -292,7 +337,7 @@ async function saveConversationToAirtable(
                 "Customer Name": customerName,
                 "Customer Email": customerEmail,
                 "Customer Phone": customerPhone,
-                "Conversation": messages
+                Conversation: messages
                   .map((m) => `${m.role.toUpperCase()}: ${m.content}`)
                   .join("\n\n"),
                 "Message Count": messages.length,
@@ -301,7 +346,7 @@ async function saveConversationToAirtable(
             },
           ],
         }),
-      }
+      },
     );
 
     if (!response.ok) {
@@ -359,7 +404,7 @@ export const handleChat: RequestHandler = async (req, res) => {
         customerData.email,
         customerData.name || "Unknown",
         customerData.phone || "Not provided",
-        allMessages
+        allMessages,
       );
     }
 
@@ -391,7 +436,7 @@ export const handleSaveSession: RequestHandler = async (req, res) => {
       session.customerEmail || "Unknown",
       session.customerName || "Unknown",
       session.customerPhone || "Not provided",
-      session.messages
+      session.messages,
     );
 
     res.json({ success: true, sessionId: session.id });
