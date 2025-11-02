@@ -127,10 +127,11 @@ export default function AdminUsers() {
       email: newUserData.email,
       phone: newUserData.phone,
       company: newUserData.company,
+      role: newUserData.role,
     });
 
     refreshUsers();
-    setNewUserData({ name: "", email: "", phone: "", company: "" });
+    setNewUserData({ name: "", email: "", phone: "", company: "", role: "client" });
     setShowNewUserModal(false);
     toast.success("User created");
   };
