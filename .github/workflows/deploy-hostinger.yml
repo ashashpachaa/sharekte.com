@@ -19,7 +19,7 @@ jobs:
           port: ${{ secrets.HOSTINGER_PORT }}
           script: |
             cd /var/www/sharekte.com
-            echo "✅ Deploying sharekte.com..."
+            echo "🚀 Deploying sharekte.com to Hostinger VPS..."
 
             # Pull latest code from GitHub
             echo "📥 Pulling latest code from GitHub..."
@@ -35,22 +35,20 @@ jobs:
             echo "🔨 Building application..."
             npm run build
 
-            # Kill old process
-            echo "🛑 Stopping old server..."
-            pkill -f "node dist/server/node-build.mjs" || true
-            sleep 2
-
-            # Start new process in background
-            echo "🚀 Starting new server..."
-            nohup npm start > /var/log/sharekte.log 2>&1 &
+            # Use PM2 for process management
+            echo "🛑 Restarting application with PM2..."
+            pm2 restart sharekte || pm2 start ecosystem.config.js
 
             # Wait for server to start
             sleep 3
 
             # Check if server is running
+            echo "🏥 Performing health check..."
             if curl -f http://localhost:8080/health > /dev/null 2>&1; then
               echo "✅ Deploy successful! Server is running."
+              pm2 save
             else
               echo "❌ Deploy failed! Health check didn't pass."
+              pm2 logs sharekte
               exit 1
             fi
