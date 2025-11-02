@@ -40,6 +40,7 @@ export default function AdminOrders() {
   const { toast } = useToast();
   const { addNotification } = useNotifications();
   const [notifiedOrderIds, setNotifiedOrderIds] = useState<Set<string>>(new Set());
+  const [viewedOrderIds, setViewedOrderIds] = useState<Set<string>>(new Set());
   const [orders, setOrders] = useState<Order[]>([]);
   const [newOrdersCount, setNewOrdersCount] = useState(0);
   const [newFormsCount, setNewFormsCount] = useState(0);
