@@ -15,10 +15,12 @@ export function Footer() {
               to="/"
               className="flex items-center gap-2 font-bold text-lg text-primary mb-4"
             >
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white font-bold">
-                BC
-              </div>
-              <span>BusinessCorp</span>
+              <img
+                src="https://cdn.builder.io/api/v1/image/assets%2F752b1abf9cc241c993361e9dcaee5153%2Fd9d4a64693d843b1a53386d5a7c2937e?format=webp&width=100"
+                alt="Sharekte"
+                className="h-8"
+              />
+              <span>Sharekte</span>
             </Link>
             <p className="text-sm text-muted-foreground">
               Global marketplace for buying and selling established,
@@ -129,7 +131,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-border/40 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            © {currentYear} BusinessCorp. {t("common.all")}{" "}
+            © {currentYear} Sharekte. {t("common.all")}{" "}
             {t("common.search")}.
           </p>
           <div className="flex items-center gap-6">

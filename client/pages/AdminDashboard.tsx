@@ -35,7 +35,7 @@ export default function AdminDashboard() {
       <header className="sticky top-0 z-50 border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container max-w-7xl mx-auto flex h-16 items-center justify-between px-4">
           <div>
-            <h1 className="text-2xl font-bold text-primary">BusinessCorp Admin</h1>
+            <h1 className="text-2xl font-bold text-primary">Sharekte Admin</h1>
             <p className="text-xs text-muted-foreground">
               {currentAdmin.name} ({currentAdmin.role.replace("-", " ").toUpperCase()})
             </p>

@@ -38,10 +38,12 @@ export function Header() {
           to="/"
           className="flex items-center gap-2 font-bold text-xl text-primary"
         >
-          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-white font-bold">
-            BC
-          </div>
-          <span className="hidden sm:inline">BusinessCorp</span>
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets%2F752b1abf9cc241c993361e9dcaee5153%2Fd9d4a64693d843b1a53386d5a7c2937e?format=webp&width=100"
+            alt="Sharekte"
+            className="h-8"
+          />
+          <span className="hidden sm:inline">Sharekte</span>
         </Link>
 
         {/* Navigation */}
