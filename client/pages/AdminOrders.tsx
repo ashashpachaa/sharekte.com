@@ -30,6 +30,7 @@ import {
   FileText,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useNotifications } from "@/lib/notifications-context";
 
 type FilterStatus = "all" | OrderStatus;
 
@@ -37,8 +38,8 @@ export default function AdminOrders() {
   const { isAdmin } = useAdmin();
   const navigate = useNavigate();
   const { toast } = useToast();
-
-  const [orders, setOrders] = useState<Order[]>([]);
+  const { addNotification, markAsRead } = useNotifications();
+  const [notifiedOrderIds, setNotifiedOrderIds] = useState<Set<string>>(new Set());
   const [newOrdersCount, setNewOrdersCount] = useState(0);
   const [newFormsCount, setNewFormsCount] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
