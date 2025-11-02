@@ -42,7 +42,7 @@ interface GroqMessage {
 async function callGroqAPI(messages: GroqMessage[]): Promise<string> {
   if (!GROQ_API_KEY) {
     console.warn("[Groq] API key not configured, using demo mode");
-    return await getDemoResponse(messages);
+    return await getDemoResponse(messages, currency);
   }
 
   try {
@@ -68,7 +68,7 @@ async function callGroqAPI(messages: GroqMessage[]): Promise<string> {
       const error = await response.text();
       console.error("[Groq API Error]", error);
       console.warn("[Groq] Falling back to demo mode due to API error");
-      return await getDemoResponse(messages);
+      return await getDemoResponse(messages, currency);
     }
 
     const data = (await response.json()) as {
@@ -78,7 +78,7 @@ async function callGroqAPI(messages: GroqMessage[]): Promise<string> {
   } catch (error) {
     console.error("[Groq API Error]", error);
     console.warn("[Groq] Falling back to demo mode due to error");
-    return await getDemoResponse(messages);
+    return await getDemoResponse(messages, currency);
   }
 }
 
@@ -206,7 +206,7 @@ async function getDemoResponse(
                 Math.floor(Math.random() * matchingCompanies.length)
               ];
             const symbol = getCurrencySymbol(currency);
-            return `Perfect! Here's an available company from ${targetYear} in ${targetCountry}:\n\n💼 **${company.companyName}**\n📌 Company Number: ${company.companyNumber}\n💰 Price: ${symbol}${company.purchasePrice || "Contact for quote"}\n\n⚡ **Do you want to buy it now?** It will take only **1 minute** to start the transfer and take ownership of this company!`;
+            return `Perfect! Here's an available company from ${targetYear} in ${targetCountry}:\n\n💼 **${company.companyName}**\n📌 Company Number: ${company.companyNumber}\n💰 Price: ${symbol}${company.purchasePrice || "Contact for quote"}\n\n�� **Do you want to buy it now?** It will take only **1 minute** to start the transfer and take ownership of this company!`;
           } else if (countryCompanies.length > 0) {
             // User asked for a year but it's not available - show available years
             const availableYears = [
