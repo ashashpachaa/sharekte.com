@@ -59,7 +59,7 @@ export function CartDropdown() {
                         #{item.companyNumber}
                       </p>
                       <p className="text-sm font-bold text-primary mt-2">
-                        £{item.price.toLocaleString()}
+                        {formatPrice(item.price)}
                       </p>
                     </div>
                     <button
