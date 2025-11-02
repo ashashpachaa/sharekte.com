@@ -205,7 +205,7 @@ async function getDemoResponse(messages: GroqMessage[]): Promise<string> {
     }
   }
 
-  return `Thanks for your question! ${companyContext ? `We currently have companies in: ${companyContext}. ` : ""}You can ask me about companies by country, pricing, how to place an order, or anything else about Sharekte. How can I assist you?`;
+  return `Thanks for your question! 😊\n\n${companyContext ? `We currently have companies in: ${companyContext}.\n\n` : ""}Which country interests you? I can show you available companies with incorporation years and pricing. It only takes 1 minute to transfer ownership!`;
 }
 
 async function fetchCompaniesContext(): Promise<string> {
