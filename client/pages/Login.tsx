@@ -75,11 +75,10 @@ export default function Login() {
               <LogIn className="w-8 h-8 text-primary" />
             </div>
             <h1 className="text-3xl font-bold text-foreground">
-              {t("auth.login.title") || "Sign In"}
+              Sign In
             </h1>
             <p className="text-muted-foreground">
-              {t("auth.login.subtitle") ||
-                "Access your account to manage orders and companies"}
+              Access your account to manage orders and companies
             </p>
           </div>
 
