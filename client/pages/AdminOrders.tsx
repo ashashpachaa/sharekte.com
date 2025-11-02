@@ -529,12 +529,14 @@ export default function AdminOrders() {
                               onClick={() => {
                                 setSelectedOrder(order);
                                 setShowDetailsModal(true);
-                                // Hide notification badge when viewing order
+                                // Hide notification badge and mark as viewed when viewing order
                                 setNotifiedOrderIds((prev) => {
                                   const updated = new Set(prev);
                                   updated.delete(order.id);
                                   return updated;
                                 });
+                                // Track as viewed so it won't be notified again
+                                setViewedOrderIds((prev) => new Set([...prev, order.id]));
                               }}
                             >
                               <Eye className="w-4 h-4" />
