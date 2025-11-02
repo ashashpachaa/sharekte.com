@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY || "";
-const GROQ_MODEL = "mixtral-8x7b-32768";
+const GROQ_MODEL = "llama-3.1-70b-versatile";
 
 interface ChatMessage {
   role: "user" | "assistant" | "system";
