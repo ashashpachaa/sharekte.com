@@ -38,10 +38,12 @@ export default function App() {
           <AdminProvider>
             <CurrencyProvider>
               <NotificationsProvider>
-                <CartProvider>
-                  <Toaster />
-                  <Sonner />
-                  <BrowserRouter>
+                <AIChatProvider>
+                  <CartProvider>
+                    <Toaster />
+                    <Sonner />
+                    <AIChat />
+                    <BrowserRouter>
                     <Routes>
                       <Route path="/" element={<Index />} />
                       <Route path="/login" element={<Login />} />
@@ -74,7 +76,8 @@ export default function App() {
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </BrowserRouter>
-                </CartProvider>
+                  </CartProvider>
+                </AIChatProvider>
               </NotificationsProvider>
             </CurrencyProvider>
           </AdminProvider>
