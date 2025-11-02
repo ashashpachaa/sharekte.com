@@ -215,6 +215,7 @@ export default function AdminUsers() {
                 <tr>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Name</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Email</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Role</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Company</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Status</th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Registered</th>
