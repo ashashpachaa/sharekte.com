@@ -61,7 +61,7 @@
     "searchCompanies": "البحث عن الشركات...",
     "activeCompanies": "الشركات النشطة",
     "pendingCompanies": "الشركات المعلقة",
-    "totalValue": "القيمة الإجمالية",
+    "totalValue": "القيمة الإ��مالية",
     "noCompanies": "لا توجد شركات حتى الآن",
     "documents": "المستندات",
     "noDocuments": "لم يتم تحميل أي مستندات حتى الآن. سيقوم المسؤول بتحميل مستند��ت شركتك هنا.",
@@ -116,7 +116,7 @@
     "clearFilters": "مسح التصفية"
   },
   "checkout": {
-    "title": "الدفع",
+    "title": "��لدفع",
     "subtitle": "إكمال عملية الشراء",
     "reviewOrder": "مراجعة الطلب",
     "billingAddress": "عنوان الفواتير",
@@ -146,7 +146,7 @@
     "currency": "العملة"
   },
   "cart": {
-    "title": "سلة التسوق",
+    "title": "سلة ال��سوق",
     "empty": "سلتك فارغة",
     "items": "العناصر",
     "subtotal": "الإجمالي الفرعي",
@@ -179,7 +179,7 @@
     "delete": "��ذف",
     "view": "عرض",
     "addUser": "إضافة مستخدم",
-    "editUser": "تعديل المستخدم",
+    "editUser": "تعديل الم��تخدم",
     "deleteUser": "حذف المستخدم",
     "username": "اسم المستخدم",
     "email": "البريد الإلكتروني",
@@ -244,7 +244,7 @@
     "submit": "إرسال",
     "submitting": "جاري الإرسال...",
     "invalidShares": "يجب أن تصل الأسهم إلى 100%",
-    "attachmentUploaded": "تم تحميل الملف بنجاح",
+    "attachmentUploaded": "تم تحميل المل�� بنجاح",
     "attachmentFailed": "فشل ��حميل الملف"
   },
   "notifications": {
@@ -400,7 +400,7 @@
     "price": "السعر",
     "addToCart": "إضافة إلى السلة",
     "inCart": "في السلة",
-    "itemRemoved": "تم إزالة العنصر من السلة",
+    "itemRemoved": "تم إزالة ال��نصر من السلة",
     "itemAdded": "تم إضافة العنصر إلى السلة"
   },
   "companies": {
@@ -462,7 +462,7 @@
     "phone": "الهاتف",
     "address": "العنوان",
     "followUs": "تابعنا",
-    "copyright": "© 2024 BusinessCorp. جميع الحقوق محفوظة."
+    "copyright": "© 2024 Sharekte. جميع الحقوق محفوظة."
   },
   "auth": {
     "login": "تسجيل الدخول",
