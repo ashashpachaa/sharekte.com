@@ -39,7 +39,10 @@ interface GroqMessage {
   content: string;
 }
 
-async function callGroqAPI(messages: GroqMessage[]): Promise<string> {
+async function callGroqAPI(
+  messages: GroqMessage[],
+  currency: string = "USD",
+): Promise<string> {
   if (!GROQ_API_KEY) {
     console.warn("[Groq] API key not configured, using demo mode");
     return await getDemoResponse(messages, currency);
@@ -206,7 +209,7 @@ async function getDemoResponse(
                 Math.floor(Math.random() * matchingCompanies.length)
               ];
             const symbol = getCurrencySymbol(currency);
-            return `Perfect! Here's an available company from ${targetYear} in ${targetCountry}:\n\n💼 **${company.companyName}**\n📌 Company Number: ${company.companyNumber}\n💰 Price: ${symbol}${company.purchasePrice || "Contact for quote"}\n\n�� **Do you want to buy it now?** It will take only **1 minute** to start the transfer and take ownership of this company!`;
+            return `Perfect! Here's an available company from ${targetYear} in ${targetCountry}:\n\n💼 **${company.companyName}**\n📌 Company Number: ${company.companyNumber}\n💰 Price: ${symbol}${company.purchasePrice || "Contact for quote"}\n\n⚡ **Do you want to buy it now?** It will take only **1 minute** to start the transfer and take ownership of this company!`;
           } else if (countryCompanies.length > 0) {
             // User asked for a year but it's not available - show available years
             const availableYears = [
