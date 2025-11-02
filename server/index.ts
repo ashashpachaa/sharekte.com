@@ -155,6 +155,9 @@ export function createServer() {
   app.post("/api/notifications/email", sendEmailNotification);
   app.get("/api/notifications", getNotifications);
 
+  // Email preview routes
+  app.get("/api/email-preview", getEmailPreview);
+
   // Test endpoint for transfer form Airtable sync
   app.post("/api/test-transfer-form", async (req, res) => {
     try {
