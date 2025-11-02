@@ -189,12 +189,14 @@ async function getDemoResponse(messages: GroqMessage[]): Promise<string> {
   // Fallback responses if no specific country match
   const demoResponses: Record<string, string> = {
     "hello": "Hello! 👋 Welcome to Sharekte. I'm an AI sales assistant here to help you explore our company marketplace. What are you looking for today?",
-    "company": `We have a great selection of ready-made companies for sale. ${companyContext ? `Currently available in: ${companyContext}. ` : ""}Would you like to browse by country, industry, or price range?`,
-    "price": "Our companies range from $500 to $100,000+ depending on the company type and jurisdiction. Would you like to see some options in a specific price range?",
-    "order": "I can help you place a new order! First, let me collect your information using the form above, then we can proceed to checkout.",
+    "company": `We have a great selection of ready-made companies for sale. ${companyContext ? `Currently available in: ${companyContext}. ` : ""}Which country interests you?`,
+    "price": "Our companies range from $500 to $100,000+ depending on the company type and jurisdiction. Would you like to see some options in a specific country?",
+    "yes": "Excellent! 🎉 Let me help you get started.\n\nPlease provide your contact information using the form above (name, email, phone), and I'll guide you through the quick 1-minute transfer process.\n\nOnce you confirm, we'll begin the ownership transfer immediately!",
+    "buy": "Great choice! 🚀 This is an excellent opportunity.\n\nClick the **'Add to Cart'** button or tell me your email, and I'll prepare everything for your transfer. The entire process takes just 1 minute!",
+    "order": "I can help you place a new order! Which country are you interested in?",
     "checkout": "To proceed with checkout, I'll need your contact information first. Please fill out the form above with your name, email, and phone number.",
-    "how": "Our process is simple: 1) Browse companies, 2) Add to cart, 3) Provide your information, 4) Complete payment, 5) Receive company documents. Want to get started?",
-    "help": "I'm here to help! You can ask me about: company listings by country, pricing, the ordering process, or how our service works. What interests you?",
+    "how": "Our process is simple: 1) Choose a country, 2) Pick incorporation year, 3) Select company, 4) Add to cart, 5) Provide info, 6) Complete payment (1 min transfer!). Ready to start?",
+    "help": "I'm here to help! Ask me about: companies by country, incorporation years, pricing, how buying works, or anything else. What interests you?",
   };
 
   for (const [keyword, response] of Object.entries(demoResponses)) {
