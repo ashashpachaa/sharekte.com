@@ -199,6 +199,25 @@ export default function AdminDashboard() {
             </Button>
           </div>
 
+          {/* Roles Management */}
+          <div className="bg-card border border-border/40 rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <Shield className="w-5 h-5" />
+              Roles Management
+            </h3>
+            <p className="text-muted-foreground text-sm mb-4">
+              Create custom roles and assign permissions to users
+            </p>
+            <Button
+              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
+              asChild
+            >
+              <Link to="/admin/roles">
+                Manage Roles
+              </Link>
+            </Button>
+          </div>
+
           {/* System Settings */}
           <div className="bg-card border border-border/40 rounded-lg p-6">
             <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
