@@ -72,17 +72,67 @@ async function callGroqAPI(messages: GroqMessage[]): Promise<string> {
   }
 }
 
-function getDemoResponse(messages: GroqMessage[]): string {
+async function getDemoResponse(messages: GroqMessage[]): Promise<string> {
   const userMessage = messages[messages.length - 1]?.content.toLowerCase() || "";
 
+  // Fetch real company data for intelligent responses
+  let companyContext = "";
+  try {
+    const response = await fetch("http://localhost:8080/api/companies");
+    const companies = (await response.json()) as Array<{
+      companyName?: string;
+      id?: string;
+      country?: string;
+      purchasePrice?: number;
+      type?: string;
+    }>;
+
+    if (Array.isArray(companies) && companies.length > 0) {
+      const countries = [...new Set(companies.map(c => c.country).filter(Boolean))];
+      const activeCompanies = companies.filter((c) => c.country);
+
+      companyContext = `Available countries: ${countries.join(", ")}. Total companies: ${companies.length}`;
+
+      // Check for country-specific queries
+      if (userMessage.includes("united kingdom") || userMessage.includes(" uk") || userMessage.includes("england") || userMessage.includes("britain")) {
+        const ukCompanies = companies.filter(c =>
+          c.country?.toLowerCase().includes("united kingdom") ||
+          c.country?.toLowerCase().includes("uk") ||
+          c.country?.toLowerCase().includes("england")
+        );
+
+        if (ukCompanies.length > 0) {
+          const list = ukCompanies.map(c => `${c.companyName} (£${c.purchasePrice || "Contact for price"})`).join("\n• ");
+          return `Yes! We have ${ukCompanies.length} companies in the United Kingdom:\n• ${list}\n\nWould you like more details about any of these companies?`;
+        } else {
+          return `I don't currently have companies in the United Kingdom in our inventory. However, we have companies in: ${countries.join(", ")}. Would you like to explore companies from a different country?`;
+        }
+      }
+
+      // Check for other country queries
+      for (const country of countries) {
+        if (userMessage.includes(country.toLowerCase())) {
+          const countryCompanies = companies.filter(c => c.country?.toLowerCase() === country.toLowerCase());
+          if (countryCompanies.length > 0) {
+            const list = countryCompanies.map(c => `${c.companyName} ($${c.purchasePrice || "Contact for price"})`).join("\n• ");
+            return `Yes! We have ${countryCompanies.length} companies in ${country}:\n• ${list}\n\nInterested in any of these?`;
+          }
+        }
+      }
+    }
+  } catch (error) {
+    console.warn("[Demo Mode] Could not fetch company data", error);
+  }
+
+  // Fallback responses if no specific country match
   const demoResponses: Record<string, string> = {
     "hello": "Hello! 👋 Welcome to Sharekte. I'm an AI sales assistant here to help you explore our company marketplace. What are you looking for today?",
-    "company": "We have a great selection of ready-made companies for sale across various industries. Would you like to browse by country, industry, or price range?",
+    "company": `We have a great selection of ready-made companies for sale. ${companyContext ? `Currently available in: ${companyContext}. ` : ""}Would you like to browse by country, industry, or price range?`,
     "price": "Our companies range from $500 to $100,000+ depending on the company type and jurisdiction. Would you like to see some options in a specific price range?",
     "order": "I can help you place an order! First, let me collect your information using the form above, then we can proceed to checkout.",
     "checkout": "To proceed with checkout, I'll need your contact information first. Please fill out the form above with your name, email, and phone number.",
     "how": "Our process is simple: 1) Browse companies, 2) Add to cart, 3) Provide your information, 4) Complete payment, 5) Receive company documents. Want to get started?",
-    "help": "I'm here to help! You can ask me about: company listings, pricing, the ordering process, or how our service works. What interests you?",
+    "help": "I'm here to help! You can ask me about: company listings by country, pricing, the ordering process, or how our service works. What interests you?",
   };
 
   for (const [keyword, response] of Object.entries(demoResponses)) {
@@ -91,7 +141,7 @@ function getDemoResponse(messages: GroqMessage[]): string {
     }
   }
 
-  return "Thanks for your question! You can ask me about our companies, pricing, how to place an order, or anything else about Sharekte. How can I assist you?";
+  return `Thanks for your question! ${companyContext ? `We currently have companies in: ${companyContext}. ` : ""}You can ask me about companies by country, pricing, how to place an order, or anything else about Sharekte. How can I assist you?`;
 }
 
 async function fetchCompaniesContext(): Promise<string> {
