@@ -189,10 +189,10 @@ export default function Login() {
           {/* Demo Credentials */}
           <div className="bg-muted p-4 rounded-lg space-y-2">
             <p className="text-xs font-medium text-foreground">
-              {t("auth.demoTitle") || "Demo Credentials"}
+              Demo Credentials
             </p>
             <div className="text-xs text-muted-foreground space-y-1">
-              <p>{t("auth.demoEmail") || "Email"}: demo@example.com</p>
+              <p>Email: demo@example.com</p>
               <p>{t("auth.demoPassword") || "Password"}: password123</p>
             </div>
           </div>
