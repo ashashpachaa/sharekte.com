@@ -146,35 +146,32 @@ async function getDemoResponse(messages: GroqMessage[]): Promise<string> {
       if (yearMatch && userMessage.trim().match(/^\d{4}$/)) {
         targetYear = parseInt(yearMatch[0]);
 
-        // Look back in conversation to find which country was asked about
+        // Look back through ALL messages to find which country was mentioned
+        // This is more robust than looking only after the question message
         for (let i = messages.length - 2; i >= 0; i--) {
           const prevMsg = messages[i].content.toLowerCase();
+
+          // Check for UK variations
           if (
-            prevMsg.includes("which **incorporation year**") ||
-            prevMsg.includes("incorporation year")
+            prevMsg.includes("united kingdom") ||
+            prevMsg.includes("uk ") ||
+            prevMsg.includes(" uk") ||
+            prevMsg.includes("england") ||
+            prevMsg.includes("britain")
           ) {
-            // Found the question message, now look before it for country
-            for (let j = i - 1; j >= 0; j--) {
-              const countryMsg = messages[j].content.toLowerCase();
-              if (
-                countryMsg.includes("united kingdom") ||
-                countryMsg.includes("uk") ||
-                countryMsg.includes("england") ||
-                countryMsg.includes("britain")
-              ) {
-                targetCountry = "United Kingdom";
-                break;
-              }
-              for (const country of countries) {
-                if (countryMsg.includes(country.toLowerCase())) {
-                  targetCountry = country;
-                  break;
-                }
-              }
-              if (targetCountry) break;
-            }
+            targetCountry = "United Kingdom";
             break;
           }
+
+          // Check for other countries
+          for (const country of countries) {
+            if (prevMsg.includes(country.toLowerCase())) {
+              targetCountry = country;
+              break;
+            }
+          }
+
+          if (targetCountry) break;
         }
 
         // If we found country and year, show a random company matching both
@@ -228,7 +225,7 @@ async function getDemoResponse(messages: GroqMessage[]): Promise<string> {
             ),
           ].sort((a, b) => (b as number) - (a as number));
 
-          return `Yes, we have! 🎯\n\nWhich **incorporation year** are you looking for?\n\nAvailable years: ${availableYears.join(", ")}`;
+          return `Yes, we have! ���\n\nWhich **incorporation year** are you looking for?\n\nAvailable years: ${availableYears.join(", ")}`;
         } else {
           return `I don't currently have companies in the United Kingdom in our inventory. However, we have companies in: ${countries.join(", ")}. Which country interests you?`;
         }
