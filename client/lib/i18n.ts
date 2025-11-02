@@ -22,8 +22,8 @@ i18n.use(initReactI18next).init({
   interpolation: {
     escapeValue: false,
   },
-  returnNull: false,
-  returnEmptyString: false,
+  returnNull: true,
+  returnEmptyString: true,
 });
 
 // Handle language change - update HTML attributes for RTL
