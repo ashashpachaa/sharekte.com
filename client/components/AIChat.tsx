@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import { useState, useRef, useEffect } from "react";
 import { useAIChat } from "@/lib/ai-chat-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
