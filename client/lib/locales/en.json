@@ -16,7 +16,7 @@
     "login": {
       "title": "Sign In",
       "subtitle": "Access your account to manage orders and companies",
-      "button": "Sign In"
+      "button": "Login"
     },
     "signup": {
       "title": "Create Account",
