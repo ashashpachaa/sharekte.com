@@ -225,25 +225,19 @@ export default function AdminEmailTemplates() {
 
       {/* Preview Dialog */}
       <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
-        <DialogContent className="fixed inset-0 max-w-none max-h-none w-screen h-screen flex flex-col border-0 rounded-0">
-          <div className="flex justify-between items-center pb-4 border-b">
+        <DialogContent className="max-w-6xl w-[95vw] h-[90vh] max-h-[90vh] flex flex-col p-0">
+          <div className="flex justify-between items-start p-6 border-b">
             <div>
-              <DialogTitle className="text-xl">
+              <DialogTitle className="text-2xl">
                 {TEMPLATES.find((t) => t.type === selectedTemplate)?.name}
               </DialogTitle>
               <DialogDescription>
                 Preview your email template as recipients will see it
               </DialogDescription>
             </div>
-            <button
-              onClick={() => setPreviewOpen(false)}
-              className="text-muted-foreground hover:text-foreground"
-            >
-              ✕
-            </button>
           </div>
 
-          <div className="flex-1 overflow-auto bg-background">
+          <div className="flex-1 overflow-auto bg-muted rounded-none mx-6">
             <iframe
               srcDoc={previewHtml}
               className="w-full h-full border-none"
@@ -252,7 +246,7 @@ export default function AdminEmailTemplates() {
             />
           </div>
 
-          <div className="border-t pt-4 flex gap-2 justify-between bg-background sticky bottom-0">
+          <div className="border-t p-6 flex gap-2 justify-between">
             <div className="flex gap-2">
               <Button
                 variant="outline"
