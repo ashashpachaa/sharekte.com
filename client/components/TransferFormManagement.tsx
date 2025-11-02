@@ -54,7 +54,6 @@ import {
   Trash2,
   Clock,
   Mail,
-  FileText,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -445,8 +444,7 @@ export function TransferFormManagement({
 
               {/* Attached Files - Prominent Display */}
               <div className="border-2 border-blue-300 bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg">
-                <div className="flex items-center gap-2 mb-3">
-                  <FileText className="w-5 h-5 text-blue-600" />
+                <div className="mb-3">
                   <h3 className="font-bold text-lg">📎 Attached Files ({selectedForm.attachments.length})</h3>
                 </div>
                 {selectedForm.attachments.length > 0 ? (
