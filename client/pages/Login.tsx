@@ -183,7 +183,7 @@ export default function Login() {
             onClick={() => navigate("/signup")}
             disabled={loading}
           >
-            {t("auth.createAccount") || "Create an Account"}
+            Create Account
           </Button>
 
           {/* Demo Credentials */}
