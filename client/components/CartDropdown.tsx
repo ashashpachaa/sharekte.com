@@ -6,12 +6,14 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/cart-context";
+import { useCurrency } from "@/lib/currency-context";
 import { ShoppingCart, Trash2, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export function CartDropdown() {
   const { t } = useTranslation();
   const { items, removeItem, totalPrice } = useCart();
+  const { currency } = useCurrency();
   const cartCount = items.length;
 
   return (
