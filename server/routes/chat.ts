@@ -179,11 +179,14 @@ async function getDemoResponse(messages: GroqMessage[]): Promise<string> {
 
         // If we found country and year, show a random company matching both
         if (targetCountry && targetYear) {
-          const matchingCompanies = companies.filter(
+          const countryCompanies = companies.filter(
             (c) =>
-              (c.country?.toLowerCase().includes(targetCountry.toLowerCase()) ||
-                c.country?.toLowerCase() === targetCountry.toLowerCase()) &&
-              c.incorporationYear === targetYear,
+              c.country?.toLowerCase().includes(targetCountry.toLowerCase()) ||
+              c.country?.toLowerCase() === targetCountry.toLowerCase(),
+          );
+
+          const matchingCompanies = countryCompanies.filter(
+            (c) => c.incorporationYear === targetYear,
           );
 
           if (matchingCompanies.length > 0) {
@@ -193,6 +196,12 @@ async function getDemoResponse(messages: GroqMessage[]): Promise<string> {
               ];
             const symbol = targetCountry === "United Kingdom" ? "£" : "$";
             return `Perfect! Here's an available company from ${targetYear} in ${targetCountry}:\n\n💼 **${company.companyName}**\n📌 Company Number: ${company.companyNumber}\n💰 Price: ${symbol}${company.purchasePrice || "Contact for quote"}\n\n⚡ **Do you want to buy it now?** It will take only **1 minute** to start the transfer and take ownership of this company!`;
+          } else if (countryCompanies.length > 0) {
+            // User asked for a year but it's not available - show available years
+            const availableYears = [
+              ...new Set(countryCompanies.map((c) => c.incorporationYear).filter(Boolean)),
+            ].sort((a, b) => (b as number) - (a as number));
+            return `Sorry, we don't have companies from ${targetYear} in ${targetCountry} right now. 😊\n\nBut we have companies from these years:\n\n**Available years: ${availableYears.join(", ")}**\n\nWhich year would you prefer?`;
           }
         }
       }
