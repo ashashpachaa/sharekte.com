@@ -191,7 +191,7 @@ async function getDemoResponse(messages: GroqMessage[]): Promise<string> {
               matchingCompanies[
                 Math.floor(Math.random() * matchingCompanies.length)
               ];
-            const symbol = targetCountry === "United Kingdom" ? "£" : "$";
+            const symbol = getCurrencySymbol(currency);
             return `Perfect! Here's an available company from ${targetYear} in ${targetCountry}:\n\n💼 **${company.companyName}**\n📌 Company Number: ${company.companyNumber}\n💰 Price: ${symbol}${company.purchasePrice || "Contact for quote"}\n\n⚡ **Do you want to buy it now?** It will take only **1 minute** to start the transfer and take ownership of this company!`;
           } else if (countryCompanies.length > 0) {
             // User asked for a year but it's not available - show available years
