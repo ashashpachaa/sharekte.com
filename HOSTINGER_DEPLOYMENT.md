@@ -5,6 +5,7 @@ This guide explains how to set up automatic deployment from GitHub to your Hosti
 ## Setup Overview
 
 Your app will:
+
 1. **Push code to GitHub** → GitHub Actions triggers automatically
 2. **GitHub connects to Hostinger VPS via SSH** → Pulls latest code
 3. **Installs dependencies & builds** → Restarts the server
@@ -15,6 +16,7 @@ Your app will:
 ## Prerequisites
 
 ✅ **Hostinger VPS Details** (already have):
+
 - IP: `72.61.112.139`
 - Hostname: `srv1092855.hstgr.cloud`
 - SSH User: `root`
@@ -22,10 +24,12 @@ Your app will:
 - Web Dir: `/var/www/sharekte.com`
 
 ✅ **GitHub Repository**:
+
 - Repo: `ashashpachaa/sharekte.com`
 - Branch: `main`
 
 ✅ **SSH Key**:
+
 - Already generated with: `SHA256:aZ2Mr+DrFqioGmbgmL0tGY/pAShyWuK6DvqmSG2Jdoo`
 
 ---
@@ -78,6 +82,7 @@ cat ~/.ssh/id_ed25519
 ```
 
 **If you don't have the private key yet**, ask Hostinger to:
+
 - Generate a new SSH key pair
 - Provide you the private key
 - Or use password authentication instead
@@ -90,12 +95,12 @@ cat ~/.ssh/id_ed25519
 2. Click **Settings** → **Secrets and variables** → **Actions**
 3. Click **New repository secret** and add these 3 secrets:
 
-| Secret Name | Value |
-|------------|-------|
-| `HOSTINGER_HOST` | `srv1092855.hstgr.cloud` |
-| `HOSTINGER_USER` | `root` |
-| `HOSTINGER_PORT` | `22` |
-| `HOSTINGER_SSH_KEY` | *Your private SSH key content* |
+| Secret Name         | Value                          |
+| ------------------- | ------------------------------ |
+| `HOSTINGER_HOST`    | `srv1092855.hstgr.cloud`       |
+| `HOSTINGER_USER`    | `root`                         |
+| `HOSTINGER_PORT`    | `22`                           |
+| `HOSTINGER_SSH_KEY` | _Your private SSH key content_ |
 
 **Important**: The `HOSTINGER_SSH_KEY` value should be your private key (the one that starts with `-----BEGIN RSA PRIVATE KEY-----` or similar).
 
@@ -125,6 +130,7 @@ GitHub Actions will automatically trigger and deploy to your Hostinger VPS!
 4. Click on it to see real-time logs
 
 If successful, you'll see:
+
 ```
 ✅ Deploy successful! Server is running.
 ```
@@ -161,6 +167,7 @@ Add these to `/etc/environment` or `.env` in `/var/www/shareket.com`.
 ### 1. **Deployment fails with permission error**
 
 Check SSH key permissions on Hostinger:
+
 ```bash
 chmod 600 ~/.ssh/id_rsa
 chmod 700 ~/.ssh
@@ -169,6 +176,7 @@ chmod 700 ~/.ssh
 ### 2. **Port 8080 already in use**
 
 Kill the old process:
+
 ```bash
 pkill -f "node dist/server/node-build.mjs"
 ```
@@ -176,6 +184,7 @@ pkill -f "node dist/server/node-build.mjs"
 ### 3. **Health check fails**
 
 Check logs:
+
 ```bash
 tail -f /var/log/shareket-deploy.log
 ```
@@ -183,6 +192,7 @@ tail -f /var/log/shareket-deploy.log
 ### 4. **GitHub Actions can't connect to VPS**
 
 Verify SSH credentials:
+
 ```bash
 # Test SSH connection locally
 ssh -i your-private-key root@srv1092855.hstgr.cloud
@@ -211,6 +221,7 @@ ssh -i your-private-key root@srv1092855.hstgr.cloud
 ## Support
 
 If you encounter issues:
+
 - Check GitHub Actions logs for error messages
 - SSH into Hostinger and check `/var/log/shareket-deploy.log`
 - Verify environment variables are set correctly
