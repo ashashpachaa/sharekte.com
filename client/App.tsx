@@ -23,6 +23,7 @@ import AdminUsers from "./pages/AdminUsers";
 import AdminOrders from "./pages/AdminOrders";
 import AdminInvoices from "./pages/AdminInvoices";
 import AdminSettings from "./pages/AdminSettings";
+import AdminEmailTemplates from "./pages/AdminEmailTemplates";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -62,6 +63,10 @@ export default function App() {
                       <Route
                         path="/admin/settings"
                         element={<AdminSettings />}
+                      />
+                      <Route
+                        path="/admin/email-templates"
+                        element={<AdminEmailTemplates />}
                       />
                       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                       <Route path="*" element={<NotFound />} />
