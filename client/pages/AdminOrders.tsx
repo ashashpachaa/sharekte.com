@@ -106,9 +106,9 @@ export default function AdminOrders() {
 
       if (newOrders.length > 0) {
         setNewOrdersCount(newOrders.length);
-        // Create notifications for new orders that haven't been notified yet
+        // Create notifications for new orders that haven't been notified or viewed yet
         newOrders.forEach((order) => {
-          if (!notifiedOrderIds.has(order.id)) {
+          if (!notifiedOrderIds.has(order.id) && !viewedOrderIds.has(order.id)) {
             addNotification({
               id: `order-${order.id}`,
               title: "New Order",
