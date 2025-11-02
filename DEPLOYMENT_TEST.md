@@ -3,6 +3,7 @@
 **Test Date:** November 2, 2025
 **Test Time:** 14:25 UTC
 **Test Status:** Testing automatic deployment from GitHub to Hostinger
+**Email Preview Route:** Active at /api/email-preview
 **Status:** ✅ Automatic deployment is WORKING!
 
 This file was automatically deployed from GitHub to Hostinger via GitHub Actions.
