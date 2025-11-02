@@ -308,8 +308,10 @@ export function CompanyTable({
 
         {/* Results info */}
         <div className="mb-4 text-sm text-gray-600 px-4">
-          {displayedCompanies.length} {t("table.showing")}{" "}
-          {filteredCompanies.length}
+          {t("table.showing", {
+            count: displayedCompanies.length,
+            total: filteredCompanies.length,
+          })}
         </div>
       </div>
 
