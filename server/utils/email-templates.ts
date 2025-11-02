@@ -47,6 +47,7 @@ const APP_URL = process.env.APP_URL || "https://shareket.com";
 const FROM_EMAIL = process.env.FROM_EMAIL || "noreply@shareket.com";
 const SUPPORT_EMAIL = process.env.SUPPORT_EMAIL || "support@shareket.com";
 const COMPANY_NAME = "Sharekte";
+const LOGO_URL = "https://cdn.builder.io/api/v1/image/assets%2F752b1abf9cc241c993361e9dcaee5153%2Fd9d4a64693d843b1a53386d5a7c2937e?format=webp&width=200";
 
 /**
  * Email transporter singleton
@@ -126,8 +127,14 @@ function getEmailLayout(
     .header {
       background: linear-gradient(135deg, ${headerColor} 0%, ${headerColor}dd 100%);
       color: white;
-      padding: 40px 30px;
+      padding: 30px 30px 40px 30px;
       text-align: center;
+    }
+    .logo {
+      max-width: 180px;
+      height: auto;
+      margin: 0 auto 20px auto;
+      display: block;
     }
     .header h1 {
       font-size: 28px;
