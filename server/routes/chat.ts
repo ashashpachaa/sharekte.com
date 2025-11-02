@@ -366,7 +366,7 @@ async function saveConversationToAirtable(
 
 export const handleChat: RequestHandler = async (req, res) => {
   try {
-    const { sessionId, message, customerData } = req.body;
+    const { sessionId, message, customerData, currency } = req.body;
 
     if (!message) {
       return res.status(400).json({ error: "Message is required" });
