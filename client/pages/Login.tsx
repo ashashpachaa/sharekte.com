@@ -74,9 +74,7 @@ export default function Login() {
             <div className="flex justify-center mb-4">
               <LogIn className="w-8 h-8 text-primary" />
             </div>
-            <h1 className="text-3xl font-bold text-foreground">
-              Sign In
-            </h1>
+            <h1 className="text-3xl font-bold text-foreground">Sign In</h1>
             <p className="text-muted-foreground">
               Access your account to manage orders and companies
             </p>
