@@ -159,6 +159,10 @@ export function createServer() {
   // Email preview routes
   app.get("/api/email-preview", getEmailPreview);
 
+  // AI Chat routes
+  app.post("/api/chat", handleChat);
+  app.post("/api/chat-sessions", handleSaveSession);
+
   // Test endpoint for transfer form Airtable sync
   app.post("/api/test-transfer-form", async (req, res) => {
     try {
