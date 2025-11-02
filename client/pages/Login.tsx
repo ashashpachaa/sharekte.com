@@ -139,7 +139,7 @@ export default function Login() {
                 </button>
               </div>
               <p className="text-xs text-muted-foreground">
-                {t("auth.passwordHint") || "Minimum 6 characters"}
+                Minimum 6 characters
               </p>
             </div>
 
