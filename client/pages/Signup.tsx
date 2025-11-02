@@ -73,7 +73,14 @@ export default function Signup() {
         }
       }
 
-      // Store user data in localStorage (simple auth)
+      // Create user account with "client" role
+      createUser({
+        name: fullName,
+        email: email,
+        role: "client",
+      });
+
+      // Store user session in localStorage (simple auth)
       const userData = {
         fullName: fullName,
         email: email,
