@@ -24,9 +24,9 @@
       "button": "Create Account"
     },
     "email": "Email Address",
-    "emailPlaceholder": "you@example.com",
+    "emailPlaceholder": "Email Address",
     "password": "Password",
-    "passwordPlaceholder": "Enter your password",
+    "passwordPlaceholder": "Password",
     "passwordHint": "Minimum 6 characters",
     "confirmPassword": "Confirm Password",
     "confirmPasswordPlaceholder": "Re-enter your password",
