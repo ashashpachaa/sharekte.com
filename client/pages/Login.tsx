@@ -112,7 +112,7 @@ export default function Login() {
                 htmlFor="password"
                 className="block text-sm font-medium text-foreground"
               >
-                {t("auth.password") || "Password"}
+                Password
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
@@ -121,9 +121,7 @@ export default function Login() {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder={
-                    t("auth.passwordPlaceholder") || "Enter your password"
-                  }
+                  placeholder="Password"
                   className="w-full pl-10 pr-10 py-2 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-background text-foreground"
                   disabled={loading}
                 />
