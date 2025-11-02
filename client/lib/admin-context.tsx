@@ -29,6 +29,7 @@ export interface UserAccount {
   company?: string;
   companyLinks: string[];
   accountStatus: "active" | "suspended" | "inactive";
+  role: "client" | "super-admin" | "admin" | "administrations" | "operations" | "accounting";
   registrationDate: string;
   lastLoginDate?: string;
   notes?: string;
