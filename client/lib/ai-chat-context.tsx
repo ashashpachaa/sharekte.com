@@ -229,6 +229,12 @@ export function AIChatProvider({ children }: { children: ReactNode }) {
     clearError,
   };
 
+  useEffect(() => {
+    if (sessions.length === 0 && currentSessionId === null) {
+      startNewSession();
+    }
+  }, []);
+
   return (
     <AIChatContext.Provider value={value}>{children}</AIChatContext.Provider>
   );
