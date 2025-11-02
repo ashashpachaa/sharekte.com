@@ -101,6 +101,20 @@ export default function AdminOrders() {
 
       if (newOrders.length > 0) {
         setNewOrdersCount(newOrders.length);
+        // Create notifications for new orders that haven't been notified yet
+        newOrders.forEach((order) => {
+          if (!notifiedOrderIds.has(order.id)) {
+            addNotification({
+              id: `order-${order.id}`,
+              title: "New Order",
+              message: `New order ${order.orderId} from ${order.customerName} for ${order.companyName}`,
+              type: "success",
+              read: false,
+              timestamp: new Date(),
+            });
+            setNotifiedOrderIds((prev) => new Set([...prev, order.id]));
+          }
+        });
         const message =
           newOrders.length === 1
             ? `New order: ${newOrders[0].orderId} from ${newOrders[0].customerName}`
