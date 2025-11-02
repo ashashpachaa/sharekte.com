@@ -34,7 +34,8 @@ interface GroqMessage {
 
 async function callGroqAPI(messages: GroqMessage[]): Promise<string> {
   if (!GROQ_API_KEY) {
-    throw new Error("GROQ_API_KEY not configured");
+    console.warn("[Groq] API key not configured, using demo mode");
+    return getDemoResponse(messages);
   }
 
   try {
@@ -56,7 +57,8 @@ async function callGroqAPI(messages: GroqMessage[]): Promise<string> {
     if (!response.ok) {
       const error = await response.text();
       console.error("[Groq API Error]", error);
-      throw new Error(`Groq API error: ${response.statusText}`);
+      console.warn("[Groq] Falling back to demo mode due to API error");
+      return getDemoResponse(messages);
     }
 
     const data = (await response.json()) as {
@@ -65,8 +67,31 @@ async function callGroqAPI(messages: GroqMessage[]): Promise<string> {
     return data.choices[0].message.content;
   } catch (error) {
     console.error("[Groq API Error]", error);
-    throw error;
+    console.warn("[Groq] Falling back to demo mode due to error");
+    return getDemoResponse(messages);
   }
+}
+
+function getDemoResponse(messages: GroqMessage[]): string {
+  const userMessage = messages[messages.length - 1]?.content.toLowerCase() || "";
+
+  const demoResponses: Record<string, string> = {
+    "hello": "Hello! 👋 Welcome to Sharekte. I'm an AI sales assistant here to help you explore our company marketplace. What are you looking for today?",
+    "company": "We have a great selection of ready-made companies for sale across various industries. Would you like to browse by country, industry, or price range?",
+    "price": "Our companies range from $500 to $100,000+ depending on the company type and jurisdiction. Would you like to see some options in a specific price range?",
+    "order": "I can help you place an order! First, let me collect your information using the form above, then we can proceed to checkout.",
+    "checkout": "To proceed with checkout, I'll need your contact information first. Please fill out the form above with your name, email, and phone number.",
+    "how": "Our process is simple: 1) Browse companies, 2) Add to cart, 3) Provide your information, 4) Complete payment, 5) Receive company documents. Want to get started?",
+    "help": "I'm here to help! You can ask me about: company listings, pricing, the ordering process, or how our service works. What interests you?",
+  };
+
+  for (const [keyword, response] of Object.entries(demoResponses)) {
+    if (userMessage.includes(keyword)) {
+      return response;
+    }
+  }
+
+  return "Thanks for your question! You can ask me about our companies, pricing, how to place an order, or anything else about Sharekte. How can I assist you?";
 }
 
 async function fetchCompaniesContext(): Promise<string> {
