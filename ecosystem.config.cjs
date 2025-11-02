@@ -8,8 +8,10 @@ module.exports = {
       env: {
         NODE_ENV: "production",
         PORT: 8080,
-        AIRTABLE_API_TOKEN: "patLkehZ2xg1wRuKr.59e309fed3a49ecc3bee1f2ade0c8603e30f48887c257fb29998547f7e8e3ded",
-        VITE_AIRTABLE_API_TOKEN: "patLkehZ2xg1wRuKr.59e309fed3a49ecc3bee1f2ade0c8603e30f48887c257fb29998547f7e8e3ded",
+        AIRTABLE_API_TOKEN:
+          "patLkehZ2xg1wRuKr.59e309fed3a49ecc3bee1f2ade0c8603e30f48887c257fb29998547f7e8e3ded",
+        VITE_AIRTABLE_API_TOKEN:
+          "patLkehZ2xg1wRuKr.59e309fed3a49ecc3bee1f2ade0c8603e30f48887c257fb29998547f7e8e3ded",
         AIRTABLE_TABLE_TRANSFER_FORMS: "tblK7lUO1cfNFYO14",
       },
       error_file: "/var/log/sharekte-error.log",
