@@ -13,6 +13,7 @@ export function AIChat() {
     startNewSession,
     addMessage,
   } = useAIChat();
+  const { currency } = useCurrency();
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
