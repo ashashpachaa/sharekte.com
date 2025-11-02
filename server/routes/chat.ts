@@ -407,8 +407,8 @@ export const handleChat: RequestHandler = async (req, res) => {
       };
     }
 
-    // Call Groq API
-    const aiResponse = await callGroqAPI(groqMessages);
+    // Call Groq API (pass currency for pricing display)
+    const aiResponse = await callGroqAPI(groqMessages, currency || "USD");
 
     // If customer provided contact info, try to create an order
     if (infoMatch && customerInfo.email) {
