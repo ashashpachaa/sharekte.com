@@ -10,7 +10,8 @@ module.exports = {
         PORT: 8080,
         AIRTABLE_API_TOKEN: process.env.AIRTABLE_API_TOKEN,
         VITE_AIRTABLE_API_TOKEN: process.env.VITE_AIRTABLE_API_TOKEN,
-        AIRTABLE_TABLE_TRANSFER_FORMS: process.env.AIRTABLE_TABLE_TRANSFER_FORMS,
+        AIRTABLE_TABLE_TRANSFER_FORMS:
+          process.env.AIRTABLE_TABLE_TRANSFER_FORMS,
       },
       error_file: "/var/log/sharekte-error.log",
       out_file: "/var/log/sharekte-out.log",

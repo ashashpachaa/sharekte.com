@@ -3,6 +3,7 @@
 ## Overview
 
 This guide sets up **sharekte.com** on Hostinger VPS with:
+
 - ✅ Node.js + Express API
 - ✅ React SPA (Vite)
 - ✅ Nginx reverse proxy (port 8080)
@@ -212,12 +213,14 @@ pm2 monit
 ### To get SSH private key:
 
 On your Hostinger VPS:
+
 ```bash
 cat ~/.ssh/id_rsa
 # Copy the entire output (includes -----BEGIN RSA PRIVATE KEY-----)
 ```
 
 Or generate new key:
+
 ```bash
 ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ""
 cat ~/.ssh/id_rsa
@@ -446,24 +449,26 @@ pm2 start ecosystem.config.js
 
 ## Important Endpoints
 
-| Endpoint | Purpose | Expected Response |
-|----------|---------|-------------------|
-| `https://sharekte.com/health` | Health check | `{ "status": "ok" }` |
-| `https://sharekte.com/api/ping` | API test | `{ "message": "ping" }` |
-| `https://sharekte.com/api/companies` | List companies | Array of company objects |
-| `https://sharekte.com/api/orders` | List orders | Array of order objects |
-| `https://sharekte.com/api/transfer-forms` | List transfer forms | Array of form objects |
+| Endpoint                                  | Purpose             | Expected Response        |
+| ----------------------------------------- | ------------------- | ------------------------ |
+| `https://sharekte.com/health`             | Health check        | `{ "status": "ok" }`     |
+| `https://sharekte.com/api/ping`           | API test            | `{ "message": "ping" }`  |
+| `https://sharekte.com/api/companies`      | List companies      | Array of company objects |
+| `https://sharekte.com/api/orders`         | List orders         | Array of order objects   |
+| `https://sharekte.com/api/transfer-forms` | List transfer forms | Array of form objects    |
 
 ---
 
 ## Performance Tips
 
 1. **Monitor resource usage**:
+
    ```bash
    pm2 monit
    ```
 
 2. **Scale to multiple instances** (if needed):
+
    ```javascript
    // In ecosystem.config.js
    instances: 'max',  // Use all CPU cores
@@ -471,6 +476,7 @@ pm2 start ecosystem.config.js
    ```
 
 3. **Enable browser caching** in Nginx (already in config):
+
    ```nginx
    expires 30d;  # Cache for 30 days
    ```

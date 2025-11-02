@@ -11,6 +11,7 @@ Your entire project is now **production-ready for Hostinger VPS**. Here's what h
 **Purpose**: Auto-restart Node.js app if it crashes, manage logs, memory limits
 
 **Configuration**:
+
 - App name: `sharekte`
 - Entry point: `dist/server/node-build.mjs`
 - Port: `8080`
@@ -22,6 +23,7 @@ Your entire project is now **production-ready for Hostinger VPS**. Here's what h
 - Watch mode: ❌ Disabled (don't reload on file changes)
 
 **Environment variables passed**:
+
 ```
 NODE_ENV=production
 PORT=8080
@@ -37,6 +39,7 @@ AIRTABLE_TABLE_TRANSFER_FORMS=tblK7lUO1cfNFYO14
 **Purpose**: Accept HTTPS requests, proxy to Node.js on port 8080, serve static assets
 
 **Features**:
+
 - ✅ HTTP → HTTPS redirect
 - ✅ SSL/TLS 1.2 & 1.3
 - ✅ Rate limiting (10req/s general, 30req/s API)
@@ -48,6 +51,7 @@ AIRTABLE_TABLE_TRANSFER_FORMS=tblK7lUO1cfNFYO14
 - ✅ Request/response caching
 
 **Configuration**:
+
 ```nginx
 HTTP (port 80) → Redirect to HTTPS
 HTTPS (port 443) → Proxy to http://localhost:8080
@@ -65,6 +69,7 @@ Routes:
 **Purpose**: Auto-deploy when you push to `main` branch
 
 **Flow**:
+
 ```
 1. You push code to GitHub
    ↓
@@ -86,6 +91,7 @@ Routes:
 ```
 
 **Required GitHub Secrets** (must be configured):
+
 - `HOSTINGER_HOST`: `srv1092855.hstgr.cloud`
 - `HOSTINGER_USER`: `root`
 - `HOSTINGER_PORT`: `22`
@@ -181,13 +187,14 @@ Node.js (PM2 managed)
 
 **All business data syncs to Airtable**:
 
-| Table | Purpose | Records |
-|-------|---------|---------|
-| `tbljtdHPdHnTberDy` | Companies | For sale, pricing, status |
-| `tbl01DTvrGtsAaPfZ` | Orders | Purchase history, payments |
-| `tblK7lUO1cfNFYO14` | Transfer Forms | Ownership transfers |
+| Table               | Purpose        | Records                    |
+| ------------------- | -------------- | -------------------------- |
+| `tbljtdHPdHnTberDy` | Companies      | For sale, pricing, status  |
+| `tbl01DTvrGtsAaPfZ` | Orders         | Purchase history, payments |
+| `tblK7lUO1cfNFYO14` | Transfer Forms | Ownership transfers        |
 
 **Sync Direction**: Bidirectional
+
 - Form submissions → Auto-sync to Airtable
 - Admin edits in Airtable → Dashboard reflects changes
 - Order status updates → Both directions
@@ -199,6 +206,7 @@ Node.js (PM2 managed)
 ## 7. Server Entry Point (`server/node-build.ts`)
 
 **What it does**:
+
 1. Starts Express server on port 8080
 2. Registers all API routes (`/api/*`)
 3. Serves static SPA files from `dist/spa/`
@@ -206,6 +214,7 @@ Node.js (PM2 managed)
 5. Error handling & logging
 
 **Critical paths**:
+
 ```javascript
 // SPA directory
 const spaDir = path.resolve(__dirname, "../dist/spa");
@@ -217,7 +226,7 @@ app.use(express.static(spaDir));
 app.get(/.*/, (req, res) => {
   const indexPath = path.join(spaDir, "index.html");
   if (fs.existsSync(indexPath)) {
-    res.sendFile(indexPath);  // ← Serve SPA
+    res.sendFile(indexPath); // ← Serve SPA
   } else {
     res.status(404).json({ error: "SPA index.html not found" });
   }
@@ -232,9 +241,9 @@ app.get(/.*/, (req, res) => {
 {
   "scripts": {
     "build": "npm run build:client && npm run build:server",
-    "build:client": "vite build",           // → dist/spa/
-    "build:server": "vite build --config vite.config.server.ts",  // → dist/server/
-    "start": "node dist/server/node-build.mjs"  // ← Used by PM2
+    "build:client": "vite build", // → dist/spa/
+    "build:server": "vite build --config vite.config.server.ts", // → dist/server/
+    "start": "node dist/server/node-build.mjs" // ← Used by PM2
   }
 }
 ```
@@ -270,6 +279,7 @@ git push origin main
 ## 10. Monitoring & Logs
 
 ### Check Status
+
 ```bash
 pm2 list              # All apps
 pm2 logs sharekte     # Last 100 lines
@@ -277,6 +287,7 @@ pm2 monit             # Real-time resources
 ```
 
 ### View Logs
+
 ```bash
 tail -f /var/log/sharekte-out.log      # Application output
 tail -f /var/log/sharekte-error.log    # Application errors
@@ -288,18 +299,18 @@ tail -f /var/log/nginx/error.log       # Nginx errors
 
 ## 11. Key Environment Details
 
-| Setting | Value |
-|---------|-------|
-| **VPS Host** | `srv1092855.hstgr.cloud` |
-| **VPS User** | `root` |
-| **App Directory** | `/var/www/sharekte.com` |
-| **Domain** | `sharekte.com` |
-| **Node Port** | `8080` |
-| **Nginx Ports** | `80` (HTTP) & `443` (HTTPS) |
-| **Database** | Airtable (cloud-based) |
-| **Process Manager** | PM2 |
-| **Reverse Proxy** | Nginx |
-| **SSL Provider** | Let's Encrypt (auto-renew) |
+| Setting             | Value                       |
+| ------------------- | --------------------------- |
+| **VPS Host**        | `srv1092855.hstgr.cloud`    |
+| **VPS User**        | `root`                      |
+| **App Directory**   | `/var/www/sharekte.com`     |
+| **Domain**          | `sharekte.com`              |
+| **Node Port**       | `8080`                      |
+| **Nginx Ports**     | `80` (HTTP) & `443` (HTTPS) |
+| **Database**        | Airtable (cloud-based)      |
+| **Process Manager** | PM2                         |
+| **Reverse Proxy**   | Nginx                       |
+| **SSL Provider**    | Let's Encrypt (auto-renew)  |
 
 ---
 
@@ -360,6 +371,7 @@ git push origin main
 ## Summary
 
 Your project is **100% configured for Hostinger VPS production** with:
+
 - Auto-restart on crashes (PM2)
 - Automatic HTTPS renewal (Let's Encrypt)
 - Automatic deployments (GitHub Actions)

@@ -37,6 +37,7 @@ ls -la dist/server/node-build.mjs  # Should exist
 ```
 
 **Expected Output**:
+
 ```
 dist/spa/index.html (size: 5-50KB)
 dist/server/node-build.mjs (size: 100KB+)
@@ -49,6 +50,7 @@ If any of these files are missing, **DO NOT deploy yet**. Fix build errors first
 ## 📋 Hostinger Setup Checklist
 
 ### Phase 1-3: SSH & Install Dependencies
+
 - [ ] SSH to Hostinger: `ssh root@srv1092855.hstgr.cloud`
 - [ ] Update system: `apt update && apt upgrade -y`
 - [ ] Install Node.js 22
@@ -58,6 +60,7 @@ If any of these files are missing, **DO NOT deploy yet**. Fix build errors first
 - [ ] Verify all installations
 
 ### Phase 4: Clone & Build
+
 - [ ] Create `/var/www/sharekte.com` directory
 - [ ] Clone repository from GitHub
 - [ ] Run `pnpm install --frozen-lockfile`
@@ -66,6 +69,7 @@ If any of these files are missing, **DO NOT deploy yet**. Fix build errors first
 - [ ] Verify `dist/server/node-build.mjs` exists
 
 ### Phase 5: Environment Variables
+
 - [ ] Create `.env` file in `/var/www/sharekte.com/`
 - [ ] Add `AIRTABLE_API_TOKEN`
 - [ ] Add `VITE_AIRTABLE_API_TOKEN`
@@ -75,6 +79,7 @@ If any of these files are missing, **DO NOT deploy yet**. Fix build errors first
 - [ ] Verify `.env` file with: `cat /var/www/sharekte.com/.env`
 
 ### Phase 6: Nginx Setup
+
 - [ ] Copy `nginx-sharekte.conf` to `/etc/nginx/sites-available/`
 - [ ] Enable site with symbolic link
 - [ ] Test Nginx config: `sudo nginx -t` (should show "successful")
@@ -82,6 +87,7 @@ If any of these files are missing, **DO NOT deploy yet**. Fix build errors first
 - [ ] Enable Nginx on boot: `sudo systemctl enable nginx`
 
 ### Phase 7: SSL Certificate (Let's Encrypt)
+
 - [ ] Install Certbot
 - [ ] Obtain certificate: `sudo certbot certonly --standalone -d sharekte.com`
 - [ ] Verify certificate: `sudo certbot certificates`
@@ -90,6 +96,7 @@ If any of these files are missing, **DO NOT deploy yet**. Fix build errors first
 - [ ] Enable auto-renewal
 
 ### Phase 8: PM2 Setup
+
 - [ ] Start with PM2: `pm2 start ecosystem.config.js`
 - [ ] Save PM2 config: `pm2 save`
 - [ ] Setup boot startup: `pm2 startup`
@@ -97,6 +104,7 @@ If any of these files are missing, **DO NOT deploy yet**. Fix build errors first
 - [ ] Verify running: `pm2 list` (should show "sharekte" with ✓ status)
 
 ### Phase 9: Verify Deployment
+
 - [ ] Health check: `curl http://localhost:8080/health`
 - [ ] Health check HTTPS: `curl https://sharekte.com/health` (from local machine)
 - [ ] API test: `curl https://sharekte.com/api/ping`
@@ -113,12 +121,12 @@ Go to: `https://github.com/ashashpachaa/sharekte.com/settings/secrets/actions`
 
 Add these secrets:
 
-| Secret Name | Value | Example |
-|-------------|-------|---------|
-| `HOSTINGER_HOST` | Your Hostinger server | `srv1092855.hstgr.cloud` |
-| `HOSTINGER_USER` | SSH user | `root` |
-| `HOSTINGER_PORT` | SSH port | `22` |
-| `HOSTINGER_SSH_KEY` | Private SSH key | (multi-line) |
+| Secret Name         | Value                 | Example                  |
+| ------------------- | --------------------- | ------------------------ |
+| `HOSTINGER_HOST`    | Your Hostinger server | `srv1092855.hstgr.cloud` |
+| `HOSTINGER_USER`    | SSH user              | `root`                   |
+| `HOSTINGER_PORT`    | SSH port              | `22`                     |
+| `HOSTINGER_SSH_KEY` | Private SSH key       | (multi-line)             |
 
 ### Get SSH Private Key
 
@@ -142,37 +150,44 @@ cat ~/.ssh/id_rsa
 ## 🔍 Verification Tests
 
 ### Test 1: Health Check
+
 ```bash
 curl https://sharekte.com/health
 # Expected: { "status": "ok", ... }
 ```
 
 ### Test 2: API Endpoint
+
 ```bash
 curl https://sharekte.com/api/ping
 # Expected: { "message": "ping" }
 ```
 
 ### Test 3: Homepage
+
 ```bash
 curl https://sharekte.com/
 # Expected: HTML response with React app (contains <div id="root">)
 ```
 
 ### Test 4: Companies List
+
 ```bash
 curl https://sharekte.com/api/companies
 # Expected: Array of company objects
 ```
 
 ### Test 5: Logs
+
 ```bash
 pm2 logs sharekte
 # Expected: No error messages, shows requests being processed
 ```
 
 ### Test 6: Browser
+
 Open `https://sharekte.com/` in browser:
+
 - [ ] Homepage loads without 404 errors
 - [ ] Companies page loads
 - [ ] Can navigate between pages (React Router works)
@@ -184,9 +199,11 @@ Open `https://sharekte.com/` in browser:
 ## 🚨 Common Issues & Fixes
 
 ### Issue: "SPA index.html not found"
+
 **Cause**: Build didn't complete or files not in correct location
 
 **Fix**:
+
 ```bash
 cd /var/www/sharekte.com
 npm run build
@@ -195,9 +212,11 @@ pm2 restart sharekte
 ```
 
 ### Issue: Port 8080 already in use
+
 **Cause**: Old process still running
 
 **Fix**:
+
 ```bash
 lsof -i :8080
 kill -9 <PID>
@@ -205,9 +224,11 @@ pm2 start ecosystem.config.js
 ```
 
 ### Issue: Nginx 502 Bad Gateway
+
 **Cause**: Node.js app not running or Nginx can't reach it
 
 **Fix**:
+
 ```bash
 pm2 status  # Check if sharekte is running
 curl http://localhost:8080/health  # Test direct
@@ -215,9 +236,11 @@ sudo systemctl restart nginx
 ```
 
 ### Issue: SSL certificate not working
+
 **Cause**: Certificate not installed or path wrong
 
 **Fix**:
+
 ```bash
 sudo certbot certificates  # Check status
 sudo certbot renew  # Manually renew
@@ -225,9 +248,11 @@ sudo systemctl reload nginx
 ```
 
 ### Issue: Airtable sync not working
+
 **Cause**: API token not set or invalid
 
 **Fix**:
+
 ```bash
 echo $AIRTABLE_API_TOKEN  # Verify it's set
 cat /var/www/sharekte.com/.env | grep AIRTABLE
@@ -240,6 +265,7 @@ pm2 logs sharekte | grep -i airtable  # Check logs
 ## 📊 Monitor After Deployment
 
 ### Daily Health Check
+
 ```bash
 # SSH to Hostinger
 ssh root@srv1092855.hstgr.cloud
@@ -255,6 +281,7 @@ pm2 logs sharekte | grep -i error
 ```
 
 ### Weekly Maintenance
+
 ```bash
 # Update OS
 apt update && apt upgrade -y
@@ -267,6 +294,7 @@ du -sh /var/www/sharekte.com
 ```
 
 ### Monthly Review
+
 ```bash
 # Backup application
 tar -czf /var/backups/sharekte-$(date +%Y%m%d).tar.gz /var/www/sharekte.com
@@ -336,17 +364,20 @@ After deployment, you should see:
 ## 📝 Checklist Summary
 
 ### Before Deployment
+
 - [ ] All files created (ecosystem.config.js, etc.)
 - [ ] Local build succeeds
 - [ ] dist/spa/ and dist/server/ exist locally
 
 ### During Setup
+
 - [ ] All 9 phases of HOSTINGER_SETUP_GUIDE.md completed
 - [ ] All verification tests pass
 - [ ] Health check works
 - [ ] SSL certificate valid
 
 ### After Deployment
+
 - [ ] Auto-deploy workflow configured
 - [ ] GitHub secrets added
 - [ ] Test auto-deploy with push
