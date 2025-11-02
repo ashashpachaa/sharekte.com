@@ -8,13 +8,13 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Install dependencies
         run: sudo apt-get update && sudo apt-get install -y sshpass
-      
+
       - name: Deploy to Hostinger
         env:
           HOSTINGER_HOST: ${{ secrets.HOSTINGER_HOST }}
@@ -24,14 +24,14 @@ jobs:
         run: |
           sshpass -p "$HOSTINGER_PASSWORD" ssh -o StrictHostKeyChecking=no $HOSTINGER_USER@$HOSTINGER_HOST << 'ENDSSH'
           cd /var/www/shareket.com
-          
+
           git config --global url."https://$GIT_PAT:x-oauth-basic@github.com/".insteadOf "https://github.com/"
-          
+
           git pull origin main
           pnpm install --frozen-lockfile
           npm run build
           pm2 restart sharekte
           pm2 save
-          
+
           echo "✅ Deployment complete at $(date)"
           ENDSSH
