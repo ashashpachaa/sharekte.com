@@ -9,8 +9,10 @@ import {
   addUserNote,
   updateUserDetails,
   createUser,
+  updateUserRole,
   type UserAccount,
 } from "@/lib/user-management";
+import { getRoleByName } from "@/lib/roles-and-permissions";
 import { getLoginHistory } from "@/lib/login-history";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
