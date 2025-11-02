@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useAIChat } from "@/lib/ai-chat-context";
+import { useCurrency } from "@/lib/currency-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { X, Send, MessageCircle, Loader, Plus } from "lucide-react";
