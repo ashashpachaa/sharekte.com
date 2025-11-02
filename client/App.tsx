@@ -8,6 +8,8 @@ import { CartProvider } from "@/lib/cart-context";
 import { NotificationsProvider } from "@/lib/notifications-context";
 import { CurrencyProvider } from "@/lib/currency-context";
 import { AdminProvider } from "@/lib/admin-context";
+import { AIChatProvider } from "@/lib/ai-chat-context";
+import { AIChat } from "@/components/AIChat";
 import i18n from "@/lib/i18n";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
