@@ -38,7 +38,7 @@ export default function AdminOrders() {
   const { isAdmin } = useAdmin();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { addNotification, markAsRead } = useNotifications();
+  const { addNotification } = useNotifications();
   const [notifiedOrderIds, setNotifiedOrderIds] = useState<Set<string>>(new Set());
   const [orders, setOrders] = useState<Order[]>([]);
   const [newOrdersCount, setNewOrdersCount] = useState(0);
