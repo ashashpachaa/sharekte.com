@@ -406,18 +406,6 @@ export function TransferFormManagement({
                   </p>
                 </div>
               </div>
-              {/* Current Status */}
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="font-semibold mb-2">Current Status</h3>
-                <div className="flex items-center gap-2">
-                  <Badge className={getFormStatusColor(selectedForm.status)}>
-                    {formatFormStatus(selectedForm.status)}
-                  </Badge>
-                  <span className="text-sm text-gray-600">
-                    Updated: {new Date(selectedForm.updatedAt).toLocaleString()}
-                  </span>
-                </div>
-              </div>
 
               {/* Company Information */}
               <div>
