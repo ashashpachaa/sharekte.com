@@ -212,11 +212,6 @@ export function AIChatProvider({ children }: { children: ReactNode }) {
     setError(null);
   }, []);
 
-  // Initialize with first session on mount
-  if (sessions.length === 0 && currentSessionId === null) {
-    startNewSession();
-  }
-
   const value: AIChatContextType = {
     sessions,
     currentSessionId,
