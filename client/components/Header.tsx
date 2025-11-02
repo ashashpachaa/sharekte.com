@@ -36,14 +36,13 @@ export function Header() {
         {/* Logo and Brand */}
         <Link
           to="/"
-          className="flex items-center gap-2 font-bold text-xl text-primary"
+          className="flex items-center font-bold text-xl text-primary"
         >
           <img
-            src="https://cdn.builder.io/api/v1/image/assets%2F752b1abf9cc241c993361e9dcaee5153%2Fd9d4a64693d843b1a53386d5a7c2937e?format=webp&width=100"
+            src="https://cdn.builder.io/api/v1/image/assets%2F752b1abf9cc241c993361e9dcaee5153%2Fd9d4a64693d843b1a53386d5a7c2937e?format=webp&width=200"
             alt="Sharekte"
-            className="h-8"
+            className="h-12 w-auto"
           />
-          <span className="hidden sm:inline">Sharekte</span>
         </Link>
 
         {/* Navigation */}

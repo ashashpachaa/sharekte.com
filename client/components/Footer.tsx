@@ -13,14 +13,13 @@ export function Footer() {
           <div>
             <Link
               to="/"
-              className="flex items-center gap-2 font-bold text-lg text-primary mb-4"
+              className="flex items-center font-bold text-lg text-primary mb-4"
             >
               <img
-                src="https://cdn.builder.io/api/v1/image/assets%2F752b1abf9cc241c993361e9dcaee5153%2Fd9d4a64693d843b1a53386d5a7c2937e?format=webp&width=100"
+                src="https://cdn.builder.io/api/v1/image/assets%2F752b1abf9cc241c993361e9dcaee5153%2Fd9d4a64693d843b1a53386d5a7c2937e?format=webp&width=200"
                 alt="Sharekte"
-                className="h-8"
+                className="h-14 w-auto"
               />
-              <span>Sharekte</span>
             </Link>
             <p className="text-sm text-muted-foreground">
               Global marketplace for buying and selling established,
