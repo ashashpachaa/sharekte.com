@@ -102,7 +102,7 @@ export default function Signup() {
     if (password.length < 6)
       return {
         level: 1,
-        text: t("auth.weakness") || "Weak",
+        text: "Weak",
         color: "text-red-500",
       };
     if (
@@ -112,12 +112,12 @@ export default function Signup() {
     )
       return {
         level: 2,
-        text: t("auth.fair") || "Fair",
+        text: "Fair",
         color: "text-yellow-500",
       };
     return {
       level: 3,
-      text: t("auth.strong") || "Strong",
+      text: "Strong",
       color: "text-green-500",
     };
   })();
@@ -245,7 +245,7 @@ export default function Signup() {
                 htmlFor="confirmPassword"
                 className="block text-sm font-medium text-foreground"
               >
-                {t("auth.confirmPassword") || "Confirm Password"}
+                Confirm Password
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
@@ -254,10 +254,7 @@ export default function Signup() {
                   type={showConfirm ? "text" : "password"}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder={
-                    t("auth.confirmPasswordPlaceholder") ||
-                    "Re-enter your password"
-                  }
+                  placeholder="Confirm Password"
                   className="w-full pl-10 pr-10 py-2 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-background text-foreground"
                   disabled={loading}
                 />
@@ -277,7 +274,7 @@ export default function Signup() {
               {confirmPassword && password === confirmPassword && (
                 <div className="flex items-center gap-2 text-xs text-green-600">
                   <CheckCircle className="w-4 h-4" />
-                  {t("auth.passwordsMatch") || "Passwords match"}
+                  Passwords match
                 </div>
               )}
             </div>
@@ -293,8 +290,7 @@ export default function Signup() {
                 disabled={loading}
               />
               <label htmlFor="terms" className="text-xs text-muted-foreground">
-                {t("auth.agreeToTerms") ||
-                  "I agree to the Terms of Service and Privacy Policy"}
+                I agree to the Terms of Service and Privacy Policy
               </label>
             </div>
 
@@ -307,12 +303,12 @@ export default function Signup() {
               {loading ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  {t("auth.creatingAccount") || "Creating account..."}
+                  Creating account...
                 </>
               ) : (
                 <>
                   <LogIn className="w-4 h-4" />
-                  {t("auth.signup.button") || "Create Account"}
+                  Create Account
                 </>
               )}
             </Button>
@@ -325,7 +321,7 @@ export default function Signup() {
             </div>
             <div className="relative flex justify-center text-sm">
               <span className="px-2 bg-background text-muted-foreground">
-                {t("auth.alreadyHaveAccount") || "Already have an account?"}
+                Already have an account?
               </span>
             </div>
           </div>
@@ -338,7 +334,7 @@ export default function Signup() {
             onClick={() => navigate("/login")}
             disabled={loading}
           >
-            {t("auth.signIn") || "Sign In"}
+            Sign In
           </Button>
         </div>
       </div>
