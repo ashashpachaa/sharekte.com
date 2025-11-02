@@ -541,6 +541,24 @@ export default function AdminUsers() {
                 />
               </div>
 
+              <div>
+                <label className="text-xs text-muted-foreground font-semibold mb-1 block">
+                  Role *
+                </label>
+                <select
+                  value={newUserData.role}
+                  onChange={(e) => setNewUserData({ ...newUserData, role: e.target.value as any })}
+                  className="w-full px-3 py-2 border border-input rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                >
+                  <option value="client">Client</option>
+                  <option value="admin">Admin</option>
+                  <option value="super-admin">Super Admin</option>
+                  <option value="administrations">Administrations</option>
+                  <option value="operations">Operations</option>
+                  <option value="accounting">Accounting</option>
+                </select>
+              </div>
+
               <div className="flex gap-2 pt-4">
                 <Button
                   variant="outline"
