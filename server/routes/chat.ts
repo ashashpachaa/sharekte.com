@@ -82,6 +82,18 @@ async function callGroqAPI(messages: GroqMessage[]): Promise<string> {
 async function getDemoResponse(messages: GroqMessage[]): Promise<string> {
   const userMessage = messages[messages.length - 1]?.content.toLowerCase() || "";
 
+  // Check if user is talking about an EXISTING order
+  if (userMessage.includes("i have") && userMessage.includes("order") ||
+      userMessage.includes("i got") && userMessage.includes("order") ||
+      userMessage.includes("my order") ||
+      userMessage.includes("order status") ||
+      userMessage.includes("check my order") ||
+      userMessage.includes("where is") ||
+      userMessage.includes("track order") ||
+      userMessage.includes("already have") && userMessage.includes("order")) {
+    return "Great! You already have an order with us. 🎉\n\nWhat would you like to do?\n• Check order status\n• Track your order\n• Modify order details\n• Ask about next steps\n• Or anything else?\n\nLet me know how I can help!";
+  }
+
   // Fetch real company data for intelligent responses
   let companyContext = "";
   try {
@@ -136,7 +148,7 @@ async function getDemoResponse(messages: GroqMessage[]): Promise<string> {
     "hello": "Hello! 👋 Welcome to Sharekte. I'm an AI sales assistant here to help you explore our company marketplace. What are you looking for today?",
     "company": `We have a great selection of ready-made companies for sale. ${companyContext ? `Currently available in: ${companyContext}. ` : ""}Would you like to browse by country, industry, or price range?`,
     "price": "Our companies range from $500 to $100,000+ depending on the company type and jurisdiction. Would you like to see some options in a specific price range?",
-    "order": "I can help you place an order! First, let me collect your information using the form above, then we can proceed to checkout.",
+    "order": "I can help you place a new order! First, let me collect your information using the form above, then we can proceed to checkout.",
     "checkout": "To proceed with checkout, I'll need your contact information first. Please fill out the form above with your name, email, and phone number.",
     "how": "Our process is simple: 1) Browse companies, 2) Add to cart, 3) Provide your information, 4) Complete payment, 5) Receive company documents. Want to get started?",
     "help": "I'm here to help! You can ask me about: company listings by country, pricing, the ordering process, or how our service works. What interests you?",
