@@ -80,7 +80,7 @@ export function CartDropdown() {
                     Subtotal
                   </span>
                   <span className="text-lg font-bold text-primary">
-                    £{totalPrice.toLocaleString()}
+                    {formatPrice(totalPrice)}
                   </span>
                 </div>
 
