@@ -83,14 +83,14 @@ async function getDemoResponse(messages: GroqMessage[]): Promise<string> {
   const userMessage = messages[messages.length - 1]?.content.toLowerCase() || "";
 
   // Check if user is talking about an EXISTING order
-  if (userMessage.includes("i have") && userMessage.includes("order") ||
-      userMessage.includes("i got") && userMessage.includes("order") ||
+  if ((userMessage.includes("i have") && userMessage.includes("order")) ||
+      (userMessage.includes("i got") && userMessage.includes("order")) ||
       userMessage.includes("my order") ||
       userMessage.includes("order status") ||
       userMessage.includes("check my order") ||
       userMessage.includes("where is") ||
       userMessage.includes("track order") ||
-      userMessage.includes("already have") && userMessage.includes("order")) {
+      (userMessage.includes("already have") && userMessage.includes("order"))) {
     return "Great! You already have an order with us. 🎉\n\nWhat would you like to do?\n• Check order status\n• Track your order\n• Modify order details\n• Ask about next steps\n• Or anything else?\n\nLet me know how I can help!";
   }
 
