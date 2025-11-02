@@ -54,6 +54,7 @@ import {
   Trash2,
   Clock,
   Mail,
+  FileText,
 } from "lucide-react";
 import { toast } from "sonner";
 
