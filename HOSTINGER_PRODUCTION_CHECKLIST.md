@@ -37,6 +37,7 @@ echo 'PORT="8080"' | sudo tee -a /etc/environment
 ```
 
 Then reload:
+
 ```bash
 source /etc/environment
 ```
@@ -51,20 +52,20 @@ Create or update `/var/www/sharekte.com/ecosystem.config.js`:
 module.exports = {
   apps: [
     {
-      name: 'sharekte',
-      script: './dist/server/node-build.mjs',
+      name: "sharekte",
+      script: "./dist/server/node-build.mjs",
       instances: 1,
-      exec_mode: 'fork',
+      exec_mode: "fork",
       env: {
-        NODE_ENV: 'production',
+        NODE_ENV: "production",
         PORT: 8080,
       },
-      error_file: '/var/log/sharekte-error.log',
-      out_file: '/var/log/sharekte-out.log',
-      log_date_format: 'YYYY-MM-DD HH:mm:ss Z',
+      error_file: "/var/log/sharekte-error.log",
+      out_file: "/var/log/sharekte-out.log",
+      log_date_format: "YYYY-MM-DD HH:mm:ss Z",
       merge_logs: true,
       autorestart: true,
-      max_memory_restart: '500M',
+      max_memory_restart: "500M",
       watch: false,
     },
   ],
@@ -72,6 +73,7 @@ module.exports = {
 ```
 
 **Start with PM2:**
+
 ```bash
 cd /var/www/sharekte.com
 pm2 start ecosystem.config.js
@@ -114,6 +116,7 @@ server {
 ```
 
 Test and reload:
+
 ```bash
 sudo nginx -t
 sudo systemctl reload nginx
@@ -124,37 +127,43 @@ sudo systemctl reload nginx
 ## ✅ Critical App Features (MUST VERIFY)
 
 ### 1. Health Check Endpoint
+
 - **URL**: `https://sharekte.com/health`
 - **Expected Response**: `{ status: "ok", ... }`
 - **Purpose**: PM2 and monitoring tools use this
 - **Code Location**: `server/index.ts` (line ~95)
 
 Test:
+
 ```bash
 curl https://sharekte.com/health
 ```
 
 ### 2. API Routes (All Must Work)
+
 These endpoints power your business logic:
 
-| Route | Purpose | Critical |
-|-------|---------|----------|
-| `GET /api/companies` | List all companies | ✅ YES |
-| `POST /api/orders` | Create orders | ✅ YES |
-| `GET /api/orders` | List orders | ✅ YES |
-| `GET /api/transfer-forms` | List transfer forms | ✅ YES |
-| `POST /api/transfer-forms` | Submit transfer forms | ✅ YES |
-| `GET /api/invoices` | List invoices | ✅ YES |
+| Route                      | Purpose               | Critical |
+| -------------------------- | --------------------- | -------- |
+| `GET /api/companies`       | List all companies    | ✅ YES   |
+| `POST /api/orders`         | Create orders         | ✅ YES   |
+| `GET /api/orders`          | List orders           | ✅ YES   |
+| `GET /api/transfer-forms`  | List transfer forms   | ✅ YES   |
+| `POST /api/transfer-forms` | Submit transfer forms | ✅ YES   |
+| `GET /api/invoices`        | List invoices         | ✅ YES   |
 
 Test a critical route:
+
 ```bash
 curl https://sharekte.com/api/companies
 ```
 
 ### 3. Airtable Sync (Data Persistence)
+
 Your business data syncs to Airtable. If this fails, orders won't be saved!
 
 **Verify:**
+
 1. `AIRTABLE_API_TOKEN` is set correctly
 2. Airtable tables exist:
    - `tbl01DTvrGtsAaPfZ` (Orders)
@@ -165,7 +174,9 @@ Your business data syncs to Airtable. If this fails, orders won't be saved!
 **Code Location**: `server/utils/airtable-sync.ts`
 
 ### 4. SPA Routing (React Router)
+
 All React routes should load properly:
+
 - `/` - Homepage
 - `/companies` - Companies list
 - `/dashboard` - User dashboard
@@ -176,11 +187,13 @@ All React routes should load properly:
 **Test**: Navigate to each route, should load without 404 errors
 
 ### 5. Static Assets (CSS, JS, Images)
+
 - **Built files**: `dist/spa/index.html` + assets
 - **Served by**: Nginx (static files)
 - **Built by**: `npm run build`
 
 Check if assets loaded:
+
 ```bash
 ls -la /var/www/sharekte.com/dist/spa/
 ```
@@ -190,6 +203,7 @@ ls -la /var/www/sharekte.com/dist/spa/
 ## ✅ Production Monitoring
 
 ### Check PM2 Status
+
 ```bash
 pm2 list
 pm2 logs sharekte
@@ -197,18 +211,21 @@ pm2 monit
 ```
 
 ### Check Nginx Status
+
 ```bash
 sudo systemctl status nginx
 sudo nginx -t
 ```
 
 ### View Application Logs
+
 ```bash
 tail -f /var/log/sharekte-out.log
 tail -f /var/log/sharekte-error.log
 ```
 
 ### Check Disk Space
+
 ```bash
 df -h
 du -sh /var/www/sharekte.com
@@ -219,6 +236,7 @@ du -sh /var/www/sharekte.com
 ## ✅ Deployment Process (Every Time You Push)
 
 1. **Push to GitHub**:
+
    ```bash
    git add .
    git commit -m "Your changes"
@@ -241,6 +259,7 @@ du -sh /var/www/sharekte.com
 ## ✅ Troubleshooting
 
 ### Problem: App won't start
+
 ```bash
 # Check logs
 pm2 logs sharekte
@@ -254,6 +273,7 @@ npm start
 ```
 
 ### Problem: 502 Bad Gateway (Nginx error)
+
 ```bash
 # Check if Node app is running
 pm2 list
@@ -266,6 +286,7 @@ tail -f /var/log/sharekte-error.log
 ```
 
 ### Problem: Airtable sync failing
+
 ```bash
 # Check if token is set
 echo $AIRTABLE_API_TOKEN
@@ -275,6 +296,7 @@ echo $AIRTABLE_API_TOKEN
 ```
 
 ### Problem: CSS/JS not loading
+
 ```bash
 # Rebuild
 cd /var/www/sharekte.com
@@ -293,16 +315,16 @@ Your data lives in Airtable. Hostinger only runs the app code.
 **Airtable Base**: `app0PK34gyJDizR3Q`
 
 **Tables**:
+
 - **Orders**: `tbl01DTvrGtsAaPfZ`
   - Fields: Order ID, Customer Name, Company Name, Status, Amount, etc.
-  
 - **Companies**: `tbljtdHPdHnTberDy`
   - Fields: Company name, Company number, Country, Price, Status, etc.
-  
 - **Transfer Forms**: `tblK7lUO1cfNFYO14`
   - Fields: Order Number, Company Name, Status, Shareholder info, etc.
 
-**Important**: 
+**Important**:
+
 - DO NOT delete tables or change field names
 - Field names are case-sensitive
 - Status field is named "Statues " (with trailing space) in Companies table
@@ -314,12 +336,14 @@ Your data lives in Airtable. Hostinger only runs the app code.
 Your HTTPS is auto-renewed by Let's Encrypt.
 
 **Check certificate**:
+
 ```bash
 sudo certbot certificates
 sudo certbot renew --dry-run
 ```
 
 Certificate location:
+
 - `/etc/letsencrypt/live/sharekte.com/fullchain.pem`
 - `/etc/letsencrypt/live/sharekte.com/privkey.pem`
 
@@ -328,12 +352,14 @@ Certificate location:
 ## ✅ Backup & Recovery
 
 **Backup your code** (already on GitHub):
+
 ```bash
 git remote -v
 # Should show: github.com:ashashpachaa/sharekte.com.git
 ```
 
 **Restore from GitHub**:
+
 ```bash
 cd /var/www/sharekte.com
 git fetch origin main
@@ -347,12 +373,14 @@ pm2 restart sharekte
 ## ✅ Performance Tips
 
 1. **Enable Gzip compression** in Nginx:
+
    ```nginx
    gzip on;
    gzip_types text/plain text/css application/json application/javascript;
    ```
 
 2. **Cache static assets** (browser cache):
+
    ```nginx
    location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ {
        expires 30d;
@@ -360,6 +388,7 @@ pm2 restart sharekte
    ```
 
 3. **Monitor memory**:
+
    ```bash
    pm2 monit
    free -h
