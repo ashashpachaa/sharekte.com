@@ -307,6 +307,9 @@ function getEmailLayout(
 <body>
   <div class="wrapper">
     <div class="container">
+      <div style="padding: 20px 30px 10px 30px; text-align: center; background: white;">
+        <img src="${LOGO_URL}" alt="Sharekte" class="logo" style="max-width: 160px; height: auto; margin: 0 auto;">
+      </div>
       ${content}
       <div class="footer">
         <div class="footer-logo">${COMPANY_NAME}</div>
