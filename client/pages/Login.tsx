@@ -170,7 +170,7 @@ export default function Login() {
             </div>
             <div className="relative flex justify-center text-sm">
               <span className="px-2 bg-background text-muted-foreground">
-                {t("auth.noAccount") || "Don't have an account?"}
+                Don't have an account?
               </span>
             </div>
           </div>
