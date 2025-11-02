@@ -35,7 +35,7 @@ interface GroqMessage {
 async function callGroqAPI(messages: GroqMessage[]): Promise<string> {
   if (!GROQ_API_KEY) {
     console.warn("[Groq] API key not configured, using demo mode");
-    return getDemoResponse(messages);
+    return await getDemoResponse(messages);
   }
 
   try {
@@ -58,7 +58,7 @@ async function callGroqAPI(messages: GroqMessage[]): Promise<string> {
       const error = await response.text();
       console.error("[Groq API Error]", error);
       console.warn("[Groq] Falling back to demo mode due to API error");
-      return getDemoResponse(messages);
+      return await getDemoResponse(messages);
     }
 
     const data = (await response.json()) as {
@@ -68,7 +68,7 @@ async function callGroqAPI(messages: GroqMessage[]): Promise<string> {
   } catch (error) {
     console.error("[Groq API Error]", error);
     console.warn("[Groq] Falling back to demo mode due to error");
-    return getDemoResponse(messages);
+    return await getDemoResponse(messages);
   }
 }
 
