@@ -82,7 +82,21 @@ async function callGroqAPI(messages: GroqMessage[]): Promise<string> {
   }
 }
 
-async function getDemoResponse(messages: GroqMessage[]): Promise<string> {
+function getCurrencySymbol(currency: string): string {
+  const symbols: Record<string, string> = {
+    USD: "$",
+    GBP: "£",
+    EUR: "€",
+    AED: "د.إ",
+    SAR: "﷼",
+  };
+  return symbols[currency] || "$";
+}
+
+async function getDemoResponse(
+  messages: GroqMessage[],
+  currency: string = "USD",
+): Promise<string> {
   const userMessage =
     messages[messages.length - 1]?.content.toLowerCase() || "";
 
