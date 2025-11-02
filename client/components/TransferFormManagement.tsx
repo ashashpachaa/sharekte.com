@@ -394,7 +394,7 @@ export function TransferFormManagement({
               {/* Company Information */}
               <div>
                 <h3 className="font-semibold mb-3">Company Information</h3>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   <div>
                     <Label className="text-xs text-gray-600">
                       Company Name
@@ -417,8 +417,41 @@ export function TransferFormManagement({
                     </Label>
                     <p className="text-sm">{selectedForm.incorporationYear}</p>
                   </div>
+                  <div>
+                    <Label className="text-xs text-gray-600">
+                      Incorporation Date
+                    </Label>
+                    <p className="text-sm">{selectedForm.incorporationDate ? new Date(selectedForm.incorporationDate).toLocaleDateString() : "N/A"}</p>
+                  </div>
                 </div>
               </div>
+
+              {/* Share Information */}
+              {selectedForm.totalShares > 0 && (
+                <div>
+                  <h3 className="font-semibold mb-3">Share Details</h3>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="bg-blue-50 p-3 rounded-lg">
+                      <Label className="text-xs text-gray-600">
+                        Total Shares
+                      </Label>
+                      <p className="font-medium text-lg">{selectedForm.totalShares}</p>
+                    </div>
+                    <div className="bg-blue-50 p-3 rounded-lg">
+                      <Label className="text-xs text-gray-600">
+                        Share Capital
+                      </Label>
+                      <p className="font-medium text-lg">{selectedForm.totalShareCapital}</p>
+                    </div>
+                    <div className="bg-blue-50 p-3 rounded-lg">
+                      <Label className="text-xs text-gray-600">
+                        Price Per Share
+                      </Label>
+                      <p className="font-medium text-lg">{selectedForm.pricePerShare}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Shareholders Information */}
               <div>
@@ -431,13 +464,24 @@ export function TransferFormManagement({
                     {selectedForm.shareholders.map((shareholder, idx) => (
                       <div
                         key={idx}
-                        className="border-l-2 border-blue-200 pl-3 py-2"
+                        className="border-l-2 border-blue-200 pl-3 py-2 p-3 bg-gray-50 rounded"
                       >
                         <p className="font-medium text-sm">
                           {shareholder.name}
                         </p>
-                        <p className="text-xs text-gray-600">
-                          {shareholder.sharePercentage}% shares
+                        <div className="grid grid-cols-3 gap-2 mt-2 text-xs">
+                          <div>
+                            <span className="text-gray-600">Nationality:</span> {shareholder.nationality}
+                          </div>
+                          <div>
+                            <span className="text-gray-600">Shares:</span> {shareholder.shareholderPercentage}%
+                          </div>
+                          <div>
+                            <span className="text-gray-600">Amount:</span> {shareholder.amount}
+                          </div>
+                        </div>
+                        <p className="text-xs text-gray-600 mt-1">
+                          {shareholder.address}, {shareholder.city}, {shareholder.country}
                         </p>
                       </div>
                     ))}
@@ -449,37 +493,166 @@ export function TransferFormManagement({
                 )}
               </div>
 
-              {/* Attachments */}
-              {selectedForm.attachments.length > 0 && (
+              {/* PSC Information */}
+              {selectedForm.pscList && selectedForm.pscList.length > 0 && (
                 <div>
                   <h3 className="font-semibold mb-3">
-                    Attachments ({selectedForm.attachments.length})
+                    Persons of Significant Control ({selectedForm.numberOfPSCs})
                   </h3>
-                  <div className="space-y-2">
-                    {selectedForm.attachments.map((attachment) => (
+                  <div className="space-y-3">
+                    {selectedForm.pscList.map((psc, idx) => (
                       <div
-                        key={attachment.id}
-                        className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50"
+                        key={idx}
+                        className="border-l-2 border-green-200 pl-3 p-3 bg-green-50 rounded"
                       >
-                        <div>
-                          <p className="font-medium text-sm">
-                            {attachment.name}
-                          </p>
-                          <p className="text-xs text-gray-500">
-                            {(attachment.size / 1024 / 1024).toFixed(2)} MB •{" "}
-                            {new Date(
-                              attachment.uploadedDate,
-                            ).toLocaleDateString()}
-                          </p>
+                        <p className="font-medium text-sm">{psc.shareholderName}</p>
+                        <div className="grid grid-cols-2 gap-2 mt-2 text-xs">
+                          <div>
+                            <span className="text-gray-600">Nationality:</span> {psc.nationality}
+                          </div>
+                          <div>
+                            <span className="text-gray-600">Level of Control:</span> {psc.levelOfControl.join(", ")}
+                          </div>
                         </div>
-                        <Button variant="ghost" size="sm">
-                          <Download className="w-4 h-4" />
-                        </Button>
+                        <p className="text-xs text-gray-600 mt-1">
+                          {psc.address}, {psc.city}, {psc.country}
+                        </p>
                       </div>
                     ))}
                   </div>
                 </div>
               )}
+
+              {/* Company Change Requests */}
+              <div>
+                <h3 className="font-semibold mb-3">Company Changes</h3>
+                {selectedForm.changeCompanyName && (
+                  <div className="mb-3 p-3 bg-yellow-50 border border-yellow-200 rounded">
+                    <p className="font-medium text-sm mb-1">🏷️ Company Name Change</p>
+                    {selectedForm.suggestedNames && selectedForm.suggestedNames.length > 0 ? (
+                      <p className="text-sm">Suggested names: {selectedForm.suggestedNames.join(", ")}</p>
+                    ) : (
+                      <p className="text-sm text-gray-600">Name change requested</p>
+                    )}
+                  </div>
+                )}
+                {selectedForm.changeCompanyActivities && (
+                  <div className="p-3 bg-yellow-50 border border-yellow-200 rounded">
+                    <p className="font-medium text-sm mb-1">🏢 Activities Change</p>
+                    {selectedForm.companyActivities && selectedForm.companyActivities.length > 0 ? (
+                      <div className="text-sm">
+                        {selectedForm.companyActivities.map((activity, idx) => (
+                          <p key={idx} className="text-gray-700">• {activity}</p>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-sm text-gray-600">Activities change requested</p>
+                    )}
+                  </div>
+                )}
+                {!selectedForm.changeCompanyName && !selectedForm.changeCompanyActivities && (
+                  <p className="text-sm text-gray-500">No company changes requested</p>
+                )}
+              </div>
+
+              {/* Admin Tracking */}
+              {(selectedForm.assignedTo || selectedForm.reviewedBy) && (
+                <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                  <h3 className="font-semibold mb-2 text-purple-900">Admin Assignment</h3>
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    {selectedForm.assignedTo && (
+                      <div>
+                        <span className="text-gray-600">Assigned to:</span>
+                        <p className="font-medium">{selectedForm.assignedTo}</p>
+                        <p className="text-xs text-gray-600">{selectedForm.assignedDate ? new Date(selectedForm.assignedDate).toLocaleDateString() : ""}</p>
+                      </div>
+                    )}
+                    {selectedForm.reviewedBy && (
+                      <div>
+                        <span className="text-gray-600">Reviewed by:</span>
+                        <p className="font-medium">{selectedForm.reviewedBy}</p>
+                        <p className="text-xs text-gray-600">{selectedForm.reviewedDate ? new Date(selectedForm.reviewedDate).toLocaleDateString() : ""}</p>
+                      </div>
+                    )}
+                  </div>
+                  {selectedForm.amendmentsRequiredCount > 0 && (
+                    <div className="mt-2 text-sm">
+                      <span className="text-orange-700">Amendments required:</span> {selectedForm.amendmentsRequiredCount}
+                      {selectedForm.lastAmendmentDate && (
+                        <p className="text-xs text-gray-600">Last amendment: {new Date(selectedForm.lastAmendmentDate).toLocaleDateString()}</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Status History */}
+              {selectedForm.statusHistory && selectedForm.statusHistory.length > 0 && (
+                <div>
+                  <h3 className="font-semibold mb-3">Status Change History</h3>
+                  <div className="space-y-2">
+                    {selectedForm.statusHistory.map((change, idx) => (
+                      <div key={idx} className="flex gap-3 p-3 bg-gray-50 rounded-lg text-sm">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <Badge variant="outline" className="text-xs">
+                              {formatFormStatus(change.fromStatus as FormStatus)}
+                            </Badge>
+                            <span className="text-gray-600">→</span>
+                            <Badge className="text-xs">
+                              {formatFormStatus(change.toStatus as FormStatus)}
+                            </Badge>
+                          </div>
+                          <p className="text-xs text-gray-600 mt-1">
+                            Changed by {change.changedBy} on {new Date(change.changedDate).toLocaleDateString()}
+                          </p>
+                          {change.notes && (
+                            <p className="text-xs text-gray-700 mt-1 italic">{change.notes}</p>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Attachments */}
+              <div>
+                <h3 className="font-semibold mb-3">
+                  📎 Attached Files ({selectedForm.attachments.length})
+                </h3>
+                {selectedForm.attachments.length > 0 ? (
+                  <div className="space-y-2">
+                    {selectedForm.attachments.map((attachment) => (
+                      <div
+                        key={attachment.id}
+                        className="flex items-center justify-between p-3 border rounded-lg hover:bg-blue-50 transition-colors"
+                      >
+                        <div className="flex-1">
+                          <p className="font-medium text-sm text-blue-900">
+                            📄 {attachment.name}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {(attachment.size / 1024 / 1024).toFixed(2)} MB • Uploaded {new Date(
+                              attachment.uploadedDate,
+                            ).toLocaleDateString()} by {attachment.uploadedBy}
+                          </p>
+                          {attachment.type && (
+                            <p className="text-xs text-gray-500 mt-1">Type: {attachment.type}</p>
+                          )}
+                        </div>
+                        <Button variant="ghost" size="sm" className="ml-2">
+                          <Download className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="p-4 bg-gray-50 rounded-lg text-center">
+                    <p className="text-sm text-gray-500">No attachments uploaded yet</p>
+                  </div>
+                )}
+              </div>
 
               {/* Comments */}
               {selectedForm.comments.length > 0 && (
