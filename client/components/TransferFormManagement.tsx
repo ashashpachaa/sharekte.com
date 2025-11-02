@@ -442,6 +442,55 @@ export function TransferFormManagement({
                 </div>
               </div>
 
+              {/* Attached Files - Prominent Display */}
+              <div className="border-2 border-blue-300 bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg">
+                <div className="flex items-center gap-2 mb-3">
+                  <FileText className="w-5 h-5 text-blue-600" />
+                  <h3 className="font-bold text-lg">📎 Attached Files ({selectedForm.attachments.length})</h3>
+                </div>
+                {selectedForm.attachments.length > 0 ? (
+                  <div className="space-y-2">
+                    {selectedForm.attachments.map((attachment) => (
+                      <div
+                        key={attachment.id}
+                        className="flex items-center justify-between p-3 bg-white border-l-4 border-blue-500 rounded hover:shadow-md transition-shadow"
+                      >
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-sm text-blue-900 truncate">
+                            📄 {attachment.name}
+                          </p>
+                          <div className="flex gap-3 text-xs text-gray-600 mt-1">
+                            <span>{(attachment.size / 1024 / 1024).toFixed(2)} MB</span>
+                            <span>•</span>
+                            <span>{new Date(attachment.uploadedDate).toLocaleDateString()}</span>
+                            <span>•</span>
+                            <span>By {attachment.uploadedBy}</span>
+                            {attachment.type && (
+                              <>
+                                <span>•</span>
+                                <span>{attachment.type}</span>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="ml-2 text-blue-600 hover:text-blue-900"
+                          title="Download attachment"
+                        >
+                          <Download className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="p-4 bg-white rounded text-center">
+                    <p className="text-sm text-gray-500">📭 No attachments uploaded yet</p>
+                  </div>
+                )}
+              </div>
+
               {/* Share Information */}
               {selectedForm.totalShares > 0 && (
                 <div>
