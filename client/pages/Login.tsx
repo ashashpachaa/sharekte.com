@@ -193,7 +193,7 @@ export default function Login() {
             </p>
             <div className="text-xs text-muted-foreground space-y-1">
               <p>Email: demo@example.com</p>
-              <p>{t("auth.demoPassword") || "Password"}: password123</p>
+              <p>Password: password123</p>
             </div>
           </div>
         </div>
