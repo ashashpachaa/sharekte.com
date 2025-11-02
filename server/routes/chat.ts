@@ -88,7 +88,7 @@ async function getDemoResponse(messages: GroqMessage[]): Promise<string> {
       userMessage.includes("my order") ||
       userMessage.includes("order status") ||
       userMessage.includes("check my order") ||
-      userMessage.includes("where is") ||
+      (userMessage.includes("where is") && userMessage.includes("order")) ||
       userMessage.includes("track order") ||
       (userMessage.includes("already have") && userMessage.includes("order"))) {
     return "Great! You already have an order with us. 🎉\n\nWhat would you like to do?\n• Check order status\n• Track your order\n• Modify order details\n• Ask about next steps\n• Or anything else?\n\nLet me know how I can help!";
