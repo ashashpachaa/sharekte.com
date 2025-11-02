@@ -1,0 +1,56 @@
+name: Deploy to Hostinger VPS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Deploy to Hostinger VPS
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOSTINGER_HOST }}
+          username: ${{ secrets.HOSTINGER_USER }}
+          key: ${{ secrets.HOSTINGER_SSH_KEY }}
+          port: ${{ secrets.HOSTINGER_PORT }}
+          script: |
+            cd /var/www/sharekte.com
+            echo "✅ Deploying sharekte.com..."
+            
+            # Pull latest code from GitHub
+            echo "📥 Pulling latest code from GitHub..."
+            git fetch origin main
+            git reset --hard origin/main
+            
+            # Install dependencies
+            echo "📦 Installing dependencies..."
+            npm install -g pnpm
+            pnpm install --frozen-lockfile
+            
+            # Build the application
+            echo "🔨 Building application..."
+            npm run build
+            
+            # Kill old process
+            echo "🛑 Stopping old server..."
+            pkill -f "node dist/server/node-build.mjs" || true
+            sleep 2
+            
+            # Start new process in background
+            echo "🚀 Starting new server..."
+            nohup npm start > /var/log/sharekte.log 2>&1 &
+            
+            # Wait for server to start
+            sleep 3
+            
+            # Check if server is running
+            if curl -f http://localhost:8080/health > /dev/null 2>&1; then
+              echo "✅ Deploy successful! Server is running."
+            else
+              echo "❌ Deploy failed! Health check didn't pass."
+              exit 1
+            fi
