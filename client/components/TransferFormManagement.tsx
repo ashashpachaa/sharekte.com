@@ -368,16 +368,44 @@ export function TransferFormManagement({
         onOpenChange={setShowDetailsModal}
       >
         {selectedForm && (
-          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-4xl max-h-[95vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Transfer Form: {selectedForm.formId}</DialogTitle>
+              <DialogTitle>Transfer Form Application</DialogTitle>
               <DialogDescription>
-                Company: {selectedForm.companyName} (
-                {selectedForm.companyNumber})
+                Form ID: {selectedForm.formId} • Order ID: {selectedForm.orderId}
               </DialogDescription>
             </DialogHeader>
 
             <div className="space-y-6">
+              {/* Form Summary */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
+                <div>
+                  <p className="text-xs text-gray-600">Form ID</p>
+                  <p className="font-semibold text-sm">{selectedForm.formId}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-600">Status</p>
+                  <div className="mt-1">
+                    <Badge className={getFormStatusColor(selectedForm.status)}>
+                      {formatFormStatus(selectedForm.status)}
+                    </Badge>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-600">Submitted</p>
+                  <p className="font-semibold text-sm">
+                    {selectedForm.submittedAt
+                      ? new Date(selectedForm.submittedAt).toLocaleDateString()
+                      : new Date(selectedForm.createdAt).toLocaleDateString()}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-600">Last Updated</p>
+                  <p className="font-semibold text-sm">
+                    {new Date(selectedForm.updatedAt).toLocaleDateString()}
+                  </p>
+                </div>
+              </div>
               {/* Current Status */}
               <div className="bg-gray-50 p-4 rounded-lg">
                 <h3 className="font-semibold mb-2">Current Status</h3>
