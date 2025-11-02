@@ -394,11 +394,66 @@ export const handleChat: RequestHandler = async (req, res) => {
       },
     ];
 
+    // Check if user is providing contact information (Name, Email, Phone)
+    const infoPattern = /Name:\s*(.+?)\s*Email:\s*(.+?)\s*Phone:\s*(.+?)(?:\n|$)/i;
+    const infoMatch = message.match(infoPattern);
+
+    let customerInfo = customerData;
+    if (infoMatch) {
+      customerInfo = {
+        name: infoMatch[1].trim(),
+        email: infoMatch[2].trim(),
+        phone: infoMatch[3].trim(),
+      };
+    }
+
     // Call Groq API
     const aiResponse = await callGroqAPI(groqMessages);
 
+    // If customer provided contact info, try to create an order
+    if (infoMatch && customerInfo.email) {
+      try {
+        // Extract company info from conversation history
+        const fullConversation = [...conversationHistory, { role: "user", content: message }]
+          .map((m) => m.content)
+          .join(" ");
+
+        // Look for company details in conversation (company name, number, price)
+        const companyMatch = fullConversation.match(/💼 \*\*(.+?)\*\*.*?📌 Company Number: (\d+).*?💰 Price: [£$](\d+)/s);
+
+        if (companyMatch) {
+          const [, companyName, companyNumber, price] = companyMatch;
+
+          // Create order via API
+          const orderResponse = await fetch("http://localhost:8080/api/orders", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              customerName: customerInfo.name,
+              customerEmail: customerInfo.email,
+              customerPhone: customerInfo.phone,
+              companyName: companyName.trim(),
+              companyNumber: companyNumber.trim(),
+              amount: parseFloat(price),
+              currency: "USD",
+              paymentMethod: "pending",
+              country: "United Kingdom", // Extract from conversation if needed
+              billingAddress: "",
+            }),
+          });
+
+          if (orderResponse.ok) {
+            const order = await orderResponse.json();
+            console.log("[Order Created]", order.orderId);
+          }
+        }
+      } catch (error) {
+        console.error("[Order creation error]", error);
+      }
+    }
+
     // Save to Airtable if customer data provided
-    if (customerData?.email) {
+    if (customerInfo?.email) {
       const allMessages: ChatMessage[] = [
         ...conversationHistory,
         { role: "user", content: message },
@@ -407,9 +462,9 @@ export const handleChat: RequestHandler = async (req, res) => {
 
       await saveConversationToAirtable(
         sessionId,
-        customerData.email,
-        customerData.name || "Unknown",
-        customerData.phone || "Not provided",
+        customerInfo.email,
+        customerInfo.name || "Unknown",
+        customerInfo.phone || "Not provided",
         allMessages,
       );
     }
