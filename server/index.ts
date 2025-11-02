@@ -21,6 +21,7 @@ import {
   sendEmailNotification,
   getNotifications,
 } from "./routes/notifications";
+import { getEmailPreview } from "./routes/email-preview";
 import {
   getCompanies,
   getCompany,
