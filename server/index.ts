@@ -22,6 +22,7 @@ import {
   getNotifications,
 } from "./routes/notifications";
 import { getEmailPreview } from "./routes/email-preview";
+import { handleChat, handleSaveSession } from "./routes/chat";
 import {
   getCompanies,
   getCompany,
