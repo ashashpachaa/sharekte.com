@@ -41,7 +41,7 @@ export function Header() {
           <img
             src="https://cdn.builder.io/api/v1/image/assets%2F752b1abf9cc241c993361e9dcaee5153%2Fd9d4a64693d843b1a53386d5a7c2937e?format=webp&width=200"
             alt="Sharekte"
-            className="h-12 w-auto"
+            className="w-full"
           />
         </Link>
 
