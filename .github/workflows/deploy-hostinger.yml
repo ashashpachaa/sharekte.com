@@ -8,42 +8,35 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
       - uses: actions/checkout@v4
-
-      - name: Deploy to Hostinger via Git
+      
+      - name: Deploy to Hostinger
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GIT_PAT: ${{ secrets.GIT_PAT }}
           HOSTINGER_HOST: ${{ secrets.HOSTINGER_HOST }}
           HOSTINGER_USER: ${{ secrets.HOSTINGER_USER }}
+          GIT_PAT: ${{ secrets.GIT_PAT }}
         run: |
-          # SSH into Hostinger and deploy
-          ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_HOST }} << 'ENDSSH'
-
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.HOSTINGER_HOST }} >> ~/.ssh/known_hosts
+          
+          ssh -o StrictHostKeyChecking=no ${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_HOST }} << 'ENDSSH'
           cd /var/www/shareket.com
-
-          # Configure git with PAT for authentication
+          
           git config --global url."https://$GIT_PAT:x-oauth-basic@github.com/".insteadOf "https://github.com/"
-
-          # Pull latest code
+          
           git pull origin main
-
-          # Install dependencies
+          
           pnpm install --frozen-lockfile
-
-          # Build
+          
           npm run build
-
-          # Restart PM2
+          
           pm2 restart sharekte
           pm2 save
-
-          # Show status
+          
           pm2 status
           pm2 logs sharekte --lines 10
-
+          
           echo "✅ Deployment complete at $(date)"
-
           ENDSSH
