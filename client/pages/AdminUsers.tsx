@@ -239,6 +239,11 @@ export default function AdminUsers() {
                         </div>
                       </td>
                       <td className="px-6 py-4 text-sm text-foreground">{user.email}</td>
+                      <td className="px-6 py-4 text-sm">
+                        <span className="inline-block px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700 capitalize">
+                          {user.role}
+                        </span>
+                      </td>
                       <td className="px-6 py-4 text-sm text-foreground">{user.company || "—"}</td>
                       <td className="px-6 py-4">
                         <span
