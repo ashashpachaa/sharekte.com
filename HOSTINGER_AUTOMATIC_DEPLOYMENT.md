@@ -5,6 +5,7 @@
 ## 🎯 What You Get
 
 Every time you `git push` to main branch:
+
 1. ✅ GitHub automatically builds your code
 2. ✅ Uploads to Hostinger VPS
 3. ✅ Restarts PM2 automatically
@@ -52,6 +53,7 @@ exit
 ### Step 3: Add GitHub Secrets
 
 Go to your GitHub repo:
+
 ```
 https://github.com/ashashpachaa/sharekte.com/settings/secrets/actions
 ```
@@ -59,22 +61,27 @@ https://github.com/ashashpachaa/sharekte.com/settings/secrets/actions
 Click **"New repository secret"** and add these 5 secrets:
 
 **Secret 1:**
+
 - Name: `HOSTINGER_HOST`
 - Value: `72.61.112.139`
 
 **Secret 2:**
+
 - Name: `HOSTINGER_USER`
 - Value: `root`
 
 **Secret 3:**
+
 - Name: `HOSTINGER_SSH_KEY`
 - Value: (Paste the ENTIRE content of `hostinger_deploy` file - the private key)
 
 **Secret 4:**
+
 - Name: `VITE_AIRTABLE_API_TOKEN`
 - Value: (Your Airtable token from .env)
 
 **Secret 5:**
+
 - Name: `AIRTABLE_API_TOKEN`
 - Value: (Same as above)
 
@@ -89,6 +96,7 @@ git push origin main
 ```
 
 **Watch it deploy:**
+
 1. Go to: https://github.com/ashashpachaa/sharekte.com/actions
 2. Click the latest workflow run
 3. Watch the "Deploy to Hostinger" step
@@ -99,7 +107,7 @@ git push origin main
 
 ## 🚀 That's It!
 
-Now every time you push to main, your Hostinger site updates automatically! 
+Now every time you push to main, your Hostinger site updates automatically!
 
 ## ✅ Verify It Worked
 
@@ -147,6 +155,7 @@ Site is LIVE! 🚀
 ## 🔍 Troubleshooting
 
 ### "SSH key permission denied"
+
 ```bash
 # Fix permissions on Hostinger
 ssh root@72.61.112.139
@@ -155,6 +164,7 @@ chmod 600 ~/.ssh/authorized_keys
 ```
 
 ### "Deployment failed - Connection refused"
+
 ```bash
 # Check if Hostinger firewall allows SSH
 ssh -i hostinger_deploy root@72.61.112.139
@@ -162,6 +172,7 @@ ssh -i hostinger_deploy root@72.61.112.139
 ```
 
 ### "PM2 not found"
+
 ```bash
 # SSH to Hostinger and check PM2
 ssh root@72.61.112.139
@@ -170,6 +181,7 @@ pm2 status
 ```
 
 ### "Deployment succeeded but site not updated"
+
 ```bash
 # SSH to Hostinger and check PM2 logs
 ssh root@72.61.112.139
@@ -178,6 +190,7 @@ pm2 logs sharekte
 ```
 
 ### Workflow Failed - Check Logs
+
 1. Go to: https://github.com/ashashpachaa/sharekte.com/actions
 2. Click the failed run
 3. Click "Deploy to Hostinger" step
@@ -189,6 +202,7 @@ pm2 logs sharekte
 ## 🎯 Quick Commands
 
 ### Deploy manually (if needed)
+
 ```bash
 # SSH to Hostinger and deploy manually
 ssh root@72.61.112.139
@@ -202,6 +216,7 @@ pm2 save
 ```
 
 ### Check deployment status
+
 ```bash
 # View GitHub Actions
 https://github.com/ashashpachaa/sharekte.com/actions
@@ -213,6 +228,7 @@ pm2 logs sharekte
 ```
 
 ### Rollback to previous version
+
 ```bash
 ssh root@72.61.112.139
 cd /var/www/shareket.com
@@ -265,6 +281,7 @@ All triggered automatically on `git push`!
 **Every `git push` = automatic deployment to shareket.com**
 
 Next time you make changes:
+
 ```bash
 git add .
 git commit -m "Your changes here"
