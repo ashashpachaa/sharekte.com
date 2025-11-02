@@ -116,6 +116,9 @@ export function AIChatProvider({ children }: { children: ReactNode }) {
       setError(null);
 
       try {
+        // Get customer's selected currency from localStorage
+        const currency = localStorage.getItem("currency") || "USD";
+
         // Send to backend for AI processing
         const response = await fetch("/api/chat", {
           method: "POST",
@@ -123,6 +126,7 @@ export function AIChatProvider({ children }: { children: ReactNode }) {
           body: JSON.stringify({
             sessionId: currentSessionId,
             message: content,
+            currency,
             customerData: {
               email: currentSession?.customerEmail,
               name: currentSession?.customerName,
