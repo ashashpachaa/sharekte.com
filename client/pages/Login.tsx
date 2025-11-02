@@ -152,12 +152,12 @@ export default function Login() {
               {loading ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  {t("auth.signingIn") || "Signing in..."}
+                  Signing in...
                 </>
               ) : (
                 <>
                   <LogIn className="w-4 h-4" />
-                  {t("auth.login.button") || "Sign In"}
+                  Login
                 </>
               )}
             </Button>
