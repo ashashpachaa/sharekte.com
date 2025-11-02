@@ -115,13 +115,64 @@ async function getDemoResponse(messages: GroqMessage[]): Promise<string> {
       country?: string;
       purchasePrice?: number;
       type?: string;
+      incorporationYear?: number;
+      companyNumber?: string;
     }>;
 
     if (Array.isArray(companies) && companies.length > 0) {
       const countries = [...new Set(companies.map(c => c.country).filter(Boolean))];
-      const activeCompanies = companies.filter((c) => c.country);
 
       companyContext = `Available countries: ${countries.join(", ")}. Total companies: ${companies.length}`;
+
+      // SMART CONTEXT TRACKING: Look at previous messages to understand user flow
+      // If the last AI message asked "Which year do you want?", and user just replies with a year,
+      // we need to know which country context we were in
+      let targetCountry = "";
+      let targetYear: number | null = null;
+
+      // Check if current message is just a year
+      const yearMatch = userMessage.match(/\b(19|20)\d{2}\b/);
+      if (yearMatch && userMessage.trim().match(/^\d{4}$/)) {
+        targetYear = parseInt(yearMatch[0]);
+
+        // Look back in conversation to find which country was asked about
+        for (let i = messages.length - 2; i >= 0; i--) {
+          const prevMsg = messages[i].content.toLowerCase();
+          if (prevMsg.includes("which **incorporation year**") || prevMsg.includes("incorporation year")) {
+            // Found the question message, now look before it for country
+            for (let j = i - 1; j >= 0; j--) {
+              const countryMsg = messages[j].content.toLowerCase();
+              if (countryMsg.includes("united kingdom") || countryMsg.includes("uk") || countryMsg.includes("england") || countryMsg.includes("britain")) {
+                targetCountry = "United Kingdom";
+                break;
+              }
+              for (const country of countries) {
+                if (countryMsg.includes(country.toLowerCase())) {
+                  targetCountry = country;
+                  break;
+                }
+              }
+              if (targetCountry) break;
+            }
+            break;
+          }
+        }
+
+        // If we found country and year, show a random company matching both
+        if (targetCountry && targetYear) {
+          const matchingCompanies = companies.filter(c =>
+            (c.country?.toLowerCase().includes(targetCountry.toLowerCase()) ||
+             c.country?.toLowerCase() === targetCountry.toLowerCase()) &&
+            c.incorporationYear === targetYear
+          );
+
+          if (matchingCompanies.length > 0) {
+            const company = matchingCompanies[Math.floor(Math.random() * matchingCompanies.length)];
+            const symbol = targetCountry === "United Kingdom" ? "£" : "$";
+            return `Perfect! Here's an available company from ${targetYear} in ${targetCountry}:\n\n💼 **${company.companyName}**\n📌 Company Number: ${company.companyNumber}\n💰 Price: ${symbol}${company.purchasePrice || "Contact for quote"}\n\n⚡ **Do you want to buy it now?** It will take only **1 minute** to start the transfer and take ownership of this company!`;
+          }
+        }
+      }
 
       // Check for country-specific queries
       if (userMessage.includes("united kingdom") || userMessage.includes(" uk") || userMessage.includes("england") || userMessage.includes("britain")) {
@@ -132,22 +183,8 @@ async function getDemoResponse(messages: GroqMessage[]): Promise<string> {
         );
 
         if (ukCompanies.length > 0) {
-          // Check if user already specified incorporation year
-          const yearMatch = userMessage.match(/\b(19|20)\d{2}\b/);
-
-          if (yearMatch) {
-            // Filter by year and show one company
-            const targetYear = parseInt(yearMatch[0]);
-            const yearCompanies = ukCompanies.filter(c => c.incorporationYear === targetYear);
-
-            if (yearCompanies.length > 0) {
-              const company = yearCompanies[Math.floor(Math.random() * yearCompanies.length)];
-              return `Perfect! Here's an available company from ${targetYear} in the UK:\n\n💼 **${company.companyName}**\n📌 Company Number: ${company.companyNumber}\n💰 Price: £${company.purchasePrice || "Contact for quote"}\n\n⚡ **Do you want to buy it now?** It will take only **1 minute** to start the transfer and take ownership of this company!`;
-            }
-          }
-
           // Get available years in UK companies
-          const availableYears = [...new Set(ukCompanies.map(c => c.incorporationYear).filter(Boolean))].sort((a, b) => b - a);
+          const availableYears = [...new Set(ukCompanies.map(c => c.incorporationYear).filter(Boolean))].sort((a, b) => (b as number) - (a as number));
 
           return `Yes, we have! 🎯\n\nWhich **incorporation year** are you looking for?\n\nAvailable years: ${availableYears.join(", ")}`;
         } else {
@@ -160,22 +197,8 @@ async function getDemoResponse(messages: GroqMessage[]): Promise<string> {
         if (userMessage.includes(country.toLowerCase())) {
           const countryCompanies = companies.filter(c => c.country?.toLowerCase() === country.toLowerCase());
           if (countryCompanies.length > 0) {
-            // Check if user already specified incorporation year
-            const yearMatch = userMessage.match(/\b(19|20)\d{2}\b/);
-
-            if (yearMatch) {
-              // Filter by year and show one company
-              const targetYear = parseInt(yearMatch[0]);
-              const yearCompanies = countryCompanies.filter(c => c.incorporationYear === targetYear);
-
-              if (yearCompanies.length > 0) {
-                const company = yearCompanies[Math.floor(Math.random() * yearCompanies.length)];
-                return `Perfect! Here's an available company from ${targetYear} in ${country}:\n\n💼 **${company.companyName}**\n📌 Company Number: ${company.companyNumber}\n💰 Price: $${company.purchasePrice || "Contact for quote"}\n\n⚡ **Do you want to buy it now?** It will take only **1 minute** to start the transfer and take ownership of this company!`;
-              }
-            }
-
             // Get available years
-            const availableYears = [...new Set(countryCompanies.map(c => c.incorporationYear).filter(Boolean))].sort((a, b) => b - a);
+            const availableYears = [...new Set(countryCompanies.map(c => c.incorporationYear).filter(Boolean))].sort((a, b) => (b as number) - (a as number));
 
             return `Yes, we have! 🎯\n\nWhich **incorporation year** are you looking for?\n\nAvailable years: ${availableYears.join(", ")}`;
           }
