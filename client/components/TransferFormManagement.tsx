@@ -729,21 +729,35 @@ export function TransferFormManagement({
               )}
             </div>
 
-            <DialogFooter>
+            <DialogFooter className="flex gap-2 flex-wrap justify-between">
               <Button
                 variant="outline"
                 onClick={() => setShowDetailsModal(false)}
               >
                 Close
               </Button>
-              <Button
-                onClick={() => {
-                  setShowStatusModal(true);
-                  setShowDetailsModal(false);
-                }}
-              >
-                Change Status
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    // Download as PDF
+                    window.open(`/api/transfer-forms/${selectedForm.id}/pdf`, '_blank');
+                  }}
+                  className="gap-2"
+                >
+                  <Download className="w-4 h-4" />
+                  Download PDF
+                </Button>
+                <Button
+                  onClick={() => {
+                    setShowStatusModal(true);
+                    setShowDetailsModal(false);
+                  }}
+                >
+                  Change Status
+                </Button>
+              </div>
             </DialogFooter>
           </DialogContent>
         )}
