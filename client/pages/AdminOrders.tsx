@@ -81,6 +81,10 @@ export default function AdminOrders() {
     }
   }, [activeTab]);
 
+  const isOrderNew = (orderId: string) => {
+    return notifiedOrderIds.has(orderId);
+  };
+
   const loadOrders = async () => {
     try {
       setLoading(true);
@@ -470,13 +474,21 @@ export default function AdminOrders() {
                       {filteredOrders.map((order) => (
                         <tr
                           key={order.id}
-                          className="hover:bg-muted/50 transition-colors"
+                          className={`hover:bg-muted/50 transition-colors ${isOrderNew(order.id) ? "bg-blue-50/50 border-l-4 border-l-blue-500" : ""}`}
                         >
                           <td className="px-6 py-4">
                             <div>
-                              <p className="font-semibold text-foreground">
-                                {order.orderId}
-                              </p>
+                              <div className="flex items-center gap-2">
+                                <p className="font-semibold text-foreground">
+                                  {order.orderId}
+                                </p>
+                                {isOrderNew(order.id) && (
+                                  <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-medium">
+                                    <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                                    New
+                                  </span>
+                                )}
+                              </div>
                               <p className="text-xs text-muted-foreground">
                                 {order.id}
                               </p>
