@@ -431,7 +431,8 @@ export async function bulkUpdateInvoiceStatus(invoiceIds: string[], status: Invo
 
 export async function bulkSendEmails(invoiceIds: string[]): Promise<boolean> {
   try {
-    const response = await fetch("/api/invoices/bulk/send-emails", {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/invoices/bulk/send-emails`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ invoiceIds }),
