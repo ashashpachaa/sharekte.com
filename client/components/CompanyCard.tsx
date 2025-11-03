@@ -38,6 +38,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { useCurrency } from "@/lib/currency-context";
 
 interface CompanyCardProps {
   company: CompanyData;
@@ -58,6 +59,7 @@ export function CompanyCard({
   onViewDetails,
   isAdmin = false,
 }: CompanyCardProps) {
+  const { convertPrice, formatPrice: formatWithCurrency } = useCurrency();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const renewalCountdown = getRenewalCountdown(company.renewalDaysLeft);
@@ -113,7 +115,7 @@ export function CompanyCard({
             </div>
             <div className="flex items-center gap-1 text-gray-600">
               <DollarSign className="w-3 h-3" />
-              <span>{company.purchasePrice ? formatPrice(company.purchasePrice, company.currency || "USD") : "N/A"}</span>
+              <span>{company.purchasePrice ? formatWithCurrency(convertPrice(company.purchasePrice)) : "N/A"}</span>
             </div>
             <div className="flex items-center gap-1 text-gray-600">
               <User className="w-3 h-3" />
