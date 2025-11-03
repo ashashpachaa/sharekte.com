@@ -339,16 +339,31 @@ export async function uploadFormAttachment(
   file: File,
 ): Promise<FormAttachment | null> {
   try {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("formId", formId);
+    // Convert file to base64
+    const fileBuffer = await file.arrayBuffer();
+    const uint8Array = new Uint8Array(fileBuffer);
+    let binary = '';
+    for (let i = 0; i < uint8Array.length; i++) {
+      binary += String.fromCharCode(uint8Array[i]);
+    }
+    const base64Data = btoa(binary);
 
     const response = await fetch("/api/transfer-forms/attachments/upload", {
       method: "POST",
-      body: formData,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        formId,
+        filename: file.name,
+        filesize: file.size,
+        filetype: file.type || "application/octet-stream",
+        data: base64Data,
+      }),
     });
     if (!response.ok) throw new Error("Failed to upload attachment");
-    return await response.json();
+    const attachment = await response.json();
+    return attachment;
   } catch (error) {
     console.error("Error uploading attachment:", error);
     return null;
