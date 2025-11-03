@@ -302,20 +302,91 @@ export default function Checkout() {
     return (
       <div className="min-h-screen flex flex-col bg-background">
         <Header />
-        <div className="flex-1 flex items-center justify-center py-20 px-4">
-          <div className="text-center space-y-8 max-w-lg">
-            <CheckCircle className="w-24 h-24 text-primary mx-auto" />
-            <div>
-              <h1 className="text-3xl font-bold text-foreground mb-2">
-                Order Completed!
+        <div className="flex-1 flex items-center justify-center py-12 px-4">
+          <div className="text-center space-y-6 max-w-2xl">
+            {/* Success Icon */}
+            <div className="flex justify-center">
+              <CheckCircle className="w-20 h-20 text-primary" />
+            </div>
+
+            {/* Main Message */}
+            <div className="space-y-3">
+              <h1 className="text-4xl md:text-5xl font-bold text-foreground">
+                🎉 Purchase Successful!
               </h1>
-              <p className="text-muted-foreground">
-                Thank you for your purchase. Your companies have been marked as
-                sold and removed from the marketplace.
+              <p className="text-lg text-muted-foreground max-w-xl mx-auto">
+                Your company ownership transfer has been initiated. Welcome to Sharekte!
               </p>
             </div>
-            <p className="text-sm text-muted-foreground">
-              Redirecting you to your dashboard...
+
+            {/* What's Next */}
+            <div className="bg-card border border-border/40 rounded-lg p-8 my-8">
+              <h2 className="text-xl font-bold text-foreground mb-6">
+                What's Next?
+              </h2>
+              <div className="space-y-4 text-left">
+                <div className="flex gap-4">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-sm flex-shrink-0">
+                    1
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground">
+                      Complete Transfer Form
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Visit your dashboard to fill out the company transfer form with ownership details
+                    </p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-sm flex-shrink-0">
+                    2
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground">
+                      Upload Documents
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Provide necessary documentation to complete the ownership transfer
+                    </p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-sm flex-shrink-0">
+                    3
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground">
+                      Finalize Transfer
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Our team will process your documents and complete the transfer
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Order Details Summary */}
+            <div className="space-y-2 text-sm">
+              <p className="text-muted-foreground">
+                {items.length} {items.length === 1 ? "company" : "companies"} purchased • Order confirmation sent to your email
+              </p>
+            </div>
+
+            {/* CTA Button */}
+            <Button
+              size="lg"
+              onClick={() => navigate("/dashboard")}
+              className="bg-primary hover:bg-primary-600 text-white font-semibold gap-2 mt-6"
+            >
+              Go to Dashboard
+              <ArrowRight className="w-4 h-4" />
+            </Button>
+
+            {/* Redirect Notice */}
+            <p className="text-xs text-muted-foreground">
+              Automatically redirecting to your dashboard in 3 seconds...
             </p>
           </div>
         </div>
