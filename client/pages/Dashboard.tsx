@@ -849,55 +849,141 @@ export default function Dashboard() {
 
   // Generate PDF invoice (simplified)
   const handleDownloadInvoice = (invoice: Invoice) => {
-    const invoiceContent = `
-INVOICE
+    // Generate HTML content for PDF
+    const invoiceHTML = `
+      <html>
+        <head>
+          <title>${invoice.invoiceNumber}</title>
+          <style>
+            body { font-family: Arial, sans-serif; padding: 40px; max-width: 800px; margin: 0 auto; }
+            .invoice-header { text-align: center; margin-bottom: 30px; }
+            .invoice-header h1 { margin: 0; font-size: 28px; }
+            .invoice-header p { margin: 5px 0; color: #666; }
+            .section { margin: 20px 0; }
+            .section-title { font-weight: bold; font-size: 14px; margin-bottom: 10px; border-bottom: 2px solid #333; padding-bottom: 5px; }
+            .row { display: flex; justify-content: space-between; margin: 5px 0; }
+            .row-label { color: #666; }
+            .row-value { font-weight: 500; }
+            table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+            th { text-align: left; padding: 10px; background-color: #f5f5f5; border-bottom: 2px solid #333; font-weight: bold; }
+            td { padding: 10px; border-bottom: 1px solid #ddd; }
+            .total-section { text-align: right; margin-top: 30px; }
+            .total-row { font-size: 18px; font-weight: bold; margin-top: 10px; }
+            .status-badge { display: inline-block; padding: 5px 15px; border-radius: 20px; background-color: #4caf50; color: white; font-size: 12px; margin-top: 10px; }
+            .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; font-size: 12px; color: #999; }
+          </style>
+        </head>
+        <body>
+          <div class="invoice-header">
+            <h1>INVOICE</h1>
+            <p>Invoice Number: <strong>${invoice.invoiceNumber}</strong></p>
+          </div>
 
-Invoice Number: ${invoice.invoiceNumber}
-Date: ${invoice.date}
-Due Date: ${invoice.dueDate}
+          <div class="section">
+            <div class="section-title">COMPANY INFORMATION</div>
+            <div class="row">
+              <span class="row-label">Company Name:</span>
+              <span class="row-value">${invoice.companyName}</span>
+            </div>
+            <div class="row">
+              <span class="row-label">Company Number:</span>
+              <span class="row-value">${invoice.companyNumber}</span>
+            </div>
+          </div>
 
-=== COMPANY INFORMATION ===
-Company Name: ${invoice.companyName}
-Company Number: ${invoice.companyNumber}
+          <div class="section">
+            <div class="section-title">CLIENT INFORMATION</div>
+            <div class="row">
+              <span class="row-label">Name:</span>
+              <span class="row-value">${invoice.clientName}</span>
+            </div>
+            <div class="row">
+              <span class="row-label">Email:</span>
+              <span class="row-value">${invoice.clientEmail}</span>
+            </div>
+          </div>
 
-=== CLIENT INFORMATION ===
-Name: ${invoice.clientName}
-Email: ${invoice.clientEmail}
+          <div class="section">
+            <div class="section-title">INVOICE DETAILS</div>
+            <div class="row">
+              <span class="row-label">Invoice Date:</span>
+              <span class="row-value">${invoice.date}</span>
+            </div>
+            <div class="row">
+              <span class="row-label">Due Date:</span>
+              <span class="row-value">${invoice.dueDate}</span>
+            </div>
+            <div class="row">
+              <span class="row-label">Status:</span>
+              <span class="row-value"><span class="status-badge">${invoice.status.toUpperCase()}</span></span>
+            </div>
+          </div>
 
-=== INVOICE DETAILS ===
-Description: ${invoice.description}
-Status: ${invoice.status.toUpperCase()}
+          <div class="section">
+            <div class="section-title">LINE ITEMS</div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Description</th>
+                  <th>Quantity</th>
+                  <th>Unit Price</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${invoice.items
+                  .map(
+                    (item) => `
+                  <tr>
+                    <td>${item.description}</td>
+                    <td>${item.quantity}</td>
+                    <td>${invoice.currency}${item.unitPrice.toLocaleString()}</td>
+                    <td>${invoice.currency}${item.total.toLocaleString()}</td>
+                  </tr>
+                `,
+                  )
+                  .join("")}
+              </tbody>
+            </table>
+          </div>
 
-=== ITEMS ===
-${invoice.items
-  .map(
-    (item) =>
-      `${item.description}
-Quantity: ${item.quantity}
-Unit Price: £${item.unitPrice.toLocaleString()}
-Total: £${item.total.toLocaleString()}`,
-  )
-  .join("\n\n")}
+          <div class="total-section">
+            <div>Subtotal: ${invoice.currency}${invoice.amount.toLocaleString()}</div>
+            <div class="total-row">Total: ${invoice.currency}${invoice.amount.toLocaleString()}</div>
+          </div>
 
-=== TOTAL ===
-Amount: £${invoice.amount.toLocaleString()}
-
----
-Generated on: ${new Date().toLocaleDateString()}
+          <div class="footer">
+            <p>Generated on: ${new Date().toLocaleDateString()}</p>
+            <p style="margin-top: 20px;">Please save this invoice as a PDF using your browser's print function (Ctrl+P or Cmd+P) and select "Save as PDF".</p>
+          </div>
+        </body>
+      </html>
     `;
 
-    // Create blob and download
-    const blob = new Blob([invoiceContent], { type: "text/plain" });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `${invoice.invoiceNumber}.txt`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
+    // Open in new window for print-to-PDF
+    const printWindow = window.open("", "", "height=800,width=900");
+    if (printWindow) {
+      printWindow.document.write(invoiceHTML);
+      printWindow.document.close();
 
-    toast.success("Invoice downloaded successfully!");
+      // Trigger print dialog after content loads
+      setTimeout(() => {
+        printWindow.print();
+      }, 250);
+    } else {
+      // Fallback: create HTML blob and download
+      const blob = new Blob([invoiceHTML], { type: "text/html" });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${invoice.invoiceNumber}.html`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    }
+
+    toast.success("Opening invoice for download... Use Ctrl+P (or Cmd+P) to save as PDF");
   };
 
   // Print invoice
