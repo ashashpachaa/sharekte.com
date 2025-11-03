@@ -821,16 +821,41 @@ export function TransferFormManagement({
                           size="sm"
                           className="ml-2"
                           onClick={() => {
-                            if (attachment.url) {
-                              // Open download link in new tab or trigger download
+                            try {
                               const link = document.createElement("a");
-                              link.href = attachment.url;
+
+                              if (attachment.url) {
+                                // If URL exists, use it directly
+                                link.href = attachment.url;
+                              } else if (attachment.data) {
+                                // If base64 data exists, create blob download
+                                const byteCharacters = atob(attachment.data);
+                                const byteNumbers = new Array(byteCharacters.length);
+                                for (let i = 0; i < byteCharacters.length; i++) {
+                                  byteNumbers[i] = byteCharacters.charCodeAt(i);
+                                }
+                                const byteArray = new Uint8Array(byteNumbers);
+                                const blob = new Blob([byteArray], { type: attachment.type });
+                                link.href = URL.createObjectURL(blob);
+                              } else {
+                                toast.error("File data not available for download");
+                                return;
+                              }
+
                               link.download = attachment.name;
                               document.body.appendChild(link);
                               link.click();
                               document.body.removeChild(link);
-                            } else {
-                              toast.error("Download link not available for this file");
+
+                              // Clean up object URL if created
+                              if (!attachment.url && attachment.data) {
+                                URL.revokeObjectURL(link.href);
+                              }
+
+                              toast.success(`Downloading ${attachment.name}...`);
+                            } catch (error) {
+                              console.error("Download error:", error);
+                              toast.error("Failed to download file");
                             }
                           }}
                           title={`Download ${attachment.name}`}
