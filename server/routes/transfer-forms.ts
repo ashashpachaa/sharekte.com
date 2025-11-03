@@ -792,16 +792,23 @@ export const generatePDF: RequestHandler = async (req, res) => {
     console.log("[generatePDF] Generating PDF for form:", id);
 
     // First, check if form data is included in request body (client sends complete form via POST)
-    let form: TransferFormData | undefined = (req.body && typeof req.body === "object" && "formId" in req.body)
-      ? (req.body as TransferFormData)
-      : undefined;
+    let form: TransferFormData | undefined = undefined;
 
-    // If no form data in body, try to find it in local storage
-    if (!form) {
+    console.log("[generatePDF] Request method:", req.method);
+    console.log("[generatePDF] Request body type:", typeof req.body);
+    console.log("[generatePDF] Request body keys:", req.body ? Object.keys(req.body) : "none");
+
+    if (req.body && typeof req.body === "object" && "formId" in req.body) {
+      form = req.body as TransferFormData;
+      console.log("[generatePDF] Using form data provided in request body for formId:", form.formId);
+    } else {
+      // If no form data in body, try to find it in local storage
+      console.log("[generatePDF] No form data in request body, checking local storage...");
       form = inMemoryForms.find((f) => f.formId === id || f.id === id) ||
              formsDb.find((f) => f.formId === id || f.id === id);
-    } else {
-      console.log("[generatePDF] Using form data provided in request body");
+      if (form) {
+        console.log("[generatePDF] Found form in local storage");
+      }
     }
 
     // If form not found locally, try fetching from Airtable (handles multi-instance/load-balanced scenarios)
