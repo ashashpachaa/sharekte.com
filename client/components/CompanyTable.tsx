@@ -419,7 +419,12 @@ export function CompanyTable({
                     {company.incorporationYear}
                   </TableCell>
                   <TableCell className="text-sm font-medium">
-                    {formatWithCurrency(convertPrice(company.purchasePrice))}
+                    {formatWithCurrency(
+                      // If company has a different currency, we need to normalize to USD first
+                      company.currency && company.currency !== "USD" && rates[company.currency as any]
+                        ? convertPrice(company.purchasePrice / (rates[company.currency as any]?.rate || 1))
+                        : convertPrice(company.purchasePrice)
+                    )}
                   </TableCell>
                   <TableCell className="text-sm">
                     {company.optionsInclude &&
