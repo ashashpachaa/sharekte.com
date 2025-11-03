@@ -532,8 +532,14 @@ export default function Checkout() {
     toast.success("Signed in successfully! 🎉");
   };
 
-  const taxAmount = Math.round(totalPrice * 0.2);
-  const finalTotal = totalPrice + taxAmount;
+  // Calculate fees dynamically
+  const enabledFees = getEnabledFees();
+  const feesDetails = enabledFees.map((fee) => ({
+    ...fee,
+    calculatedAmount: calculateFeeAmount(fee, totalPrice),
+  }));
+  const totalFees = feesDetails.reduce((sum, fee) => sum + fee.calculatedAmount, 0);
+  const finalTotal = totalPrice + totalFees;
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -893,14 +899,19 @@ export default function Checkout() {
                     {formatPrice(totalPrice)}
                   </span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">
-                    {t("checkout.tax")}
-                  </span>
-                  <span className="font-semibold text-foreground">
-                    {formatPrice(taxAmount)}
-                  </span>
-                </div>
+                {feesDetails.map((fee) => (
+                  <div key={fee.id} className="flex justify-between">
+                    <span className="text-muted-foreground text-sm">
+                      {fee.name}
+                      {fee.type === "percentage" && (
+                        <span className="text-xs"> ({fee.amount}%)</span>
+                      )}
+                    </span>
+                    <span className="font-semibold text-foreground">
+                      {formatPrice(fee.calculatedAmount)}
+                    </span>
+                  </div>
+                ))}
               </div>
 
               <div className="flex justify-between mb-6">
