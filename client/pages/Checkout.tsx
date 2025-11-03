@@ -6,7 +6,7 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/cart-context";
 import { useCurrency } from "@/lib/currency-context";
-import { ArrowLeft, CheckCircle, Loader, Mail, Lock, User, AlertCircle, LogIn } from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle, Loader, Mail, Lock, User, AlertCircle, LogIn } from "lucide-react";
 import { toast } from "sonner";
 import {
   savePurchasedCompany,
