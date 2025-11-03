@@ -1031,49 +1031,51 @@ export function TransferFormManagement({
                   size="sm"
                   onClick={async () => {
                     try {
-                      // Download PDF directly
                       const apiBaseURL = getAPIBaseURL();
                       const pdfUrl = `${apiBaseURL}/api/transfer-forms/${selectedForm.id}/pdf`;
-                      console.log("[Transfer Form Download] URL:", pdfUrl);
 
+                      console.log("[Transfer Form Download] Fetching from:", pdfUrl);
+
+                      // Fetch as blob directly - don't check response.ok first
                       const response = await fetch(pdfUrl);
-                      console.log("[Transfer Form Download] Response status:", response.status);
 
                       if (!response.ok) {
-                        try {
-                          const errorText = await response.text();
-                          console.error("[Transfer Form Download] Error:", response.status, errorText);
-                          throw new Error(`HTTP ${response.status}: ${errorText}`);
-                        } catch {
-                          throw new Error(`HTTP ${response.status}: Failed to download PDF`);
-                        }
+                        throw new Error(`HTTP ${response.status}: Failed to fetch form`);
                       }
 
-                      // Read response as blob for successful response only
+                      // Get blob from response (only read body once)
                       const blob = await response.blob();
-                      console.log("[Transfer Form Download] Blob size:", blob.size);
 
-                      if (blob.size === 0) {
-                        throw new Error("Received empty file from server");
+                      if (!blob || blob.size === 0) {
+                        throw new Error("Server returned empty file");
                       }
 
+                      console.log("[Transfer Form Download] Success, blob size:", blob.size, "bytes");
+
+                      // Create download link and trigger download
                       const downloadUrl = window.URL.createObjectURL(blob);
                       const link = document.createElement("a");
                       link.href = downloadUrl;
                       link.download = `transfer-form-${selectedForm.id}.html`;
+
+                      // Append, click, and remove
                       document.body.appendChild(link);
                       link.click();
                       document.body.removeChild(link);
 
-                      // Cleanup after download completes
+                      // Revoke URL after a short delay
                       setTimeout(() => {
                         window.URL.revokeObjectURL(downloadUrl);
-                      }, 100);
+                      }, 200);
 
                       toast.success("Form downloaded successfully");
                     } catch (error) {
-                      console.error("Error downloading PDF:", error);
-                      toast.error(error instanceof Error ? error.message : "Failed to download form");
+                      console.error("[Transfer Form Download] Error:", error);
+                      toast.error(
+                        error instanceof Error
+                          ? `Download failed: ${error.message}`
+                          : "Failed to download form"
+                      );
                     }
                   }}
                   className="gap-2"
