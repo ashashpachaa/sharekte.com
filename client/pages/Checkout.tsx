@@ -80,6 +80,19 @@ export default function Checkout() {
         console.error("Error parsing stored user data:", error);
       }
     }
+
+    // Load saved billing information
+    const savedBilling = getBillingInformation();
+    if (savedBilling) {
+      setBillingFullName(savedBilling.fullName);
+      setBillingEmail(savedBilling.email);
+      setBillingPhoneNumber(savedBilling.phoneNumber);
+      setBillingAddress(savedBilling.billingAddress);
+      setBillingCountry(savedBilling.country);
+      setCardNumber(savedBilling.cardNumber);
+      setExpiryDate(savedBilling.expiryDate);
+      setCvv(savedBilling.cvv);
+    }
   }, []);
 
   if (items.length === 0 && !orderCompleted) {
