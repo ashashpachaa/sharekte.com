@@ -6,6 +6,46 @@ import {
   type DirectorInfo,
   type ShareholderInfo,
 } from "../../client/lib/transfer-form";
+import * as fs from "fs";
+import * as path from "path";
+
+// Persistent storage directory for forms (works across Fly.io instances)
+const FORMS_STORAGE_DIR = process.env.FORMS_STORAGE_DIR || "/tmp/shareket-forms";
+
+// Ensure storage directory exists
+if (!fs.existsSync(FORMS_STORAGE_DIR)) {
+  try {
+    fs.mkdirSync(FORMS_STORAGE_DIR, { recursive: true });
+    console.log("[transferForms] Created storage directory:", FORMS_STORAGE_DIR);
+  } catch (error) {
+    console.error("[transferForms] Failed to create storage directory:", error);
+  }
+}
+
+// Helper: Load form from persistent storage
+function loadFormFromFile(formId: string): TransferFormData | null {
+  try {
+    const filePath = path.join(FORMS_STORAGE_DIR, `${formId}.json`);
+    if (fs.existsSync(filePath)) {
+      const data = fs.readFileSync(filePath, "utf-8");
+      return JSON.parse(data);
+    }
+  } catch (error) {
+    console.error(`[transferForms] Error loading form ${formId} from file:`, error);
+  }
+  return null;
+}
+
+// Helper: Save form to persistent storage
+function saveFormToFile(form: TransferFormData): void {
+  try {
+    const filePath = path.join(FORMS_STORAGE_DIR, `${form.formId}.json`);
+    fs.writeFileSync(filePath, JSON.stringify(form, null, 2));
+    console.log(`[transferForms] Saved form ${form.formId} to file storage`);
+  } catch (error) {
+    console.error(`[transferForms] Error saving form to file:`, error);
+  }
+}
 
 // In-memory storage - persists newly created forms across requests
 let inMemoryForms: TransferFormData[] = [];
