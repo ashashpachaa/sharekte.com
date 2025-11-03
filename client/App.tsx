@@ -70,6 +70,7 @@ export default function App() {
                         path="/admin/email-templates"
                         element={<AdminEmailTemplates />}
                       />
+                      <Route path="/admin/roles" element={<AdminRoles />} />
                       <Route path="/admin/fees" element={<AdminFees />} />
                       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                       <Route path="*" element={<NotFound />} />
