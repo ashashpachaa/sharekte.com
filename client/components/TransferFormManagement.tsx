@@ -485,7 +485,7 @@ export function TransferFormManagement({
                             <span>
                               {(attachment.size / 1024 / 1024).toFixed(2)} MB
                             </span>
-                            <span>��</span>
+                            <span>•</span>
                             <span>
                               {new Date(
                                 attachment.uploadedDate,
@@ -1059,7 +1059,18 @@ export function TransferFormManagement({
                       });
 
                       if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}: Failed to generate PDF`);
+                        let errorDetail = `HTTP ${response.status}`;
+                        try {
+                          const errorBody = await response.json();
+                          errorDetail += `: ${errorBody.error || "Unknown error"}`;
+                          if (errorBody.details) {
+                            errorDetail += ` - ${errorBody.details}`;
+                          }
+                        } catch {
+                          // Could not parse error response
+                        }
+                        console.error("[Transfer Form Download] Server error response:", errorDetail);
+                        throw new Error(errorDetail);
                       }
 
                       // Get blob from response (only read body once)
