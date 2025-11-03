@@ -4,7 +4,7 @@
  */
 
 // Get the correct API base URL (use production URL for Fly.io or old deployments)
-function getAPIBaseURL(): string {
+export function getAPIBaseURL(): string {
   if (typeof window === "undefined") return "https://shareket.com";
 
   const hostname = window.location.hostname;
