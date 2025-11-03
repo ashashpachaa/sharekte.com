@@ -17,6 +17,7 @@ export interface FormAttachment {
   type: string;
   size: number;
   url?: string;
+  data?: string;
   uploadedDate: string;
   uploadedBy: string;
 }
