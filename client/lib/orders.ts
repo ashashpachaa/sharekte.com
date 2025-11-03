@@ -317,7 +317,8 @@ export async function uploadOrderDocument(
   console.log(
     `[uploadOrderDocument] Sending POST request to /api/orders/${orderId}/documents`,
   );
-  const response = await fetch(`/api/orders/${orderId}/documents`, {
+  const apiBaseURL = getAPIBaseURL();
+  const response = await fetch(`${apiBaseURL}/api/orders/${orderId}/documents`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -355,8 +356,9 @@ export async function deleteOrderDocument(
   orderId: string,
   documentId: string,
 ): Promise<Order> {
+  const apiBaseURL = getAPIBaseURL();
   const response = await fetch(
-    `/api/orders/${orderId}/documents/${documentId}`,
+    `${apiBaseURL}/api/orders/${orderId}/documents/${documentId}`,
     {
       method: "DELETE",
     },
@@ -373,7 +375,8 @@ export async function addOrderNote(
   note: string,
   isInternal: boolean = false,
 ): Promise<Order> {
-  const response = await fetch(`/api/orders/${orderId}/notes`, {
+  const apiBaseURL = getAPIBaseURL();
+  const response = await fetch(`${apiBaseURL}/api/orders/${orderId}/notes`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ note, isInternal }),
