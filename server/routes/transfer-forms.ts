@@ -738,8 +738,11 @@ export const generatePDF: RequestHandler = async (req, res) => {
 
     if (!form) {
       console.log("[generatePDF] Form not found with ID:", id);
-      console.log("[generatePDF] Available forms:", inMemoryForms.map(f => ({ id: f.id, formId: f.formId })));
-      return res.status(404).json({ error: "Form not found" });
+      console.log("[generatePDF] inMemoryForms count:", inMemoryForms.length);
+      console.log("[generatePDF] Available inMemory forms:", inMemoryForms.map(f => ({ id: f.id, formId: f.formId })));
+      console.log("[generatePDF] formsDb count:", formsDb.length);
+      console.log("[generatePDF] Available db forms:", formsDb.map(f => ({ id: f.id, formId: f.formId })));
+      return res.status(404).json({ error: "Form not found", searchedFor: id, availableInMemory: inMemoryForms.length, availableInDb: formsDb.length });
     }
 
     console.log("[generatePDF] Form found:", { id: form.id, formId: form.formId });
