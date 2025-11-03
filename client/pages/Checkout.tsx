@@ -238,6 +238,8 @@ export default function Checkout() {
             lastUpdateDate: today,
             renewalDate: oneYearLater,
             renewalFees: convertedRenewalFees,
+            appliedFees: feesDetails,
+            totalFees: totalFees,
             refundStatus: "none",
             documents: [],
             createdAt: today,
