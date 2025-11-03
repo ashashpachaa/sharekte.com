@@ -21,8 +21,11 @@ import { toast } from "sonner";
 import {
   savePurchasedCompany,
   addInvoice,
+  saveBillingInformation,
+  getBillingInformation,
   type PurchasedCompanyData,
   type InvoiceData,
+  type BillingInformation,
 } from "@/lib/user-data";
 import { createOrder } from "@/lib/orders";
 import { getEnabledFees, calculateFeeAmount } from "@/lib/fees";
