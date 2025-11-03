@@ -1034,13 +1034,20 @@ export function TransferFormManagement({
                       // Download PDF directly
                       const apiBaseURL = getAPIBaseURL();
                       const pdfUrl = `${apiBaseURL}/api/transfer-forms/${selectedForm.id}/pdf`;
+                      console.log("[Transfer Form Download] URL:", pdfUrl);
 
                       const response = await fetch(pdfUrl);
+                      console.log("[Transfer Form Download] Response status:", response.status);
+
                       if (!response.ok) {
-                        throw new Error("Failed to download PDF");
+                        const errorText = await response.text();
+                        console.error("[Transfer Form Download] Error:", response.status, errorText);
+                        throw new Error(`HTTP ${response.status}: Failed to download PDF`);
                       }
 
                       const blob = await response.blob();
+                      console.log("[Transfer Form Download] Blob size:", blob.size);
+
                       const downloadUrl = window.URL.createObjectURL(blob);
                       const link = document.createElement("a");
                       link.href = downloadUrl;
@@ -1053,7 +1060,7 @@ export function TransferFormManagement({
                       toast.success("Form downloaded successfully");
                     } catch (error) {
                       console.error("Error downloading PDF:", error);
-                      toast.error("Failed to download form");
+                      toast.error(error instanceof Error ? error.message : "Failed to download form");
                     }
                   }}
                   className="gap-2"
