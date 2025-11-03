@@ -1001,10 +1001,9 @@ export function TransferFormManagement({
                   size="sm"
                   onClick={() => {
                     // Open PDF in new tab for printing
-                    const pdfWindow = window.open(
-                      `/api/transfer-forms/${selectedForm.id}/pdf`,
-                      "_blank",
-                    );
+                    const apiBaseURL = getAPIBaseURL();
+                    const pdfUrl = `${apiBaseURL}/api/transfer-forms/${selectedForm.id}/pdf`;
+                    const pdfWindow = window.open(pdfUrl, "_blank");
                     if (pdfWindow) {
                       pdfWindow.onload = () => {
                         toast.info(
