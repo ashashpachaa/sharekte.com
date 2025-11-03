@@ -102,6 +102,16 @@ export interface Order {
   renewalDate: string;
   renewalFees: number;
 
+  // Fees
+  appliedFees?: Array<{
+    id: string;
+    name: string;
+    type: "fixed" | "percentage";
+    amount: number;
+    calculatedAmount: number;
+  }>;
+  totalFees?: number;
+
   // Refund Info
   refundStatus: RefundStatus;
   refundRequest?: RefundRequest;
