@@ -52,6 +52,16 @@ export default function Checkout() {
   const [company, setCompany] = useState("");
   const [whatsappNumber, setWhatsappNumber] = useState("");
 
+  // Billing Information form
+  const [billingFullName, setBillingFullName] = useState("");
+  const [billingEmail, setBillingEmail] = useState("");
+  const [billingPhoneNumber, setBillingPhoneNumber] = useState("");
+  const [billingAddress, setBillingAddress] = useState("");
+  const [billingCountry, setBillingCountry] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+  const [expiryDate, setExpiryDate] = useState("");
+  const [cvv, setCvv] = useState("");
+
   // Check if user is already logged in on component mount
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
