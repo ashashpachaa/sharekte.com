@@ -270,3 +270,25 @@ export function updateCompanyRenewalStatus(
     localStorage.setItem(key, JSON.stringify(userData));
   }
 }
+
+export function saveBillingInformation(billing: BillingInformation): void {
+  const userData = getUserData();
+  userData.billingInformation = {
+    ...billing,
+    savedAt: new Date().toISOString(),
+  };
+  const key = getUserDataKey();
+  localStorage.setItem(key, JSON.stringify(userData));
+}
+
+export function getBillingInformation(): BillingInformation | undefined {
+  const userData = getUserData();
+  return userData.billingInformation;
+}
+
+export function clearBillingInformation(): void {
+  const userData = getUserData();
+  userData.billingInformation = undefined;
+  const key = getUserDataKey();
+  localStorage.setItem(key, JSON.stringify(userData));
+}
