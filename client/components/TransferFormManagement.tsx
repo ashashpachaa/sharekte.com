@@ -818,7 +818,7 @@ export function TransferFormManagement({
                           variant="ghost"
                           size="sm"
                           className="ml-2"
-                          onClick={() => {
+                          onClick={async () => {
                             try {
                               const link = document.createElement("a");
 
