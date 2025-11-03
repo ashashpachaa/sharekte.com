@@ -90,6 +90,19 @@ async function fetchCompaniesData(): Promise<CompanyData[]> {
             "active";
           const statusValue = rawStatus.toLowerCase() as CompanyStatus;
 
+          // Try multiple field name variations for price field
+          const priceValue =
+            fields["Price"] ||
+            fields["price"] ||
+            fields["Purchase Price"] ||
+            fields["purchase price"] ||
+            fields["Purchase price"] ||
+            "0";
+          const purchasePrice = parseFloat(String(priceValue));
+
+          // Try to get currency from Airtable or default to USD
+          const currencyValue = fields["Currency"] || fields["currency"] || "USD";
+
           return {
             id: record.id,
             companyName: fields["Company name"] || "",
@@ -100,9 +113,9 @@ async function fetchCompaniesData(): Promise<CompanyData[]> {
             incorporationYear: parseInt(
               String(fields["Incorporate Year"] || new Date().getFullYear()),
             ),
-            purchasePrice: parseFloat(String(fields["Price"] || "0")),
+            purchasePrice: purchasePrice,
             renewalFee: parseFloat(String(fields["Renewal fees"] || "0")),
-            currency: "USD",
+            currency: String(currencyValue) as any,
             expiryDate: calculateExpiryDate(incorporationDate),
             renewalDate: calculateExpiryDate(incorporationDate),
             renewalDaysLeft: calculateRenewalDaysLeft(
