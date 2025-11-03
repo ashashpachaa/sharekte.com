@@ -825,39 +825,54 @@ export function TransferFormManagement({
                               if (attachment.url) {
                                 // If URL exists, use it directly
                                 link.href = attachment.url;
+                                link.download = attachment.name;
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
                               } else if (attachment.data) {
                                 // If base64 data exists, create blob download
-                                const byteCharacters = atob(attachment.data);
-                                const byteNumbers = new Array(
-                                  byteCharacters.length,
-                                );
-                                for (
-                                  let i = 0;
-                                  i < byteCharacters.length;
-                                  i++
-                                ) {
-                                  byteNumbers[i] = byteCharacters.charCodeAt(i);
+                                try {
+                                  const byteCharacters = atob(attachment.data);
+                                  const byteNumbers = new Array(
+                                    byteCharacters.length,
+                                  );
+                                  for (
+                                    let i = 0;
+                                    i < byteCharacters.length;
+                                    i++
+                                  ) {
+                                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                                  }
+                                  const byteArray = new Uint8Array(byteNumbers);
+                                  const blob = new Blob([byteArray], {
+                                    type: attachment.type || "application/octet-stream",
+                                  });
+                                  link.href = URL.createObjectURL(blob);
+                                  link.download = attachment.name;
+                                  document.body.appendChild(link);
+                                  link.click();
+                                  document.body.removeChild(link);
+
+                                  // Clean up object URL
+                                  setTimeout(() => {
+                                    URL.revokeObjectURL(link.href);
+                                  }, 100);
+                                } catch (decodeError) {
+                                  console.error("Base64 decode error:", decodeError);
+                                  toast.error("File format error - cannot decode attachment");
+                                  return;
                                 }
-                                const byteArray = new Uint8Array(byteNumbers);
-                                const blob = new Blob([byteArray], {
-                                  type: attachment.type,
-                                });
-                                link.href = URL.createObjectURL(blob);
                               } else {
+                                console.warn("Attachment data missing:", {
+                                  name: attachment.name,
+                                  type: attachment.type,
+                                  hasUrl: !!attachment.url,
+                                  hasData: !!attachment.data,
+                                });
                                 toast.error(
-                                  "File data not available for download",
+                                  "File data not available - please re-upload the attachment",
                                 );
                                 return;
-                              }
-
-                              link.download = attachment.name;
-                              document.body.appendChild(link);
-                              link.click();
-                              document.body.removeChild(link);
-
-                              // Clean up object URL if created
-                              if (!attachment.url && attachment.data) {
-                                URL.revokeObjectURL(link.href);
                               }
 
                               toast.success(
