@@ -167,6 +167,20 @@ export default function Checkout() {
 
       const userEmail = userData.email;
 
+      // Save billing information
+      const billingInfo: BillingInformation = {
+        fullName: billingFullName,
+        email: billingEmail,
+        phoneNumber: billingPhoneNumber,
+        billingAddress: billingAddress,
+        country: billingCountry,
+        cardNumber: cardNumber,
+        expiryDate: expiryDate,
+        cvv: cvv,
+        savedAt: new Date().toISOString(),
+      };
+      saveBillingInformation(billingInfo);
+
       // Create purchased company records, invoices, and orders for each item
       const today = new Date().toISOString().split("T")[0];
       const oneYearLater = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
