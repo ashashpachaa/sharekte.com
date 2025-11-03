@@ -452,6 +452,9 @@ export const updateTransferForm: RequestHandler = async (req, res) => {
       }
     }
 
+    // Save updated form to file storage for multi-instance consistency
+    saveFormToFile(updated);
+
     res.json(updated);
   } catch (error) {
     console.error("Error updating form:", error);
