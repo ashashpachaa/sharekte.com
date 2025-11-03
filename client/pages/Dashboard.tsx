@@ -181,10 +181,19 @@ function formatPriceWithCurrency(
   rates: Record<string, { symbol: string; rate: number }>,
 ): string {
   const currencyInfo = rates[currency as keyof typeof rates];
-  if (!currencyInfo) return `${amount.toLocaleString()}`;
 
-  // Amount is already converted by convertPrice, just format it
-  return `${currencyInfo.symbol}${amount.toLocaleString(undefined, {
+  // Fallback symbol map in case rates lookup fails
+  const fallbackSymbols: Record<string, string> = {
+    USD: "$",
+    GBP: "£",
+    AED: "د.إ",
+    EUR: "€",
+    SAR: "﷼",
+  };
+
+  const symbol = currencyInfo?.symbol || fallbackSymbols[currency] || currency;
+
+  return `${symbol}${amount.toLocaleString(undefined, {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   })}`;
