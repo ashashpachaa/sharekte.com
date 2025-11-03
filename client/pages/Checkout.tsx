@@ -591,14 +591,10 @@ export default function Checkout() {
                         <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
                         <div>
                           <p className="font-semibold text-foreground">
-                            Welcome,{" "}
-                            {authMode === "signin"
-                              ? email.split("@")[0]
-                              : fullName}
-                            ! 👋
+                            Welcome back, {fullName || email.split("@")[0]}! 👋
                           </p>
                           <p className="text-sm text-muted-foreground">
-                            {authMode === "signin" ? email : signupEmail}
+                            {email || signupEmail}
                           </p>
                           <p className="text-xs text-muted-foreground mt-1">
                             Ready to complete your purchase!
