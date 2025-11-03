@@ -6,7 +6,7 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/cart-context";
 import { useCurrency } from "@/lib/currency-context";
-import { ArrowLeft, CheckCircle, Loader, Mail, Lock, User } from "lucide-react";
+import { ArrowLeft, CheckCircle, Loader, Mail, Lock, User, AlertCircle, LogIn } from "lucide-react";
 import { toast } from "sonner";
 import {
   savePurchasedCompany,
@@ -23,7 +23,8 @@ export default function Checkout() {
   const { items, clearCart, totalPrice } = useCart();
   const [loading, setLoading] = useState(false);
   const [orderCompleted, setOrderCompleted] = useState(false);
-  const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
+  const [authMode, setAuthMode] = useState<"signin" | "signup">("signup");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // Sign In form
   const [email, setEmail] = useState("");
@@ -56,36 +57,47 @@ export default function Checkout() {
 
   const handleCompleteOrder = async () => {
     // Validate authentication
-    if (authMode === "signin" && (!email || !password)) {
-      toast.error("Please sign in to complete your order");
-      return;
-    }
+    if (!isAuthenticated) {
+      if (authMode === "signin" && (!email || !password)) {
+        toast.error("Please sign in to complete your order");
+        return;
+      }
 
-    if (
-      authMode === "signup" &&
-      (!fullName || !signupEmail || !signupPassword || !company)
-    ) {
-      toast.error("Please create an account to complete your order");
-      return;
+      if (
+        authMode === "signup" &&
+        (!fullName || !signupEmail || !signupPassword || !company)
+      ) {
+        toast.error("Please create an account to complete your order");
+        return;
+      }
     }
 
     setLoading(true);
     try {
-      // Determine user email and data
-      const userEmail = authMode === "signin" ? email : signupEmail;
-      const userFullName =
-        authMode === "signin" ? email.split("@")[0] : fullName;
-      const userCompany = authMode === "signup" ? company : "Not specified";
+      // Get user data from localStorage
+      const storedUser = localStorage.getItem("user");
+      let userData: any;
 
-      // Store user info in localStorage (simple auth)
-      const userData = {
-        fullName: userFullName,
-        email: userEmail,
-        company: userCompany,
-        accountCreated: new Date().toISOString(),
-        authenticated: true,
-      };
-      localStorage.setItem("user", JSON.stringify(userData));
+      if (storedUser && isAuthenticated) {
+        userData = JSON.parse(storedUser);
+      } else {
+        // Fallback if not authenticated (shouldn't happen with validation above)
+        const userEmail = authMode === "signin" ? email : signupEmail;
+        const userFullName =
+          authMode === "signin" ? email.split("@")[0] : fullName;
+        const userCompany = authMode === "signup" ? company : "Not specified";
+
+        userData = {
+          fullName: userFullName,
+          email: userEmail,
+          company: userCompany,
+          accountCreated: new Date().toISOString(),
+          authenticated: true,
+        };
+        localStorage.setItem("user", JSON.stringify(userData));
+      }
+
+      const userEmail = userData.email;
 
       // Create purchased company records, invoices, and orders for each item
       const today = new Date().toISOString().split("T")[0];
@@ -326,6 +338,11 @@ export default function Checkout() {
       return;
     }
 
+    if (!signupEmail.includes("@")) {
+      toast.error("Please enter a valid email");
+      return;
+    }
+
     if (signupPassword !== confirmPassword) {
       toast.error("Passwords do not match");
       return;
@@ -336,7 +353,28 @@ export default function Checkout() {
       return;
     }
 
-    toast.success("Account created successfully! Ready to checkout.");
+    // Check if user already exists
+    const existingUser = localStorage.getItem("user");
+    if (existingUser) {
+      const user = JSON.parse(existingUser);
+      if (user.email === signupEmail) {
+        toast.error("An account with this email already exists");
+        return;
+      }
+    }
+
+    // Create account
+    const userData = {
+      fullName: fullName,
+      email: signupEmail,
+      company: company,
+      accountCreated: new Date().toISOString(),
+      authenticated: true,
+    };
+    localStorage.setItem("user", JSON.stringify(userData));
+
+    setIsAuthenticated(true);
+    toast.success("Account created successfully! 🎉");
   };
 
   const handleSignIn = (e: React.FormEvent) => {
@@ -347,15 +385,27 @@ export default function Checkout() {
       return;
     }
 
-    // Simple validation for demo
     if (!email.includes("@")) {
       toast.error("Please enter a valid email");
       return;
     }
 
-    toast.success("Signed in successfully! Ready to checkout.");
-    setEmail("");
-    setPassword("");
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
+
+    // Simple authentication (in production, this would check against a real database)
+    const userData = {
+      fullName: email.split("@")[0],
+      email: email,
+      authenticated: true,
+      lastLogin: new Date().toISOString(),
+    };
+    localStorage.setItem("user", JSON.stringify(userData));
+
+    setIsAuthenticated(true);
+    toast.success("Signed in successfully! 🎉");
   };
 
   const taxAmount = Math.round(totalPrice * 0.2);
@@ -409,141 +459,208 @@ export default function Checkout() {
               {/* Authentication Section */}
               <div>
                 <h2 className="text-xl font-bold text-foreground mb-4">
-                  Account
+                  {isAuthenticated ? "✓ Account Verified" : "Create or Sign Into Your Account"}
                 </h2>
                 <div className="bg-card border border-border/40 rounded-lg p-6 space-y-4">
-                  {/* Tabs */}
-                  <div className="flex gap-4 mb-6">
-                    <button
-                      onClick={() => setAuthMode("signin")}
-                      className={`pb-2 px-1 font-semibold transition-colors ${
-                        authMode === "signin"
-                          ? "text-primary border-b-2 border-primary"
-                          : "text-muted-foreground hover:text-foreground border-b-2 border-transparent"
-                      }`}
-                    >
-                      <Mail className="w-4 h-4 inline mr-2" />
-                      {t("auth.signIn")}
-                    </button>
-                    <button
-                      onClick={() => setAuthMode("signup")}
-                      className={`pb-2 px-1 font-semibold transition-colors ${
-                        authMode === "signup"
-                          ? "text-primary border-b-2 border-primary"
-                          : "text-muted-foreground hover:text-foreground border-b-2 border-transparent"
-                      }`}
-                    >
-                      <User className="w-4 h-4 inline mr-2" />
-                      {t("auth.signUp")}
-                    </button>
-                  </div>
-
-                  {/* Sign In Form */}
-                  {authMode === "signin" && (
-                    <form onSubmit={handleSignIn} className="space-y-4">
-                      <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">
-                          Email
-                        </label>
-                        <input
-                          type="email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                          placeholder="john@example.com"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">
-                          Password
-                        </label>
-                        <input
-                          type="password"
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                          placeholder="••••••••"
-                        />
+                  {isAuthenticated ? (
+                    <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-4">
+                      <div className="flex items-center gap-3">
+                        <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
+                        <div>
+                          <p className="font-semibold text-foreground">
+                            Welcome, {authMode === "signin" ? email.split("@")[0] : fullName}! 👋
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            {authMode === "signin" ? email : signupEmail}
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Ready to complete your purchase!
+                          </p>
+                        </div>
                       </div>
                       <Button
-                        type="submit"
-                        className="w-full bg-primary hover:bg-primary-600 text-white"
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setIsAuthenticated(false);
+                          setEmail("");
+                          setPassword("");
+                          setFullName("");
+                          setSignupEmail("");
+                          setSignupPassword("");
+                          setConfirmPassword("");
+                          setCompany("");
+                        }}
+                        className="mt-4 w-full text-xs"
                       >
-                        Sign In
+                        Use Different Account
                       </Button>
-                    </form>
-                  )}
+                    </div>
+                  ) : (
+                    <>
+                      {/* Tabs */}
+                      <div className="flex gap-4 mb-6 border-b border-border/40">
+                        <button
+                          onClick={() => setAuthMode("signin")}
+                          className={`pb-3 px-1 font-semibold transition-colors ${
+                            authMode === "signin"
+                              ? "text-primary border-b-2 border-primary -mb-px"
+                              : "text-muted-foreground hover:text-foreground"
+                          }`}
+                        >
+                          <LogIn className="w-4 h-4 inline mr-2" />
+                          {t("auth.signIn")}
+                        </button>
+                        <button
+                          onClick={() => setAuthMode("signup")}
+                          className={`pb-3 px-1 font-semibold transition-colors ${
+                            authMode === "signup"
+                              ? "text-primary border-b-2 border-primary -mb-px"
+                              : "text-muted-foreground hover:text-foreground"
+                          }`}
+                        >
+                          <User className="w-4 h-4 inline mr-2" />
+                          {t("auth.signUp")}
+                        </button>
+                      </div>
 
-                  {/* Sign Up Form */}
-                  {authMode === "signup" && (
-                    <form onSubmit={handleSignUp} className="space-y-4">
-                      <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">
-                          Full Name
-                        </label>
-                        <input
-                          type="text"
-                          value={fullName}
-                          onChange={(e) => setFullName(e.target.value)}
-                          className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                          placeholder="John Doe"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">
-                          Email
-                        </label>
-                        <input
-                          type="email"
-                          value={signupEmail}
-                          onChange={(e) => setSignupEmail(e.target.value)}
-                          className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                          placeholder="john@example.com"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">
-                          Company Name
-                        </label>
-                        <input
-                          type="text"
-                          value={company}
-                          onChange={(e) => setCompany(e.target.value)}
-                          className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                          placeholder="Your Company"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">
-                          Password
-                        </label>
-                        <input
-                          type="password"
-                          value={signupPassword}
-                          onChange={(e) => setSignupPassword(e.target.value)}
-                          className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                          placeholder="••••••••"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">
-                          Confirm Password
-                        </label>
-                        <input
-                          type="password"
-                          value={confirmPassword}
-                          onChange={(e) => setConfirmPassword(e.target.value)}
-                          className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                          placeholder="••••••••"
-                        />
-                      </div>
-                      <Button
-                        type="submit"
-                        className="w-full bg-primary hover:bg-primary-600 text-white"
-                      >
-                        Create Account
-                      </Button>
-                    </form>
+                      {/* Sign In Form */}
+                      {authMode === "signin" && (
+                        <form onSubmit={handleSignIn} className="space-y-4">
+                          <div>
+                            <label className="block text-sm font-medium text-foreground mb-2">
+                              Email Address
+                            </label>
+                            <input
+                              type="email"
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)}
+                              className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                              placeholder="john@example.com"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-foreground mb-2">
+                              Password
+                            </label>
+                            <input
+                              type="password"
+                              value={password}
+                              onChange={(e) => setPassword(e.target.value)}
+                              className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                              placeholder="••••••••"
+                            />
+                          </div>
+                          <Button
+                            type="submit"
+                            className="w-full bg-primary hover:bg-primary-600 text-white font-semibold"
+                          >
+                            Sign In & Continue
+                          </Button>
+                          <p className="text-xs text-center text-muted-foreground">
+                            Don't have an account?{" "}
+                            <button
+                              type="button"
+                              onClick={() => setAuthMode("signup")}
+                              className="text-primary hover:underline font-semibold"
+                            >
+                              Create one here
+                            </button>
+                          </p>
+                        </form>
+                      )}
+
+                      {/* Sign Up Form */}
+                      {authMode === "signup" && (
+                        <form onSubmit={handleSignUp} className="space-y-4">
+                          <div>
+                            <label className="block text-sm font-medium text-foreground mb-2">
+                              Full Name *
+                            </label>
+                            <input
+                              type="text"
+                              value={fullName}
+                              onChange={(e) => setFullName(e.target.value)}
+                              className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                              placeholder="John Doe"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-foreground mb-2">
+                              Email Address *
+                            </label>
+                            <input
+                              type="email"
+                              value={signupEmail}
+                              onChange={(e) => setSignupEmail(e.target.value)}
+                              className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                              placeholder="john@example.com"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-foreground mb-2">
+                              Company Name *
+                            </label>
+                            <input
+                              type="text"
+                              value={company}
+                              onChange={(e) => setCompany(e.target.value)}
+                              className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                              placeholder="Your Company"
+                              required
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-foreground mb-2">
+                              Password *
+                            </label>
+                            <input
+                              type="password"
+                              value={signupPassword}
+                              onChange={(e) => setSignupPassword(e.target.value)}
+                              className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                              placeholder="••••••••"
+                              required
+                            />
+                            <p className="text-xs text-muted-foreground mt-1">
+                              Minimum 6 characters
+                            </p>
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-foreground mb-2">
+                              Confirm Password *
+                            </label>
+                            <input
+                              type="password"
+                              value={confirmPassword}
+                              onChange={(e) => setConfirmPassword(e.target.value)}
+                              className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                              placeholder="••••••••"
+                              required
+                            />
+                          </div>
+                          <Button
+                            type="submit"
+                            className="w-full bg-primary hover:bg-primary-600 text-white font-semibold"
+                          >
+                            Create Account & Continue
+                          </Button>
+                          <p className="text-xs text-center text-muted-foreground">
+                            Already have an account?{" "}
+                            <button
+                              type="button"
+                              onClick={() => setAuthMode("signin")}
+                              className="text-primary hover:underline font-semibold"
+                            >
+                              Sign in here
+                            </button>
+                          </p>
+                        </form>
+                      )}
+                    </>
                   )}
                 </div>
               </div>
