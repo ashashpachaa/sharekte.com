@@ -1070,6 +1070,8 @@ export function TransferFormManagement({
                           }
                           if (errorBody.hint) {
                             friendlyMessage = `${errorBody.error}. ${errorBody.hint}`;
+                          } else if (response.status === 404) {
+                            friendlyMessage = "Form data could not be found. Please refresh the page and try again.";
                           }
                         } catch {
                           // Could not parse error response
