@@ -316,7 +316,11 @@ export function createServer() {
     "/api/transfer-forms/:id/attachments/:attachmentId",
     deleteAttachment,
   );
+  // Handle both GET and POST for PDF generation
+  // GET: looks up form from server storage
+  // POST: uses form data provided in request body (for multi-instance deployments)
   app.get("/api/transfer-forms/:id/pdf", generatePDF);
+  app.post("/api/transfer-forms/:id/pdf", generatePDF);
 
   // Invoice routes - Specific routes before parameterized ones
   app.get("/api/invoices/analytics/summary", getInvoiceAnalytics);
