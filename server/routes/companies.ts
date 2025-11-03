@@ -463,9 +463,17 @@ export const createCompany: RequestHandler = async (req, res) => {
       incorporationDate: record.fields["Incorporate date"] || getTodayString(),
       incorporationYear:
         record.fields["Incorporate year"] || new Date().getFullYear(),
-      purchasePrice: parseFloat(record.fields.Price || "0"),
+      purchasePrice: parseFloat(
+        String(
+          record.fields.Price ||
+          record.fields.price ||
+          record.fields["Purchase Price"] ||
+          record.fields["purchase price"] ||
+          "0"
+        )
+      ),
       renewalFee: parseFloat(String(record.fields["Renewal fees"] || "0")),
-      currency: "USD",
+      currency: String(record.fields.Currency || record.fields.currency || "USD") as any,
       expiryDate: calculateExpiryDate(
         record.fields["Incorporate date"] || getTodayString(),
       ),
