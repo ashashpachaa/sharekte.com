@@ -420,8 +420,18 @@ export const updateFormStatus: RequestHandler = async (req, res) => {
       ],
     };
 
-    const index = formsDb.findIndex((f) => f.id === id);
-    formsDb[index] = updated;
+    // Update in the appropriate storage (in-memory takes priority)
+    let memIndex = inMemoryForms.findIndex((f) => f.id === id);
+    if (memIndex !== -1) {
+      inMemoryForms[memIndex] = updated;
+      console.log("[updateFormStatus] ✓ Updated form in in-memory storage");
+    } else {
+      let dbIndex = formsDb.findIndex((f) => f.id === id);
+      if (dbIndex !== -1) {
+        formsDb[dbIndex] = updated;
+        console.log("[updateFormStatus] ✓ Updated form in demo storage");
+      }
+    }
 
     // Send status notification email (async - don't wait for response)
     (async () => {
