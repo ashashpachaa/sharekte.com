@@ -142,7 +142,8 @@ export async function getAllOrders(): Promise<Order[]> {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
-    const response = await fetch("/api/orders", {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/orders`, {
       signal: controller.signal,
       headers: {
         "Content-Type": "application/json",
