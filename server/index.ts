@@ -119,6 +119,51 @@ export function createServer() {
 
   app.get("/api/demo", handleDemo);
 
+  // Debug endpoint to inspect Airtable field names and values
+  app.get("/api/debug/companies-airtable", async (req, res) => {
+    try {
+      const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
+      const AIRTABLE_BASE_ID = "app0PK34gyJDizR3Q";
+      const AIRTABLE_TABLE_ID = "tbljtdHPdHnTberDy";
+
+      if (!AIRTABLE_API_TOKEN) {
+        return res.status(500).json({ error: "AIRTABLE_API_TOKEN not configured" });
+      }
+
+      const response = await fetch(
+        `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_ID}?maxRecords=5`,
+        {
+          headers: {
+            Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const error = await response.text();
+        return res.status(response.status).json({ error, status: response.status });
+      }
+
+      const data = await response.json();
+
+      // Return raw records for debugging
+      const debugData = data.records.map((record: any) => ({
+        id: record.id,
+        fieldNames: Object.keys(record.fields),
+        fields: record.fields,
+      }));
+
+      res.json({
+        totalRecords: data.records.length,
+        records: debugData,
+        message: "Field names and values from Airtable",
+      });
+    } catch (error) {
+      console.error("Debug endpoint error:", error);
+      res.status(500).json({ error: String(error) });
+    }
+  });
+
   // Company routes
   app.get("/api/companies", getCompanies);
   app.get("/api/companies/:id", getCompany);
