@@ -183,8 +183,8 @@ function formatPriceWithCurrency(
   const currencyInfo = rates[currency as keyof typeof rates];
   if (!currencyInfo) return `${amount.toLocaleString()}`;
 
-  const converted = amount * currencyInfo.rate;
-  return `${currencyInfo.symbol}${converted.toLocaleString(undefined, {
+  // Amount is already converted by convertPrice, just format it
+  return `${currencyInfo.symbol}${amount.toLocaleString(undefined, {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   })}`;
