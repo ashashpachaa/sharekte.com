@@ -85,6 +85,7 @@ export default function AdminOrders() {
       navigate("/admin/login");
     } else {
       loadOrders();
+      loadCompanies();
       // Auto-refresh orders every 1 second to sync with Airtable
       const refreshInterval = setInterval(() => {
         loadOrders();
