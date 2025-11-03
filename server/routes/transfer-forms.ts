@@ -699,7 +699,11 @@ export const generatePDF: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const form = formsDb.find((f) => f.id === id);
+    // Search in both in-memory and demo forms
+    const form =
+      inMemoryForms.find((f) => f.id === id) ||
+      formsDb.find((f) => f.id === id);
+
     if (!form) {
       return res.status(404).json({ error: "Form not found" });
     }
