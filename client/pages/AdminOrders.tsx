@@ -947,16 +947,37 @@ function OrderDetailsModal({
                   />
                   <button
                     onClick={() => {
-                      // Auto-calculate renewal fees based on the linked company
-                      // Standard renewal fee is typically 10% of purchase price or a fixed company fee
-                      // For now, use a reasonable calculation: 1/10 of the purchase amount for new companies,
-                      // or use the company's standard renewal fee if available
-                      const baseRenewalFee = editedOrder.amount * 0.1; // 10% of purchase price as default
-                      handleFieldChange("renewalFees", Math.round(baseRenewalFee));
-                      toast.success("Renewal fees auto-calculated based on purchase amount");
+                      // Auto-calculate renewal fees based on company's standard renewal fee
+                      // Typical renewal fee is a percentage of base price
+                      // Standard formula: approximately 1/10 of the base company fee (e.g., 350 USD)
+                      // Get the linked company to check its renewal fee
+                      const linkedCompany = companies.find(
+                        (c) => c.name.toLowerCase() === editedOrder.companyName.toLowerCase()
+                      );
+
+                      if (linkedCompany && linkedCompany.renewalFee) {
+                        // Convert company renewal fee to selected currency
+                        const baseRenewalUSD = linkedCompany.renewalFee;
+                        const rates: Record<string, number> = {
+                          USD: 1,
+                          AED: 3.67,
+                          SAR: 3.75,
+                          GBP: 0.79,
+                          EUR: 0.92,
+                        };
+                        const rate = rates[editedOrder.currency] || 1;
+                        const convertedFee = Math.round(baseRenewalUSD * rate);
+                        handleFieldChange("renewalFees", convertedFee);
+                        toast.success(`Renewal fees auto-calculated to ${editedOrder.currency} ${convertedFee}`);
+                      } else {
+                        // Fallback: use 10% of purchase amount
+                        const calculatedFee = Math.round(editedOrder.amount * 0.1);
+                        handleFieldChange("renewalFees", calculatedFee);
+                        toast.success(`Renewal fees calculated as 10% of purchase amount: ${editedOrder.currency} ${calculatedFee}`);
+                      }
                     }}
                     className="px-3 py-2 bg-primary/10 text-primary rounded-md text-xs font-medium hover:bg-primary/20 transition"
-                    title="Auto-calculate renewal fees as 10% of purchase amount"
+                    title="Auto-calculate renewal fees based on company renewal fee"
                   >
                     Auto-Calculate
                   </button>
