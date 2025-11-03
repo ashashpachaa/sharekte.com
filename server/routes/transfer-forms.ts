@@ -532,7 +532,11 @@ export const removeDirector: RequestHandler = async (req, res) => {
   try {
     const { id, directorId } = req.params;
 
-    const form = formsDb.find((f) => f.id === id);
+    // Search in both in-memory and demo forms
+    let form =
+      inMemoryForms.find((f) => f.id === id) ||
+      formsDb.find((f) => f.id === id);
+
     if (!form) {
       return res.status(404).json({ error: "Form not found" });
     }
