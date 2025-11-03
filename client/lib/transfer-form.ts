@@ -18,13 +18,18 @@ export function getAPIBaseURL(): string {
     return "";
   }
 
-  // For production, always use shareket.com
-  if (hostname.includes("fly.dev") || !hostname.includes("shareket.com")) {
-    return "https://shareket.com";
+  // If on Fly.io, use the Fly.io domain (current origin)
+  if (hostname.includes("fly.dev")) {
+    return window.location.origin;
   }
 
-  // Use current domain for shareket.com
-  return window.location.origin;
+  // For shareket.com, use current origin
+  if (hostname.includes("shareket.com")) {
+    return window.location.origin;
+  }
+
+  // Fallback: use relative paths (same origin as frontend)
+  return "";
 }
 
 export type FormStatus =
