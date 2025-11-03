@@ -272,7 +272,8 @@ export async function getAllInvoices(filters?: InvoiceFilter): Promise<Invoice[]
 
 export async function getInvoice(invoiceId: string): Promise<Invoice | null> {
   try {
-    const response = await fetch(`/api/invoices/${invoiceId}`, {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/invoices/${invoiceId}`, {
       headers: { "Content-Type": "application/json" },
     });
 
@@ -302,7 +303,8 @@ export async function createInvoice(invoice: Omit<Invoice, "id" | "createdDate" 
 
 export async function updateInvoice(invoiceId: string, updates: Partial<Invoice>): Promise<Invoice | null> {
   try {
-    const response = await fetch(`/api/invoices/${invoiceId}`, {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/invoices/${invoiceId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updates),
@@ -334,7 +336,8 @@ export async function updateInvoiceStatus(invoiceId: string, status: InvoiceStat
 
 export async function deleteInvoice(invoiceId: string): Promise<boolean> {
   try {
-    const response = await fetch(`/api/invoices/${invoiceId}`, {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/invoices/${invoiceId}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
     });
