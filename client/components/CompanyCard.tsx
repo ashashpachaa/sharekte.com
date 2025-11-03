@@ -117,7 +117,12 @@ export function CompanyCard({
               <DollarSign className="w-3 h-3" />
               <span>
                 {company.purchasePrice
-                  ? formatWithCurrency(convertPrice(company.purchasePrice))
+                  ? formatWithCurrency(
+                      // If company has a different currency, we need to normalize to USD first
+                      company.currency && company.currency !== "USD" && rates[company.currency as any]
+                        ? convertPrice(company.purchasePrice / (rates[company.currency as any]?.rate || 1))
+                        : convertPrice(company.purchasePrice)
+                    )
                   : "N/A"}
               </span>
             </div>
