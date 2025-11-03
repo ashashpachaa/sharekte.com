@@ -795,15 +795,24 @@ export const generatePDF: RequestHandler = async (req, res) => {
     let form: TransferFormData | undefined = undefined;
 
     console.log("[generatePDF] Request method:", req.method);
+    console.log("[generatePDF] Request body exists:", !!req.body);
     console.log("[generatePDF] Request body type:", typeof req.body);
-    console.log("[generatePDF] Request body keys:", req.body ? Object.keys(req.body) : "none");
+    console.log("[generatePDF] Request body constructor:", req.body?.constructor?.name);
 
-    if (req.body && typeof req.body === "object" && "formId" in req.body) {
-      form = req.body as TransferFormData;
-      console.log("[generatePDF] Using form data provided in request body for formId:", form.formId);
-    } else {
-      // If no form data in body, try to find it in local storage
-      console.log("[generatePDF] No form data in request body, checking local storage...");
+    // Try to get form from request body
+    if (req.body) {
+      const bodyKeys = Object.keys(req.body);
+      console.log("[generatePDF] Request body keys:", bodyKeys.length > 0 ? bodyKeys : "empty");
+
+      if (bodyKeys.length > 0 && ("formId" in req.body || "companyName" in req.body)) {
+        form = req.body as TransferFormData;
+        console.log("[generatePDF] Using form data from POST body - formId:", form.formId || "unknown");
+      }
+    }
+
+    // If no form data in body, try to find it in local storage
+    if (!form) {
+      console.log("[generatePDF] No form data in request body, checking local storage for id:", id);
       form = inMemoryForms.find((f) => f.formId === id || f.id === id) ||
              formsDb.find((f) => f.formId === id || f.id === id);
       if (form) {
