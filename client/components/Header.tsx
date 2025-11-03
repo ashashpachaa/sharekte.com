@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Button } from "./ui/button";
 import { CartDropdown } from "./CartDropdown";
 import { NotificationBell } from "./NotificationBell";
