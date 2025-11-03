@@ -624,8 +624,7 @@ export const addComment: RequestHandler = async (req, res) => {
 export const uploadAttachment: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
-    const file = (req as any).file;
-    const { formId } = req.body;
+    const { formId, filename, filesize, filetype, data } = req.body;
 
     // Support both URL param id and formId from body
     const targetFormId = id || formId;
@@ -636,26 +635,22 @@ export const uploadAttachment: RequestHandler = async (req, res) => {
       return res.status(404).json({ error: "Form not found" });
     }
 
-    if (!file) {
-      return res.status(400).json({ error: "No file provided" });
+    if (!filename) {
+      return res.status(400).json({ error: "No filename provided" });
     }
 
     // Check file size limit (50MB)
     const maxSize = 50 * 1024 * 1024;
-    if (file.size > maxSize) {
+    if (filesize && filesize > maxSize) {
       return res.status(400).json({ error: "File size exceeds 50MB limit" });
     }
 
-    // Convert file to base64 for storage
-    const fileBuffer = Buffer.from(await file.arrayBuffer());
-    const base64Data = fileBuffer.toString("base64");
-
     const attachment = {
       id: `attachment_${Date.now()}`,
-      name: file.name || file.originalname || "download",
-      type: file.type || file.mimetype || "application/octet-stream",
-      size: file.size,
-      data: base64Data,
+      name: filename,
+      type: filetype || "application/octet-stream",
+      size: filesize || 0,
+      data: data || "",
       uploadedDate: new Date().toISOString(),
       uploadedBy: "user",
     };
@@ -667,15 +662,8 @@ export const uploadAttachment: RequestHandler = async (req, res) => {
     form.attachments.push(attachment);
     form.updatedAt = new Date().toISOString();
 
-    // Return attachment without base64 in response to keep it light
-    res.json({
-      id: attachment.id,
-      name: attachment.name,
-      type: attachment.type,
-      size: attachment.size,
-      uploadedDate: attachment.uploadedDate,
-      uploadedBy: attachment.uploadedBy,
-    });
+    // Return attachment (including data so client can download immediately)
+    res.json(attachment);
   } catch (error) {
     console.error("Error uploading attachment:", error);
     res.status(500).json({ error: "Failed to upload attachment" });
