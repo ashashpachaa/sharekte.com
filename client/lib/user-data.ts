@@ -77,9 +77,22 @@ export interface InvoiceData {
   orderId?: string;
 }
 
+export interface BillingInformation {
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  billingAddress: string;
+  country: string;
+  cardNumber: string;
+  expiryDate: string;
+  cvv: string;
+  savedAt: string;
+}
+
 export interface UserDataStore {
   purchasedCompanies: PurchasedCompanyData[];
   invoices: InvoiceData[];
+  billingInformation?: BillingInformation;
 }
 
 function getUserEmail(): string {
