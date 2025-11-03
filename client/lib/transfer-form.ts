@@ -349,13 +349,12 @@ export async function uploadFormAttachment(
     }
     const base64Data = btoa(binary);
 
-    const response = await fetch("/api/transfer-forms/attachments/upload", {
+    const response = await fetch(`/api/transfer-forms/${formId}/attachments`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        formId,
         filename: file.name,
         filesize: file.size,
         filetype: file.type || "application/octet-stream",
