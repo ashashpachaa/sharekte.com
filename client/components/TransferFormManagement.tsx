@@ -1060,17 +1060,25 @@ export function TransferFormManagement({
 
                       if (!response.ok) {
                         let errorDetail = `HTTP ${response.status}`;
+                        let friendlyMessage = "Failed to download form";
+
                         try {
                           const errorBody = await response.json();
-                          errorDetail += `: ${errorBody.error || "Unknown error"}`;
-                          if (errorBody.details) {
-                            errorDetail += ` - ${errorBody.details}`;
+                          errorDetail = `${response.status}: ${errorBody.error || "Unknown error"}`;
+                          if (errorBody.detail) {
+                            errorDetail += ` - ${errorBody.detail}`;
+                          }
+                          if (errorBody.hint) {
+                            friendlyMessage = `${errorBody.error}. ${errorBody.hint}`;
                           }
                         } catch {
                           // Could not parse error response
+                          if (response.status === 404) {
+                            friendlyMessage = "Form not found. Please refresh the page and try again.";
+                          }
                         }
-                        console.error("[Transfer Form Download] Server error response:", errorDetail);
-                        throw new Error(errorDetail);
+                        console.error("[Transfer Form Download] Server error:", errorDetail);
+                        throw new Error(friendlyMessage);
                       }
 
                       // Get blob from response (only read body once)
