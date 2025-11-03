@@ -6,7 +6,17 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/lib/cart-context";
 import { useCurrency } from "@/lib/currency-context";
-import { ArrowLeft, ArrowRight, CheckCircle, Loader, Mail, Lock, User, AlertCircle, LogIn } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  CheckCircle,
+  Loader,
+  Mail,
+  Lock,
+  User,
+  AlertCircle,
+  LogIn,
+} from "lucide-react";
 import { toast } from "sonner";
 import {
   savePurchasedCompany,
@@ -66,7 +76,11 @@ export default function Checkout() {
 
       if (
         authMode === "signup" &&
-        (!fullName || !signupEmail || !signupPassword || !company || !whatsappNumber)
+        (!fullName ||
+          !signupEmail ||
+          !signupPassword ||
+          !company ||
+          !whatsappNumber)
       ) {
         toast.error("Please fill in all required fields");
         return;
@@ -316,7 +330,8 @@ export default function Checkout() {
                 🎉 Purchase Successful!
               </h1>
               <p className="text-lg text-muted-foreground max-w-xl mx-auto">
-                Your company ownership transfer has been initiated. Welcome to Sharekte!
+                Your company ownership transfer has been initiated. Welcome to
+                Sharekte!
               </p>
             </div>
 
@@ -335,7 +350,8 @@ export default function Checkout() {
                       Complete Transfer Form
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      Visit your dashboard to fill out the company transfer form with ownership details
+                      Visit your dashboard to fill out the company transfer form
+                      with ownership details
                     </p>
                   </div>
                 </div>
@@ -348,7 +364,8 @@ export default function Checkout() {
                       Upload Documents
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      Provide necessary documentation to complete the ownership transfer
+                      Provide necessary documentation to complete the ownership
+                      transfer
                     </p>
                   </div>
                 </div>
@@ -361,7 +378,8 @@ export default function Checkout() {
                       Finalize Transfer
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      Our team will process your documents and complete the transfer
+                      Our team will process your documents and complete the
+                      transfer
                     </p>
                   </div>
                 </div>
@@ -371,7 +389,8 @@ export default function Checkout() {
             {/* Order Details Summary */}
             <div className="space-y-2 text-sm">
               <p className="text-muted-foreground">
-                {items.length} {items.length === 1 ? "company" : "companies"} purchased • Order confirmation sent to your email
+                {items.length} {items.length === 1 ? "company" : "companies"}{" "}
+                purchased • Order confirmation sent to your email
               </p>
             </div>
 
@@ -426,7 +445,10 @@ export default function Checkout() {
       return;
     }
 
-    if (!whatsappNumber.replace(/\D/g, "") || whatsappNumber.replace(/\D/g, "").length < 10) {
+    if (
+      !whatsappNumber.replace(/\D/g, "") ||
+      whatsappNumber.replace(/\D/g, "").length < 10
+    ) {
       toast.error("Please enter a valid WhatsApp number");
       return;
     }
@@ -538,7 +560,9 @@ export default function Checkout() {
               {/* Authentication Section */}
               <div>
                 <h2 className="text-xl font-bold text-foreground mb-4">
-                  {isAuthenticated ? "✓ Account Verified" : "Create or Sign Into Your Account"}
+                  {isAuthenticated
+                    ? "✓ Account Verified"
+                    : "Create or Sign Into Your Account"}
                 </h2>
                 <div className="bg-card border border-border/40 rounded-lg p-6 space-y-4">
                   {isAuthenticated ? (
@@ -547,7 +571,11 @@ export default function Checkout() {
                         <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
                         <div>
                           <p className="font-semibold text-foreground">
-                            Welcome, {authMode === "signin" ? email.split("@")[0] : fullName}! 👋
+                            Welcome,{" "}
+                            {authMode === "signin"
+                              ? email.split("@")[0]
+                              : fullName}
+                            ! 👋
                           </p>
                           <p className="text-sm text-muted-foreground">
                             {authMode === "signin" ? email : signupEmail}
@@ -700,7 +728,9 @@ export default function Checkout() {
                             <input
                               type="tel"
                               value={whatsappNumber}
-                              onChange={(e) => setWhatsappNumber(e.target.value)}
+                              onChange={(e) =>
+                                setWhatsappNumber(e.target.value)
+                              }
                               className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
                               placeholder="+1 (555) 000-0000"
                               required
@@ -716,7 +746,9 @@ export default function Checkout() {
                             <input
                               type="password"
                               value={signupPassword}
-                              onChange={(e) => setSignupPassword(e.target.value)}
+                              onChange={(e) =>
+                                setSignupPassword(e.target.value)
+                              }
                               className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
                               placeholder="••••••••"
                               required
@@ -732,7 +764,9 @@ export default function Checkout() {
                             <input
                               type="password"
                               value={confirmPassword}
-                              onChange={(e) => setConfirmPassword(e.target.value)}
+                              onChange={(e) =>
+                                setConfirmPassword(e.target.value)
+                              }
                               className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
                               placeholder="••••••••"
                               required

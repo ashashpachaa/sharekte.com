@@ -212,7 +212,8 @@ export function createEmptyForm(
 export function getActivityLabel(code: string): string {
   // Activity codes map - matches COMPANY_ACTIVITIES structure
   const activities: Record<string, string> = {
-    "01110": "01110 - Growing of cereals and other crops not elsewhere classified",
+    "01110":
+      "01110 - Growing of cereals and other crops not elsewhere classified",
     "01120": "01120 - Growing of rice",
     "01130": "01130 - Growing of vegetables and melons, roots and tubers",
     "01140": "01140 - Growing of sugar cane",
@@ -242,7 +243,8 @@ export function getActivityLabel(code: string): string {
     "01630": "01630 - Post-harvest crop activities",
     "01640": "01640 - Seed processing for propagation",
     "01700": "01700 - Hunting, trapping and related activities",
-    "46900": "46900 - Remediation activities and other waste management services",
+    "46900":
+      "46900 - Remediation activities and other waste management services",
   };
 
   return activities[code] || code;

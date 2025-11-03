@@ -373,7 +373,8 @@ export function TransferFormManagement({
             <DialogHeader>
               <DialogTitle>Transfer Form Application</DialogTitle>
               <DialogDescription>
-                Form ID: {selectedForm.formId} • Order ID: {selectedForm.orderId}
+                Form ID: {selectedForm.formId} • Order ID:{" "}
+                {selectedForm.orderId}
               </DialogDescription>
             </DialogHeader>
 
@@ -438,7 +439,13 @@ export function TransferFormManagement({
                     <Label className="text-xs text-gray-600">
                       Incorporation Date
                     </Label>
-                    <p className="text-sm">{selectedForm.incorporationDate ? new Date(selectedForm.incorporationDate).toLocaleDateString() : "N/A"}</p>
+                    <p className="text-sm">
+                      {selectedForm.incorporationDate
+                        ? new Date(
+                            selectedForm.incorporationDate,
+                          ).toLocaleDateString()
+                        : "N/A"}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -446,7 +453,9 @@ export function TransferFormManagement({
               {/* Attached Files - Prominent Display */}
               <div className="border-2 border-blue-300 bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg">
                 <div className="mb-3">
-                  <h3 className="font-bold text-lg">📎 Attached Files ({selectedForm.attachments.length})</h3>
+                  <h3 className="font-bold text-lg">
+                    📎 Attached Files ({selectedForm.attachments.length})
+                  </h3>
                 </div>
                 {selectedForm.attachments.length > 0 ? (
                   <div className="space-y-2">
@@ -460,9 +469,15 @@ export function TransferFormManagement({
                             📄 {attachment.name}
                           </p>
                           <div className="flex gap-3 text-xs text-gray-600 mt-1">
-                            <span>{(attachment.size / 1024 / 1024).toFixed(2)} MB</span>
+                            <span>
+                              {(attachment.size / 1024 / 1024).toFixed(2)} MB
+                            </span>
                             <span>•</span>
-                            <span>{new Date(attachment.uploadedDate).toLocaleDateString()}</span>
+                            <span>
+                              {new Date(
+                                attachment.uploadedDate,
+                              ).toLocaleDateString()}
+                            </span>
                             <span>•</span>
                             <span>By {attachment.uploadedBy}</span>
                             {attachment.type && (
@@ -486,7 +501,9 @@ export function TransferFormManagement({
                   </div>
                 ) : (
                   <div className="p-4 bg-white rounded text-center">
-                    <p className="text-sm text-gray-500">📭 No attachments uploaded yet</p>
+                    <p className="text-sm text-gray-500">
+                      📭 No attachments uploaded yet
+                    </p>
                   </div>
                 )}
               </div>
@@ -500,19 +517,25 @@ export function TransferFormManagement({
                       <Label className="text-xs text-gray-600">
                         Total Shares
                       </Label>
-                      <p className="font-medium text-lg">{selectedForm.totalShares}</p>
+                      <p className="font-medium text-lg">
+                        {selectedForm.totalShares}
+                      </p>
                     </div>
                     <div className="bg-blue-50 p-3 rounded-lg">
                       <Label className="text-xs text-gray-600">
                         Share Capital
                       </Label>
-                      <p className="font-medium text-lg">{selectedForm.totalShareCapital}</p>
+                      <p className="font-medium text-lg">
+                        {selectedForm.totalShareCapital}
+                      </p>
                     </div>
                     <div className="bg-blue-50 p-3 rounded-lg">
                       <Label className="text-xs text-gray-600">
                         Price Per Share
                       </Label>
-                      <p className="font-medium text-lg">{selectedForm.pricePerShare}</p>
+                      <p className="font-medium text-lg">
+                        {selectedForm.pricePerShare}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -536,17 +559,21 @@ export function TransferFormManagement({
                         </p>
                         <div className="grid grid-cols-3 gap-2 mt-2 text-xs">
                           <div>
-                            <span className="text-gray-600">Nationality:</span> {shareholder.nationality}
+                            <span className="text-gray-600">Nationality:</span>{" "}
+                            {shareholder.nationality}
                           </div>
                           <div>
-                            <span className="text-gray-600">Shares:</span> {shareholder.shareholderPercentage}%
+                            <span className="text-gray-600">Shares:</span>{" "}
+                            {shareholder.shareholderPercentage}%
                           </div>
                           <div>
-                            <span className="text-gray-600">Amount:</span> {shareholder.amount}
+                            <span className="text-gray-600">Amount:</span>{" "}
+                            {shareholder.amount}
                           </div>
                         </div>
                         <p className="text-xs text-gray-600 mt-1">
-                          {shareholder.address}, {shareholder.city}, {shareholder.country}
+                          {shareholder.address}, {shareholder.city},{" "}
+                          {shareholder.country}
                         </p>
                       </div>
                     ))}
@@ -570,13 +597,19 @@ export function TransferFormManagement({
                         key={idx}
                         className="border-l-2 border-green-200 pl-3 p-3 bg-green-50 rounded"
                       >
-                        <p className="font-medium text-sm">{psc.shareholderName}</p>
+                        <p className="font-medium text-sm">
+                          {psc.shareholderName}
+                        </p>
                         <div className="grid grid-cols-2 gap-2 mt-2 text-xs">
                           <div>
-                            <span className="text-gray-600">Nationality:</span> {psc.nationality}
+                            <span className="text-gray-600">Nationality:</span>{" "}
+                            {psc.nationality}
                           </div>
                           <div>
-                            <span className="text-gray-600">Level of Control:</span> {psc.levelOfControl.join(", ")}
+                            <span className="text-gray-600">
+                              Level of Control:
+                            </span>{" "}
+                            {psc.levelOfControl.join(", ")}
                           </div>
                         </div>
                         <p className="text-xs text-gray-600 mt-1">
@@ -593,59 +626,101 @@ export function TransferFormManagement({
                 <h3 className="font-semibold mb-3">Company Changes</h3>
                 {selectedForm.changeCompanyName && (
                   <div className="mb-3 p-3 bg-yellow-50 border border-yellow-200 rounded">
-                    <p className="font-medium text-sm mb-1">🏷️ Company Name Change</p>
-                    {selectedForm.suggestedNames && selectedForm.suggestedNames.length > 0 ? (
-                      <p className="text-sm">Suggested names: {selectedForm.suggestedNames.join(", ")}</p>
+                    <p className="font-medium text-sm mb-1">
+                      🏷️ Company Name Change
+                    </p>
+                    {selectedForm.suggestedNames &&
+                    selectedForm.suggestedNames.length > 0 ? (
+                      <p className="text-sm">
+                        Suggested names:{" "}
+                        {selectedForm.suggestedNames.join(", ")}
+                      </p>
                     ) : (
-                      <p className="text-sm text-gray-600">Name change requested</p>
+                      <p className="text-sm text-gray-600">
+                        Name change requested
+                      </p>
                     )}
                   </div>
                 )}
                 {selectedForm.changeCompanyActivities && (
                   <div className="p-3 bg-yellow-50 border border-yellow-200 rounded">
-                    <p className="font-medium text-sm mb-1">🏢 Activities Change</p>
-                    {selectedForm.companyActivities && selectedForm.companyActivities.length > 0 ? (
+                    <p className="font-medium text-sm mb-1">
+                      🏢 Activities Change
+                    </p>
+                    {selectedForm.companyActivities &&
+                    selectedForm.companyActivities.length > 0 ? (
                       <div className="text-sm">
                         {selectedForm.companyActivities.map((activity, idx) => {
                           const label = getActivityLabel(activity);
-                          return <p key={idx} className="text-gray-700">• {label}</p>;
+                          return (
+                            <p key={idx} className="text-gray-700">
+                              • {label}
+                            </p>
+                          );
                         })}
                       </div>
                     ) : (
-                      <p className="text-sm text-gray-600">Activities change requested</p>
+                      <p className="text-sm text-gray-600">
+                        Activities change requested
+                      </p>
                     )}
                   </div>
                 )}
-                {!selectedForm.changeCompanyName && !selectedForm.changeCompanyActivities && (
-                  <p className="text-sm text-gray-500">No company changes requested</p>
-                )}
+                {!selectedForm.changeCompanyName &&
+                  !selectedForm.changeCompanyActivities && (
+                    <p className="text-sm text-gray-500">
+                      No company changes requested
+                    </p>
+                  )}
               </div>
 
               {/* Admin Tracking */}
               {(selectedForm.assignedTo || selectedForm.reviewedBy) && (
                 <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                  <h3 className="font-semibold mb-2 text-purple-900">Admin Assignment</h3>
+                  <h3 className="font-semibold mb-2 text-purple-900">
+                    Admin Assignment
+                  </h3>
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     {selectedForm.assignedTo && (
                       <div>
                         <span className="text-gray-600">Assigned to:</span>
                         <p className="font-medium">{selectedForm.assignedTo}</p>
-                        <p className="text-xs text-gray-600">{selectedForm.assignedDate ? new Date(selectedForm.assignedDate).toLocaleDateString() : ""}</p>
+                        <p className="text-xs text-gray-600">
+                          {selectedForm.assignedDate
+                            ? new Date(
+                                selectedForm.assignedDate,
+                              ).toLocaleDateString()
+                            : ""}
+                        </p>
                       </div>
                     )}
                     {selectedForm.reviewedBy && (
                       <div>
                         <span className="text-gray-600">Reviewed by:</span>
                         <p className="font-medium">{selectedForm.reviewedBy}</p>
-                        <p className="text-xs text-gray-600">{selectedForm.reviewedDate ? new Date(selectedForm.reviewedDate).toLocaleDateString() : ""}</p>
+                        <p className="text-xs text-gray-600">
+                          {selectedForm.reviewedDate
+                            ? new Date(
+                                selectedForm.reviewedDate,
+                              ).toLocaleDateString()
+                            : ""}
+                        </p>
                       </div>
                     )}
                   </div>
                   {selectedForm.amendmentsRequiredCount > 0 && (
                     <div className="mt-2 text-sm">
-                      <span className="text-orange-700">Amendments required:</span> {selectedForm.amendmentsRequiredCount}
+                      <span className="text-orange-700">
+                        Amendments required:
+                      </span>{" "}
+                      {selectedForm.amendmentsRequiredCount}
                       {selectedForm.lastAmendmentDate && (
-                        <p className="text-xs text-gray-600">Last amendment: {new Date(selectedForm.lastAmendmentDate).toLocaleDateString()}</p>
+                        <p className="text-xs text-gray-600">
+                          Last amendment:{" "}
+                          {new Date(
+                            selectedForm.lastAmendmentDate,
+                          ).toLocaleDateString()}
+                        </p>
                       )}
                     </div>
                   )}
@@ -653,34 +728,49 @@ export function TransferFormManagement({
               )}
 
               {/* Status History */}
-              {selectedForm.statusHistory && selectedForm.statusHistory.length > 0 && (
-                <div>
-                  <h3 className="font-semibold mb-3">Status Change History</h3>
-                  <div className="space-y-2">
-                    {selectedForm.statusHistory.map((change, idx) => (
-                      <div key={idx} className="flex gap-3 p-3 bg-gray-50 rounded-lg text-sm">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2">
-                            <Badge variant="outline" className="text-xs">
-                              {formatFormStatus(change.fromStatus as FormStatus)}
-                            </Badge>
-                            <span className="text-gray-600">→</span>
-                            <Badge className="text-xs">
-                              {formatFormStatus(change.toStatus as FormStatus)}
-                            </Badge>
+              {selectedForm.statusHistory &&
+                selectedForm.statusHistory.length > 0 && (
+                  <div>
+                    <h3 className="font-semibold mb-3">
+                      Status Change History
+                    </h3>
+                    <div className="space-y-2">
+                      {selectedForm.statusHistory.map((change, idx) => (
+                        <div
+                          key={idx}
+                          className="flex gap-3 p-3 bg-gray-50 rounded-lg text-sm"
+                        >
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                              <Badge variant="outline" className="text-xs">
+                                {formatFormStatus(
+                                  change.fromStatus as FormStatus,
+                                )}
+                              </Badge>
+                              <span className="text-gray-600">→</span>
+                              <Badge className="text-xs">
+                                {formatFormStatus(
+                                  change.toStatus as FormStatus,
+                                )}
+                              </Badge>
+                            </div>
+                            <p className="text-xs text-gray-600 mt-1">
+                              Changed by {change.changedBy} on{" "}
+                              {new Date(
+                                change.changedDate,
+                              ).toLocaleDateString()}
+                            </p>
+                            {change.notes && (
+                              <p className="text-xs text-gray-700 mt-1 italic">
+                                {change.notes}
+                              </p>
+                            )}
                           </div>
-                          <p className="text-xs text-gray-600 mt-1">
-                            Changed by {change.changedBy} on {new Date(change.changedDate).toLocaleDateString()}
-                          </p>
-                          {change.notes && (
-                            <p className="text-xs text-gray-700 mt-1 italic">{change.notes}</p>
-                          )}
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
               {/* Attachments */}
               <div>
@@ -699,12 +789,17 @@ export function TransferFormManagement({
                             📄 {attachment.name}
                           </p>
                           <p className="text-xs text-gray-500">
-                            {(attachment.size / 1024 / 1024).toFixed(2)} MB • Uploaded {new Date(
+                            {(attachment.size / 1024 / 1024).toFixed(2)} MB •
+                            Uploaded{" "}
+                            {new Date(
                               attachment.uploadedDate,
-                            ).toLocaleDateString()} by {attachment.uploadedBy}
+                            ).toLocaleDateString()}{" "}
+                            by {attachment.uploadedBy}
                           </p>
                           {attachment.type && (
-                            <p className="text-xs text-gray-500 mt-1">Type: {attachment.type}</p>
+                            <p className="text-xs text-gray-500 mt-1">
+                              Type: {attachment.type}
+                            </p>
                           )}
                         </div>
                         <Button variant="ghost" size="sm" className="ml-2">
@@ -715,7 +810,9 @@ export function TransferFormManagement({
                   </div>
                 ) : (
                   <div className="p-4 bg-gray-50 rounded-lg text-center">
-                    <p className="text-sm text-gray-500">No attachments uploaded yet</p>
+                    <p className="text-sm text-gray-500">
+                      No attachments uploaded yet
+                    </p>
                   </div>
                 )}
               </div>
@@ -780,7 +877,10 @@ export function TransferFormManagement({
                   size="sm"
                   onClick={() => {
                     // Download as PDF
-                    window.open(`/api/transfer-forms/${selectedForm.id}/pdf`, '_blank');
+                    window.open(
+                      `/api/transfer-forms/${selectedForm.id}/pdf`,
+                      "_blank",
+                    );
                   }}
                   className="gap-2"
                 >
