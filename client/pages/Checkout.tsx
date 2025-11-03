@@ -254,11 +254,11 @@ export default function Checkout() {
         try {
           await createOrder({
             orderId: `ORD-${new Date().getFullYear()}-${String(Date.now()).slice(-5)}`,
-            customerName: userData.fullName,
-            customerEmail: userEmail,
-            customerPhone: "+1 (555) 000-0000",
-            billingAddress: "Not specified",
-            country: item.country || "Not specified",
+            customerName: billingFullName,
+            customerEmail: billingEmail,
+            customerPhone: billingPhoneNumber,
+            billingAddress: billingAddress,
+            country: billingCountry,
             companyId: item.id,
             companyName: item.name,
             companyNumber: item.companyNumber,
