@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
@@ -47,6 +47,26 @@ export default function Checkout() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [company, setCompany] = useState("");
   const [whatsappNumber, setWhatsappNumber] = useState("");
+
+  // Check if user is already logged in on component mount
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        const userData = JSON.parse(storedUser);
+        if (userData.authenticated && userData.email) {
+          setIsAuthenticated(true);
+          setEmail(userData.email);
+          setFullName(userData.fullName || "");
+          setSignupEmail(userData.email);
+          setCompany(userData.company || "");
+          setWhatsappNumber(userData.whatsappNumber || "");
+        }
+      } catch (error) {
+        console.error("Error parsing stored user data:", error);
+      }
+    }
+  }, []);
 
   if (items.length === 0 && !orderCompleted) {
     return (
