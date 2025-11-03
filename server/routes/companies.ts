@@ -585,11 +585,21 @@ export const updateCompany: RequestHandler = async (req, res) => {
       incorporationYear: parseInt(
         String(fields["Incorporate Year"] || new Date().getFullYear()),
       ),
-      purchasePrice: parseFloat(String(fields["Price"] || "0")),
+      purchasePrice: parseFloat(
+        String(
+          fields["Price"] ||
+          fields["price"] ||
+          fields["Purchase Price"] ||
+          fields["purchase price"] ||
+          updatedFields.Price ||
+          updatedFields.price ||
+          "0"
+        )
+      ),
       renewalFee: parseFloat(
         String(fields["Renewal fees"] || updatedFields["Renewal fees"] || "0"),
       ),
-      currency: "USD",
+      currency: String(fields["Currency"] || fields["currency"] || updatedFields.Currency || updatedFields.currency || "USD") as any,
       expiryDate: calculateExpiryDate(incorporationDate),
       renewalDate: calculateExpiryDate(incorporationDate),
       renewalDaysLeft: calculateRenewalDaysLeft(
