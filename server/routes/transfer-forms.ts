@@ -306,21 +306,35 @@ export const createTransferForm: RequestHandler = async (req, res) => {
 
     formsDb.push(newForm);
 
-    // Sync to Airtable if configured
-    (async () => {
+    // Sync to Airtable if configured (wait for completion)
+    if (process.env.AIRTABLE_API_TOKEN) {
       try {
         const { syncFormToAirtable, syncFormToTransferFormTable } =
           await import("../utils/airtable-sync");
 
         // Sync to comprehensive forms table
         await syncFormToAirtable(newForm);
+        console.log(
+          "[createTransferForm] ✓ Form synced to Airtable comprehensive table",
+        );
 
         // Sync to simplified Transfer Forms table (with core fields only)
         await syncFormToTransferFormTable(newForm);
+        console.log(
+          "[createTransferForm] ✓ Form synced to Airtable Transfer Forms table",
+        );
       } catch (error) {
-        console.error("Error syncing form to Airtable:", error);
+        console.error(
+          "[createTransferForm] Warning - Airtable sync failed:",
+          error,
+        );
+        // Don't fail the request, form is safe in formsDb
       }
-    })();
+    } else {
+      console.log(
+        "[createTransferForm] Note: AIRTABLE_API_TOKEN not set, form stored in-memory only",
+      );
+    }
 
     res.status(201).json(newForm);
   } catch (error) {

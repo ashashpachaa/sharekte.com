@@ -332,20 +332,27 @@ export const createOrder: RequestHandler = async (req, res) => {
     inMemoryOrders.push(order);
     console.log("[createOrder] ✓ Stored order in-memory storage");
 
-    // Try to sync to Airtable as secondary backup
-    try {
-      const airtableId = await syncOrderToAirtable(order);
-      if (airtableId) {
-        order.airtableId = airtableId;
-        console.log(
-          "[createOrder] ✓ Order also synced to Airtable with ID:",
-          airtableId,
+    // Sync to Airtable immediately (wait for completion)
+    if (AIRTABLE_API_TOKEN) {
+      try {
+        const airtableId = await syncOrderToAirtable(order);
+        if (airtableId) {
+          order.airtableId = airtableId;
+          console.log(
+            "[createOrder] ✓ Order synced to Airtable with ID:",
+            airtableId,
+          );
+        }
+      } catch (airtableError) {
+        console.error(
+          "[createOrder] Warning - Airtable sync failed:",
+          airtableError,
         );
+        // Don't fail the request, order is safe in-memory
       }
-    } catch (airtableError) {
-      console.error(
-        "[createOrder] Airtable sync failed (order safe in-memory):",
-        airtableError,
+    } else {
+      console.log(
+        "[createOrder] Note: AIRTABLE_API_TOKEN not set, order stored in-memory only",
       );
     }
 
