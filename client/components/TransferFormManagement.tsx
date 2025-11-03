@@ -908,13 +908,24 @@ export function TransferFormManagement({
                   variant="outline"
                   size="sm"
                   onClick={() => {
-                    // Download as PDF
-                    window.open(
+                    // Open PDF in new tab for printing
+                    const pdfWindow = window.open(
                       `/api/transfer-forms/${selectedForm.id}/pdf`,
                       "_blank",
                     );
+                    if (pdfWindow) {
+                      pdfWindow.onload = () => {
+                        toast.info(
+                          "Form opened. Use Ctrl+P (or Cmd+P) to print to PDF",
+                          { duration: 5000 },
+                        );
+                      };
+                    } else {
+                      toast.error("Failed to open form. Please check popup blocker");
+                    }
                   }}
                   className="gap-2"
+                  title="Opens form in new tab. Use print to save as PDF"
                 >
                   <Download className="w-4 h-4" />
                   Download PDF
