@@ -945,6 +945,21 @@ function OrderDetailsModal({
                     }
                     className="flex-1 px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
                   />
+                  <button
+                    onClick={() => {
+                      // Auto-calculate renewal fees based on the linked company
+                      // Standard renewal fee is typically 10% of purchase price or a fixed company fee
+                      // For now, use a reasonable calculation: 1/10 of the purchase amount for new companies,
+                      // or use the company's standard renewal fee if available
+                      const baseRenewalFee = editedOrder.amount * 0.1; // 10% of purchase price as default
+                      handleFieldChange("renewalFees", Math.round(baseRenewalFee));
+                      toast.success("Renewal fees auto-calculated based on purchase amount");
+                    }}
+                    className="px-3 py-2 bg-primary/10 text-primary rounded-md text-xs font-medium hover:bg-primary/20 transition"
+                    title="Auto-calculate renewal fees as 10% of purchase amount"
+                  >
+                    Auto-Calculate
+                  </button>
                 </div>
               </div>
             </div>
