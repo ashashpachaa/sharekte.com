@@ -369,10 +369,14 @@ export const createTransferForm: RequestHandler = async (req, res) => {
       ],
     };
 
-    // Store in persistent in-memory storage first
+    // Store in persistent in-memory storage
     inMemoryForms.push(newForm);
+
+    // Also save to file storage for multi-instance deployments (Fly.io load balancing)
+    saveFormToFile(newForm);
+
     console.log(
-      "[createTransferForm] ✓ Form stored in persistent in-memory storage",
+      "[createTransferForm] ✓ Form stored in memory and file storage",
       { formId: newForm.formId, id: newForm.id, totalForms: inMemoryForms.length }
     );
     console.log("[createTransferForm] Current inMemoryForms:", inMemoryForms.map(f => ({ id: f.id, formId: f.formId, company: f.companyName })));
