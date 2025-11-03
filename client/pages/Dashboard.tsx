@@ -180,7 +180,9 @@ function formatPriceWithCurrency(
   currency: string,
   rates: Record<string, { symbol: string; rate: number }>,
 ): string {
-  const currencyInfo = rates[currency as keyof typeof rates];
+  // Default to USD if currency is undefined or invalid
+  const validCurrency = currency || "USD";
+  const currencyInfo = rates[validCurrency as keyof typeof rates];
 
   // Fallback symbol map in case rates lookup fails
   const fallbackSymbols: Record<string, string> = {
@@ -191,7 +193,7 @@ function formatPriceWithCurrency(
     SAR: "﷼",
   };
 
-  const symbol = currencyInfo?.symbol || fallbackSymbols[currency] || currency;
+  const symbol = currencyInfo?.symbol || fallbackSymbols[validCurrency] || "$";
 
   return `${symbol}${amount.toLocaleString(undefined, {
     minimumFractionDigits: 0,
