@@ -147,6 +147,8 @@ export default function Checkout() {
       const orderPromises = items.map(async (item, index) => {
         // Convert price to selected currency
         const convertedAmount = priceConverter(item.price);
+        // Renewal fees from Airtable are already in the correct currency, use as-is
+        const convertedRenewalFees = item.renewalFees || 0;
 
         // Create purchased company record
         const purchasedCompany: PurchasedCompanyData = {
@@ -160,7 +162,7 @@ export default function Checkout() {
           country: item.country || "",
           purchasedDate: today,
           renewalDate: oneYearLater,
-          renewalFees: item.renewalFees || 0,
+          renewalFees: convertedRenewalFees,
           status: "pending-form",
           statusLabel: "Pending Transfer Form",
           renewalStatus: "active",
@@ -234,7 +236,7 @@ export default function Checkout() {
             purchaseDate: today,
             lastUpdateDate: today,
             renewalDate: oneYearLater,
-            renewalFees: item.renewalFees || 0,
+            renewalFees: convertedRenewalFees,
             refundStatus: "none",
             documents: [],
             createdAt: today,
