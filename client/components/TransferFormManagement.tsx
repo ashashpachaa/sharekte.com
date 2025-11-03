@@ -1057,7 +1057,7 @@ export function TransferFormManagement({
                     }
                   }}
                   className="gap-2"
-                  title="Opens form in new tab. Use print to save as PDF"
+                  title="Download form as HTML file"
                 >
                   <Download className="w-4 h-4" />
                   Download PDF
