@@ -880,24 +880,71 @@ export default function Checkout() {
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-foreground mb-2">
-                        Full Name
+                        Full Name *
                       </label>
                       <input
                         type="text"
+                        value={billingFullName}
+                        onChange={(e) => setBillingFullName(e.target.value)}
                         className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
                         placeholder="John Doe"
+                        required
                       />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-foreground mb-2">
-                        Email
+                        Email *
                       </label>
                       <input
                         type="email"
+                        value={billingEmail}
+                        onChange={(e) => setBillingEmail(e.target.value)}
                         className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
                         placeholder="john@example.com"
+                        required
                       />
                     </div>
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Phone Number *
+                      </label>
+                      <input
+                        type="tel"
+                        value={billingPhoneNumber}
+                        onChange={(e) => setBillingPhoneNumber(e.target.value)}
+                        className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        placeholder="+1 (555) 000-0000"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-foreground mb-2">
+                        Country *
+                      </label>
+                      <input
+                        type="text"
+                        value={billingCountry}
+                        onChange={(e) => setBillingCountry(e.target.value)}
+                        className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        placeholder="United Kingdom"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-2">
+                      Billing Address *
+                    </label>
+                    <input
+                      type="text"
+                      value={billingAddress}
+                      onChange={(e) => setBillingAddress(e.target.value)}
+                      className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                      placeholder="123 Main Street, London, UK"
+                      required
+                    />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-2">
@@ -905,6 +952,8 @@ export default function Checkout() {
                     </label>
                     <input
                       type="text"
+                      value={cardNumber}
+                      onChange={(e) => setCardNumber(e.target.value)}
                       className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
                       placeholder="4532 1234 5678 9010"
                     />
@@ -916,6 +965,8 @@ export default function Checkout() {
                       </label>
                       <input
                         type="text"
+                        value={expiryDate}
+                        onChange={(e) => setExpiryDate(e.target.value)}
                         className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
                         placeholder="MM/YY"
                       />
@@ -926,6 +977,8 @@ export default function Checkout() {
                       </label>
                       <input
                         type="text"
+                        value={cvv}
+                        onChange={(e) => setCvv(e.target.value)}
                         className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
                         placeholder="123"
                       />
