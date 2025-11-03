@@ -1057,7 +1057,7 @@ export function TransferFormManagement({
                       const downloadUrl = window.URL.createObjectURL(blob);
                       const link = document.createElement("a");
                       link.href = downloadUrl;
-                      link.download = `transfer-form-${selectedForm.id}.html`;
+                      link.download = `transfer-form-${selectedForm.formId}.html`;
 
                       // Append, click, and remove
                       document.body.appendChild(link);
