@@ -239,6 +239,15 @@ export const getCompanies: RequestHandler = async (req, res) => {
   try {
     const companies = await fetchCompaniesData();
     res.set("Cache-Control", "public, max-age=120");
+
+    // Debug logging for first few companies
+    if (companies.length > 0) {
+      console.log("[getCompanies] Sample prices:");
+      companies.slice(0, 3).forEach((c, i) => {
+        console.log(`  Company ${i + 1}: ${c.companyName} - Price: ${c.purchasePrice} ${c.currency}`);
+      });
+    }
+
     res.json(companies);
   } catch (error) {
     console.error("Error fetching companies:", error);
