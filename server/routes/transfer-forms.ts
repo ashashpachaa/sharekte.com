@@ -732,9 +732,26 @@ export const generatePDF: RequestHandler = async (req, res) => {
     console.log("[generatePDF] Generating PDF for form:", id);
 
     // Search in both in-memory and demo forms by formId (user-facing ID like FORM-1762204603954)
-    const form =
+    let form =
       inMemoryForms.find((f) => f.formId === id || f.id === id) ||
       formsDb.find((f) => f.formId === id || f.id === id);
+
+    // If form not found locally, try fetching from Airtable (handles multi-instance/load-balanced scenarios)
+    if (!form && process.env.AIRTABLE_API_TOKEN) {
+      console.log("[generatePDF] Form not found locally, checking Airtable...");
+      try {
+        const { fetchFormsFromAirtable } = await import("../utils/airtable-sync");
+        const airtableForms = await fetchFormsFromAirtable();
+        form = airtableForms.find((f) => f.formId === id || f.id === id);
+        if (form) {
+          console.log("[generatePDF] Found form in Airtable:", { id: form.id, formId: form.formId });
+          // Add to local memory for future requests
+          inMemoryForms.push(form);
+        }
+      } catch (error) {
+        console.error("[generatePDF] Error fetching from Airtable:", error);
+      }
+    }
 
     if (!form) {
       console.log("[generatePDF] Form not found with ID:", id);
