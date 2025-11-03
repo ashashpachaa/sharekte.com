@@ -1038,10 +1038,13 @@ export function TransferFormManagement({
 
                       // Send complete form data to server for PDF generation
                       // This ensures PDF can be generated even if form isn't in server memory
+                      const formDataSize = JSON.stringify(selectedForm).length;
                       console.log("[Transfer Form Download] Sending form data to server:", {
+                        url: pdfUrl,
                         formId: selectedForm.formId,
-                        hasCompanyName: !!selectedForm.companyName,
-                        dataSize: JSON.stringify(selectedForm).length,
+                        companyName: selectedForm.companyName,
+                        dataSize: formDataSize,
+                        hasAllRequiredFields: !!(selectedForm.formId && selectedForm.companyName),
                       });
 
                       const response = await fetch(pdfUrl, {
@@ -1071,15 +1074,20 @@ export function TransferFormManagement({
                           if (errorBody.hint) {
                             friendlyMessage = `${errorBody.error}. ${errorBody.hint}`;
                           } else if (response.status === 404) {
-                            friendlyMessage = "Form data could not be found. Please refresh the page and try again.";
+                            friendlyMessage = "Form data could not be found. Please refresh the page and try downloading again.";
                           }
                         } catch {
                           // Could not parse error response
                           if (response.status === 404) {
-                            friendlyMessage = "Form not found. Please refresh the page and try again.";
+                            friendlyMessage = "Form not found. Please refresh the page and try downloading again.";
                           }
                         }
                         console.error("[Transfer Form Download] Server error:", errorDetail);
+                        console.error("[Transfer Form Download] Sent form details:", {
+                          formId: selectedForm?.formId,
+                          companyName: selectedForm?.companyName,
+                          dataSize: formDataSize,
+                        });
                         throw new Error(friendlyMessage);
                       }
 
