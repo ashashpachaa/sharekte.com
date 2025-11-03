@@ -1032,16 +1032,24 @@ export function TransferFormManagement({
                   onClick={async () => {
                     try {
                       const apiBaseURL = getAPIBaseURL();
-                      // Use formId (e.g., FORM-1762204603954) not id
                       const pdfUrl = `${apiBaseURL}/api/transfer-forms/${selectedForm.formId}/pdf`;
 
-                      console.log("[Transfer Form Download] Fetching from:", pdfUrl);
+                      console.log("[Transfer Form Download] Generating PDF for form:", selectedForm.formId);
 
-                      // Fetch as blob directly - don't check response.ok first
-                      const response = await fetch(pdfUrl);
+                      // Send complete form data to server for PDF generation
+                      // This ensures PDF can be generated even if form isn't in server memory
+                      const response = await fetch(pdfUrl, {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(selectedForm),
+                      });
+
+                      console.log("[Transfer Form Download] Response status:", response.status);
 
                       if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}: Failed to fetch form`);
+                        throw new Error(`HTTP ${response.status}: Failed to generate PDF`);
                       }
 
                       // Get blob from response (only read body once)
