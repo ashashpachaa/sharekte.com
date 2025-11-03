@@ -521,6 +521,9 @@ export const updateFormStatus: RequestHandler = async (req, res) => {
       }
     }
 
+    // Save updated form to file storage for multi-instance consistency
+    saveFormToFile(updated);
+
     // Sync status change to Airtable (critical - prevents status revert)
     (async () => {
       try {
