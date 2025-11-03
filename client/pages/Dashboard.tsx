@@ -2153,8 +2153,9 @@ export default function Dashboard() {
                                       Annual Renewal Fees
                                     </p>
                                     <p className="font-semibold text-foreground text-sm">
+                                      {/* Renewal fees from Airtable are in base USD - convert to user's selected currency */}
                                       {formatPriceWithCurrency(
-                                        company.renewalFees,
+                                        convertPrice(company.renewalFees),
                                         currency,
                                         rates,
                                       )}
