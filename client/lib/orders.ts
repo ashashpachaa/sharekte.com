@@ -140,7 +140,7 @@ export interface Order {
 export async function getAllOrders(): Promise<Order[]> {
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout (increased from 10s for slower networks)
 
     const apiBaseURL = getAPIBaseURL();
     const response = await fetch(`${apiBaseURL}/api/orders`, {
