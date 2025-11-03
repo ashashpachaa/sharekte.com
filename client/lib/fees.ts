@@ -24,17 +24,16 @@ export function getEnabledFees(): Fee[] {
     const config = localStorage.getItem("feesConfig");
     if (!config) return [];
     const parsed = JSON.parse(config) as FeesConfig;
-    return parsed.fees.filter((f) => f.enabled).sort((a, b) => a.order - b.order);
+    return parsed.fees
+      .filter((f) => f.enabled)
+      .sort((a, b) => a.order - b.order);
   } catch {
     return [];
   }
 }
 
 // Calculate fee amount
-export function calculateFeeAmount(
-  fee: Fee,
-  subtotal: number,
-): number {
+export function calculateFeeAmount(fee: Fee, subtotal: number): number {
   if (fee.type === "fixed") {
     return fee.amount;
   } else {

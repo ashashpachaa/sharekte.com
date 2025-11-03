@@ -7,8 +7,9 @@ A comprehensive, flexible fees management system that allows admins to create, m
 ## Features
 
 ### 1. **Admin Fees Management Dashboard** (`/admin/fees`)
+
 - **Create Fees**: Add unlimited custom fees
-- **Fee Types**: 
+- **Fee Types**:
   - Fixed Amount (e.g., "$50" or "د.إ 200")
   - Percentage (e.g., "10%")
 - **Enable/Disable**: Toggle fees on/off without deleting
@@ -18,14 +19,16 @@ A comprehensive, flexible fees management system that allows admins to create, m
 - **Description**: Optional notes for each fee
 
 ### 2. **Checkout Integration**
+
 - **Dynamic Fee Display**: All enabled fees show in the Order Summary
 - **Fee Breakdown**: Customers see each fee individually calculated
-- **Real-time Calculation**: 
+- **Real-time Calculation**:
   - Fixed fees: Applied as-is
   - Percentage fees: Calculated as % of subtotal
 - **Final Total**: Automatically updated with all fees
 
 ### 3. **Order Tracking**
+
 - **Applied Fees**: Each order stores which fees were applied and calculated amounts
 - **Total Fees**: Total fee amount recorded for each order
 - **Airtable Sync**: Fee information synced with order records
@@ -52,16 +55,16 @@ server/
 
 ```typescript
 interface Fee {
-  id: string;                       // Unique identifier
-  name: string;                     // "Tax", "Service Fee", etc.
-  description?: string;             // Optional description
-  type: "fixed" | "percentage";     // Fee calculation method
-  amount: number;                   // Dollar amount or percentage
-  currency?: string;                // For fixed: USD, AED, GBP, EUR, SAR
-  enabled: boolean;                 // Apply to orders?
-  order: number;                    // Display order
-  createdAt: string;                // ISO timestamp
-  updatedAt: string;                // ISO timestamp
+  id: string; // Unique identifier
+  name: string; // "Tax", "Service Fee", etc.
+  description?: string; // Optional description
+  type: "fixed" | "percentage"; // Fee calculation method
+  amount: number; // Dollar amount or percentage
+  currency?: string; // For fixed: USD, AED, GBP, EUR, SAR
+  enabled: boolean; // Apply to orders?
+  order: number; // Display order
+  createdAt: string; // ISO timestamp
+  updatedAt: string; // ISO timestamp
 }
 ```
 
@@ -75,9 +78,9 @@ interface Order {
     name: string;
     type: "fixed" | "percentage";
     amount: number;
-    calculatedAmount: number;       // What was actually charged
+    calculatedAmount: number; // What was actually charged
   }>;
-  totalFees?: number;               // Sum of all calculated fees
+  totalFees?: number; // Sum of all calculated fees
 }
 ```
 
@@ -134,11 +137,13 @@ Total:              د.إ 4,137
 ## Usage
 
 ### Access Admin Fees Page
+
 1. Navigate to Admin Dashboard
 2. Click "Manage Fees" card (DollarSign icon)
 3. Or visit: `/admin/fees`
 
 ### Create a Fee
+
 1. Click "Add New Fee"
 2. Fill in:
    - **Fee Name** (required)
@@ -150,15 +155,18 @@ Total:              د.إ 4,137
 3. Click "Add Fee"
 
 ### Edit a Fee
+
 1. Click Edit icon (pencil) on fee row
 2. Modify any fields
 3. Click "Update Fee"
 
 ### Toggle Fee On/Off
+
 1. Click the status badge on fee row, OR
 2. Click Eye/Eye-off icon
 
 ### Delete a Fee
+
 1. Click Delete icon (trash)
 2. Confirm deletion
 
@@ -167,12 +175,14 @@ Total:              د.إ 4,137
 **Location**: `/admin/fees`
 
 The "Manage Fees" card appears in the admin dashboard alongside:
+
 - Users Management
 - Orders Management
 - Email Templates
 - System Settings
 
 ### Navigation Path
+
 ```
 Admin Dashboard
   ↓
@@ -184,6 +194,7 @@ Admin Dashboard
 ## Examples
 
 ### Example 1: Global Tax Rate
+
 ```
 Name:        "Tax"
 Type:        Percentage
@@ -195,6 +206,7 @@ Enabled:     ✓
 **Result**: Every purchase adds 20% to subtotal
 
 ### Example 2: Processing Fee
+
 ```
 Name:        "Processing Fee"
 Type:        Fixed
@@ -207,6 +219,7 @@ Enabled:     ✓
 **Result**: Every purchase adds د.إ 50
 
 ### Example 3: Shipping (Conditional)
+
 ```
 Name:        "International Shipping"
 Type:        Fixed
@@ -265,26 +278,29 @@ saveFeesConfig(fees): void
 ## Integration with Existing Features
 
 ### Checkout Page (`client/pages/Checkout.tsx`)
+
 - Imports: `getEnabledFees`, `calculateFeeAmount`
 - Displays each enabled fee in Order Summary
 - Includes fees in final order amount
 - Records `appliedFees` in order object
 
 ### Orders Management (`client/lib/orders.ts`)
+
 - Extended `Order` interface with `appliedFees` and `totalFees`
 - Orders maintain fee history
 
 ### Admin Dashboard (`client/pages/AdminDashboard.tsx`)
+
 - Added Fees Management card
 - Links to `/admin/fees`
 
 ## Future Enhancements
 
 ### Possible Additions
-1. **Conditional Fees**: 
+
+1. **Conditional Fees**:
    - Apply fees only for specific countries
    - Apply based on order amount (e.g., only if > $1000)
-   
 2. **Seasonal Fees**:
    - Enable/disable by date range
    - Holiday surcharges
@@ -305,16 +321,19 @@ saveFeesConfig(fees): void
 ## Troubleshooting
 
 ### Fees Not Showing in Checkout
+
 - Check if fees are enabled (toggle status)
 - Verify `localStorage` isn't cleared
 - Check browser console for errors
 
 ### Incorrect Fee Calculation
+
 - Verify fee type (fixed vs percentage)
 - For percentages: ensure amount is decimal (e.g., 10 for 10%)
 - For fixed: confirm currency matches order currency
 
 ### Fee Changes Not Taking Effect
+
 - Refresh the page
 - Clear localStorage and reload
 - Check admin dashboard - fee should show as enabled
@@ -322,6 +341,7 @@ saveFeesConfig(fees): void
 ## Support
 
 For issues or questions:
+
 1. Check Admin Fees page for configured fees
 2. Review order details to see applied fees
 3. Check browser console for JavaScript errors

@@ -166,9 +166,7 @@ export function TransferFormManagement({
         setSelectedForm(updatedForm);
         // Update form in list
         setForms((prevForms) =>
-          prevForms.map((f) =>
-            f.id === selectedForm.id ? updatedForm : f,
-          ),
+          prevForms.map((f) => (f.id === selectedForm.id ? updatedForm : f)),
         );
         setShowStatusModal(false);
         setNewStatus("");
@@ -830,15 +828,25 @@ export function TransferFormManagement({
                               } else if (attachment.data) {
                                 // If base64 data exists, create blob download
                                 const byteCharacters = atob(attachment.data);
-                                const byteNumbers = new Array(byteCharacters.length);
-                                for (let i = 0; i < byteCharacters.length; i++) {
+                                const byteNumbers = new Array(
+                                  byteCharacters.length,
+                                );
+                                for (
+                                  let i = 0;
+                                  i < byteCharacters.length;
+                                  i++
+                                ) {
                                   byteNumbers[i] = byteCharacters.charCodeAt(i);
                                 }
                                 const byteArray = new Uint8Array(byteNumbers);
-                                const blob = new Blob([byteArray], { type: attachment.type });
+                                const blob = new Blob([byteArray], {
+                                  type: attachment.type,
+                                });
                                 link.href = URL.createObjectURL(blob);
                               } else {
-                                toast.error("File data not available for download");
+                                toast.error(
+                                  "File data not available for download",
+                                );
                                 return;
                               }
 
@@ -852,7 +860,9 @@ export function TransferFormManagement({
                                 URL.revokeObjectURL(link.href);
                               }
 
-                              toast.success(`Downloading ${attachment.name}...`);
+                              toast.success(
+                                `Downloading ${attachment.name}...`,
+                              );
                             } catch (error) {
                               console.error("Download error:", error);
                               toast.error("Failed to download file");
@@ -946,7 +956,9 @@ export function TransferFormManagement({
                         );
                       };
                     } else {
-                      toast.error("Failed to open form. Please check popup blocker");
+                      toast.error(
+                        "Failed to open form. Please check popup blocker",
+                      );
                     }
                   }}
                   className="gap-2"

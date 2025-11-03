@@ -39,7 +39,9 @@ export default function AdminOrders() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { addNotification } = useNotifications();
-  const [notifiedOrderIds, setNotifiedOrderIds] = useState<Set<string>>(new Set());
+  const [notifiedOrderIds, setNotifiedOrderIds] = useState<Set<string>>(
+    new Set(),
+  );
   const [viewedOrderIds, setViewedOrderIds] = useState<Set<string>>(new Set());
   const [orders, setOrders] = useState<Order[]>([]);
   const [newOrdersCount, setNewOrdersCount] = useState(0);
@@ -109,7 +111,10 @@ export default function AdminOrders() {
         setNewOrdersCount(newOrders.length);
         // Create notifications for new orders that haven't been notified or viewed yet
         newOrders.forEach((order) => {
-          if (!notifiedOrderIds.has(order.id) && !viewedOrderIds.has(order.id)) {
+          if (
+            !notifiedOrderIds.has(order.id) &&
+            !viewedOrderIds.has(order.id)
+          ) {
             addNotification({
               id: `order-${order.id}`,
               title: "New Order",
@@ -536,7 +541,9 @@ export default function AdminOrders() {
                                   return updated;
                                 });
                                 // Track as viewed so it won't be notified again
-                                setViewedOrderIds((prev) => new Set([...prev, order.id]));
+                                setViewedOrderIds(
+                                  (prev) => new Set([...prev, order.id]),
+                                );
                               }}
                             >
                               <Eye className="w-4 h-4" />
@@ -931,7 +938,10 @@ function OrderDetailsModal({
                     type="number"
                     value={editedOrder.renewalFees}
                     onChange={(e) =>
-                      handleFieldChange("renewalFees", parseFloat(e.target.value))
+                      handleFieldChange(
+                        "renewalFees",
+                        parseFloat(e.target.value),
+                      )
                     }
                     className="flex-1 px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
                   />

@@ -159,7 +159,9 @@ export function AdminFees() {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">Fees Management</h1>
+          <h1 className="text-3xl font-bold text-foreground">
+            Fees Management
+          </h1>
           <p className="text-muted-foreground mt-1">
             Create and manage checkout fees (taxes, service fees, etc.)
           </p>
@@ -231,7 +233,11 @@ export function AdminFees() {
                         {fee.name}
                       </TableCell>
                       <TableCell>
-                        <Badge variant={fee.type === "fixed" ? "secondary" : "outline"}>
+                        <Badge
+                          variant={
+                            fee.type === "fixed" ? "secondary" : "outline"
+                          }
+                        >
                           {fee.type === "fixed" ? "Fixed" : "Percentage"}
                         </Badge>
                       </TableCell>
@@ -297,9 +303,7 @@ export function AdminFees() {
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>
-              {editingFee ? "Edit Fee" : "Add New Fee"}
-            </DialogTitle>
+            <DialogTitle>{editingFee ? "Edit Fee" : "Add New Fee"}</DialogTitle>
             <DialogDescription>
               {editingFee
                 ? "Update the fee details"
@@ -360,9 +364,7 @@ export function AdminFees() {
               <Input
                 type="number"
                 placeholder={
-                  formData.type === "fixed"
-                    ? "e.g., 100"
-                    : "e.g., 10 for 10%"
+                  formData.type === "fixed" ? "e.g., 100" : "e.g., 10 for 10%"
                 }
                 value={formData.amount}
                 onChange={(e) =>

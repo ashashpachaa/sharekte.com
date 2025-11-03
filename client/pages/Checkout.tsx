@@ -540,7 +540,10 @@ export default function Checkout() {
     ...fee,
     calculatedAmount: calculateFeeAmount(fee, totalPrice),
   }));
-  const totalFees = feesDetails.reduce((sum, fee) => sum + fee.calculatedAmount, 0);
+  const totalFees = feesDetails.reduce(
+    (sum, fee) => sum + fee.calculatedAmount,
+    0,
+  );
   const finalTotal = totalPrice + totalFees;
 
   return (

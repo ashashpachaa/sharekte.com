@@ -353,7 +353,9 @@ export const updateTransferForm: RequestHandler = async (req, res) => {
     const { id } = req.params;
 
     // Search in both in-memory and demo forms
-    let form = inMemoryForms.find((f) => f.id === id) || formsDb.find((f) => f.id === id);
+    let form =
+      inMemoryForms.find((f) => f.id === id) ||
+      formsDb.find((f) => f.id === id);
 
     if (!form) {
       return res.status(404).json({ error: "Form not found" });
@@ -394,7 +396,9 @@ export const updateFormStatus: RequestHandler = async (req, res) => {
     const { status, notes, reason } = req.body;
 
     // Search in both in-memory and demo forms
-    let form = inMemoryForms.find((f) => f.id === id) || formsDb.find((f) => f.id === id);
+    let form =
+      inMemoryForms.find((f) => f.id === id) ||
+      formsDb.find((f) => f.id === id);
     if (!form) {
       return res.status(404).json({ error: "Form not found" });
     }
@@ -476,7 +480,9 @@ export const deleteTransferForm: RequestHandler = async (req, res) => {
     const { id } = req.params;
 
     // Search in both in-memory and demo forms
-    let form = inMemoryForms.find((f) => f.id === id) || formsDb.find((f) => f.id === id);
+    let form =
+      inMemoryForms.find((f) => f.id === id) ||
+      formsDb.find((f) => f.id === id);
 
     if (!form) {
       return res.status(404).json({ error: "Form not found" });
@@ -499,7 +505,9 @@ export const addDirector: RequestHandler = async (req, res) => {
     const directorData = req.body;
 
     // Search in both in-memory and demo forms
-    let form = inMemoryForms.find((f) => f.id === id) || formsDb.find((f) => f.id === id);
+    let form =
+      inMemoryForms.find((f) => f.id === id) ||
+      formsDb.find((f) => f.id === id);
     if (!form) {
       return res.status(404).json({ error: "Form not found" });
     }

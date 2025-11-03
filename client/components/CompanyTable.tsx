@@ -141,7 +141,12 @@ export function CompanyTable({
 }: CompanyTableProps) {
   const { t } = useTranslation();
   const { addItem } = useCart();
-  const { currency, formatPrice: formatWithCurrency, rates, convertPrice } = useCurrency();
+  const {
+    currency,
+    formatPrice: formatWithCurrency,
+    rates,
+    convertPrice,
+  } = useCurrency();
   const [showDeleteDialog, setShowDeleteDialog] = useState<string | null>(null);
   const [loadedCompanies, setLoadedCompanies] =
     useState<CompanyData[]>(companies);

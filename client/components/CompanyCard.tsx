@@ -115,11 +115,17 @@ export function CompanyCard({
             </div>
             <div className="flex items-center gap-1 text-gray-600">
               <DollarSign className="w-3 h-3" />
-              <span>{company.purchasePrice ? formatWithCurrency(convertPrice(company.purchasePrice)) : "N/A"}</span>
+              <span>
+                {company.purchasePrice
+                  ? formatWithCurrency(convertPrice(company.purchasePrice))
+                  : "N/A"}
+              </span>
             </div>
             <div className="flex items-center gap-1 text-gray-600">
               <User className="w-3 h-3" />
-              <span className="truncate">{company.clientName ? company.clientName.split(" ")[0] : "N/A"}</span>
+              <span className="truncate">
+                {company.clientName ? company.clientName.split(" ")[0] : "N/A"}
+              </span>
             </div>
           </div>
 
@@ -129,14 +135,16 @@ export function CompanyCard({
               isRenewingSoon
                 ? "bg-yellow-50 text-yellow-700"
                 : isExpired
-                ? "bg-red-50 text-red-700"
-                : "bg-blue-50 text-blue-700"
+                  ? "bg-red-50 text-red-700"
+                  : "bg-blue-50 text-blue-700"
             }`}
           >
             <Clock className="w-4 h-4 flex-shrink-0" />
             <div className="flex-1 min-w-0">
               <p className="font-medium text-xs">{renewalCountdown}</p>
-              <p className="text-xs opacity-75">{company.renewalDate ? formatDate(company.renewalDate) : "N/A"}</p>
+              <p className="text-xs opacity-75">
+                {company.renewalDate ? formatDate(company.renewalDate) : "N/A"}
+              </p>
             </div>
             {isRenewingSoon && (
               <AlertCircle className="w-4 h-4 flex-shrink-0" />
@@ -145,18 +153,17 @@ export function CompanyCard({
 
           {/* Incorporation Date */}
           <div className="text-xs text-gray-600">
-            <span className="font-medium">Incorporated:</span> {company.incorporationDate ? formatDate(company.incorporationDate) : "N/A"}
+            <span className="font-medium">Incorporated:</span>{" "}
+            {company.incorporationDate
+              ? formatDate(company.incorporationDate)
+              : "N/A"}
           </div>
 
           {/* Tags */}
           {company.tags && company.tags.length > 0 && (
             <div className="flex flex-wrap gap-1">
               {company.tags.slice(0, 2).map((tag) => (
-                <Badge
-                  key={tag.id}
-                  variant="outline"
-                  className="text-xs"
-                >
+                <Badge key={tag.id} variant="outline" className="text-xs">
                   {tag.name}
                 </Badge>
               ))}
@@ -192,18 +199,20 @@ export function CompanyCard({
                   <Edit2 className="w-3 h-3 mr-1" />
                   Edit
                 </Button>
-                {company.status !== "expired" && company.status !== "cancelled" && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex-1 h-8 text-xs"
-                    onClick={handleRenew}
-                  >
-                    <RefreshCw className="w-3 h-3 mr-1" />
-                    Renew
-                  </Button>
-                )}
-                {(company.status === "refunded" || company.status === "cancelled") && (
+                {company.status !== "expired" &&
+                  company.status !== "cancelled" && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1 h-8 text-xs"
+                      onClick={handleRenew}
+                    >
+                      <RefreshCw className="w-3 h-3 mr-1" />
+                      Renew
+                    </Button>
+                  )}
+                {(company.status === "refunded" ||
+                  company.status === "cancelled") && (
                   <Button
                     variant="outline"
                     size="sm"
