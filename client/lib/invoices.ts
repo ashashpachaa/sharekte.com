@@ -454,7 +454,8 @@ export async function exportInvoicesToCSV(filters?: InvoiceFilter): Promise<Blob
     if (filters?.dateFrom) params.append("dateFrom", filters.dateFrom);
     if (filters?.dateTo) params.append("dateTo", filters.dateTo);
 
-    const response = await fetch(`/api/invoices/export/csv?${params}`, {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/invoices/export/csv?${params}`, {
       headers: { "Content-Type": "application/json" },
     });
 
