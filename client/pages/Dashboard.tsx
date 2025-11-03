@@ -2054,7 +2054,7 @@ Generated on: ${new Date().toLocaleDateString()}
                                       Annual Renewal Fees
                                     </p>
                                     <p className="font-semibold text-foreground text-sm">
-                                      {formatPrice(company.renewalFees)}
+                                      {formatPriceWithCurrency(company.renewalFees, company.currency || "USD")}
                                     </p>
                                   </div>
                                 </div>
