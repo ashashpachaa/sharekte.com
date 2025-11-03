@@ -62,6 +62,23 @@ export default function AdminOrders() {
   const [previousOrderStates, setPreviousOrderStates] = useState<
     Map<string, string>
   >(new Map());
+  const [companies, setCompanies] = useState<CompanyData[]>([]);
+
+  // Fetch companies from API
+  const loadCompanies = async () => {
+    try {
+      const apiBaseURL = getAPIBaseURL();
+      const response = await fetch(`${apiBaseURL}/api/companies`);
+      if (!response.ok) {
+        console.error("Failed to fetch companies");
+        return;
+      }
+      const data = await response.json();
+      setCompanies(data);
+    } catch (error) {
+      console.error("Error loading companies:", error);
+    }
+  };
 
   useEffect(() => {
     if (!isAdmin) {
