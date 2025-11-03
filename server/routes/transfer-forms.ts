@@ -788,24 +788,37 @@ export const generatePDF: RequestHandler = async (req, res) => {
     }
 
     if (!form) {
-      console.error("[generatePDF] Form not found with ID:", id);
+      console.error("[generatePDF] ❌ Form not found with ID:", id);
       console.error("[generatePDF] DIAGNOSTIC INFO:");
       console.error("  - Request method:", req.method);
       console.error("  - Request has body:", !!req.body);
       console.error("  - Body keys:", req.body ? Object.keys(req.body) : "none");
       console.error("  - inMemoryForms count:", inMemoryForms.length);
-      console.error("  - Available inMemory forms:", inMemoryForms.map(f => ({ id: f.id, formId: f.formId })));
+      console.error("  - Available inMemory formIds:", inMemoryForms.map(f => f.formId).join(", "));
       console.error("  - formsDb count:", formsDb.length);
-      console.error("  - Available db forms:", formsDb.map(f => ({ id: f.id, formId: f.formId })));
+      console.error("  - Available db formIds:", formsDb.map(f => f.formId).join(", "));
 
-      return res.status(404).json({
-        error: "Form not found",
-        detail: "Form data not found in request body or local storage",
-        searchedFor: id,
-        requestMethod: req.method,
-        hasBody: !!req.body,
-        inMemoryCount: inMemoryForms.length
-      });
+      // Try one more time with a more lenient search
+      console.error("[generatePDF] Attempting lenient search...");
+      if (id.includes("FORM-") || id.includes("form_")) {
+        const searchPattern = id.split("-")[1] || id;
+        const lenientMatch = inMemoryForms.find(f =>
+          f.formId?.includes(searchPattern) || f.id?.includes(searchPattern)
+        );
+        if (lenientMatch) {
+          console.log("[generatePDF] ✓ Found form with lenient search:", lenientMatch.formId);
+          form = lenientMatch;
+        }
+      }
+
+      if (!form) {
+        return res.status(404).json({
+          error: "Form not found",
+          detail: "Form data not found in request body or local storage. Please refresh the page and try again.",
+          searchedFor: id,
+          hint: "If you just created this form, please wait a moment and try again. The form may still be syncing."
+        });
+      }
     }
 
     console.log("[generatePDF] Form found:", { id: form.id, formId: form.formId });
