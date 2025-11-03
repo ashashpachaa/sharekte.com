@@ -698,13 +698,9 @@ export const generatePDF: RequestHandler = async (req, res) => {
       compact: false,
     });
 
-    // Return HTML with download headers (user can print to PDF)
-    // For browser print-to-PDF functionality
+    // Return HTML for viewing and printing to PDF
+    // User will print to PDF using browser print dialog (Ctrl+P or Cmd+P)
     res.setHeader("Content-Type", "text/html; charset=utf-8");
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename="transfer-form-${id}.html"`,
-    );
     res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     res.send(htmlContent);
 
