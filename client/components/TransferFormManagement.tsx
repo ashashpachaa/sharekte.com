@@ -1032,7 +1032,8 @@ export function TransferFormManagement({
                   onClick={async () => {
                     try {
                       const apiBaseURL = getAPIBaseURL();
-                      const pdfUrl = `${apiBaseURL}/api/transfer-forms/${selectedForm.id}/pdf`;
+                      // Use formId (e.g., FORM-1762204603954) not id
+                      const pdfUrl = `${apiBaseURL}/api/transfer-forms/${selectedForm.formId}/pdf`;
 
                       console.log("[Transfer Form Download] Fetching from:", pdfUrl);
 
