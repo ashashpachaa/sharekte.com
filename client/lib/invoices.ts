@@ -257,7 +257,8 @@ export async function getAllInvoices(filters?: InvoiceFilter): Promise<Invoice[]
     if (filters?.companyName) params.append("companyName", filters.companyName);
     if (filters?.invoiceNumber) params.append("invoiceNumber", filters.invoiceNumber);
 
-    const response = await fetch(`/api/invoices?${params}`, {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/invoices?${params}`, {
       headers: { "Content-Type": "application/json" },
     });
 
