@@ -64,6 +64,7 @@ interface CurrencyContextType {
   setCurrency: (currency: Currency) => void;
   convertPrice: (priceInUSD: number) => number;
   formatPrice: (priceInUSD: number) => string;
+  formatPriceAlreadyConverted: (price: number) => string;
   rates: Record<Currency, CurrencyRate>;
 }
 
