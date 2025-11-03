@@ -485,7 +485,7 @@ export function TransferFormManagement({
                             <span>
                               {(attachment.size / 1024 / 1024).toFixed(2)} MB
                             </span>
-                            <span>•</span>
+                            <span>��</span>
                             <span>
                               {new Date(
                                 attachment.uploadedDate,
@@ -1038,6 +1038,12 @@ export function TransferFormManagement({
 
                       // Send complete form data to server for PDF generation
                       // This ensures PDF can be generated even if form isn't in server memory
+                      console.log("[Transfer Form Download] Sending form data to server:", {
+                        formId: selectedForm.formId,
+                        hasCompanyName: !!selectedForm.companyName,
+                        dataSize: JSON.stringify(selectedForm).length,
+                      });
+
                       const response = await fetch(pdfUrl, {
                         method: "POST",
                         headers: {
@@ -1047,6 +1053,10 @@ export function TransferFormManagement({
                       });
 
                       console.log("[Transfer Form Download] Response status:", response.status);
+                      console.log("[Transfer Form Download] Response headers:", {
+                        contentType: response.headers.get("content-type"),
+                        contentLength: response.headers.get("content-length"),
+                      });
 
                       if (!response.ok) {
                         throw new Error(`HTTP ${response.status}: Failed to generate PDF`);
