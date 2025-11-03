@@ -741,32 +741,38 @@ export const generatePDF: RequestHandler = async (req, res) => {
     console.log("[generatePDF] Request body type:", typeof req.body);
     console.log("[generatePDF] Request body constructor:", req.body?.constructor?.name);
 
-    // Try to get form from request body
-    if (req.body) {
+    // Try to get form from request body - be very lenient
+    if (req.body && typeof req.body === 'object') {
       const bodyKeys = Object.keys(req.body);
-      console.log("[generatePDF] Request body keys:", bodyKeys);
+      console.log("[generatePDF] Request body keys:", bodyKeys.slice(0, 10)); // Log first 10 keys
 
-      // Check if body looks like a form (has multiple properties or key form properties)
-      if (bodyKeys.length > 0) {
-        // Be lenient - accept any object with form-like properties
-        if ("formId" in req.body || "companyName" in req.body || "buyerName" in req.body || "sellerName" in req.body) {
-          form = req.body as TransferFormData;
-          console.log("[generatePDF] Using form data from POST body - formId:", form.formId || "unknown");
-        } else if (bodyKeys.length > 5) {
-          // If body has many properties, treat it as a form object
-          form = req.body as TransferFormData;
-          console.log("[generatePDF] Using form data from POST body (multi-property object) - formId:", form.formId || "unknown");
-        }
+      // Check if any key indicates this is a form
+      const isFormLike = bodyKeys.some(key =>
+        key.includes('form') || key.includes('Form') ||
+        key.includes('buyer') || key.includes('Buyer') ||
+        key.includes('seller') || key.includes('Seller') ||
+        key.includes('company') || key.includes('Company')
+      );
+
+      if (isFormLike || bodyKeys.length > 5) {
+        // This looks like a form object
+        form = req.body as TransferFormData;
+        console.log("[generatePDF] ✓ Using form data from POST body");
+        console.log("[generatePDF] Form has formId:", !!form.formId);
+        console.log("[generatePDF] Form has companyName:", !!form.companyName);
+        console.log("[generatePDF] Form has buyerName:", !!form.buyerName);
       }
     }
 
     // If no form data in body, try to find it in local storage
     if (!form) {
-      console.log("[generatePDF] No form data in request body, checking local storage for id:", id);
+      console.log("[generatePDF] Searching local storage for form with id:", id);
       form = inMemoryForms.find((f) => f.formId === id || f.id === id) ||
              formsDb.find((f) => f.formId === id || f.id === id);
       if (form) {
-        console.log("[generatePDF] Found form in local storage");
+        console.log("[generatePDF] ✓ Found form in local storage:", form.formId);
+      } else {
+        console.log("[generatePDF] Form not found in local storage");
       }
     }
 
@@ -778,52 +784,32 @@ export const generatePDF: RequestHandler = async (req, res) => {
         const airtableForms = await fetchFormsFromAirtable();
         form = airtableForms.find((f) => f.formId === id || f.id === id);
         if (form) {
-          console.log("[generatePDF] Found form in Airtable:", { id: form.id, formId: form.formId });
+          console.log("[generatePDF] ✓ Found form in Airtable:", form.formId);
           // Add to local memory for future requests
           inMemoryForms.push(form);
+        } else {
+          console.log("[generatePDF] Form not found in Airtable either");
         }
       } catch (error) {
         console.error("[generatePDF] Error fetching from Airtable:", error);
       }
     }
 
+    // If still not found, return detailed error
     if (!form) {
       console.error("[generatePDF] ❌ Form not found with ID:", id);
-      console.error("[generatePDF] DIAGNOSTIC INFO:");
-      console.error("  - Request method:", req.method);
-      console.error("  - Request has body:", !!req.body);
-      console.error("  - Body keys:", req.body ? Object.keys(req.body) : "none");
-      console.error("  - inMemoryForms count:", inMemoryForms.length);
-      console.error("  - Available inMemory formIds:", inMemoryForms.map(f => f.formId).join(", "));
-      console.error("  - formsDb count:", formsDb.length);
-      console.error("  - Available db formIds:", formsDb.map(f => f.formId).join(", "));
+      console.error("[generatePDF] Available in-memory forms:", inMemoryForms.map(f => f.formId).join(", ") || "none");
+      console.error("[generatePDF] Available db forms:", formsDb.map(f => f.formId).join(", ") || "none");
 
-      // Try one more time with a more lenient search
-      console.error("[generatePDF] Attempting lenient search...");
-      if (id.includes("FORM-") || id.includes("form_")) {
-        const searchPattern = id.split("-")[1] || id;
-        const lenientMatch = inMemoryForms.find(f =>
-          f.formId?.includes(searchPattern) || f.id?.includes(searchPattern)
-        );
-        if (lenientMatch) {
-          console.log("[generatePDF] ✓ Found form with lenient search:", lenientMatch.formId);
-          form = lenientMatch;
-        }
-      }
-
-      if (!form) {
-        return res.status(404).json({
-          error: "Form not found",
-          detail: "Form data not found in request body or local storage. Please refresh the page and try again.",
-          searchedFor: id,
-          hint: "If you just created this form, please wait a moment and try again. The form may still be syncing."
-        });
-      }
+      return res.status(404).json({
+        error: "Form not found",
+        detail: "The requested form could not be found. The form data may not have been saved properly or the server instance may have restarted.",
+        searchedFor: id,
+        hint: "Please refresh the page and try downloading the PDF again. If the problem persists, try submitting the form again."
+      });
     }
 
-    console.log("[generatePDF] Form found:", { id: form.id, formId: form.formId });
-
-    console.log("[generatePDF] Form found, generating HTML...");
+    console.log("[generatePDF] ✓ Form found, generating HTML...");
 
     try {
       const { getFormPDFHTML } = await import("../utils/pdf-generator");
@@ -834,7 +820,7 @@ export const generatePDF: RequestHandler = async (req, res) => {
         compact: false,
       });
 
-      console.log("[generatePDF] HTML generated successfully, size:", htmlContent.length);
+      console.log("[generatePDF] ✓ HTML generated successfully, size:", htmlContent.length, "bytes");
 
       // Return HTML for viewing and printing to PDF
       // User will print to PDF using browser print dialog (Ctrl+P or Cmd+P)
@@ -842,7 +828,7 @@ export const generatePDF: RequestHandler = async (req, res) => {
       res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
       res.setHeader("Content-Length", Buffer.byteLength(htmlContent));
       res.send(htmlContent);
-      console.log("[generatePDF] HTML sent successfully");
+      console.log("[generatePDF] ✓ HTML sent successfully to client");
     } catch (htmlError) {
       console.error("[generatePDF] HTML generation error:", htmlError);
       res.status(500).json({ error: "HTML generation failed", details: String(htmlError) });
