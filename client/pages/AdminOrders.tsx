@@ -917,16 +917,25 @@ function OrderDetailsModal({
               </div>
               <div>
                 <p className="text-xs text-muted-foreground font-semibold mb-1">
-                  Renewal Fees
+                  Renewal Fees ({editedOrder.currency})
                 </p>
-                <input
-                  type="number"
-                  value={editedOrder.renewalFees}
-                  onChange={(e) =>
-                    handleFieldChange("renewalFees", parseFloat(e.target.value))
-                  }
-                  className="w-full px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
-                />
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-semibold text-muted-foreground">
+                    {editedOrder.currency === "AED" && "د.إ"}
+                    {editedOrder.currency === "USD" && "$"}
+                    {editedOrder.currency === "GBP" && "£"}
+                    {editedOrder.currency === "EUR" && "€"}
+                    {editedOrder.currency === "SAR" && "﷼"}
+                  </span>
+                  <input
+                    type="number"
+                    value={editedOrder.renewalFees}
+                    onChange={(e) =>
+                      handleFieldChange("renewalFees", parseFloat(e.target.value))
+                    }
+                    className="flex-1 px-3 py-2 bg-background border border-border/40 rounded-md text-sm text-foreground"
+                  />
+                </div>
               </div>
             </div>
           </div>
