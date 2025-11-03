@@ -25,6 +25,7 @@ import {
   type InvoiceData,
 } from "@/lib/user-data";
 import { createOrder } from "@/lib/orders";
+import { getEnabledFees, calculateFeeAmount } from "@/lib/fees";
 
 export default function Checkout() {
   const { t } = useTranslation();
