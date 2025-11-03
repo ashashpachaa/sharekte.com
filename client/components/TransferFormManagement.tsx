@@ -38,6 +38,7 @@ import {
   getFormStatusColor,
   formatFormStatus,
   getAvailableStatusTransitions,
+  getActivityLabel,
   type TransferFormData,
   type FormStatus,
 } from "@/lib/transfer-form";
