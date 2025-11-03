@@ -208,6 +208,46 @@ export function createEmptyForm(
   };
 }
 
+// Helper function to get full activity label from code
+export function getActivityLabel(code: string): string {
+  // Activity codes map - matches COMPANY_ACTIVITIES structure
+  const activities: Record<string, string> = {
+    "01110": "01110 - Growing of cereals and other crops not elsewhere classified",
+    "01120": "01120 - Growing of rice",
+    "01130": "01130 - Growing of vegetables and melons, roots and tubers",
+    "01140": "01140 - Growing of sugar cane",
+    "01150": "01150 - Growing of tobacco",
+    "01160": "01160 - Growing of fibre crops",
+    "01190": "01190 - Growing of other non-perennial crops",
+    "01210": "01210 - Growing of grapes",
+    "01220": "01220 - Growing of tropical and subtropical fruits",
+    "01230": "01230 - Growing of citrus fruits",
+    "01240": "01240 - Growing of pome fruits and stone fruits",
+    "01250": "01250 - Growing of other tree and shrub fruits and nuts",
+    "01260": "01260 - Growing of oleaginous fruits",
+    "01270": "01270 - Growing of beverage crops",
+    "01280": "01280 - Growing of spices, aromatic, drug and dye plants",
+    "01290": "01290 - Growing of other perennial crops",
+    "01300": "01300 - Plant propagation",
+    "01410": "01410 - Raising of cattle",
+    "01420": "01420 - Raising of horses and other equines",
+    "01430": "01430 - Raising of camels and camelids",
+    "01440": "01440 - Raising of sheep and goats",
+    "01450": "01450 - Raising of swine",
+    "01460": "01460 - Raising of poultry",
+    "01470": "01470 - Raising of other animals",
+    "01500": "01500 - Mixed farming",
+    "01610": "01610 - Support activities for crop production",
+    "01620": "01620 - Support activities for animal production",
+    "01630": "01630 - Post-harvest crop activities",
+    "01640": "01640 - Seed processing for propagation",
+    "01700": "01700 - Hunting, trapping and related activities",
+    "46900": "46900 - Remediation activities and other waste management services",
+  };
+
+  return activities[code] || code;
+}
+
 // API Functions
 export async function fetchTransferForms(
   orderId?: string,

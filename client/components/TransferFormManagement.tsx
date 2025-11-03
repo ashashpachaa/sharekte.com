@@ -605,9 +605,10 @@ export function TransferFormManagement({
                     <p className="font-medium text-sm mb-1">🏢 Activities Change</p>
                     {selectedForm.companyActivities && selectedForm.companyActivities.length > 0 ? (
                       <div className="text-sm">
-                        {selectedForm.companyActivities.map((activity, idx) => (
-                          <p key={idx} className="text-gray-700">• {activity}</p>
-                        ))}
+                        {selectedForm.companyActivities.map((activity, idx) => {
+                          const label = getActivityLabel(activity);
+                          return <p key={idx} className="text-gray-700">• {label}</p>;
+                        })}
                       </div>
                     ) : (
                       <p className="text-sm text-gray-600">Activities change requested</p>
