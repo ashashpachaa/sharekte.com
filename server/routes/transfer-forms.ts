@@ -829,35 +829,23 @@ export const generatePDF: RequestHandler = async (req, res) => {
     }
 
     if (!form) {
-      console.log("[generatePDF] Form not found with ID:", id);
-      console.log("[generatePDF] DIAGNOSTIC INFO:");
-      console.log("  - inMemoryForms count:", inMemoryForms.length);
-      console.log("  - Available inMemory forms:", inMemoryForms.map(f => ({ id: f.id, formId: f.formId })));
-      console.log("  - formsDb count:", formsDb.length);
-      console.log("  - Available db forms:", formsDb.map(f => ({ id: f.id, formId: f.formId })));
-
-      // Try to help the user understand what went wrong
-      const formIdFormat = id.startsWith("FORM-") ? "FORM-timestamp format (API form)" : "form_N format (demo form)";
-      console.log(`  - Searched formId format: ${formIdFormat}`);
-
-      // Check if there's a mismatch in formId format
-      const possibleMatch = inMemoryForms.find(f => {
-        // Check if the timestamp part matches
-        const searchTimestamp = id.split("-")[1];
-        const formTimestamp = f.formId.split("-")[1];
-        return searchTimestamp && formTimestamp && searchTimestamp.includes(formTimestamp);
-      });
-
-      if (possibleMatch) {
-        console.log("[generatePDF] WARNING: Found possible match with different timestamp:", possibleMatch.formId);
-      }
+      console.error("[generatePDF] Form not found with ID:", id);
+      console.error("[generatePDF] DIAGNOSTIC INFO:");
+      console.error("  - Request method:", req.method);
+      console.error("  - Request has body:", !!req.body);
+      console.error("  - Body keys:", req.body ? Object.keys(req.body) : "none");
+      console.error("  - inMemoryForms count:", inMemoryForms.length);
+      console.error("  - Available inMemory forms:", inMemoryForms.map(f => ({ id: f.id, formId: f.formId })));
+      console.error("  - formsDb count:", formsDb.length);
+      console.error("  - Available db forms:", formsDb.map(f => ({ id: f.id, formId: f.formId })));
 
       return res.status(404).json({
-        error: "Form not found - may be on different server instance",
+        error: "Form not found",
+        detail: "Form data not found in request body or local storage",
         searchedFor: id,
-        availableInMemory: inMemoryForms.length,
-        availableInDb: formsDb.length,
-        hint: "Form was likely created but stored on a different server instance. Try refreshing the page and creating the form again."
+        requestMethod: req.method,
+        hasBody: !!req.body,
+        inMemoryCount: inMemoryForms.length
       });
     }
 
