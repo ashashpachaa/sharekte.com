@@ -7,7 +7,10 @@ import {
   type ShareholderInfo,
 } from "../../client/lib/transfer-form";
 
-// Mock database - Ready for Airtable integration
+// In-memory storage - persists newly created forms across requests
+let inMemoryForms: TransferFormData[] = [];
+
+// Demo data storage
 let formsDb: TransferFormData[] = [];
 let idCounter = 1;
 
@@ -153,12 +156,15 @@ export const getTransferForms: RequestHandler = async (req, res) => {
       }
     })();
 
-    // If we have local forms, merge Airtable status with them
-    // Otherwise, use Airtable forms directly (as source of truth)
+    // Combine demo forms, in-memory forms, and Airtable forms
+    // In-memory forms take priority (they're the most recent)
     let result: TransferFormData[] = [];
 
-    if (formsDb.length > 0) {
-      result = formsDb.map((form) => {
+    // Start with demo forms
+    const allLocalForms = [...formsDb, ...inMemoryForms];
+
+    if (allLocalForms.length > 0) {
+      result = allLocalForms.map((form) => {
         const airtableForm = airtableForms.find(
           (af) =>
             af.companyName &&
@@ -177,20 +183,14 @@ export const getTransferForms: RequestHandler = async (req, res) => {
         }
         return form;
       });
+      console.log(
+        `[getTransferForms] Returning ${result.length} forms (${formsDb.length} demo + ${inMemoryForms.length} in-memory + Airtable sync)`,
+      );
     } else {
       // Use Airtable forms directly when local DB is empty
       result = airtableForms;
       console.log(
         "[getTransferForms] Using Airtable forms directly (no local forms)",
-      );
-      console.log(
-        "[getTransferForms] Forms data:",
-        result.map((f) => ({
-          id: f.id,
-          companyName: f.companyName,
-          status: f.status,
-          orderId: f.orderId,
-        })),
       );
     }
 
@@ -304,7 +304,11 @@ export const createTransferForm: RequestHandler = async (req, res) => {
       ],
     };
 
-    formsDb.push(newForm);
+    // Store in persistent in-memory storage first
+    inMemoryForms.push(newForm);
+    console.log(
+      "[createTransferForm] ✓ Form stored in persistent in-memory storage",
+    );
 
     // Sync to Airtable if configured (wait for completion)
     if (process.env.AIRTABLE_API_TOKEN) {
@@ -328,7 +332,7 @@ export const createTransferForm: RequestHandler = async (req, res) => {
           "[createTransferForm] Warning - Airtable sync failed:",
           error,
         );
-        // Don't fail the request, form is safe in formsDb
+        // Don't fail the request, form is safe in in-memory storage
       }
     } else {
       console.log(
