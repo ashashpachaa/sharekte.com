@@ -1264,9 +1264,17 @@ export const markCompanyAsSold: RequestHandler = async (req, res) => {
       incorporationYear: parseInt(
         String(updatedFields["Incorporate Year"] || new Date().getFullYear()),
       ),
-      purchasePrice: parseFloat(String(updatedFields["Price"] || "0")),
+      purchasePrice: parseFloat(
+        String(
+          updatedFields["Price"] ||
+          updatedFields["price"] ||
+          updatedFields["Purchase Price"] ||
+          updatedFields["purchase price"] ||
+          "0"
+        )
+      ),
       renewalFee: parseFloat(String(updatedFields["Renewal fees"] || "0")),
-      currency: "USD",
+      currency: String(updatedFields.Currency || updatedFields.currency || "USD") as any,
       expiryDate: calculateExpiryDate(incorporationDate),
       renewalDate: calculateExpiryDate(incorporationDate),
       renewalDaysLeft: calculateRenewalDaysLeft(
