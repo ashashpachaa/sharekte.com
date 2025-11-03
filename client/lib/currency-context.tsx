@@ -121,8 +121,18 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
     })}`;
   };
 
+  const formatPriceAlreadyConverted = (price: number): string => {
+    const currencyInfo = rates[currency];
+    if (!currencyInfo) return `$${price.toLocaleString()}`;
+
+    return `${currencyInfo.symbol}${price.toLocaleString(undefined, {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    })}`;
+  };
+
   return (
-    <CurrencyContext.Provider value={{ currency, setCurrency, convertPrice, formatPrice, rates }}>
+    <CurrencyContext.Provider value={{ currency, setCurrency, convertPrice, formatPrice, formatPriceAlreadyConverted, rates }}>
       {children}
     </CurrencyContext.Provider>
   );
