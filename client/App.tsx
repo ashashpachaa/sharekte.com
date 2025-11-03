@@ -24,6 +24,7 @@ import AdminOrders from "./pages/AdminOrders";
 import AdminInvoices from "./pages/AdminInvoices";
 import AdminSettings from "./pages/AdminSettings";
 import AdminEmailTemplates from "./pages/AdminEmailTemplates";
+import AdminRoles from "./pages/AdminRoles";
 import { AdminFees } from "./pages/AdminFees";
 import NotFound from "./pages/NotFound";
 
