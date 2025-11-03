@@ -1029,22 +1029,31 @@ export function TransferFormManagement({
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => {
-                    // Open PDF in new tab for printing
-                    const apiBaseURL = getAPIBaseURL();
-                    const pdfUrl = `${apiBaseURL}/api/transfer-forms/${selectedForm.id}/pdf`;
-                    const pdfWindow = window.open(pdfUrl, "_blank");
-                    if (pdfWindow) {
-                      pdfWindow.onload = () => {
-                        toast.info(
-                          "Form opened. Use Ctrl+P (or Cmd+P) to print to PDF",
-                          { duration: 5000 },
-                        );
-                      };
-                    } else {
-                      toast.error(
-                        "Failed to open form. Please check popup blocker",
-                      );
+                  onClick={async () => {
+                    try {
+                      // Download PDF directly
+                      const apiBaseURL = getAPIBaseURL();
+                      const pdfUrl = `${apiBaseURL}/api/transfer-forms/${selectedForm.id}/pdf`;
+
+                      const response = await fetch(pdfUrl);
+                      if (!response.ok) {
+                        throw new Error("Failed to download PDF");
+                      }
+
+                      const blob = await response.blob();
+                      const downloadUrl = window.URL.createObjectURL(blob);
+                      const link = document.createElement("a");
+                      link.href = downloadUrl;
+                      link.download = `transfer-form-${selectedForm.id}.html`;
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                      window.URL.revokeObjectURL(downloadUrl);
+
+                      toast.success("Form downloaded successfully");
+                    } catch (error) {
+                      console.error("Error downloading PDF:", error);
+                      toast.error("Failed to download form");
                     }
                   }}
                   className="gap-2"
