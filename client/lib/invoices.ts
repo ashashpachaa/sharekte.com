@@ -477,7 +477,8 @@ export async function getInvoiceStatistics(): Promise<{
   byPaymentMethod: Record<PaymentMethod, number>;
 }> {
   try {
-    const response = await fetch("/api/invoices/analytics/summary", {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/invoices/analytics/summary`, {
       headers: { "Content-Type": "application/json" },
     });
 
