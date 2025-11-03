@@ -367,7 +367,7 @@ export async function uploadFormAttachment(
     // Convert file to base64
     const fileBuffer = await file.arrayBuffer();
     const uint8Array = new Uint8Array(fileBuffer);
-    let binary = '';
+    let binary = "";
     for (let i = 0; i < uint8Array.length; i++) {
       binary += String.fromCharCode(uint8Array[i]);
     }

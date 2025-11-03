@@ -985,7 +985,9 @@ export default function Dashboard() {
       window.URL.revokeObjectURL(url);
     }
 
-    toast.success("Opening invoice for download... Use Ctrl+P (or Cmd+P) to save as PDF");
+    toast.success(
+      "Opening invoice for download... Use Ctrl+P (or Cmd+P) to save as PDF",
+    );
   };
 
   // Print invoice

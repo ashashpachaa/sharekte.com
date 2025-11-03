@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 
 export type Currency = "USD" | "AED" | "SAR" | "EUR" | "GBP";
 
@@ -35,7 +41,7 @@ try {
 async function fetchExchangeRates(): Promise<Record<Currency, CurrencyRate>> {
   try {
     const response = await fetch(
-      "https://api.exchangerate-api.com/v4/latest/USD"
+      "https://api.exchangerate-api.com/v4/latest/USD",
     );
     if (!response.ok) throw new Error("Failed to fetch rates");
 
@@ -44,10 +50,25 @@ async function fetchExchangeRates(): Promise<Record<Currency, CurrencyRate>> {
 
     const newRates: Record<Currency, CurrencyRate> = {
       USD: { code: "USD", symbol: "$", name: "US Dollar", rate: 1 },
-      AED: { code: "AED", symbol: "د.إ", name: "UAE Dirham", rate: rates.AED || 3.67 },
-      SAR: { code: "SAR", symbol: "﷼", name: "Saudi Riyal", rate: rates.SAR || 3.75 },
+      AED: {
+        code: "AED",
+        symbol: "د.إ",
+        name: "UAE Dirham",
+        rate: rates.AED || 3.67,
+      },
+      SAR: {
+        code: "SAR",
+        symbol: "﷼",
+        name: "Saudi Riyal",
+        rate: rates.SAR || 3.75,
+      },
       EUR: { code: "EUR", symbol: "€", name: "Euro", rate: rates.EUR || 0.92 },
-      GBP: { code: "GBP", symbol: "£", name: "British Pound", rate: rates.GBP || 0.79 },
+      GBP: {
+        code: "GBP",
+        symbol: "£",
+        name: "British Pound",
+        rate: rates.GBP || 0.79,
+      },
     };
 
     localStorage.setItem("currencyRates", JSON.stringify(newRates));
@@ -68,7 +89,9 @@ interface CurrencyContextType {
   rates: Record<Currency, CurrencyRate>;
 }
 
-const CurrencyContext = createContext<CurrencyContextType | undefined>(undefined);
+const CurrencyContext = createContext<CurrencyContextType | undefined>(
+  undefined,
+);
 
 export function CurrencyProvider({ children }: { children: ReactNode }) {
   const [currency, setCurrencyState] = useState<Currency>(() => {
@@ -80,7 +103,8 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
     }
   });
 
-  const [rates, setRates] = useState<Record<Currency, CurrencyRate>>(initialRates);
+  const [rates, setRates] =
+    useState<Record<Currency, CurrencyRate>>(initialRates);
 
   // Fetch exchange rates on mount and periodically refresh
   useEffect(() => {
@@ -132,7 +156,16 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <CurrencyContext.Provider value={{ currency, setCurrency, convertPrice, formatPrice, formatPriceAlreadyConverted, rates }}>
+    <CurrencyContext.Provider
+      value={{
+        currency,
+        setCurrency,
+        convertPrice,
+        formatPrice,
+        formatPriceAlreadyConverted,
+        rates,
+      }}
+    >
       {children}
     </CurrencyContext.Provider>
   );

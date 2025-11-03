@@ -32,7 +32,12 @@ export interface PurchasedCompanyData {
   purchasedDate: string;
   renewalDate: string;
   renewalFees: number;
-  status: "pending-form" | "under-review" | "amend-required" | "pending-transfer" | "completed";
+  status:
+    | "pending-form"
+    | "under-review"
+    | "amend-required"
+    | "pending-transfer"
+    | "completed";
   statusLabel: string;
   renewalStatus: "active" | "expired" | "cancelled";
   documents: Array<{
@@ -112,7 +117,7 @@ function getUserDataKey(): string {
 export function getUserData(): UserDataStore {
   const key = getUserDataKey();
   const saved = localStorage.getItem(key);
-  
+
   if (saved) {
     try {
       return JSON.parse(saved);
@@ -120,29 +125,33 @@ export function getUserData(): UserDataStore {
       return { purchasedCompanies: [], invoices: [] };
     }
   }
-  
+
   return { purchasedCompanies: [], invoices: [] };
 }
 
 export function savePurchasedCompany(company: PurchasedCompanyData): void {
   const userData = getUserData();
-  
+
   // Check if company already exists
-  const existingIndex = userData.purchasedCompanies.findIndex(c => c.id === company.id);
+  const existingIndex = userData.purchasedCompanies.findIndex(
+    (c) => c.id === company.id,
+  );
   if (existingIndex >= 0) {
     userData.purchasedCompanies[existingIndex] = company;
   } else {
     userData.purchasedCompanies.push(company);
   }
-  
+
   const key = getUserDataKey();
   localStorage.setItem(key, JSON.stringify(userData));
 }
 
-export function savePurchasedCompanies(companies: PurchasedCompanyData[]): void {
+export function savePurchasedCompanies(
+  companies: PurchasedCompanyData[],
+): void {
   const userData = getUserData();
   userData.purchasedCompanies = companies;
-  
+
   const key = getUserDataKey();
   localStorage.setItem(key, JSON.stringify(userData));
 }
@@ -153,15 +162,15 @@ export function getPurchasedCompanies(): PurchasedCompanyData[] {
 
 export function saveInvoice(invoice: InvoiceData): void {
   const userData = getUserData();
-  
+
   // Check if invoice already exists
-  const existingIndex = userData.invoices.findIndex(i => i.id === invoice.id);
+  const existingIndex = userData.invoices.findIndex((i) => i.id === invoice.id);
   if (existingIndex >= 0) {
     userData.invoices[existingIndex] = invoice;
   } else {
     userData.invoices.push(invoice);
   }
-  
+
   const key = getUserDataKey();
   localStorage.setItem(key, JSON.stringify(userData));
 }
@@ -169,7 +178,7 @@ export function saveInvoice(invoice: InvoiceData): void {
 export function saveInvoices(invoices: InvoiceData[]): void {
   const userData = getUserData();
   userData.invoices = invoices;
-  
+
   const key = getUserDataKey();
   localStorage.setItem(key, JSON.stringify(userData));
 }
@@ -181,18 +190,23 @@ export function getInvoices(): InvoiceData[] {
 export function addInvoice(invoice: InvoiceData): void {
   const userData = getUserData();
   userData.invoices.push(invoice);
-  
+
   const key = getUserDataKey();
   localStorage.setItem(key, JSON.stringify(userData));
 }
 
 export function updatePurchasedCompanyStatus(
   companyId: string,
-  status: "pending-form" | "under-review" | "amend-required" | "pending-transfer" | "completed",
-  statusLabel: string
+  status:
+    | "pending-form"
+    | "under-review"
+    | "amend-required"
+    | "pending-transfer"
+    | "completed",
+  statusLabel: string,
 ): void {
   const userData = getUserData();
-  const company = userData.purchasedCompanies.find(c => c.id === companyId);
+  const company = userData.purchasedCompanies.find((c) => c.id === companyId);
 
   if (company) {
     company.status = status;
@@ -204,7 +218,7 @@ export function updatePurchasedCompanyStatus(
 
 export function renewCompany(companyId: string): void {
   const userData = getUserData();
-  const company = userData.purchasedCompanies.find(c => c.id === companyId);
+  const company = userData.purchasedCompanies.find((c) => c.id === companyId);
 
   if (company) {
     // Calculate next renewal date based on original purchase date
@@ -217,7 +231,14 @@ export function renewCompany(companyId: string): void {
     const nextRenewalDate = new Date(purchaseDate);
 
     // If today is past the purchase anniversary this year, next renewal is next year
-    if (today >= new Date(today.getFullYear(), purchaseDate.getMonth(), purchaseDate.getDate())) {
+    if (
+      today >=
+      new Date(
+        today.getFullYear(),
+        purchaseDate.getMonth(),
+        purchaseDate.getDate(),
+      )
+    ) {
       yearsToAdd = today.getFullYear() - purchaseDate.getFullYear() + 1;
     } else {
       yearsToAdd = today.getFullYear() - purchaseDate.getFullYear();
@@ -232,7 +253,10 @@ export function renewCompany(companyId: string): void {
     const currentRenewalDate = new Date(company.renewalDate);
     const renewalTime = today.getTime();
     const dueTime = currentRenewalDate.getTime();
-    const daysLate = Math.max(0, Math.ceil((renewalTime - dueTime) / (1000 * 60 * 60 * 24)));
+    const daysLate = Math.max(
+      0,
+      Math.ceil((renewalTime - dueTime) / (1000 * 60 * 60 * 24)),
+    );
     const isLate = renewalTime > dueTime;
 
     // Add to renewal history
@@ -259,10 +283,10 @@ export function renewCompany(companyId: string): void {
 
 export function updateCompanyRenewalStatus(
   companyId: string,
-  renewalStatus: "active" | "expired" | "cancelled"
+  renewalStatus: "active" | "expired" | "cancelled",
 ): void {
   const userData = getUserData();
-  const company = userData.purchasedCompanies.find(c => c.id === companyId);
+  const company = userData.purchasedCompanies.find((c) => c.id === companyId);
 
   if (company) {
     company.renewalStatus = renewalStatus;

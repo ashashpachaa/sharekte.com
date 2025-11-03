@@ -127,7 +127,9 @@ export function createServer() {
       const AIRTABLE_TABLE_ID = "tbljtdHPdHnTberDy";
 
       if (!AIRTABLE_API_TOKEN) {
-        return res.status(500).json({ error: "AIRTABLE_API_TOKEN not configured" });
+        return res
+          .status(500)
+          .json({ error: "AIRTABLE_API_TOKEN not configured" });
       }
 
       const response = await fetch(
@@ -136,12 +138,14 @@ export function createServer() {
           headers: {
             Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
           },
-        }
+        },
       );
 
       if (!response.ok) {
         const error = await response.text();
-        return res.status(response.status).json({ error, status: response.status });
+        return res
+          .status(response.status)
+          .json({ error, status: response.status });
       }
 
       const data = await response.json();

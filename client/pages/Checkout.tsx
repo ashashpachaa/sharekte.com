@@ -135,7 +135,13 @@ export default function Checkout() {
     }
 
     // Validate billing information
-    if (!billingFullName || !billingEmail || !billingPhoneNumber || !billingAddress || !billingCountry) {
+    if (
+      !billingFullName ||
+      !billingEmail ||
+      !billingPhoneNumber ||
+      !billingAddress ||
+      !billingCountry
+    ) {
       toast.error("Please fill in all billing information fields");
       return;
     }

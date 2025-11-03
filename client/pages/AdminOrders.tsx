@@ -952,7 +952,9 @@ function OrderDetailsModal({
                       // Standard formula: approximately 1/10 of the base company fee (e.g., 350 USD)
                       // Get the linked company to check its renewal fee
                       const linkedCompany = companies.find(
-                        (c) => c.name.toLowerCase() === editedOrder.companyName.toLowerCase()
+                        (c) =>
+                          c.name.toLowerCase() ===
+                          editedOrder.companyName.toLowerCase(),
                       );
 
                       if (linkedCompany && linkedCompany.renewalFee) {
@@ -968,12 +970,18 @@ function OrderDetailsModal({
                         const rate = rates[editedOrder.currency] || 1;
                         const convertedFee = Math.round(baseRenewalUSD * rate);
                         handleFieldChange("renewalFees", convertedFee);
-                        toast.success(`Renewal fees auto-calculated to ${editedOrder.currency} ${convertedFee}`);
+                        toast.success(
+                          `Renewal fees auto-calculated to ${editedOrder.currency} ${convertedFee}`,
+                        );
                       } else {
                         // Fallback: use 10% of purchase amount
-                        const calculatedFee = Math.round(editedOrder.amount * 0.1);
+                        const calculatedFee = Math.round(
+                          editedOrder.amount * 0.1,
+                        );
                         handleFieldChange("renewalFees", calculatedFee);
-                        toast.success(`Renewal fees calculated as 10% of purchase amount: ${editedOrder.currency} ${calculatedFee}`);
+                        toast.success(
+                          `Renewal fees calculated as 10% of purchase amount: ${editedOrder.currency} ${calculatedFee}`,
+                        );
                       }
                     }}
                     className="px-3 py-2 bg-primary/10 text-primary rounded-md text-xs font-medium hover:bg-primary/20 transition"

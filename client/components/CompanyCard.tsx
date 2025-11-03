@@ -59,7 +59,12 @@ export function CompanyCard({
   onViewDetails,
   isAdmin = false,
 }: CompanyCardProps) {
-  const { convertPrice, formatPrice: formatWithCurrency, formatPriceAlreadyConverted, rates } = useCurrency();
+  const {
+    convertPrice,
+    formatPrice: formatWithCurrency,
+    formatPriceAlreadyConverted,
+    rates,
+  } = useCurrency();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const renewalCountdown = getRenewalCountdown(company.renewalDaysLeft);
@@ -119,9 +124,14 @@ export function CompanyCard({
                 {company.purchasePrice
                   ? formatPriceAlreadyConverted(
                       // If company has a different currency, we need to normalize to USD first, then convert to user's currency
-                      company.currency && company.currency !== "USD" && rates[company.currency as any]
-                        ? convertPrice(company.purchasePrice / (rates[company.currency as any]?.rate || 1))
-                        : convertPrice(company.purchasePrice)
+                      company.currency &&
+                        company.currency !== "USD" &&
+                        rates[company.currency as any]
+                        ? convertPrice(
+                            company.purchasePrice /
+                              (rates[company.currency as any]?.rate || 1),
+                          )
+                        : convertPrice(company.purchasePrice),
                     )
                   : "N/A"}
               </span>

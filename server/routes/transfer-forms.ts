@@ -632,8 +632,9 @@ export const uploadAttachment: RequestHandler = async (req, res) => {
 
     // Support both URL param id and formId from body
     const targetFormId = id || formId;
-    const form = inMemoryForms.find((f) => f.id === targetFormId) ||
-                 formsDb.find((f) => f.id === targetFormId);
+    const form =
+      inMemoryForms.find((f) => f.id === targetFormId) ||
+      formsDb.find((f) => f.id === targetFormId);
 
     if (!form) {
       return res.status(404).json({ error: "Form not found" });

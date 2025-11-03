@@ -101,7 +101,8 @@ async function fetchCompaniesData(): Promise<CompanyData[]> {
           const purchasePrice = parseFloat(String(priceValue));
 
           // Try to get currency from Airtable or default to USD
-          const currencyValue = fields["Currency"] || fields["currency"] || "USD";
+          const currencyValue =
+            fields["Currency"] || fields["currency"] || "USD";
 
           return {
             id: record.id,
@@ -244,7 +245,9 @@ export const getCompanies: RequestHandler = async (req, res) => {
     if (companies.length > 0) {
       console.log("[getCompanies] Sample prices:");
       companies.slice(0, 3).forEach((c, i) => {
-        console.log(`  Company ${i + 1}: ${c.companyName} - Price: ${c.purchasePrice} ${c.currency}`);
+        console.log(
+          `  Company ${i + 1}: ${c.companyName} - Price: ${c.purchasePrice} ${c.currency}`,
+        );
       });
     }
 
@@ -475,14 +478,16 @@ export const createCompany: RequestHandler = async (req, res) => {
       purchasePrice: parseFloat(
         String(
           record.fields.Price ||
-          record.fields.price ||
-          record.fields["Purchase Price"] ||
-          record.fields["purchase price"] ||
-          "0"
-        )
+            record.fields.price ||
+            record.fields["Purchase Price"] ||
+            record.fields["purchase price"] ||
+            "0",
+        ),
       ),
       renewalFee: parseFloat(String(record.fields["Renewal fees"] || "0")),
-      currency: String(record.fields.Currency || record.fields.currency || "USD") as any,
+      currency: String(
+        record.fields.Currency || record.fields.currency || "USD",
+      ) as any,
       expiryDate: calculateExpiryDate(
         record.fields["Incorporate date"] || getTodayString(),
       ),
@@ -597,18 +602,24 @@ export const updateCompany: RequestHandler = async (req, res) => {
       purchasePrice: parseFloat(
         String(
           fields["Price"] ||
-          fields["price"] ||
-          fields["Purchase Price"] ||
-          fields["purchase price"] ||
-          updatedFields.Price ||
-          updatedFields.price ||
-          "0"
-        )
+            fields["price"] ||
+            fields["Purchase Price"] ||
+            fields["purchase price"] ||
+            updatedFields.Price ||
+            updatedFields.price ||
+            "0",
+        ),
       ),
       renewalFee: parseFloat(
         String(fields["Renewal fees"] || updatedFields["Renewal fees"] || "0"),
       ),
-      currency: String(fields["Currency"] || fields["currency"] || updatedFields.Currency || updatedFields.currency || "USD") as any,
+      currency: String(
+        fields["Currency"] ||
+          fields["currency"] ||
+          updatedFields.Currency ||
+          updatedFields.currency ||
+          "USD",
+      ) as any,
       expiryDate: calculateExpiryDate(incorporationDate),
       renewalDate: calculateExpiryDate(incorporationDate),
       renewalDaysLeft: calculateRenewalDaysLeft(
@@ -830,14 +841,16 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
       purchasePrice: parseFloat(
         String(
           updatedFields.Price ||
-          updatedFields.price ||
-          updatedFields["Purchase Price"] ||
-          updatedFields["purchase price"] ||
-          "0"
-        )
+            updatedFields.price ||
+            updatedFields["Purchase Price"] ||
+            updatedFields["purchase price"] ||
+            "0",
+        ),
       ),
       renewalFee: parseFloat(String(updatedFields["Renewal fees"] || "0")),
-      currency: String(updatedFields.Currency || updatedFields.currency || "USD") as any,
+      currency: String(
+        updatedFields.Currency || updatedFields.currency || "USD",
+      ) as any,
       expiryDate: calculateExpiryDate(incorporationDate),
       renewalDate: calculateExpiryDate(incorporationDate),
       renewalDaysLeft: calculateRenewalDaysLeft(
@@ -951,14 +964,16 @@ export const renewCompany: RequestHandler = async (req, res) => {
       purchasePrice: parseFloat(
         String(
           updatedFields.Price ||
-          updatedFields.price ||
-          updatedFields["Purchase Price"] ||
-          updatedFields["purchase price"] ||
-          "0"
-        )
+            updatedFields.price ||
+            updatedFields["Purchase Price"] ||
+            updatedFields["purchase price"] ||
+            "0",
+        ),
       ),
       renewalFee: parseFloat(String(updatedFields["Renewal fees"] || "0")),
-      currency: String(updatedFields.Currency || updatedFields.currency || "USD") as any,
+      currency: String(
+        updatedFields.Currency || updatedFields.currency || "USD",
+      ) as any,
       expiryDate: calculateExpiryDate(incorporationDate),
       renewalDate: newRenewalDate,
       renewalDaysLeft: calculateRenewalDaysLeft(newRenewalDate),
@@ -1055,14 +1070,16 @@ export const requestRefund: RequestHandler = async (req, res) => {
       purchasePrice: parseFloat(
         String(
           updatedFields.Price ||
-          updatedFields.price ||
-          updatedFields["Purchase Price"] ||
-          updatedFields["purchase price"] ||
-          "0"
-        )
+            updatedFields.price ||
+            updatedFields["Purchase Price"] ||
+            updatedFields["purchase price"] ||
+            "0",
+        ),
       ),
       renewalFee: parseFloat(String(updatedFields["Renewal fees"] || "0")),
-      currency: String(updatedFields.Currency || updatedFields.currency || "USD") as any,
+      currency: String(
+        updatedFields.Currency || updatedFields.currency || "USD",
+      ) as any,
       expiryDate: calculateExpiryDate(incorporationDate),
       renewalDate: calculateExpiryDate(incorporationDate),
       renewalDaysLeft: calculateRenewalDaysLeft(
@@ -1161,14 +1178,16 @@ export const approveRefund: RequestHandler = async (req, res) => {
       purchasePrice: parseFloat(
         String(
           updatedFields.Price ||
-          updatedFields.price ||
-          updatedFields["Purchase Price"] ||
-          updatedFields["purchase price"] ||
-          "0"
-        )
+            updatedFields.price ||
+            updatedFields["Purchase Price"] ||
+            updatedFields["purchase price"] ||
+            "0",
+        ),
       ),
       renewalFee: parseFloat(String(updatedFields["Renewal fees"] || "0")),
-      currency: String(updatedFields.Currency || updatedFields.currency || "USD") as any,
+      currency: String(
+        updatedFields.Currency || updatedFields.currency || "USD",
+      ) as any,
       expiryDate: calculateExpiryDate(incorporationDate),
       renewalDate: calculateExpiryDate(incorporationDate),
       renewalDaysLeft: calculateRenewalDaysLeft(
@@ -1276,14 +1295,16 @@ export const markCompanyAsSold: RequestHandler = async (req, res) => {
       purchasePrice: parseFloat(
         String(
           updatedFields["Price"] ||
-          updatedFields["price"] ||
-          updatedFields["Purchase Price"] ||
-          updatedFields["purchase price"] ||
-          "0"
-        )
+            updatedFields["price"] ||
+            updatedFields["Purchase Price"] ||
+            updatedFields["purchase price"] ||
+            "0",
+        ),
       ),
       renewalFee: parseFloat(String(updatedFields["Renewal fees"] || "0")),
-      currency: String(updatedFields.Currency || updatedFields.currency || "USD") as any,
+      currency: String(
+        updatedFields.Currency || updatedFields.currency || "USD",
+      ) as any,
       expiryDate: calculateExpiryDate(incorporationDate),
       renewalDate: calculateExpiryDate(incorporationDate),
       renewalDaysLeft: calculateRenewalDaysLeft(

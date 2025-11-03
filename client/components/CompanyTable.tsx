@@ -422,9 +422,14 @@ export function CompanyTable({
                   <TableCell className="text-sm font-medium">
                     {formatPriceAlreadyConverted(
                       // If company has a different currency, we need to normalize to USD first, then convert to user's currency
-                      company.currency && company.currency !== "USD" && rates[company.currency as any]
-                        ? convertPrice(company.purchasePrice / (rates[company.currency as any]?.rate || 1))
-                        : convertPrice(company.purchasePrice)
+                      company.currency &&
+                        company.currency !== "USD" &&
+                        rates[company.currency as any]
+                        ? convertPrice(
+                            company.purchasePrice /
+                              (rates[company.currency as any]?.rate || 1),
+                          )
+                        : convertPrice(company.purchasePrice),
                     )}
                   </TableCell>
                   <TableCell className="text-sm">

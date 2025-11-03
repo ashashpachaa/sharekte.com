@@ -842,11 +842,14 @@ export function TransferFormManagement({
                                     i < byteCharacters.length;
                                     i++
                                   ) {
-                                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                                    byteNumbers[i] =
+                                      byteCharacters.charCodeAt(i);
                                   }
                                   const byteArray = new Uint8Array(byteNumbers);
                                   const blob = new Blob([byteArray], {
-                                    type: attachment.type || "application/octet-stream",
+                                    type:
+                                      attachment.type ||
+                                      "application/octet-stream",
                                   });
                                   link.href = URL.createObjectURL(blob);
                                   link.download = attachment.name;
@@ -859,39 +862,61 @@ export function TransferFormManagement({
                                     URL.revokeObjectURL(link.href);
                                   }, 100);
                                 } catch (decodeError) {
-                                  console.error("Base64 decode error:", decodeError);
-                                  toast.error("File format error - cannot decode attachment");
+                                  console.error(
+                                    "Base64 decode error:",
+                                    decodeError,
+                                  );
+                                  toast.error(
+                                    "File format error - cannot decode attachment",
+                                  );
                                   return;
                                 }
                               } else {
                                 // Fallback: Try to fetch attachment data from server if available
-                                console.warn("Attachment data missing, attempting to fetch from server:", {
-                                  name: attachment.name,
-                                  formId: selectedForm.id,
-                                  attachmentId: attachment.id,
-                                });
+                                console.warn(
+                                  "Attachment data missing, attempting to fetch from server:",
+                                  {
+                                    name: attachment.name,
+                                    formId: selectedForm.id,
+                                    attachmentId: attachment.id,
+                                  },
+                                );
 
                                 try {
                                   // Try to fetch the full form with fresh attachment data
                                   const response = await fetch(
-                                    `/api/transfer-forms/${selectedForm.id}`
+                                    `/api/transfer-forms/${selectedForm.id}`,
                                   );
                                   if (response.ok) {
                                     const freshForm = await response.json();
-                                    const freshAttachment = freshForm.attachments?.find(
-                                      (a: any) => a.id === attachment.id
-                                    );
+                                    const freshAttachment =
+                                      freshForm.attachments?.find(
+                                        (a: any) => a.id === attachment.id,
+                                      );
 
                                     if (freshAttachment?.data) {
                                       // Successfully fetched fresh data, use it
-                                      const byteCharacters = atob(freshAttachment.data);
-                                      const byteNumbers = new Array(byteCharacters.length);
-                                      for (let i = 0; i < byteCharacters.length; i++) {
-                                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                                      const byteCharacters = atob(
+                                        freshAttachment.data,
+                                      );
+                                      const byteNumbers = new Array(
+                                        byteCharacters.length,
+                                      );
+                                      for (
+                                        let i = 0;
+                                        i < byteCharacters.length;
+                                        i++
+                                      ) {
+                                        byteNumbers[i] =
+                                          byteCharacters.charCodeAt(i);
                                       }
-                                      const byteArray = new Uint8Array(byteNumbers);
+                                      const byteArray = new Uint8Array(
+                                        byteNumbers,
+                                      );
                                       const blob = new Blob([byteArray], {
-                                        type: freshAttachment.type || "application/octet-stream",
+                                        type:
+                                          freshAttachment.type ||
+                                          "application/octet-stream",
                                       });
                                       link.href = URL.createObjectURL(blob);
                                       link.download = attachment.name;
@@ -903,12 +928,17 @@ export function TransferFormManagement({
                                         URL.revokeObjectURL(link.href);
                                       }, 100);
 
-                                      toast.success(`Downloading ${attachment.name}...`);
+                                      toast.success(
+                                        `Downloading ${attachment.name}...`,
+                                      );
                                       return;
                                     }
                                   }
                                 } catch (fetchError) {
-                                  console.error("Failed to fetch attachment from server:", fetchError);
+                                  console.error(
+                                    "Failed to fetch attachment from server:",
+                                    fetchError,
+                                  );
                                 }
 
                                 toast.error(
