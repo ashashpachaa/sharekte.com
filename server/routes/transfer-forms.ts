@@ -719,15 +719,18 @@ export const generatePDF: RequestHandler = async (req, res) => {
     const { id } = req.params;
     console.log("[generatePDF] Generating PDF for form:", id);
 
-    // Search in both in-memory and demo forms
+    // Search in both in-memory and demo forms by formId (user-facing ID like FORM-1762204603954)
     const form =
-      inMemoryForms.find((f) => f.id === id) ||
-      formsDb.find((f) => f.id === id);
+      inMemoryForms.find((f) => f.formId === id || f.id === id) ||
+      formsDb.find((f) => f.formId === id || f.id === id);
 
     if (!form) {
-      console.log("[generatePDF] Form not found:", id);
+      console.log("[generatePDF] Form not found with ID:", id);
+      console.log("[generatePDF] Available forms:", inMemoryForms.map(f => ({ id: f.id, formId: f.formId })));
       return res.status(404).json({ error: "Form not found" });
     }
+
+    console.log("[generatePDF] Form found:", { id: form.id, formId: form.formId });
 
     console.log("[generatePDF] Form found, generating HTML...");
 
