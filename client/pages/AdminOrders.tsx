@@ -86,10 +86,10 @@ export default function AdminOrders() {
     } else {
       loadOrders();
       loadCompanies();
-      // Auto-refresh orders every 1 second to sync with Airtable
+      // Auto-refresh orders every 5 seconds to sync with Airtable (increased from 1s to avoid request stacking)
       const refreshInterval = setInterval(() => {
         loadOrders();
-      }, 1000);
+      }, 5000);
       return () => clearInterval(refreshInterval);
     }
   }, [isAdmin, navigate]);
