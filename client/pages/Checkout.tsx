@@ -36,6 +36,7 @@ export default function Checkout() {
   const [signupPassword, setSignupPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [company, setCompany] = useState("");
+  const [whatsappNumber, setWhatsappNumber] = useState("");
 
   if (items.length === 0 && !orderCompleted) {
     return (
@@ -65,9 +66,9 @@ export default function Checkout() {
 
       if (
         authMode === "signup" &&
-        (!fullName || !signupEmail || !signupPassword || !company)
+        (!fullName || !signupEmail || !signupPassword || !company || !whatsappNumber)
       ) {
-        toast.error("Please create an account to complete your order");
+        toast.error("Please fill in all required fields");
         return;
       }
     }
@@ -403,7 +404,8 @@ export default function Checkout() {
       !signupEmail ||
       !signupPassword ||
       !confirmPassword ||
-      !company
+      !company ||
+      !whatsappNumber
     ) {
       toast.error("Please fill in all fields");
       return;
@@ -424,6 +426,11 @@ export default function Checkout() {
       return;
     }
 
+    if (!whatsappNumber.replace(/\D/g, "") || whatsappNumber.replace(/\D/g, "").length < 10) {
+      toast.error("Please enter a valid WhatsApp number");
+      return;
+    }
+
     // Check if user already exists
     const existingUser = localStorage.getItem("user");
     if (existingUser) {
@@ -439,6 +446,7 @@ export default function Checkout() {
       fullName: fullName,
       email: signupEmail,
       company: company,
+      whatsappNumber: whatsappNumber,
       accountCreated: new Date().toISOString(),
       authenticated: true,
     };
@@ -562,6 +570,7 @@ export default function Checkout() {
                           setSignupPassword("");
                           setConfirmPassword("");
                           setCompany("");
+                          setWhatsappNumber("");
                         }}
                         className="mt-4 w-full text-xs"
                       >
@@ -683,6 +692,22 @@ export default function Checkout() {
                               placeholder="Your Company"
                               required
                             />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-foreground mb-2">
+                              WhatsApp Number *
+                            </label>
+                            <input
+                              type="tel"
+                              value={whatsappNumber}
+                              onChange={(e) => setWhatsappNumber(e.target.value)}
+                              className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                              placeholder="+1 (555) 000-0000"
+                              required
+                            />
+                            <p className="text-xs text-muted-foreground mt-1">
+                              We'll use this for important updates
+                            </p>
                           </div>
                           <div>
                             <label className="block text-sm font-medium text-foreground mb-2">
