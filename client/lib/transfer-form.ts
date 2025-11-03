@@ -3,6 +3,30 @@
  * Handles company ownership transfer forms with attachments, status tracking, and notifications
  */
 
+// Get the correct API base URL (use production URL for Fly.io or old deployments)
+function getAPIBaseURL(): string {
+  if (typeof window === "undefined") return "https://shareket.com";
+
+  const hostname = window.location.hostname;
+
+  // If on localhost or localhost-like domain, use relative paths
+  if (
+    hostname === "localhost" ||
+    hostname === "127.0.0.1" ||
+    hostname.startsWith("192.168.")
+  ) {
+    return "";
+  }
+
+  // For production, always use shareket.com
+  if (hostname.includes("fly.dev") || !hostname.includes("shareket.com")) {
+    return "https://shareket.com";
+  }
+
+  // Use current domain for shareket.com
+  return window.location.origin;
+}
+
 export type FormStatus =
   | "under-review"
   | "amend-required"
