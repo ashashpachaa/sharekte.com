@@ -192,7 +192,7 @@ function formatPriceWithCurrency(
 
 export default function Dashboard() {
   const { t } = useTranslation();
-  const { formatPrice, rates, currency } = useCurrency();
+  const { formatPrice, rates, currency, convertPrice } = useCurrency();
   const [activeTab, setActiveTab] = useState<DashboardTab>("portfolio");
   const [isEditing, setIsEditing] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
