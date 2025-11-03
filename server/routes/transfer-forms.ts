@@ -198,76 +198,28 @@ function getTodayString(): string {
   return new Date().toISOString().split("T")[0];
 }
 
-// Get all transfer forms (with Airtable status sync)
+// Get all transfer forms
 export const getTransferForms: RequestHandler = async (req, res) => {
   try {
     const { orderId } = req.query;
 
-    // Fetch latest status from Airtable if available
-    const airtableForms = await (async () => {
-      try {
-        const { fetchFormsFromAirtable } = await import(
-          "../utils/airtable-sync"
-        );
-        const forms = await fetchFormsFromAirtable();
-        console.log(
-          "[getTransferForms] Fetched from Airtable:",
-          forms.length,
-          "forms",
-        );
-        return forms;
-      } catch (error) {
-        console.warn("Could not fetch from Airtable:", error);
-        return [];
-      }
-    })();
+    // Return local forms (demo + in-memory)
+    // In-memory forms have the most up-to-date status since they're updated immediately when status changes
+    let result: TransferFormData[] = [...formsDb, ...inMemoryForms];
 
-    // Combine demo forms, in-memory forms, and Airtable forms
-    // In-memory forms take priority (they're the most recent)
-    let result: TransferFormData[] = [];
+    console.log(
+      `[getTransferForms] Returning ${result.length} forms (${formsDb.length} demo + ${inMemoryForms.length} in-memory)`,
+    );
 
-    // Start with demo forms
-    const allLocalForms = [...formsDb, ...inMemoryForms];
-
-    if (allLocalForms.length > 0) {
-      result = allLocalForms.map((form) => {
-        const airtableForm = airtableForms.find(
-          (af) =>
-            af.companyName &&
-            af.companyName.toLowerCase() === form.companyName.toLowerCase(),
-        );
-
-        // If form exists in Airtable, update status from there
-        if (airtableForm && airtableForm.status) {
-          console.log(
-            `[getTransferForms] Merging Airtable status for ${form.companyName}: ${form.status} → ${airtableForm.status}`,
-          );
-          return {
-            ...form,
-            status: airtableForm.status,
-          };
-        }
-        return form;
-      });
-      console.log(
-        `[getTransferForms] Returning ${result.length} forms (${formsDb.length} demo + ${inMemoryForms.length} in-memory + Airtable sync)`,
-      );
-    } else {
-      // Use Airtable forms directly when local DB is empty
-      result = airtableForms;
-      console.log(
-        "[getTransferForms] Using Airtable forms directly (no local forms)",
-      );
-    }
-
+    // Filter by orderId if provided
     if (orderId) {
       result = result.filter((f) => f.orderId === orderId);
+      console.log(`[getTransferForms] Filtered to ${result.length} forms by orderId: ${orderId}`);
     }
 
-    console.log(`[getTransferForms] Returning ${result.length} forms`);
     res.json(result);
   } catch (error) {
-    console.error("Error fetching forms:", error);
+    console.error("[getTransferForms] Error:", error);
     res.status(500).json({ error: "Failed to fetch forms" });
   }
 };
