@@ -18,6 +18,22 @@ function generateId(): string {
   return `form_${idCounter++}`;
 }
 
+// Helper function to find forms by either internal id or user-facing formId
+function findForm(searchId: string, inMem: TransferFormData[], db: TransferFormData[]): TransferFormData | undefined {
+  return inMem.find((f) => f.formId === searchId || f.id === searchId) ||
+         db.find((f) => f.formId === searchId || f.id === searchId);
+}
+
+// Helper function to find form index in memory
+function findFormIndexInMem(searchId: string, inMem: TransferFormData[]): number {
+  return inMem.findIndex((f) => f.formId === searchId || f.id === searchId);
+}
+
+// Helper function to find form index in db
+function findFormIndexInDb(searchId: string, db: TransferFormData[]): number {
+  return db.findIndex((f) => f.formId === searchId || f.id === searchId);
+}
+
 // Initialize with demo transfer forms
 function initializeDemoForms() {
   if (formsDb.length === 0) {
