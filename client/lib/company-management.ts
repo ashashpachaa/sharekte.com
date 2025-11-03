@@ -419,7 +419,8 @@ export async function fetchAllCompanies(): Promise<CompanyData[]> {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
-    const response = await fetch("/api/companies", {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/companies`, {
       signal: controller.signal,
       headers: {
         "Content-Type": "application/json",
@@ -452,7 +453,8 @@ export async function getCompany(id: string): Promise<CompanyData | null> {
 
 export async function createCompany(company: Omit<CompanyData, "id" | "createdAt" | "updatedAt">): Promise<CompanyData | null> {
   try {
-    const response = await fetch("/api/companies", {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/companies`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(company),
