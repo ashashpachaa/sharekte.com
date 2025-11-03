@@ -698,8 +698,14 @@ export const generatePDF: RequestHandler = async (req, res) => {
       compact: false,
     });
 
-    // Return HTML in browser for viewing and printing to PDF
+    // Return HTML with download headers (user can print to PDF)
+    // For browser print-to-PDF functionality
     res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="transfer-form-${id}.html"`,
+    );
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     res.send(htmlContent);
 
     // TODO: When using Puppeteer or similar, implement:
