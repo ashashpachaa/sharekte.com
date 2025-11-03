@@ -2153,25 +2153,11 @@ export default function Dashboard() {
                                       Annual Renewal Fees
                                     </p>
                                     <p className="font-semibold text-foreground text-sm">
-                                      {(() => {
-                                        // Debug: Check if renewal fees are already pre-converted
-                                        console.log(`[Renewal Fees Debug] Company: ${company.companyName}, Raw value: ${company.renewalFees}, Currency: ${company.currency}`);
-
-                                        // If renewal fees appear to be pre-converted (e.g., 1285 instead of 350),
-                                        // don't convert again
-                                        const isPreConverted = company.renewalFees > 500 && company.currency !== "USD";
-                                        const displayValue = isPreConverted
-                                          ? company.renewalFees
-                                          : convertPrice(company.renewalFees);
-
-                                        console.log(`[Renewal Fees Debug] IsPreConverted: ${isPreConverted}, DisplayValue: ${displayValue}`);
-
-                                        return formatPriceWithCurrency(
-                                          displayValue,
-                                          currency,
-                                          rates,
-                                        );
-                                      })()}
+                                      {formatPriceWithCurrency(
+                                        convertPrice(company.renewalFees, "USD"),
+                                        currency,
+                                        rates,
+                                      )}
                                     </p>
                                   </div>
                                 </div>
