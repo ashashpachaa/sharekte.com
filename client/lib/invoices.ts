@@ -414,7 +414,8 @@ export async function downloadInvoicePDF(invoiceId: string): Promise<Blob | null
 
 export async function bulkUpdateInvoiceStatus(invoiceIds: string[], status: InvoiceStatus): Promise<boolean> {
   try {
-    const response = await fetch("/api/invoices/bulk/status", {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/invoices/bulk/status`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ invoiceIds, status }),
