@@ -194,8 +194,8 @@ export default function Checkout() {
       const orderPromises = items.map(async (item, index) => {
         // Convert price to selected currency
         const convertedAmount = priceConverter(item.price);
-        // Renewal fees from Airtable are already in the correct currency, use as-is
-        const convertedRenewalFees = item.renewalFees || 0;
+        // Convert renewal fees to selected currency (they are stored in USD in Airtable)
+        const convertedRenewalFees = priceConverter(item.renewalFees || 0);
 
         // Create purchased company record
         const purchasedCompany: PurchasedCompanyData = {
