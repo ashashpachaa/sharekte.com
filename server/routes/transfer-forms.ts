@@ -744,11 +744,19 @@ export const generatePDF: RequestHandler = async (req, res) => {
     // Try to get form from request body
     if (req.body) {
       const bodyKeys = Object.keys(req.body);
-      console.log("[generatePDF] Request body keys:", bodyKeys.length > 0 ? bodyKeys : "empty");
+      console.log("[generatePDF] Request body keys:", bodyKeys);
 
-      if (bodyKeys.length > 0 && ("formId" in req.body || "companyName" in req.body)) {
-        form = req.body as TransferFormData;
-        console.log("[generatePDF] Using form data from POST body - formId:", form.formId || "unknown");
+      // Check if body looks like a form (has multiple properties or key form properties)
+      if (bodyKeys.length > 0) {
+        // Be lenient - accept any object with form-like properties
+        if ("formId" in req.body || "companyName" in req.body || "buyerName" in req.body || "sellerName" in req.body) {
+          form = req.body as TransferFormData;
+          console.log("[generatePDF] Using form data from POST body - formId:", form.formId || "unknown");
+        } else if (bodyKeys.length > 5) {
+          // If body has many properties, treat it as a form object
+          form = req.body as TransferFormData;
+          console.log("[generatePDF] Using form data from POST body (multi-property object) - formId:", form.formId || "unknown");
+        }
       }
     }
 
