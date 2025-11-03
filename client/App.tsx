@@ -8,8 +8,6 @@ import { CartProvider } from "@/lib/cart-context";
 import { NotificationsProvider } from "@/lib/notifications-context";
 import { CurrencyProvider } from "@/lib/currency-context";
 import { AdminProvider } from "@/lib/admin-context";
-import { AIChatProvider } from "@/lib/ai-chat-context";
-import { AIChat } from "@/components/AIChat";
 import i18n from "@/lib/i18n";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
@@ -38,46 +36,43 @@ export default function App() {
           <AdminProvider>
             <CurrencyProvider>
               <NotificationsProvider>
-                <AIChatProvider>
-                  <CartProvider>
-                    <Toaster />
-                    <Sonner />
-                    <AIChat />
-                    <BrowserRouter>
-                      <Routes>
-                        <Route path="/" element={<Index />} />
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/signup" element={<Signup />} />
-                        <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/support" element={<Support />} />
-                        <Route path="/companies" element={<Companies />} />
-                        <Route path="/cart" element={<Cart />} />
-                        <Route path="/checkout" element={<Checkout />} />
-                        <Route path="/admin/login" element={<AdminLogin />} />
-                        <Route
-                          path="/admin/dashboard"
-                          element={<AdminDashboard />}
-                        />
-                        <Route path="/admin/users" element={<AdminUsers />} />
-                        <Route path="/admin/orders" element={<AdminOrders />} />
-                        <Route
-                          path="/admin/invoices"
-                          element={<AdminInvoices />}
-                        />
-                        <Route
-                          path="/admin/settings"
-                          element={<AdminSettings />}
-                        />
-                        <Route
-                          path="/admin/email-templates"
-                          element={<AdminEmailTemplates />}
-                        />
-                        {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                        <Route path="*" element={<NotFound />} />
-                      </Routes>
-                    </BrowserRouter>
-                  </CartProvider>
-                </AIChatProvider>
+                <CartProvider>
+                  <Toaster />
+                  <Sonner />
+                  <BrowserRouter>
+                    <Routes>
+                      <Route path="/" element={<Index />} />
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/signup" element={<Signup />} />
+                      <Route path="/dashboard" element={<Dashboard />} />
+                      <Route path="/support" element={<Support />} />
+                      <Route path="/companies" element={<Companies />} />
+                      <Route path="/cart" element={<Cart />} />
+                      <Route path="/checkout" element={<Checkout />} />
+                      <Route path="/admin/login" element={<AdminLogin />} />
+                      <Route
+                        path="/admin/dashboard"
+                        element={<AdminDashboard />}
+                      />
+                      <Route path="/admin/users" element={<AdminUsers />} />
+                      <Route path="/admin/orders" element={<AdminOrders />} />
+                      <Route
+                        path="/admin/invoices"
+                        element={<AdminInvoices />}
+                      />
+                      <Route
+                        path="/admin/settings"
+                        element={<AdminSettings />}
+                      />
+                      <Route
+                        path="/admin/email-templates"
+                        element={<AdminEmailTemplates />}
+                      />
+                      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </BrowserRouter>
+                </CartProvider>
               </NotificationsProvider>
             </CurrencyProvider>
           </AdminProvider>
