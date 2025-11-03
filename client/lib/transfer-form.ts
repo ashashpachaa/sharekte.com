@@ -309,7 +309,8 @@ export async function createTransferForm(
   form: Omit<TransferFormData, "id" | "createdAt" | "updatedAt">,
 ): Promise<TransferFormData | null> {
   try {
-    const response = await fetch("/api/transfer-forms", {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/transfer-forms`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
