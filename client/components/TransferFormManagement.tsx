@@ -1040,13 +1040,22 @@ export function TransferFormManagement({
                       console.log("[Transfer Form Download] Response status:", response.status);
 
                       if (!response.ok) {
-                        const errorText = await response.text();
-                        console.error("[Transfer Form Download] Error:", response.status, errorText);
-                        throw new Error(`HTTP ${response.status}: Failed to download PDF`);
+                        try {
+                          const errorText = await response.text();
+                          console.error("[Transfer Form Download] Error:", response.status, errorText);
+                          throw new Error(`HTTP ${response.status}: ${errorText}`);
+                        } catch {
+                          throw new Error(`HTTP ${response.status}: Failed to download PDF`);
+                        }
                       }
 
+                      // Read response as blob for successful response only
                       const blob = await response.blob();
                       console.log("[Transfer Form Download] Blob size:", blob.size);
+
+                      if (blob.size === 0) {
+                        throw new Error("Received empty file from server");
+                      }
 
                       const downloadUrl = window.URL.createObjectURL(blob);
                       const link = document.createElement("a");
@@ -1055,7 +1064,11 @@ export function TransferFormManagement({
                       document.body.appendChild(link);
                       link.click();
                       document.body.removeChild(link);
-                      window.URL.revokeObjectURL(downloadUrl);
+
+                      // Cleanup after download completes
+                      setTimeout(() => {
+                        window.URL.revokeObjectURL(downloadUrl);
+                      }, 100);
 
                       toast.success("Form downloaded successfully");
                     } catch (error) {
