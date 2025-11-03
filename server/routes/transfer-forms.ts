@@ -324,7 +324,9 @@ export const createTransferForm: RequestHandler = async (req, res) => {
     inMemoryForms.push(newForm);
     console.log(
       "[createTransferForm] ✓ Form stored in persistent in-memory storage",
+      { formId: newForm.formId, id: newForm.id, totalForms: inMemoryForms.length }
     );
+    console.log("[createTransferForm] Current inMemoryForms:", inMemoryForms.map(f => ({ id: f.id, formId: f.formId, company: f.companyName })));
 
     // Sync to Airtable if configured (wait for completion)
     if (process.env.AIRTABLE_API_TOKEN) {
