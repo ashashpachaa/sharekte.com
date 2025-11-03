@@ -38,7 +38,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { useCurrency } from "@/lib/currency-context";
+import { useCurrency, CurrencyRate } from "@/lib/currency-context";
 
 interface CompanyCardProps {
   company: CompanyData;
