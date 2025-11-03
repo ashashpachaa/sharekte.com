@@ -717,6 +717,7 @@ export const deleteAttachment: RequestHandler = async (req, res) => {
 export const generatePDF: RequestHandler = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log("[generatePDF] Generating PDF for form:", id);
 
     // Search in both in-memory and demo forms
     const form =
@@ -724,42 +725,37 @@ export const generatePDF: RequestHandler = async (req, res) => {
       formsDb.find((f) => f.id === id);
 
     if (!form) {
+      console.log("[generatePDF] Form not found:", id);
       return res.status(404).json({ error: "Form not found" });
     }
 
-    // Generate HTML for PDF
-    // Note: This returns HTML that can be converted to PDF using:
-    // - Puppeteer (recommended)
-    // - wkhtmltopdf
-    // - node-html-pdf
-    //
-    // For production, you'll want to use a library like:
-    // - npm install puppeteer
-    // - npm install pdfkit
-    // - npm install html-to-pdf
+    console.log("[generatePDF] Form found, generating HTML...");
 
-    const { getFormPDFHTML } = await import("../utils/pdf-generator");
-    const htmlContent = getFormPDFHTML(form, {
-      includeAttachments: true,
-      includeComments: true,
-      includeAdminNotes: true,
-      compact: false,
-    });
+    try {
+      const { getFormPDFHTML } = await import("../utils/pdf-generator");
+      const htmlContent = getFormPDFHTML(form, {
+        includeAttachments: true,
+        includeComments: true,
+        includeAdminNotes: true,
+        compact: false,
+      });
 
-    // Return HTML for viewing and printing to PDF
-    // User will print to PDF using browser print dialog (Ctrl+P or Cmd+P)
-    res.setHeader("Content-Type", "text/html; charset=utf-8");
-    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    res.send(htmlContent);
+      console.log("[generatePDF] HTML generated successfully, size:", htmlContent.length);
 
-    // TODO: When using Puppeteer or similar, implement:
-    // const html2pdf = require('html2pdf.js');
-    // const pdfBuffer = await html2pdf().set(options).from.string(htmlContent).output();
-    // res.setHeader("Content-Type", "application/pdf");
-    // res.send(pdfBuffer);
+      // Return HTML for viewing and printing to PDF
+      // User will print to PDF using browser print dialog (Ctrl+P or Cmd+P)
+      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+      res.setHeader("Content-Length", Buffer.byteLength(htmlContent));
+      res.send(htmlContent);
+      console.log("[generatePDF] HTML sent successfully");
+    } catch (htmlError) {
+      console.error("[generatePDF] HTML generation error:", htmlError);
+      res.status(500).json({ error: "HTML generation failed", details: String(htmlError) });
+    }
   } catch (error) {
-    console.error("Error generating PDF:", error);
-    res.status(500).json({ error: "Failed to generate PDF" });
+    console.error("[generatePDF] Unexpected error:", error);
+    res.status(500).json({ error: "Failed to generate PDF", details: String(error) });
   }
 };
 
