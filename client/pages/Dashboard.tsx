@@ -2055,7 +2055,7 @@ Generated on: ${new Date().toLocaleDateString()}
                                     </p>
                                     <p className="font-semibold text-foreground text-sm">
                                       {formatPriceWithCurrency(
-                                        company.renewalFees,
+                                        convertPrice(company.renewalFees),
                                         currency,
                                         rates,
                                       )}
