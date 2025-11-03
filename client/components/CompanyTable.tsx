@@ -144,6 +144,7 @@ export function CompanyTable({
   const {
     currency,
     formatPrice: formatWithCurrency,
+    formatPriceAlreadyConverted,
     rates,
     convertPrice,
   } = useCurrency();
