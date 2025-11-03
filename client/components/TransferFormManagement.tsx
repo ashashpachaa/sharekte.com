@@ -157,10 +157,24 @@ export function TransferFormManagement({
         toast.success(
           `Form status updated to ${formatFormStatus(newStatus as FormStatus)}`,
         );
+        // Update selectedForm immediately to reflect new status
+        const updatedForm = {
+          ...selectedForm,
+          status: newStatus as FormStatus,
+          updatedAt: new Date().toISOString(),
+        };
+        setSelectedForm(updatedForm);
+        // Update form in list
+        setForms((prevForms) =>
+          prevForms.map((f) =>
+            f.id === selectedForm.id ? updatedForm : f,
+          ),
+        );
         setShowStatusModal(false);
         setNewStatus("");
         setStatusNotes("");
-        loadForms();
+        // Reload forms to sync with server/Airtable
+        setTimeout(() => loadForms(), 500);
       } else {
         toast.error("Failed to update form status");
       }
