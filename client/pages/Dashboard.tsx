@@ -2154,8 +2154,8 @@ export default function Dashboard() {
                                     </p>
                                     <p className="font-semibold text-foreground text-sm">
                                       {formatPriceWithCurrency(
-                                        convertPrice(company.renewalFees),
-                                        currency,
+                                        company.renewalFees,
+                                        company.currency || "USD",
                                         rates,
                                       )}
                                     </p>
