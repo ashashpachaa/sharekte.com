@@ -802,7 +802,25 @@ export function TransferFormManagement({
                             </p>
                           )}
                         </div>
-                        <Button variant="ghost" size="sm" className="ml-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="ml-2"
+                          onClick={() => {
+                            if (attachment.url) {
+                              // Open download link in new tab or trigger download
+                              const link = document.createElement("a");
+                              link.href = attachment.url;
+                              link.download = attachment.name;
+                              document.body.appendChild(link);
+                              link.click();
+                              document.body.removeChild(link);
+                            } else {
+                              toast.error("Download link not available for this file");
+                            }
+                          }}
+                          title={`Download ${attachment.name}`}
+                        >
                           <Download className="w-4 h-4" />
                         </Button>
                       </div>
