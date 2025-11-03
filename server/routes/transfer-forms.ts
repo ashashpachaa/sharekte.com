@@ -449,6 +449,20 @@ export const updateFormStatus: RequestHandler = async (req, res) => {
       }
     }
 
+    // Sync status change to Airtable (critical - prevents status revert)
+    (async () => {
+      try {
+        const { updateFormStatusInAirtable } = await import(
+          "../utils/airtable-sync"
+        );
+        await updateFormStatusInAirtable(id, status as FormStatus, updated.updatedAt);
+        console.log("[updateFormStatus] ✓ Status synced to Airtable");
+      } catch (error) {
+        console.error("[updateFormStatus] Failed to sync status to Airtable:", error);
+        // Don't fail the response if sync fails - form is updated locally
+      }
+    })();
+
     // Send status notification email (async - don't wait for response)
     (async () => {
       try {
