@@ -863,14 +863,55 @@ export function TransferFormManagement({
                                   return;
                                 }
                               } else {
-                                console.warn("Attachment data missing:", {
+                                // Fallback: Try to fetch attachment data from server if available
+                                console.warn("Attachment data missing, attempting to fetch from server:", {
                                   name: attachment.name,
-                                  type: attachment.type,
-                                  hasUrl: !!attachment.url,
-                                  hasData: !!attachment.data,
+                                  formId: selectedForm.id,
+                                  attachmentId: attachment.id,
                                 });
+
+                                try {
+                                  // Try to fetch the full form with fresh attachment data
+                                  const response = await fetch(
+                                    `/api/transfer-forms/${selectedForm.id}`
+                                  );
+                                  if (response.ok) {
+                                    const freshForm = await response.json();
+                                    const freshAttachment = freshForm.attachments?.find(
+                                      (a: any) => a.id === attachment.id
+                                    );
+
+                                    if (freshAttachment?.data) {
+                                      // Successfully fetched fresh data, use it
+                                      const byteCharacters = atob(freshAttachment.data);
+                                      const byteNumbers = new Array(byteCharacters.length);
+                                      for (let i = 0; i < byteCharacters.length; i++) {
+                                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                                      }
+                                      const byteArray = new Uint8Array(byteNumbers);
+                                      const blob = new Blob([byteArray], {
+                                        type: freshAttachment.type || "application/octet-stream",
+                                      });
+                                      link.href = URL.createObjectURL(blob);
+                                      link.download = attachment.name;
+                                      document.body.appendChild(link);
+                                      link.click();
+                                      document.body.removeChild(link);
+
+                                      setTimeout(() => {
+                                        URL.revokeObjectURL(link.href);
+                                      }, 100);
+
+                                      toast.success(`Downloading ${attachment.name}...`);
+                                      return;
+                                    }
+                                  }
+                                } catch (fetchError) {
+                                  console.error("Failed to fetch attachment from server:", fetchError);
+                                }
+
                                 toast.error(
-                                  "File data not available - please re-upload the attachment",
+                                  "File data not available - attachment may need to be re-uploaded",
                                 );
                                 return;
                               }
