@@ -3,6 +3,8 @@
  * Handles all invoice-related types, utilities, and API operations
  */
 
+import { getAPIBaseURL } from "@/lib/transfer-form";
+
 export type InvoiceStatus = "pending" | "paid" | "overdue" | "refunded" | "partial";
 export type PaymentMethod = "stripe" | "wise" | "manual" | "bank_transfer" | "paypal";
 
