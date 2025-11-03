@@ -472,7 +472,8 @@ export async function updateCompany(
   updates: Partial<CompanyData>
 ): Promise<CompanyData | null> {
   try {
-    const response = await fetch(`/api/companies/${id}`, {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/companies/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updates),
@@ -487,7 +488,8 @@ export async function updateCompany(
 
 export async function deleteCompany(id: string): Promise<boolean> {
   try {
-    const response = await fetch(`/api/companies/${id}`, {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/companies/${id}`, {
       method: "DELETE",
     });
     return response.ok;
