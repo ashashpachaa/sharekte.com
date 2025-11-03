@@ -59,7 +59,7 @@ export function CompanyCard({
   onViewDetails,
   isAdmin = false,
 }: CompanyCardProps) {
-  const { convertPrice, formatPrice: formatWithCurrency, rates } = useCurrency();
+  const { convertPrice, formatPrice: formatWithCurrency, formatPriceAlreadyConverted, rates } = useCurrency();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const renewalCountdown = getRenewalCountdown(company.renewalDaysLeft);
