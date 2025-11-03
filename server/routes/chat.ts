@@ -134,7 +134,8 @@ async function getDemoResponse(
   // Fetch real company data for intelligent responses
   let companyContext = "";
   try {
-    const response = await fetch("http://localhost:8080/api/companies");
+    const apiUrl = process.env.API_BASE_URL || process.env.APP_URL || "http://localhost:8080";
+    const response = await fetch(`${apiUrl}/api/companies`);
     const companies = (await response.json()) as Array<{
       companyName?: string;
       id?: string;
@@ -209,7 +210,7 @@ async function getDemoResponse(
                 Math.floor(Math.random() * matchingCompanies.length)
               ];
             const symbol = getCurrencySymbol(currency);
-            return `Perfect! Here's an available company from ${targetYear} in ${targetCountry}:\n\n💼 **${company.companyName}**\n📌 Company Number: ${company.companyNumber}\n💰 Price: ${symbol}${company.purchasePrice || "Contact for quote"}\n\n⚡ **Do you want to buy it now?** It will take only **1 minute** to start the transfer and take ownership of this company!`;
+            return `Perfect! Here's an available company from ${targetYear} in ${targetCountry}:\n\n💼 **${company.companyName}**\n�� Company Number: ${company.companyNumber}\n💰 Price: ${symbol}${company.purchasePrice || "Contact for quote"}\n\n⚡ **Do you want to buy it now?** It will take only **1 minute** to start the transfer and take ownership of this company!`;
           } else if (countryCompanies.length > 0) {
             // User asked for a year but it's not available - show available years
             const availableYears = [
@@ -301,7 +302,8 @@ async function getDemoResponse(
 
 async function fetchCompaniesContext(): Promise<string> {
   try {
-    const response = await fetch("http://localhost:8080/api/companies");
+    const apiUrl = process.env.API_BASE_URL || process.env.APP_URL || "http://localhost:8080";
+    const response = await fetch(`${apiUrl}/api/companies`);
     const companies = (await response.json()) as Array<{
       companyName?: string;
       id?: string;
@@ -442,7 +444,8 @@ export const handleChat: RequestHandler = async (req, res) => {
           const [, companyName, companyNumber, price] = companyMatch;
 
           // Create order via API
-          const orderResponse = await fetch("http://localhost:8080/api/orders", {
+          const apiUrl = process.env.API_BASE_URL || process.env.APP_URL || "http://localhost:8080";
+          const orderResponse = await fetch(`${apiUrl}/api/orders`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
