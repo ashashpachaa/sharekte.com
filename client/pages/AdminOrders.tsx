@@ -968,12 +968,15 @@ function OrderDetailsModal({
                   <button
                     onClick={() => {
                       // Auto-calculate renewal fees based on company's standard renewal fee
-                      // Typical renewal fee is a percentage of base price
-                      // Standard formula: approximately 1/10 of the base company fee (e.g., 350 USD)
                       // Get the linked company to check its renewal fee
+                      if (!companies || companies.length === 0) {
+                        toast.error("Companies data not loaded yet. Please try again.");
+                        return;
+                      }
+
                       const linkedCompany = companies.find(
                         (c) =>
-                          c.name.toLowerCase() ===
+                          (c.companyName || c.name || "").toLowerCase() ===
                           editedOrder.companyName.toLowerCase(),
                       );
 
