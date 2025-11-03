@@ -173,7 +173,8 @@ export async function getAllOrders(): Promise<Order[]> {
  */
 export async function getOrderById(orderId: string): Promise<Order | null> {
   try {
-    const response = await fetch(`/api/orders/${orderId}`);
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/orders/${orderId}`);
     if (!response.ok) return null;
     return response.json();
   } catch (error) {
@@ -188,7 +189,8 @@ export async function getOrderById(orderId: string): Promise<Order | null> {
 export async function createOrder(
   order: Omit<Order, "id" | "createdAt" | "updatedAt">,
 ): Promise<Order> {
-  const response = await fetch("/api/orders", {
+  const apiBaseURL = getAPIBaseURL();
+  const response = await fetch(`${apiBaseURL}/api/orders`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(order),
@@ -204,7 +206,8 @@ export async function updateOrder(
   orderId: string,
   updates: Partial<Order>,
 ): Promise<Order> {
-  const response = await fetch(`/api/orders/${orderId}`, {
+  const apiBaseURL = getAPIBaseURL();
+  const response = await fetch(`${apiBaseURL}/api/orders/${orderId}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(updates),
@@ -221,7 +224,8 @@ export async function updateOrderStatus(
   newStatus: OrderStatus,
   reason?: string,
 ): Promise<Order> {
-  const response = await fetch(`/api/orders/${orderId}/status`, {
+  const apiBaseURL = getAPIBaseURL();
+  const response = await fetch(`${apiBaseURL}/api/orders/${orderId}/status`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ status: newStatus, reason }),
@@ -238,7 +242,8 @@ export async function requestRefund(
   reason: string,
   requestedAmount: number,
 ): Promise<Order> {
-  const response = await fetch(`/api/orders/${orderId}/refund-request`, {
+  const apiBaseURL = getAPIBaseURL();
+  const response = await fetch(`${apiBaseURL}/api/orders/${orderId}/refund-request`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ reason, requestedAmount }),
@@ -255,7 +260,8 @@ export async function approveRefund(
   approvedAmount: number,
   refundFee?: number,
 ): Promise<Order> {
-  const response = await fetch(`/api/orders/${orderId}/refund-approve`, {
+  const apiBaseURL = getAPIBaseURL();
+  const response = await fetch(`${apiBaseURL}/api/orders/${orderId}/refund-approve`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ approvedAmount, refundFee }),
@@ -271,7 +277,8 @@ export async function rejectRefund(
   orderId: string,
   reason: string,
 ): Promise<Order> {
-  const response = await fetch(`/api/orders/${orderId}/refund-reject`, {
+  const apiBaseURL = getAPIBaseURL();
+  const response = await fetch(`${apiBaseURL}/api/orders/${orderId}/refund-reject`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ reason }),
