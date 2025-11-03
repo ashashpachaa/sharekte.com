@@ -59,9 +59,18 @@ function generateId(): string {
 }
 
 // Helper function to find forms by either internal id or user-facing formId
+// Checks memory first, then file storage, then db
 function findForm(searchId: string, inMem: TransferFormData[], db: TransferFormData[]): TransferFormData | undefined {
-  return inMem.find((f) => f.formId === searchId || f.id === searchId) ||
-         db.find((f) => f.formId === searchId || f.id === searchId);
+  // Check in-memory first
+  const memForm = inMem.find((f) => f.formId === searchId || f.id === searchId);
+  if (memForm) return memForm;
+
+  // Check file storage (handles multi-instance deployments)
+  const fileForm = loadFormFromFile(searchId);
+  if (fileForm) return fileForm;
+
+  // Check database
+  return db.find((f) => f.formId === searchId || f.id === searchId);
 }
 
 // Helper function to find form index in memory
