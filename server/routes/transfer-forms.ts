@@ -755,11 +755,35 @@ export const generatePDF: RequestHandler = async (req, res) => {
 
     if (!form) {
       console.log("[generatePDF] Form not found with ID:", id);
-      console.log("[generatePDF] inMemoryForms count:", inMemoryForms.length);
-      console.log("[generatePDF] Available inMemory forms:", inMemoryForms.map(f => ({ id: f.id, formId: f.formId })));
-      console.log("[generatePDF] formsDb count:", formsDb.length);
-      console.log("[generatePDF] Available db forms:", formsDb.map(f => ({ id: f.id, formId: f.formId })));
-      return res.status(404).json({ error: "Form not found", searchedFor: id, availableInMemory: inMemoryForms.length, availableInDb: formsDb.length });
+      console.log("[generatePDF] DIAGNOSTIC INFO:");
+      console.log("  - inMemoryForms count:", inMemoryForms.length);
+      console.log("  - Available inMemory forms:", inMemoryForms.map(f => ({ id: f.id, formId: f.formId })));
+      console.log("  - formsDb count:", formsDb.length);
+      console.log("  - Available db forms:", formsDb.map(f => ({ id: f.id, formId: f.formId })));
+
+      // Try to help the user understand what went wrong
+      const formIdFormat = id.startsWith("FORM-") ? "FORM-timestamp format (API form)" : "form_N format (demo form)";
+      console.log(`  - Searched formId format: ${formIdFormat}`);
+
+      // Check if there's a mismatch in formId format
+      const possibleMatch = inMemoryForms.find(f => {
+        // Check if the timestamp part matches
+        const searchTimestamp = id.split("-")[1];
+        const formTimestamp = f.formId.split("-")[1];
+        return searchTimestamp && formTimestamp && searchTimestamp.includes(formTimestamp);
+      });
+
+      if (possibleMatch) {
+        console.log("[generatePDF] WARNING: Found possible match with different timestamp:", possibleMatch.formId);
+      }
+
+      return res.status(404).json({
+        error: "Form not found - may be on different server instance",
+        searchedFor: id,
+        availableInMemory: inMemoryForms.length,
+        availableInDb: formsDb.length,
+        hint: "Form was likely created but stored on a different server instance. Try refreshing the page and creating the form again."
+      });
     }
 
     console.log("[generatePDF] Form found:", { id: form.id, formId: form.formId });
