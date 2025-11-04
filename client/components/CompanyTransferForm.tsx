@@ -1384,7 +1384,7 @@ export function CompanyTransferForm({
                 <Label>Amount £ (Auto-calculated)</Label>
                 <Input
                   type="number"
-                  value={shareholder.amount.toFixed(2)}
+                  value={(shareholder.amount || 0).toFixed(2)}
                   disabled
                 />
               </div>
