@@ -15,6 +15,7 @@ import {
   Shield,
   Mail,
   DollarSign,
+  Package,
 } from "lucide-react";
 
 export default function AdminDashboard() {
