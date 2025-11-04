@@ -375,6 +375,11 @@ export function createServer() {
   app.get("/api/service-orders/:id", getServiceOrderHandler);
   app.patch("/api/service-orders/:id", updateServiceOrderHandler);
 
+  // Service Order Comments & Status Management
+  app.get("/api/service-orders/:id/comments", getServiceOrderCommentsHandler);
+  app.post("/api/service-orders/:id/comments", createServiceOrderCommentHandler);
+  app.patch("/api/service-orders/:id/status", updateServiceOrderStatusHandler);
+
   console.log("[createServer] ✅ All routes registered successfully");
 
   // Serve SPA static files and handle fallback to index.html
