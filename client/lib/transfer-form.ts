@@ -238,6 +238,25 @@ export function createEmptyForm(
   };
 }
 
+// Fetch existing transfer form by company ID (for amendments)
+export async function fetchExistingTransferForm(
+  companyId: string
+): Promise<TransferFormData | null> {
+  try {
+    const response = await fetch(
+      `/api/transfer-forms?companyId=${companyId}`
+    );
+    if (response.ok) {
+      const data = await response.json();
+      // Return the first form (most recent)
+      return data[0] || null;
+    }
+  } catch (error) {
+    console.error("Error fetching existing transfer form:", error);
+  }
+  return null;
+}
+
 // Helper function to get full activity label from code
 export function getActivityLabel(code: string): string {
   // Activity codes map - matches COMPANY_ACTIVITIES structure
