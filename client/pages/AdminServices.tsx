@@ -134,29 +134,53 @@ export default function AdminServices() {
           </div>
         </div>
 
-        {/* Search and Filter */}
-        <div className="bg-card border border-border/40 rounded-lg p-6 mb-8">
-          <div className="relative">
-            <Search className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
-            <Input
-              placeholder="Search services by name, description, or category..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-          {searchQuery && (
-            <p className="text-sm text-muted-foreground mt-3">
-              Found {filteredServices.length} service
-              {filteredServices.length !== 1 ? "s" : ""}
-            </p>
-          )}
-        </div>
+        {/* Tabs */}
+        <Tabs defaultValue="services" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-8">
+            <TabsTrigger value="services" className="gap-2">
+              <Package className="w-4 h-4" />
+              Services
+            </TabsTrigger>
+            <TabsTrigger value="orders" className="gap-2">
+              <ShoppingCart className="w-4 h-4" />
+              Service Orders
+            </TabsTrigger>
+          </TabsList>
 
-        {/* Services Table */}
-        <div className="bg-card border border-border/40 rounded-lg overflow-hidden">
-          <ServiceTable />
-        </div>
+          {/* Services Tab */}
+          <TabsContent value="services" className="space-y-8">
+            {/* Search and Filter */}
+            <div className="bg-card border border-border/40 rounded-lg p-6">
+              <div className="relative">
+                <Search className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
+                <Input
+                  placeholder="Search services by name, description, or category..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+              {searchQuery && (
+                <p className="text-sm text-muted-foreground mt-3">
+                  Found {filteredServices.length} service
+                  {filteredServices.length !== 1 ? "s" : ""}
+                </p>
+              )}
+            </div>
+
+            {/* Services Table */}
+            <div className="bg-card border border-border/40 rounded-lg overflow-hidden">
+              <ServiceTable />
+            </div>
+          </TabsContent>
+
+          {/* Service Orders Tab */}
+          <TabsContent value="orders" className="space-y-8">
+            <div className="bg-card border border-border/40 rounded-lg overflow-hidden">
+              <ServiceOrdersTable />
+            </div>
+          </TabsContent>
+        </Tabs>
       </main>
     </div>
   );
