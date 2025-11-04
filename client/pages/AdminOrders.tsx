@@ -12,7 +12,6 @@ import {
 import { RefundManagement } from "@/components/RefundManagement";
 import { DocumentManagement } from "@/components/DocumentManagement";
 import { TransferFormManagement } from "@/components/TransferFormManagement";
-import { ServiceTable } from "@/components/ServiceTable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -29,7 +28,6 @@ import {
   AlertCircle,
   Trash2,
   FileText,
-  Package,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useNotifications } from "@/lib/notifications-context";
@@ -314,7 +312,7 @@ export default function AdminOrders() {
       <main className="container max-w-7xl mx-auto px-4 py-8">
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-8">
+          <TabsList className="grid w-full grid-cols-2 mb-8">
             <TabsTrigger value="orders" className="gap-2 relative">
               <DollarSign className="w-4 h-4" />
               Orders
@@ -332,10 +330,6 @@ export default function AdminOrders() {
                   {newFormsCount > 9 ? "9+" : newFormsCount}
                 </span>
               )}
-            </TabsTrigger>
-            <TabsTrigger value="services" className="gap-2">
-              <Package className="w-4 h-4" />
-              Services
             </TabsTrigger>
           </TabsList>
 
@@ -591,10 +585,6 @@ export default function AdminOrders() {
 
           <TabsContent value="forms" className="space-y-8">
             <TransferFormManagement />
-          </TabsContent>
-
-          <TabsContent value="services" className="space-y-8">
-            <ServiceTable />
           </TabsContent>
         </Tabs>
       </main>
