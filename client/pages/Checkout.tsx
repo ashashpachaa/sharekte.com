@@ -193,15 +193,12 @@ export default function Checkout() {
         .toISOString()
         .split("T")[0];
 
-      // Convert prices for all items upfront
-      const priceConverter = (price: number) =>
-        currency !== "USD" ? convertPrice(price) : price;
-
       const orderPromises = items.map(async (item, index) => {
-        // Convert price to selected currency
-        const convertedAmount = priceConverter(item.price);
-        // Convert renewal fees to selected currency (they are stored in USD in Airtable)
-        const convertedRenewalFees = priceConverter(item.renewalFees || 0);
+        // Prices in cart are already converted to selected currency (from CompanyTable)
+        const convertedAmount = item.price;
+        // Renewal fees are stored in USD in Airtable, so convert them to selected currency
+        const convertedRenewalFees =
+          currency !== "USD" ? convertPrice(item.renewalFees || 0) : item.renewalFees || 0;
 
         // Create purchased company record
         const purchasedCompany: PurchasedCompanyData = {
