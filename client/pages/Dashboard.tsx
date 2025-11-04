@@ -434,10 +434,6 @@ export default function Dashboard() {
   }, []); // Run once on mount
 
   const [showTransferForm, setShowTransferForm] = useState<string | null>(null);
-  const [loadingTransferForm, setLoadingTransferForm] = useState(false);
-  const [transferFormData, setTransferFormData] = useState<Record<string, any>>(
-    {}
-  );
   const [formData, setFormData] = useState({
     directorName: "",
     directorEmail: "",
