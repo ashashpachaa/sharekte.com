@@ -592,6 +592,10 @@ export default function AdminOrders() {
           <TabsContent value="forms" className="space-y-8">
             <TransferFormManagement />
           </TabsContent>
+
+          <TabsContent value="services" className="space-y-8">
+            <ServiceTable />
+          </TabsContent>
         </Tabs>
       </main>
 
