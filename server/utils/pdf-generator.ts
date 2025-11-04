@@ -449,12 +449,12 @@ export function generateFormHTML(
         </section>
         ` : ''}
 
-        ${includeAttachments && form.attachments.length > 0 ? `
+        ${includeAttachments && safeForm.attachments.length > 0 ? `
         <!-- Attachments -->
         <section>
-          <h2>Attachments (${form.attachments.length})</h2>
+          <h2>Attachments (${safeForm.attachments.length})</h2>
           <ul class="attachment-list">
-            ${form.attachments.map(attachment => `
+            ${safeForm.attachments.map(attachment => `
               <li class="attachment-item">
                 <div>
                   <div class="attachment-name">${attachment.name}</div>
