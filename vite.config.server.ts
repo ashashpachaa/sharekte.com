@@ -45,6 +45,7 @@ export default defineConfig({
       "@": "./client",
       "@shared": "./shared",
     },
+    extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
   },
   define: {
     "process.env.NODE_ENV": '"production"',
