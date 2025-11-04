@@ -507,15 +507,10 @@ export function ServiceTable() {
 
             {/* Application Form Fields */}
             <div className="space-y-2">
-              <label className="text-sm font-medium">Application Form Fields</label>
-              <div className="flex gap-2">
-                <Input
-                  value={newFieldName}
-                  onChange={(e) => setNewFieldName(e.target.value)}
-                  placeholder="Field name"
-                  onKeyPress={(e) => e.key === "Enter" && addFormField()}
-                />
-                <Button onClick={addFormField} variant="outline">
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium">Application Form Fields</label>
+                <Button onClick={addFormField} size="sm" variant="outline">
+                  <Plus className="w-4 h-4 mr-1" />
                   Add Field
                 </Button>
               </div>
