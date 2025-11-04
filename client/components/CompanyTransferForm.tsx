@@ -2113,6 +2113,16 @@ export function CompanyTransferForm({
     { title: "Review", content: renderReview },
   ];
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-center">
+          <p className="text-gray-600">Loading form data...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="w-full max-w-4xl mx-auto p-6">
