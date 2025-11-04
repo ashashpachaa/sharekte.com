@@ -565,6 +565,14 @@ export function ServiceTable() {
         </DialogContent>
       </Dialog>
 
+      {/* Form Field Editor Dialog */}
+      <FormFieldEditor
+        field={selectedField}
+        isOpen={showFieldEditor}
+        onClose={() => setShowFieldEditor(false)}
+        onSave={handleFieldSave}
+      />
+
       {/* Delete Dialog */}
       <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <DialogContent>
