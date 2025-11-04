@@ -188,20 +188,37 @@ export function ServiceTable() {
   };
 
   const addFormField = () => {
-    if (newFieldName.trim()) {
-      const newField: ServiceFormField = {
-        id: `field_${Date.now()}`,
-        name: newFieldName,
-        label: newFieldName,
-        type: "text",
-        required: false,
-      };
-      setFormData((prev) => ({
-        ...prev,
-        applicationFormFields: [...(prev.applicationFormFields || []), newField],
-      }));
-      setNewFieldName("");
-    }
+    setSelectedField(undefined);
+    setShowFieldEditor(true);
+  };
+
+  const handleFieldSave = (field: ServiceFormField) => {
+    setFormData((prev) => {
+      const existingFields = prev.applicationFormFields || [];
+      const fieldIndex = existingFields.findIndex((f) => f.id === field.id);
+
+      if (fieldIndex > -1) {
+        // Update existing field
+        const updated = [...existingFields];
+        updated[fieldIndex] = field;
+        return {
+          ...prev,
+          applicationFormFields: updated,
+        };
+      } else {
+        // Add new field
+        return {
+          ...prev,
+          applicationFormFields: [...existingFields, field],
+        };
+      }
+    });
+    setShowFieldEditor(false);
+  };
+
+  const editFormField = (field: ServiceFormField) => {
+    setSelectedField(field);
+    setShowFieldEditor(true);
   };
 
   const removeFormField = (id: string) => {
