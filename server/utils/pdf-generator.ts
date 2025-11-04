@@ -424,7 +424,7 @@ export function generateFormHTML(
         </section>
         ` : ''}
 
-        ${form.shareholders.length > 0 ? `
+        ${safeForm.shareholders.length > 0 ? `
         <!-- Shareholders Information -->
         <section>
           <h2>Shareholders</h2>
@@ -437,7 +437,7 @@ export function generateFormHTML(
               </tr>
             </thead>
             <tbody>
-              ${form.shareholders.map(shareholder => `
+              ${safeForm.shareholders.map(shareholder => `
                 <tr>
                   <td>${shareholder.name}</td>
                   <td>${shareholder.shareholderType}</td>
