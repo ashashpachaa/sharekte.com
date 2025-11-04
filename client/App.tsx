@@ -60,6 +60,10 @@ export default function App() {
                       <Route path="/admin/users" element={<AdminUsers />} />
                       <Route path="/admin/orders" element={<AdminOrders />} />
                       <Route
+                        path="/admin/services"
+                        element={<AdminServices />}
+                      />
+                      <Route
                         path="/admin/invoices"
                         element={<AdminInvoices />}
                       />
