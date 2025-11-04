@@ -72,6 +72,8 @@ export function ServiceTable() {
   });
   const [newInclude, setNewInclude] = useState("");
   const [newFieldName, setNewFieldName] = useState("");
+  const [showFieldEditor, setShowFieldEditor] = useState(false);
+  const [selectedField, setSelectedField] = useState<ServiceFormField | undefined>();
 
   useEffect(() => {
     loadServices();
