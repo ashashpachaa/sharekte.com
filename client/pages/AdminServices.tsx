@@ -3,13 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { useAdmin } from "@/lib/admin-context";
 import { fetchServices, type ServiceData } from "@/lib/services";
 import { ServiceTable } from "@/components/ServiceTable";
+import { ServiceOrdersTable } from "@/components/ServiceOrdersTable";
 import { Button } from "@/components/ui/button";
 import {
   Search,
   ArrowLeft,
   Package,
+  ShoppingCart,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { getAPIBaseURL } from "@/lib/transfer-form";
 
