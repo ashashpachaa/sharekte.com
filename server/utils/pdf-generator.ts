@@ -19,6 +19,15 @@ export function generateFormHTML(
   form: TransferFormData,
   options: PDFOptions = {}
 ): string {
+  // Ensure all required arrays exist
+  const safeForm = {
+    ...form,
+    attachments: form.attachments || [],
+    comments: form.comments || [],
+    directors: form.directors || [],
+    shareholders: form.shareholders || [],
+  };
+
   const {
     includeAttachments = true,
     includeComments = true,
