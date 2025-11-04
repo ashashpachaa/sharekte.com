@@ -12,6 +12,7 @@ import {
 import { RefundManagement } from "@/components/RefundManagement";
 import { DocumentManagement } from "@/components/DocumentManagement";
 import { TransferFormManagement } from "@/components/TransferFormManagement";
+import { ServiceTable } from "@/components/ServiceTable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -28,6 +29,7 @@ import {
   AlertCircle,
   Trash2,
   FileText,
+  Package,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useNotifications } from "@/lib/notifications-context";
