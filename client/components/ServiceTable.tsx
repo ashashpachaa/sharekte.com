@@ -47,6 +47,7 @@ import {
 } from "@/lib/services";
 import { toast } from "sonner";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { FormFieldEditor } from "@/components/FormFieldEditor";
 
 export function ServiceTable() {
   const [services, setServices] = useState<ServiceData[]>([]);
