@@ -196,7 +196,7 @@ export default function AdminDashboard() {
               className="w-full bg-amber-600 hover:bg-amber-700 text-white"
               asChild
             >
-              <Link to="/admin/orders?tab=services">Manage Services</Link>
+              <Link to="/admin/services">Manage Services</Link>
             </Button>
           </div>
 
