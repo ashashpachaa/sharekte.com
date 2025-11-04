@@ -11,7 +11,9 @@
     ]
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "NODE_OPTIONS='--loader tsx' node --watch server/index.ts & vite",
+    "dev:vite": "vite",
+    "dev:server": "NODE_OPTIONS='--loader tsx' node --watch server/index.ts",
     "build": "npm run build:client && npm run build:server",
     "build:client": "vite build",
     "build:server": "vite build --config vite.config.server.ts",
