@@ -22,8 +22,8 @@ export function Footer() {
               />
             </Link>
             <p className="text-sm text-muted-foreground">
-              Global marketplace for buying and selling established,
-              revenue-generating businesses.
+              Sharekte is a global marketplace for buying and selling established,
+              revenue-generating companies. Skip the startup phase and step into profitability.
             </p>
           </div>
 
