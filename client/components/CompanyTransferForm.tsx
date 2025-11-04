@@ -712,6 +712,23 @@ export function CompanyTransferForm({
     null,
   );
   const [activitiesSearchTerm, setActivitiesSearchTerm] = useState("");
+  const [loading, setLoading] = useState(!initialForm && isEditing);
+
+  // Load existing form data when in edit/amend mode
+  useEffect(() => {
+    if (!initialForm && isEditing && companyId) {
+      setLoading(true);
+      fetch(`/api/transfer-forms?companyId=${companyId}`)
+        .then((res) => res.json())
+        .then((forms) => {
+          if (forms[0]) {
+            setFormData(forms[0]);
+          }
+        })
+        .catch((err) => console.error("Error loading transfer form:", err))
+        .finally(() => setLoading(false));
+    }
+  }, [companyId, isEditing, initialForm]);
 
   const [formData, setFormData] = useState<Partial<TransferFormData>>(
     initialForm || {
