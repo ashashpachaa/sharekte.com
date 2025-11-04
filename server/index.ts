@@ -372,21 +372,26 @@ export function createServer() {
 
 // Helper: Find SPA directory with fallbacks
 function findSPAPath(): string | null {
-  const path = require("path");
+  import("path").then(({ default: pathModule }) => {
+    // This won't work - use sync approach instead
+  });
+
+  // Using Node.js built-in sync for ES modules
   const fs = require("fs");
+  const path = require("path");
 
   // Try multiple paths
   const candidates = [
     "./dist/spa",                                    // Dev relative
     "/app/code/dist/spa",                            // Docker
     "/var/www/shareket.com/dist/spa",               // Hostinger
-    new URL("../dist/spa", import.meta.url).pathname // ESM relative
   ];
 
   for (const candidate of candidates) {
     try {
-      if (fs.existsSync(candidate)) {
-        return path.resolve(candidate);
+      const resolvedPath = candidate.startsWith("/") ? candidate : `${process.cwd()}/${candidate}`;
+      if (fs.existsSync(resolvedPath)) {
+        return resolvedPath;
       }
     } catch (e) {
       // Continue to next candidate
