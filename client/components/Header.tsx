@@ -37,12 +37,12 @@ export function Header() {
         {/* Logo and Brand */}
         <Link
           to="/"
-          className="flex items-center font-bold text-xl text-primary"
+          className="flex items-center font-bold text-lg text-primary h-8"
         >
           <img
-            src="https://cdn.builder.io/api/v1/image/assets%2F752b1abf9cc241c993361e9dcaee5153%2Fd9d4a64693d843b1a53386d5a7c2937e?format=webp&width=200"
-            alt="Sharekte"
-            className="w-full"
+            src="https://cdn.builder.io/api/v1/image/assets%2F752b1abf9cc241c993361e9dcaee5153%2F5fea726c5d984178a4dd0c33e5b68d99?format=webp&width=200"
+            alt="BusinessCorp"
+            className="h-full object-contain"
           />
         </Link>
 
