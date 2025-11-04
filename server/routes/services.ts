@@ -132,6 +132,74 @@ function initializeDemoServices() {
   }
 }
 
+// Initialize with demo service orders if empty
+function initializeDemoOrders() {
+  if (serviceOrdersDb.length === 0) {
+    serviceOrdersDb = [
+      {
+        id: "svc_order_001",
+        serviceId: "svc_1",
+        serviceName: "Apostille",
+        customerName: "John Smith",
+        customerEmail: "john.smith@example.com",
+        customerPhone: "+44 7700 123456",
+        amount: 150,
+        currency: "GBP",
+        status: "pending",
+        applicationData: {
+          company_name: "Tech Innovations Ltd",
+          document_type: "certificate",
+          copies_needed: "3",
+          delivery_method: "digital",
+        },
+        purchaseDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+        createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+        updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      {
+        id: "svc_order_002",
+        serviceId: "svc_2",
+        serviceName: "Company Registration",
+        customerName: "Sarah Johnson",
+        customerEmail: "sarah.johnson@example.com",
+        customerPhone: "+1 555 987 6543",
+        amount: 500,
+        currency: "USD",
+        status: "processing",
+        applicationData: {
+          company_name: "Global Solutions Inc",
+          business_type: "technology",
+          country: "United States",
+          state: "California",
+        },
+        purchaseDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+        createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+        updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      {
+        id: "svc_order_003",
+        serviceId: "svc_1",
+        serviceName: "Apostille",
+        customerName: "Michel Dupont",
+        customerEmail: "michel.dupont@example.fr",
+        customerPhone: "+33 1 2345 6789",
+        amount: 150,
+        currency: "GBP",
+        status: "completed",
+        applicationData: {
+          company_name: "France Enterprises SARL",
+          document_type: "articles",
+          copies_needed: "2",
+          delivery_method: "courier",
+        },
+        purchaseDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+        createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+        updatedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+    ];
+  }
+}
+
 function generateId(): string {
   return `svc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 }
