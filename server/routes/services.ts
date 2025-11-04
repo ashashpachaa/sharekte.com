@@ -357,6 +357,7 @@ export const createServiceOrderHandler: RequestHandler = (req, res) => {
 // GET /api/service-orders - List service orders (with filters)
 export const getServiceOrdersHandler: RequestHandler = (req, res) => {
   try {
+    initializeDemoOrders();
     let orders = serviceOrdersDb;
 
     // Apply filters
