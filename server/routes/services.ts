@@ -350,3 +350,65 @@ export const updateServiceOrderHandler: RequestHandler = (req, res) => {
     res.status(500).json({ error: "Failed to update service order" });
   }
 };
+
+// GET /api/service-orders/:id/comments - Get order comments
+export const getServiceOrderCommentsHandler: RequestHandler = (req, res) => {
+  try {
+    const comments = orderCommentsDb.filter((c) => c.orderId === req.params.id);
+    res.json(comments);
+  } catch (error) {
+    console.error("Error fetching comments:", error);
+    res.status(500).json({ error: "Failed to fetch comments" });
+  }
+};
+
+// POST /api/service-orders/:id/comments - Add comment to order
+export const createServiceOrderCommentHandler: RequestHandler = (req, res) => {
+  try {
+    const { text, author } = req.body;
+    if (!text || !author) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    const newComment: OrderComment = {
+      id: "comment_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9),
+      orderId: req.params.id,
+      author,
+      text,
+      createdAt: new Date().toISOString(),
+    };
+
+    orderCommentsDb.push(newComment);
+    res.status(201).json(newComment);
+  } catch (error) {
+    console.error("Error creating comment:", error);
+    res.status(500).json({ error: "Failed to create comment" });
+  }
+};
+
+// PATCH /api/service-orders/:id/status - Update order status
+export const updateServiceOrderStatusHandler: RequestHandler = (req, res) => {
+  try {
+    const { status } = req.body;
+    if (!status) {
+      return res.status(400).json({ error: "Status is required" });
+    }
+
+    const index = serviceOrdersDb.findIndex((o) => o.id === req.params.id);
+    if (index === -1) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+
+    const updated: ServiceOrder = {
+      ...serviceOrdersDb[index],
+      status,
+      updatedAt: new Date().toISOString(),
+    };
+
+    serviceOrdersDb[index] = updated;
+    res.json(updated);
+  } catch (error) {
+    console.error("Error updating status:", error);
+    res.status(500).json({ error: "Failed to update status" });
+  }
+};
