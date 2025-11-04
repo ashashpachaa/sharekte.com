@@ -1949,7 +1949,7 @@ export function CompanyTransferForm({
                   <div>
                     <Label className="text-gray-600 text-xs">Amount (£)</Label>
                     <p className="font-medium">
-                      £{shareholder.amount.toFixed(2)}
+                      £{(shareholder.amount || 0).toFixed(2)}
                     </p>
                   </div>
                 </div>
