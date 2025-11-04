@@ -4,10 +4,19 @@ export interface ServiceFormField {
   id: string;
   name: string;
   label: string;
-  type: "text" | "email" | "phone" | "textarea" | "select" | "checkbox" | "date";
+  type: "text" | "email" | "phone" | "textarea" | "select" | "multiselect" | "checkbox" | "radio" | "date" | "time" | "datetime" | "number" | "currency" | "file" | "attachment" | "url" | "boolean" | "rating";
   required: boolean;
   placeholder?: string;
   options?: { value: string; label: string }[];
+  minValue?: number;
+  maxValue?: number;
+  minLength?: number;
+  maxLength?: number;
+  pattern?: string;
+  helpText?: string;
+  defaultValue?: string | number | boolean;
+  maxFileSize?: number; // in MB, for file/attachment types
+  acceptedFileTypes?: string[]; // e.g., ['pdf', 'doc', 'docx', 'jpg', 'png']
 }
 
 export interface ServiceData {
