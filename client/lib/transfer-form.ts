@@ -257,6 +257,27 @@ export async function fetchExistingTransferForm(
   return null;
 }
 
+// Get amendment comments for a company
+export async function getAmendmentComments(
+  companyId: string
+): Promise<FormComment[]> {
+  try {
+    const form = await fetchExistingTransferForm(companyId);
+    if (form && form.comments) {
+      // Filter for admin comments only and sort by date (newest first)
+      return form.comments
+        .filter((c) => c.isAdminOnly)
+        .sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+    }
+  } catch (error) {
+    console.error("Error fetching amendment comments:", error);
+  }
+  return [];
+}
+
 // Helper function to get full activity label from code
 export function getActivityLabel(code: string): string {
   // Activity codes map - matches COMPANY_ACTIVITIES structure
