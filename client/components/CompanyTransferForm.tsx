@@ -713,22 +713,7 @@ export function CompanyTransferForm({
   );
   const [activitiesSearchTerm, setActivitiesSearchTerm] = useState("");
 
-  // Load existing form data when in edit/amend mode
-  useEffect(() => {
-    if (!initialForm && isEditing && companyId) {
-      setLoading(true);
-      fetch(`/api/transfer-forms?companyId=${companyId}`)
-        .then((res) => res.json())
-        .then((forms) => {
-          if (forms[0]) {
-            setFormData(forms[0]);
-          }
-        })
-        .catch((err) => console.error("Error loading transfer form:", err))
-        .finally(() => setLoading(false));
-    }
-  }, [companyId, isEditing, initialForm]);
-
+  // Declare formData state BEFORE useEffect that uses setFormData
   const [formData, setFormData] = useState<Partial<TransferFormData>>(
     initialForm || {
       orderId,
@@ -764,6 +749,23 @@ export function CompanyTransferForm({
       statusHistory: [],
     },
   );
+
+  // Load existing form data when in edit/amend mode
+  useEffect(() => {
+    if (!initialForm && isEditing && companyId) {
+      setLoading(true);
+      fetch(`/api/transfer-forms?companyId=${companyId}`)
+        .then((res) => res.json())
+        .then((forms) => {
+          if (forms[0]) {
+            console.log("Loaded transfer form with comments:", forms[0].comments);
+            setFormData(forms[0]);
+          }
+        })
+        .catch((err) => console.error("Error loading transfer form:", err))
+        .finally(() => setLoading(false));
+    }
+  }, [companyId, isEditing, initialForm]);
 
   const validateStep = (step: number): boolean => {
     const newErrors: FormErrors = {};
