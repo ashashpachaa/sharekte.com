@@ -5,6 +5,17 @@ import { ServiceData, ServiceOrder } from "../../client/lib/services";
 let servicesDb: ServiceData[] = [];
 let serviceOrdersDb: ServiceOrder[] = [];
 
+// In-memory storage for service order comments
+interface OrderComment {
+  id: string;
+  orderId: string;
+  author: string;
+  text: string;
+  createdAt: string;
+}
+
+let orderCommentsDb: OrderComment[] = [];
+
 // Demo services
 const DEMO_SERVICES: ServiceData[] = [
   {
