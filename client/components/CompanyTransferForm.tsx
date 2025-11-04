@@ -2099,6 +2099,48 @@ export function CompanyTransferForm({
   return (
     <>
       <div className="w-full max-w-4xl mx-auto p-6">
+        {/* Amendment Required Alert */}
+        {formData.status === "amend-required" &&
+          formData.comments &&
+          formData.comments.length > 0 && (
+            <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg">
+              <div className="flex gap-3">
+                <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <h3 className="font-semibold text-red-900 mb-2">
+                    Amendments Required
+                  </h3>
+                  <p className="text-sm text-red-800 mb-3">
+                    Please review the following comments from the admin and make
+                    the necessary corrections before resubmitting:
+                  </p>
+                  <div className="space-y-2">
+                    {formData.comments
+                      .filter((c) => c.isAdminOnly)
+                      .sort(
+                        (a, b) =>
+                          new Date(b.createdAt).getTime() -
+                          new Date(a.createdAt).getTime()
+                      )
+                      .map((comment) => (
+                        <div
+                          key={comment.id}
+                          className="bg-white p-3 rounded border border-red-200"
+                        >
+                          <p className="text-sm font-medium text-gray-700">
+                            {comment.author} ({new Date(comment.createdAt).toLocaleDateString()})
+                          </p>
+                          <p className="text-sm text-gray-600 mt-1">
+                            {comment.text}
+                          </p>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
         <div className="mb-8">
           <h2 className="text-2xl font-bold mb-4">Company Transfer Form</h2>
           <Progress
