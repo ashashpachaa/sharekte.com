@@ -69,10 +69,32 @@ export function CompanyCard({
     rates,
   } = useCurrency();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showAmendmentHistory, setShowAmendmentHistory] = useState(false);
+  const [amendmentComments, setAmendmentComments] = useState<FormComment[]>([]);
+  const [loadingAmendments, setLoadingAmendments] = useState(false);
+
+  // Load amendment comments when component mounts or company changes
+  useEffect(() => {
+    if (company.status === "amend-required") {
+      setLoadingAmendments(true);
+      getAmendmentComments(company.id)
+        .then((comments) => {
+          setAmendmentComments(comments);
+        })
+        .catch((error) => {
+          console.error("Error loading amendment comments:", error);
+        })
+        .finally(() => {
+          setLoadingAmendments(false);
+        });
+    }
+  }, [company.id, company.status]);
 
   const renewalCountdown = getRenewalCountdown(company.renewalDaysLeft);
   const isRenewingSoon = company.renewalDaysLeft <= 30;
   const isExpired = company.status === "expired";
+  const hasAmendmentRequired = company.status === "amend-required";
+  const recentAmendment = amendmentComments.length > 0 ? amendmentComments[0] : null;
 
   const handleDelete = () => {
     if (onDelete) {
