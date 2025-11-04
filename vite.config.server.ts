@@ -45,7 +45,6 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@": "./client",
       "@shared": "./shared",
     },
     extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
