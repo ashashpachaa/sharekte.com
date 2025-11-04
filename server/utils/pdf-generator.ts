@@ -523,9 +523,9 @@ export function generateFormSummary(form: TransferFormData): string {
   const stats = {
     status: form.status,
     createdDate: new Date(form.createdAt).toLocaleDateString(),
-    attachments: form.attachments.length,
-    comments: form.comments.length,
-    amendmentsRequired: form.amendmentsRequiredCount,
+    attachments: (form.attachments || []).length,
+    comments: (form.comments || []).length,
+    amendmentsRequired: form.amendmentsRequiredCount || 0,
   };
 
   return JSON.stringify(stats, null, 2);
