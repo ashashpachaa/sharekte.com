@@ -3,7 +3,7 @@
  * Generates PDFs from transfer forms with embedded data and attachments
  */
 
-import { TransferFormData } from "../../client/lib/transfer-form";
+import type { TransferFormData } from "@/lib/transfer-form";
 
 interface PDFOptions {
   includeAttachments?: boolean;
