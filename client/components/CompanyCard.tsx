@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -21,6 +21,8 @@ import {
   User,
   TrendingUp,
   Archive,
+  AlertTriangle,
+  History,
 } from "lucide-react";
 import {
   CompanyData,
@@ -39,6 +41,7 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { useCurrency, CurrencyRate } from "@/lib/currency-context";
+import { getAmendmentComments, FormComment } from "@/lib/transfer-form";
 
 interface CompanyCardProps {
   company: CompanyData;
