@@ -1146,7 +1146,7 @@ export function CompanyTransferForm({
               formData.totalShares &&
               formData.totalShareCapital &&
               formData.totalShares > 0
-                ? (formData.totalShareCapital / formData.totalShares).toFixed(2)
+                ? (formData.totalShares ? (formData.totalShareCapital / formData.totalShares) : 0).toFixed(2)
                 : "0.00"
             }
             disabled
@@ -1259,7 +1259,7 @@ export function CompanyTransferForm({
               ) - 100,
             ) > 0.01 && (
               <p className="text-sm text-red-600 mt-2">
-                ⚠️ Percentages must add up to exactly 100%
+                ⚠�� Percentages must add up to exactly 100%
               </p>
             )}
           </div>
