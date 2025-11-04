@@ -70,6 +70,17 @@ import {
   exportCSV,
   getAnalyticsSummary as getInvoiceAnalytics,
 } from "./routes/invoices";
+import {
+  getServices,
+  getService,
+  createServiceHandler,
+  updateServiceHandler,
+  deleteServiceHandler,
+  createServiceOrderHandler,
+  getServiceOrdersHandler,
+  getServiceOrderHandler,
+  updateServiceOrderHandler,
+} from "./routes/services";
 
 export function createServer() {
   console.log("[createServer] Initializing Express app");
