@@ -399,7 +399,7 @@ export function generateFormHTML(
           </div>
         </section>
 
-        ${form.directors.length > 0 ? `
+        ${safeForm.directors.length > 0 ? `
         <!-- Directors Information -->
         <section>
           <h2>Directors</h2>
@@ -412,7 +412,7 @@ export function generateFormHTML(
               </tr>
             </thead>
             <tbody>
-              ${form.directors.map(director => `
+              ${safeForm.directors.map(director => `
                 <tr>
                   <td>${director.name}</td>
                   <td>${director.nationality || 'N/A'}</td>
