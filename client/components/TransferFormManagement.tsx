@@ -877,7 +877,7 @@ export function TransferFormManagement({
                                   "Attachment data missing, attempting to fetch from server:",
                                   {
                                     name: attachment.name,
-                                    formId: selectedForm.id,
+                                    formId: selectedForm.formId,
                                     attachmentId: attachment.id,
                                   },
                                 );
@@ -885,7 +885,7 @@ export function TransferFormManagement({
                                 try {
                                   // Try to fetch the full form with fresh attachment data
                                   const response = await fetch(
-                                    `/api/transfer-forms/${selectedForm.id}`,
+                                    `/api/transfer-forms/${selectedForm.formId}`,
                                   );
                                   if (response.ok) {
                                     const freshForm = await response.json();
