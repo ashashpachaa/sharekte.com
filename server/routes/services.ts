@@ -1,0 +1,341 @@
+import { RequestHandler } from "express";
+import { ServiceData, ServiceOrder } from "../../client/lib/services";
+
+// In-memory storage for services and orders
+let servicesDb: ServiceData[] = [];
+let serviceOrdersDb: ServiceOrder[] = [];
+
+// Demo services
+const DEMO_SERVICES: ServiceData[] = [
+  {
+    id: "svc_1",
+    name: "Apostille",
+    description: "Get your company documents certified with an apostille for international use",
+    longDescription:
+      "Get your company documents certified with an apostille for international use. Apostille is a form of authentication issued to documents for use in countries that are parties to the Hague Apostille Convention.",
+    price: 150,
+    currency: "GBP",
+    category: "Documents",
+    turnaroundDays: 3,
+    includes: [
+      "Official certification",
+      "International recognition",
+      "Multiple document copies",
+      "Digital delivery",
+    ],
+    applicationFormFields: [
+      {
+        id: "field_1",
+        name: "company_name",
+        label: "Company Name",
+        type: "text",
+        required: true,
+        placeholder: "Enter your company name",
+      },
+      {
+        id: "field_2",
+        name: "document_type",
+        label: "Document Type",
+        type: "select",
+        required: true,
+        options: [
+          { value: "articles", label: "Articles of Association" },
+          { value: "memo", label: "Memorandum" },
+          { value: "certificate", label: "Certificate of Incorporation" },
+          { value: "other", label: "Other" },
+        ],
+      },
+      {
+        id: "field_3",
+        name: "copies_needed",
+        label: "Number of Copies",
+        type: "number",
+        required: true,
+      },
+      {
+        id: "field_4",
+        name: "delivery_address",
+        label: "Delivery Address",
+        type: "textarea",
+        required: true,
+        placeholder: "Enter your delivery address",
+      },
+    ],
+    status: "active",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "svc_2",
+    name: "Company Registration",
+    description: "Register a new company with full compliance support",
+    price: 500,
+    currency: "USD",
+    category: "Setup",
+    turnaroundDays: 5,
+    includes: [
+      "Company name registration",
+      "Legal documentation",
+      "Tax registration",
+      "Bank account setup guidance",
+    ],
+    applicationFormFields: [
+      {
+        id: "field_5",
+        name: "business_type",
+        label: "Business Type",
+        type: "select",
+        required: true,
+        options: [
+          { value: "ltd", label: "Limited Company" },
+          { value: "llc", label: "LLC" },
+          { value: "sole", label: "Sole Proprietor" },
+          { value: "partnership", label: "Partnership" },
+        ],
+      },
+      {
+        id: "field_6",
+        name: "business_address",
+        label: "Business Address",
+        type: "textarea",
+        required: true,
+      },
+      {
+        id: "field_7",
+        name: "contact_person",
+        label: "Contact Person",
+        type: "text",
+        required: true,
+      },
+    ],
+    status: "active",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+];
+
+// Initialize with demo services if empty
+function initializeDemoServices() {
+  if (servicesDb.length === 0) {
+    servicesDb = [...DEMO_SERVICES];
+  }
+}
+
+function generateId(): string {
+  return `svc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+}
+
+function generateOrderId(): string {
+  return `svc_ord_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+}
+
+// GET /api/services - List all active services
+export const getServices: RequestHandler = (req, res) => {
+  try {
+    initializeDemoServices();
+    const activeServices = servicesDb.filter((s) => s.status === "active");
+    res.json(activeServices);
+  } catch (error) {
+    console.error("Error getting services:", error);
+    res.status(500).json({ error: "Failed to fetch services" });
+  }
+};
+
+// GET /api/services/:id - Get specific service
+export const getService: RequestHandler = (req, res) => {
+  try {
+    initializeDemoServices();
+    const service = servicesDb.find((s) => s.id === req.params.id);
+    if (!service) {
+      return res.status(404).json({ error: "Service not found" });
+    }
+    res.json(service);
+  } catch (error) {
+    console.error("Error getting service:", error);
+    res.status(500).json({ error: "Failed to fetch service" });
+  }
+};
+
+// POST /api/services - Create new service (admin only)
+export const createServiceHandler: RequestHandler = (req, res) => {
+  try {
+    initializeDemoServices();
+    const { name, description, price, currency, category, includes, applicationFormFields, status } = req.body;
+
+    if (!name || !description || price === undefined) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    const newService: ServiceData = {
+      id: generateId(),
+      name,
+      description,
+      price: parseFloat(price),
+      currency: currency || "USD",
+      category: category || "Documents",
+      includes: includes || [],
+      applicationFormFields: applicationFormFields || [],
+      status: status || "active",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    servicesDb.push(newService);
+    res.status(201).json(newService);
+  } catch (error) {
+    console.error("Error creating service:", error);
+    res.status(500).json({ error: "Failed to create service" });
+  }
+};
+
+// PATCH /api/services/:id - Update service (admin only)
+export const updateServiceHandler: RequestHandler = (req, res) => {
+  try {
+    initializeDemoServices();
+    const index = servicesDb.findIndex((s) => s.id === req.params.id);
+
+    if (index === -1) {
+      return res.status(404).json({ error: "Service not found" });
+    }
+
+    const updated: ServiceData = {
+      ...servicesDb[index],
+      ...req.body,
+      id: servicesDb[index].id,
+      createdAt: servicesDb[index].createdAt,
+      updatedAt: new Date().toISOString(),
+    };
+
+    servicesDb[index] = updated;
+    res.json(updated);
+  } catch (error) {
+    console.error("Error updating service:", error);
+    res.status(500).json({ error: "Failed to update service" });
+  }
+};
+
+// DELETE /api/services/:id - Delete service (admin only)
+export const deleteServiceHandler: RequestHandler = (req, res) => {
+  try {
+    initializeDemoServices();
+    const index = servicesDb.findIndex((s) => s.id === req.params.id);
+
+    if (index === -1) {
+      return res.status(404).json({ error: "Service not found" });
+    }
+
+    servicesDb.splice(index, 1);
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Error deleting service:", error);
+    res.status(500).json({ error: "Failed to delete service" });
+  }
+};
+
+// POST /api/service-orders - Create service order
+export const createServiceOrderHandler: RequestHandler = (req, res) => {
+  try {
+    initializeDemoServices();
+    const {
+      serviceId,
+      serviceName,
+      customerName,
+      customerEmail,
+      customerPhone,
+      amount,
+      currency,
+      applicationData,
+    } = req.body;
+
+    if (!serviceId || !customerEmail || amount === undefined) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    const newOrder: ServiceOrder = {
+      id: generateOrderId(),
+      serviceId,
+      serviceName: serviceName || "",
+      customerName,
+      customerEmail,
+      customerPhone,
+      amount: parseFloat(amount),
+      currency: currency || "USD",
+      status: "pending",
+      applicationData: applicationData || {},
+      purchaseDate: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    serviceOrdersDb.push(newOrder);
+    res.status(201).json(newOrder);
+  } catch (error) {
+    console.error("Error creating service order:", error);
+    res.status(500).json({ error: "Failed to create service order" });
+  }
+};
+
+// GET /api/service-orders - List service orders (with filters)
+export const getServiceOrdersHandler: RequestHandler = (req, res) => {
+  try {
+    let orders = serviceOrdersDb;
+
+    // Apply filters
+    if (req.query.status) {
+      orders = orders.filter((o) => o.status === req.query.status);
+    }
+    if (req.query.serviceId) {
+      orders = orders.filter((o) => o.serviceId === req.query.serviceId);
+    }
+    if (req.query.customerEmail) {
+      orders = orders.filter((o) =>
+        o.customerEmail.toLowerCase().includes(
+          (req.query.customerEmail as string).toLowerCase()
+        )
+      );
+    }
+
+    res.json(orders);
+  } catch (error) {
+    console.error("Error getting service orders:", error);
+    res.status(500).json({ error: "Failed to fetch service orders" });
+  }
+};
+
+// GET /api/service-orders/:id - Get specific order
+export const getServiceOrderHandler: RequestHandler = (req, res) => {
+  try {
+    const order = serviceOrdersDb.find((o) => o.id === req.params.id);
+    if (!order) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+    res.json(order);
+  } catch (error) {
+    console.error("Error getting service order:", error);
+    res.status(500).json({ error: "Failed to fetch service order" });
+  }
+};
+
+// PATCH /api/service-orders/:id - Update order status
+export const updateServiceOrderHandler: RequestHandler = (req, res) => {
+  try {
+    const index = serviceOrdersDb.findIndex((o) => o.id === req.params.id);
+    if (index === -1) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+
+    const updated: ServiceOrder = {
+      ...serviceOrdersDb[index],
+      ...req.body,
+      id: serviceOrdersDb[index].id,
+      createdAt: serviceOrdersDb[index].createdAt,
+      updatedAt: new Date().toISOString(),
+    };
+
+    serviceOrdersDb[index] = updated;
+    res.json(updated);
+  } catch (error) {
+    console.error("Error updating service order:", error);
+    res.status(500).json({ error: "Failed to update service order" });
+  }
+};
