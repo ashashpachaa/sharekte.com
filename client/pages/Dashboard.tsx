@@ -2564,6 +2564,9 @@ export default function Dashboard() {
                                           parseInt(company.incorporationYear) ||
                                           new Date().getFullYear()
                                         }
+                                        isEditing={
+                                          company.status === "amend-required"
+                                        }
                                         onSuccess={() => {
                                           toast.success(
                                             "Transfer form submitted successfully and is now under review!",
