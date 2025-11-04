@@ -183,6 +183,23 @@ export default function AdminDashboard() {
             </Button>
           </div>
 
+          {/* Services Management */}
+          <div className="bg-card border border-border/40 rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <Package className="w-5 h-5" />
+              Services Marketplace
+            </h3>
+            <p className="text-muted-foreground text-sm mb-4">
+              Create and manage services with custom application forms
+            </p>
+            <Button
+              className="w-full bg-amber-600 hover:bg-amber-700 text-white"
+              asChild
+            >
+              <Link to="/admin/orders?tab=services">Manage Services</Link>
+            </Button>
+          </div>
+
           {/* Invoices Management */}
           <div className="bg-card border border-border/40 rounded-lg p-6">
             <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
