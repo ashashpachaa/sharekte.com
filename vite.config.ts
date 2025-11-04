@@ -28,21 +28,15 @@ function expressPlugin(): Plugin {
   return {
     name: "express-plugin",
     apply: "serve",
-    async configureServer(server) {
-      try {
-        // Import server module dynamically only during dev serve
-        // Use require-style import to avoid vite's module resolution for server code
-        const serverModule = await import("./server/index.js").catch(async () => {
-          // Fallback: try with .ts
-          return await import("./server/index.ts");
+    configureServer(server) {
+      // Server will be started separately in dev mode via npm run dev
+      // This plugin is mainly for SPA serving
+      return () => {
+        server.middlewares.use((req, res, next) => {
+          // Pass through to allow the separate server to handle API routes
+          next();
         });
-        const app = serverModule.createServer();
-        server.middlewares.use(app);
-      } catch (e) {
-        // Silently ignore server loading errors in dev mode
-        // The server will be available at runtime
-        console.info("Express server deferred to runtime mode");
-      }
+      };
     },
   };
 }
