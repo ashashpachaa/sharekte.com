@@ -353,6 +353,70 @@ export function CompanyCard({
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Amendment History Modal */}
+      <Dialog open={showAmendmentHistory} onOpenChange={setShowAmendmentHistory}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Amendment History</DialogTitle>
+            <DialogDescription>
+              {company.companyName} - {amendmentComments.length} amendment
+              request{amendmentComments.length !== 1 ? "s" : ""}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 max-h-96 overflow-y-auto">
+            {amendmentComments.length > 0 ? (
+              amendmentComments.map((comment, index) => (
+                <div
+                  key={comment.id || index}
+                  className="p-3 bg-red-50 border border-red-200 rounded-lg"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-red-900">
+                        Amendment #{amendmentComments.length - index}
+                      </p>
+                      <p className="text-xs text-red-700 mt-1">
+                        {comment.text}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1 mt-2 text-xs text-red-600">
+                    <Clock className="w-3 h-3" />
+                    {new Date(comment.createdAt).toLocaleString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit",
+                    })}
+                  </div>
+                  {comment.author && (
+                    <p className="text-xs text-red-600 mt-1">
+                      By: {comment.author}
+                    </p>
+                  )}
+                </div>
+              ))
+            ) : (
+              <p className="text-sm text-gray-600 text-center py-4">
+                No amendment history available
+              </p>
+            )}
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setShowAmendmentHistory(false)}
+            >
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
