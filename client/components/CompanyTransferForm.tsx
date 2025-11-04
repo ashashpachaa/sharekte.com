@@ -712,7 +712,6 @@ export function CompanyTransferForm({
     null,
   );
   const [activitiesSearchTerm, setActivitiesSearchTerm] = useState("");
-  const [loading, setLoading] = useState(!initialForm && isEditing);
 
   // Load existing form data when in edit/amend mode
   useEffect(() => {
