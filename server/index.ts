@@ -80,6 +80,9 @@ import {
   getServiceOrdersHandler,
   getServiceOrderHandler,
   updateServiceOrderHandler,
+  getServiceOrderCommentsHandler,
+  createServiceOrderCommentHandler,
+  updateServiceOrderStatusHandler,
 } from "./routes/services";
 
 export function createServer() {
