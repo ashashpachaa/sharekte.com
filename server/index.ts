@@ -357,6 +357,21 @@ export function createServer() {
     deleteInvoiceAttachment,
   );
 
+  // Services routes - Specific routes before parameterized ones
+  app.get("/api/services", getServices);
+  app.post("/api/services", createServiceHandler);
+
+  app.get("/api/services/:id", getService);
+  app.patch("/api/services/:id", updateServiceHandler);
+  app.delete("/api/services/:id", deleteServiceHandler);
+
+  // Service Orders routes
+  app.get("/api/service-orders", getServiceOrdersHandler);
+  app.post("/api/service-orders", createServiceOrderHandler);
+
+  app.get("/api/service-orders/:id", getServiceOrderHandler);
+  app.patch("/api/service-orders/:id", updateServiceOrderHandler);
+
   console.log("[createServer] ✅ All routes registered successfully");
 
   // Serve SPA static files and handle fallback to index.html
