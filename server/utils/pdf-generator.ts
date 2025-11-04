@@ -466,11 +466,11 @@ export function generateFormHTML(
         </section>
         ` : ''}
 
-        ${includeComments && form.comments.length > 0 ? `
+        ${includeComments && safeForm.comments.length > 0 ? `
         <!-- Comments -->
         <section class="page-break">
-          <h2>Comments & Notes (${form.comments.length})</h2>
-          ${form.comments.map(comment => `
+          <h2>Comments & Notes (${safeForm.comments.length})</h2>
+          ${safeForm.comments.map(comment => `
             <div class="comment">
               <div class="comment-header">${comment.author}${comment.isAdminOnly ? ' (Admin Only)' : ''}</div>
               <div class="comment-text">${comment.text}</div>
