@@ -253,6 +253,19 @@ export default function Checkout() {
 
         addInvoice(invoice);
 
+        // Save invoice to API for admin dashboard
+        try {
+          const baseURL = getAPIBaseURL();
+          await fetch(`${baseURL}/api/invoices`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(invoice),
+          });
+        } catch (error) {
+          console.error("Failed to save invoice to API:", error);
+          // Don't fail checkout if invoice API sync fails
+        }
+
         // Create order in API
         try {
           await createOrder({
