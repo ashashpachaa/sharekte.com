@@ -521,18 +521,30 @@ export function ServiceTable() {
               </div>
               <div className="space-y-2 mt-2">
                 {formData.applicationFormFields?.map((field) => (
-                  <div key={field.id} className="flex items-center justify-between bg-gray-50 p-2 rounded">
+                  <div key={field.id} className="flex items-center justify-between bg-gray-50 p-3 rounded border">
                     <div className="flex-1">
                       <p className="text-sm font-medium">{field.label}</p>
-                      <p className="text-xs text-gray-600">{field.type}</p>
+                      <div className="flex gap-2 items-center mt-1">
+                        <Badge variant="outline" className="text-xs">{field.type}</Badge>
+                        {field.required && <Badge variant="destructive" className="text-xs">Required</Badge>}
+                      </div>
                     </div>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => removeFormField(field.id)}
-                    >
-                      <X className="w-4 h-4" />
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => editFormField(field)}
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => removeFormField(field.id)}
+                      >
+                        <X className="w-4 h-4" />
+                      </Button>
+                    </div>
                   </div>
                 ))}
               </div>
