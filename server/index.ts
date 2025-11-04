@@ -344,5 +344,54 @@ export function createServer() {
   );
 
   console.log("[createServer] ✅ All routes registered successfully");
+
+  // Serve SPA static files and handle fallback to index.html
+  const spaPath = findSPAPath();
+  if (spaPath) {
+    console.log("[createServer] Serving SPA from:", spaPath);
+
+    // Serve static files
+    app.use(express.static(spaPath));
+
+    // SPA fallback: serve index.html for all non-API routes
+    app.get("*", (req, res) => {
+      const indexPath = `${spaPath}/index.html`;
+      res.sendFile(indexPath, (err) => {
+        if (err) {
+          console.error("[createServer] Error serving index.html:", err);
+          res.status(404).send("index.html not found");
+        }
+      });
+    });
+  } else {
+    console.warn("[createServer] ⚠️ SPA path not found, root route will not be available");
+  }
+
   return app;
+}
+
+// Helper: Find SPA directory with fallbacks
+function findSPAPath(): string | null {
+  const path = require("path");
+  const fs = require("fs");
+
+  // Try multiple paths
+  const candidates = [
+    "./dist/spa",                                    // Dev relative
+    "/app/code/dist/spa",                            // Docker
+    "/var/www/shareket.com/dist/spa",               // Hostinger
+    new URL("../dist/spa", import.meta.url).pathname // ESM relative
+  ];
+
+  for (const candidate of candidates) {
+    try {
+      if (fs.existsSync(candidate)) {
+        return path.resolve(candidate);
+      }
+    } catch (e) {
+      // Continue to next candidate
+    }
+  }
+
+  return null;
 }
