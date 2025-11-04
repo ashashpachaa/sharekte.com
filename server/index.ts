@@ -353,16 +353,16 @@ export function createServer() {
   if (spaPath) {
     console.log("[createServer] Serving SPA from:", spaPath);
 
-    // Serve static files
+    // Serve static files from SPA directory
     app.use(express.static(spaPath));
 
-    // SPA fallback: serve index.html for all non-API routes
-    app.get("*", (req, res) => {
-      const indexPath = `${spaPath}/index.html`;
+    // SPA fallback: serve index.html for all non-API requests
+    app.use((req, res) => {
+      const indexPath = path.join(spaPath, "index.html");
       res.sendFile(indexPath, (err) => {
         if (err) {
           console.error("[createServer] Error serving index.html:", err);
-          res.status(404).send("index.html not found");
+          res.status(404).json({ error: "index.html not found" });
         }
       });
     });
