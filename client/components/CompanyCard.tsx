@@ -199,6 +199,56 @@ export function CompanyCard({
               : "N/A"}
           </div>
 
+          {/* Amendment Required Alert */}
+          {hasAmendmentRequired && (
+            <div className="p-2 rounded-md bg-red-50 border border-red-200">
+              <div className="flex gap-2">
+                <AlertTriangle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-semibold text-red-900 mb-1">
+                    Amendments Required
+                  </p>
+                  {recentAmendment ? (
+                    <>
+                      <p className="text-xs text-red-800 line-clamp-2">
+                        {recentAmendment.text}
+                      </p>
+                      <p className="text-xs text-red-700 mt-1 opacity-75">
+                        {new Date(recentAmendment.createdAt).toLocaleString(
+                          "en-US",
+                          {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          }
+                        )}
+                      </p>
+                      {amendmentComments.length > 1 && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-5 px-2 text-xs text-red-600 mt-1"
+                          onClick={() => setShowAmendmentHistory(true)}
+                        >
+                          <History className="w-3 h-3 mr-1" />
+                          View {amendmentComments.length} amendments
+                        </Button>
+                      )}
+                    </>
+                  ) : (
+                    <p className="text-xs text-red-700">
+                      {loadingAmendments
+                        ? "Loading amendments..."
+                        : "No amendment details available"}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Tags */}
           {company.tags && company.tags.length > 0 && (
             <div className="flex flex-wrap gap-1">
