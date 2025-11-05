@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CompanyTable } from "@/components/CompanyTable";
+import { useMemo } from "react";
 import {
   ArrowRight,
   TrendingUp,
@@ -13,6 +14,7 @@ import {
   BarChart3,
   Globe,
   CheckCircle2,
+  TrendingDown,
 } from "lucide-react";
 
 export default function Index() {
