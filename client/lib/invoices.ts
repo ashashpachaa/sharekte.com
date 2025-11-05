@@ -173,19 +173,28 @@ export function formatInvoiceDate(dateStr: string): string {
   }
 }
 
+// Currency symbols map
+const CURRENCY_SYMBOLS: Record<string, string> = {
+  USD: "$",
+  GBP: "£",
+  AED: "د.إ",
+  SAR: "﷼",
+  EUR: "€",
+};
+
 // Format currency
-export function formatInvoiceAmount(amount: number, currency: string = "GBP"): string {
+export function formatInvoiceAmount(amount: number, currency: string = "USD"): string {
   try {
     if (!Number.isFinite(amount)) {
-      return `£0.00`;
+      return `${CURRENCY_SYMBOLS[currency] || "$"}0.00`;
     }
-    const symbol = currency === "GBP" ? "£" : currency === "USD" ? "$" : "€";
+    const symbol = CURRENCY_SYMBOLS[currency] || "$";
     return `${symbol}${amount.toLocaleString("en-US", {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     })}`;
   } catch {
-    return `£0.00`;
+    return `${CURRENCY_SYMBOLS[currency] || "$"}0.00`;
   }
 }
 
