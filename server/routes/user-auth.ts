@@ -86,6 +86,7 @@ export const signupHandler: RequestHandler = (req, res) => {
     };
 
     users.push(newUser);
+    saveUsersToFile(users);
 
     // Generate token
     const token = generateToken();
@@ -95,6 +96,9 @@ export const signupHandler: RequestHandler = (req, res) => {
       expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
+    console.log(
+      `[signupHandler] ✓ User ${newUser.email} created and saved to file`
+    );
     res.status(201).json({
       token,
       email: newUser.email,
