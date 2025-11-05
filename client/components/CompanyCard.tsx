@@ -15,6 +15,7 @@ import {
   DollarSign,
   Eye,
   Clock,
+  History,
   AlertCircle,
   Globe,
   Hash,
