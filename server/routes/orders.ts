@@ -60,6 +60,38 @@ interface AirtableResponse {
 // In-memory storage for orders (when Airtable is not configured)
 let inMemoryOrders: Order[] = [];
 
+// File-based persistence for orders
+import * as fs from "fs";
+import * as path from "path";
+
+const ORDERS_FILE = path.join(process.cwd(), "orders.json");
+
+function loadOrdersFromFile(): Order[] {
+  try {
+    if (fs.existsSync(ORDERS_FILE)) {
+      const data = fs.readFileSync(ORDERS_FILE, "utf-8");
+      const parsed = JSON.parse(data);
+      console.log(`[Orders] Loaded ${parsed.length} orders from file`);
+      return parsed;
+    }
+  } catch (error) {
+    console.error("[Orders] Failed to load orders from file:", error);
+  }
+  return [];
+}
+
+function saveOrdersToFile(orders: Order[]): void {
+  try {
+    fs.writeFileSync(ORDERS_FILE, JSON.stringify(orders, null, 2));
+    console.log(`[Orders] Saved ${orders.length} orders to file`);
+  } catch (error) {
+    console.error("[Orders] Failed to save orders to file:", error);
+  }
+}
+
+// Load orders from file on startup
+inMemoryOrders = loadOrdersFromFile();
+
 // Helper function to generate unique ID
 function generateOrderId(): string {
   return (
