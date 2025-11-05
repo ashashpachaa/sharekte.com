@@ -167,16 +167,21 @@ export const loginHandler: RequestHandler = (req, res) => {
     // Debug logging
     console.log(`[loginHandler] Attempting login for email: ${email}`);
     console.log(`[loginHandler] Total users in system: ${users.length}`);
-    console.log(`[loginHandler] Available users: ${users.map(u => u.email).join(", ")}`);
+    console.log(
+      `[loginHandler] Available users: ${users.map((u) => u.email).join(", ")}`,
+    );
 
     // Find user
-    const user = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
+    const user = users.find(
+      (u) => u.email.toLowerCase() === email.toLowerCase(),
+    );
 
     if (!user) {
       console.log(`[loginHandler] User not found for email: ${email}`);
       return res.status(401).json({
-        error: "Your email is not registered. Please sign up to create an account.",
-        code: "USER_NOT_FOUND"
+        error:
+          "Your email is not registered. Please sign up to create an account.",
+        code: "USER_NOT_FOUND",
       });
     }
 
@@ -189,7 +194,7 @@ export const loginHandler: RequestHandler = (req, res) => {
       console.log(`[loginHandler] Password mismatch for ${email}`);
       return res.status(401).json({
         error: "Incorrect password. Please try again.",
-        code: "INVALID_PASSWORD"
+        code: "INVALID_PASSWORD",
       });
     }
 

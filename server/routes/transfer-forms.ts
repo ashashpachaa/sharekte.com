@@ -1031,7 +1031,10 @@ export const generatePDF: RequestHandler = async (req, res) => {
       // Send as downloadable PDF file (user opens in browser, then prints to PDF)
       const filename = `transfer-form-${form.formId}.pdf`;
       res.setHeader("Content-Type", "application/pdf");
-      res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="${filename}"`,
+      );
       res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
       res.setHeader("Pragma", "no-cache");
       res.setHeader("Expires", "0");

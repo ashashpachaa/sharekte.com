@@ -48,16 +48,23 @@ export function UserProvider({ children }: { children: ReactNode }) {
             },
           });
 
-          console.log("[checkSession] /api/verify response status:", response.status);
+          console.log(
+            "[checkSession] /api/verify response status:",
+            response.status,
+          );
           if (response.ok) {
-            console.log("[checkSession] ✓ Session verified, setting user state");
+            console.log(
+              "[checkSession] ✓ Session verified, setting user state",
+            );
             setIsUser(true);
             setUserEmail(email);
             setUserName(name);
             setUserToken(token);
           } else {
             // Token is invalid
-            console.log("[checkSession] ✗ Token verification failed, clearing session");
+            console.log(
+              "[checkSession] ✗ Token verification failed, clearing session",
+            );
             localStorage.removeItem("userToken");
             localStorage.removeItem("userEmail");
             localStorage.removeItem("userName");
@@ -145,7 +152,11 @@ export function UserProvider({ children }: { children: ReactNode }) {
       }
 
       console.log("[login] ✓ Login successful, saving to localStorage");
-      console.log("[login] Response data:", { email: data.email, name: data.name, token: data.token ? "***" : "missing" });
+      console.log("[login] Response data:", {
+        email: data.email,
+        name: data.name,
+        token: data.token ? "***" : "missing",
+      });
 
       setIsUser(true);
       setUserEmail(data.email);
@@ -157,7 +168,10 @@ export function UserProvider({ children }: { children: ReactNode }) {
       localStorage.setItem("userName", data.name);
 
       console.log("[login] ✓ Stored in localStorage:");
-      console.log("[login] userToken:", localStorage.getItem("userToken") ? "✓ set" : "✗ missing");
+      console.log(
+        "[login] userToken:",
+        localStorage.getItem("userToken") ? "✓ set" : "✗ missing",
+      );
       console.log("[login] userEmail:", localStorage.getItem("userEmail"));
       console.log("[login] userName:", localStorage.getItem("userName"));
     } catch (error) {

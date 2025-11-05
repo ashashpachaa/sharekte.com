@@ -2467,7 +2467,9 @@ export default function Dashboard() {
                                         </DialogTrigger>
                                         <DialogContent>
                                           <DialogHeader>
-                                            <DialogTitle>Admin Comments</DialogTitle>
+                                            <DialogTitle>
+                                              Admin Comments
+                                            </DialogTitle>
                                           </DialogHeader>
                                           <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg">
                                             <p className="text-sm text-orange-800 whitespace-pre-wrap">
@@ -2493,7 +2495,9 @@ export default function Dashboard() {
                                           </DialogTrigger>
                                           <DialogContent className="max-h-[90vh] overflow-y-auto">
                                             <DialogHeader>
-                                              <DialogTitle>Status History</DialogTitle>
+                                              <DialogTitle>
+                                                Status History
+                                              </DialogTitle>
                                             </DialogHeader>
                                             <div className="space-y-4">
                                               {company.statusHistory
@@ -2507,7 +2511,8 @@ export default function Dashboard() {
                                                     <div className="flex items-start gap-3">
                                                       <div className="flex-1">
                                                         <p className="text-sm font-semibold">
-                                                          Status Change #{idx + 1}
+                                                          Status Change #
+                                                          {idx + 1}
                                                         </p>
                                                         <p className="text-xs text-muted-foreground mt-1">
                                                           {entry.fromStatus} →{" "}
@@ -2562,7 +2567,9 @@ export default function Dashboard() {
                                     <Button
                                       className="gap-2 bg-accent hover:bg-accent/80 text-white flex-1"
                                       size="sm"
-                                      onClick={() => setShowTransferForm(company.id)}
+                                      onClick={() =>
+                                        setShowTransferForm(company.id)
+                                      }
                                     >
                                       <Edit2 className="w-4 h-4" />
                                       Make Amendments
@@ -2572,7 +2579,9 @@ export default function Dashboard() {
                                     <Button
                                       className="gap-2 bg-accent hover:bg-accent/80 text-white flex-1"
                                       size="sm"
-                                      onClick={() => setShowTransferForm(company.id)}
+                                      onClick={() =>
+                                        setShowTransferForm(company.id)
+                                      }
                                     >
                                       <FileText className="w-4 h-4" />
                                       Complete Form

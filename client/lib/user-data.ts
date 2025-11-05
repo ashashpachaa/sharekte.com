@@ -234,7 +234,8 @@ export function updatePurchasedCompanyStatus(
       toStatus: status,
       changedDate: new Date().toISOString(),
       changedBy: "admin",
-      notes: adminComments || `Status changed from ${previousStatus} to ${status}`,
+      notes:
+        adminComments || `Status changed from ${previousStatus} to ${status}`,
     });
 
     company.status = status;

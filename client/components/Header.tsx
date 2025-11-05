@@ -21,11 +21,14 @@ export function Header() {
   const userEmailStored = localStorage.getItem("userEmail");
   const userName = localStorage.getItem("userName");
 
-  const user = userToken && userEmailStored && userName ? {
-    authenticated: true,
-    email: userEmailStored,
-    fullName: userName,
-  } : null;
+  const user =
+    userToken && userEmailStored && userName
+      ? {
+          authenticated: true,
+          email: userEmailStored,
+          fullName: userName,
+        }
+      : null;
 
   const handleLogout = () => {
     localStorage.removeItem("userToken");

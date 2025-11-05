@@ -51,7 +51,8 @@ export default function Login() {
       // Extract error code from message if present
       if (errorMsg.includes("USER_NOT_FOUND")) {
         code = "USER_NOT_FOUND";
-        errorMsg = "Your email is not registered. Please sign up to create an account.";
+        errorMsg =
+          "Your email is not registered. Please sign up to create an account.";
       } else if (errorMsg.includes("INVALID_PASSWORD")) {
         code = "INVALID_PASSWORD";
         errorMsg = "Incorrect password. Please try again.";
@@ -87,7 +88,10 @@ export default function Login() {
                 <p className="text-sm text-red-600">{error}</p>
                 {errorCode === "USER_NOT_FOUND" && (
                   <p className="text-sm text-red-600 mt-2">
-                    <Link to="/signup" className="font-semibold underline hover:text-red-700">
+                    <Link
+                      to="/signup"
+                      className="font-semibold underline hover:text-red-700"
+                    >
                       Click here to sign up
                     </Link>
                   </p>

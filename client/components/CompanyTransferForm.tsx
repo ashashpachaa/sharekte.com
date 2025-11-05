@@ -715,8 +715,13 @@ export function CompanyTransferForm({
 
   // Get user info from localStorage for auto-population
   const userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-  const userEmailStored = localStorage.getItem("userEmail") || userInfo.email || "";
-  const userName = localStorage.getItem("userName") || userInfo.name || userInfo.userName || "";
+  const userEmailStored =
+    localStorage.getItem("userEmail") || userInfo.email || "";
+  const userName =
+    localStorage.getItem("userName") ||
+    userInfo.name ||
+    userInfo.userName ||
+    "";
 
   // Declare formData state BEFORE useEffect that uses setFormData
   const [formData, setFormData] = useState<Partial<TransferFormData>>(
@@ -1136,9 +1141,7 @@ export function CompanyTransferForm({
       <Card>
         <CardHeader>
           <CardTitle>Seller Information</CardTitle>
-          <CardDescription>
-            Current company owner details
-          </CardDescription>
+          <CardDescription>Current company owner details</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
