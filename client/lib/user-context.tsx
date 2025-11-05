@@ -113,10 +113,11 @@ export function UserProvider({ children }: { children: ReactNode }) {
 
       let data;
       try {
-        data = await response.json();
+        const text = await response.text();
+        data = text ? JSON.parse(text) : {};
       } catch (e) {
         console.error("Failed to parse response:", e);
-        throw new Error("Server returned an invalid response");
+        throw new Error("Server error: Invalid response format");
       }
 
       if (!response.ok) {
