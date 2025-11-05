@@ -5,5 +5,12 @@
     "name": "Company",
     "password": "Test123!",
     "createdAt": "2025-01-04T10:00:00.000Z"
+  },
+  {
+    "id": "user_1762382764651_ci76qabos",
+    "email": "company@domaniostartup.com",
+    "name": "Ashraf",
+    "password": ".7p9wes4o36r",
+    "createdAt": "2025-11-05T22:46:04.651Z"
   }
 ]
