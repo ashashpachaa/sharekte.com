@@ -822,7 +822,9 @@ export const uploadAttachment: RequestHandler = async (req, res) => {
 
     // Save form to persistent storage
     saveFormToFile(form);
-    console.log(`[uploadAttachment] ✓ Attachment saved to form ${targetFormId}`);
+    console.log(
+      `[uploadAttachment] ✓ Attachment saved to form ${targetFormId}`,
+    );
 
     // Return attachment (including data so client can download immediately)
     res.json(attachment);

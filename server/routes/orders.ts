@@ -548,7 +548,9 @@ export const updateOrderStatus: RequestHandler = async (req, res) => {
     if (inMemIndex >= 0) {
       inMemoryOrders[inMemIndex] = updatedOrder;
       saveOrdersToFile(inMemoryOrders);
-      console.log("[updateOrderStatus] ✓ Order status updated and saved to file");
+      console.log(
+        "[updateOrderStatus] ✓ Order status updated and saved to file",
+      );
     }
 
     res.json(updatedOrder);
@@ -1067,7 +1069,8 @@ export const clearAllOrders: RequestHandler = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "All orders cleared successfully. System is now starting from zero orders.",
+      message:
+        "All orders cleared successfully. System is now starting from zero orders.",
       timestamp: new Date().toISOString(),
     });
   } catch (error) {

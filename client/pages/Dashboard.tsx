@@ -2418,13 +2418,14 @@ export default function Dashboard() {
                                 )}
 
                                 {/* Status History */}
-                                {company.statusHistory && company.statusHistory.length > 0 && (
-                                  <div className="p-4 bg-background border border-border rounded-lg">
-                                    <StatusHistoryTimeline
-                                      statusHistory={company.statusHistory}
-                                    />
-                                  </div>
-                                )}
+                                {company.statusHistory &&
+                                  company.statusHistory.length > 0 && (
+                                    <div className="p-4 bg-background border border-border rounded-lg">
+                                      <StatusHistoryTimeline
+                                        statusHistory={company.statusHistory}
+                                      />
+                                    </div>
+                                  )}
 
                                 {/* Documents Section */}
                                 <div>
