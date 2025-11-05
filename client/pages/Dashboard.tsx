@@ -2412,6 +2412,88 @@ export default function Dashboard() {
                                         "✅ Ownership transfer completed successfully"}
                                     </p>
                                   </div>
+
+                                  {/* Quick Action Buttons */}
+                                  <div className="flex gap-2 flex-wrap mt-4">
+                                    {company.adminComments && (
+                                      <Dialog>
+                                        <DialogTrigger asChild>
+                                          <Button
+                                            variant="outline"
+                                            size="sm"
+                                            className="gap-2"
+                                          >
+                                            <AlertCircle className="w-4 h-4 text-orange-600" />
+                                            View Admin Comments
+                                          </Button>
+                                        </DialogTrigger>
+                                        <DialogContent>
+                                          <DialogHeader>
+                                            <DialogTitle>Admin Comments</DialogTitle>
+                                          </DialogHeader>
+                                          <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                                            <p className="text-sm text-orange-800 whitespace-pre-wrap">
+                                              {company.adminComments}
+                                            </p>
+                                          </div>
+                                        </DialogContent>
+                                      </Dialog>
+                                    )}
+                                    {company.statusHistory &&
+                                      company.statusHistory.length > 0 && (
+                                        <Dialog>
+                                          <DialogTrigger asChild>
+                                            <Button
+                                              variant="outline"
+                                              size="sm"
+                                              className="gap-2"
+                                            >
+                                              <Clock className="w-4 h-4" />
+                                              View Status History (
+                                              {company.statusHistory.length})
+                                            </Button>
+                                          </DialogTrigger>
+                                          <DialogContent className="max-h-[90vh] overflow-y-auto">
+                                            <DialogHeader>
+                                              <DialogTitle>Status History</DialogTitle>
+                                            </DialogHeader>
+                                            <div className="space-y-4">
+                                              {company.statusHistory
+                                                ?.slice()
+                                                .reverse()
+                                                .map((entry, idx) => (
+                                                  <div
+                                                    key={entry.id}
+                                                    className="p-3 border border-border rounded-lg"
+                                                  >
+                                                    <div className="flex items-start gap-3">
+                                                      <div className="flex-1">
+                                                        <p className="text-sm font-semibold">
+                                                          Status Change #{idx + 1}
+                                                        </p>
+                                                        <p className="text-xs text-muted-foreground mt-1">
+                                                          {entry.fromStatus} →{" "}
+                                                          {entry.toStatus}
+                                                        </p>
+                                                        <p className="text-xs text-muted-foreground">
+                                                          {new Date(
+                                                            entry.changedDate,
+                                                          ).toLocaleString()}
+                                                        </p>
+                                                        {entry.notes && (
+                                                          <p className="text-xs mt-2 text-foreground">
+                                                            {entry.notes}
+                                                          </p>
+                                                        )}
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                ))}
+                                            </div>
+                                          </DialogContent>
+                                        </Dialog>
+                                      )}
+                                  </div>
                                 </div>
 
                                 {/* Admin Comments */}
