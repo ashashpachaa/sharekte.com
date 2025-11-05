@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { ServiceData, ServiceOrder } from "../../client/lib/services";
+import type { ServiceData, ServiceOrder } from "../../client/lib/services";
 
 // In-memory storage for services and orders
 let servicesDb: ServiceData[] = [];

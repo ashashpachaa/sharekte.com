@@ -1,12 +1,34 @@
 import { RequestHandler } from "express";
-import {
+import type {
   CompanyData,
   CompanyStatus,
   PaymentStatus,
-  calculateExpiryDate,
-  calculateRenewalDaysLeft,
-  determineStatus,
 } from "../../client/lib/company-management";
+
+// Re-implement these functions locally since we can't import from client
+function calculateExpiryDate(purchaseDate: string): string {
+  const date = new Date(purchaseDate);
+  date.setFullYear(date.getFullYear() + 1);
+  return date.toISOString().split("T")[0];
+}
+
+function calculateRenewalDaysLeft(expiryDate: string): number {
+  const today = new Date();
+  const expiry = new Date(expiryDate);
+  const diff = expiry.getTime() - today.getTime();
+  return Math.ceil(diff / (1000 * 60 * 60 * 24));
+}
+
+function determineStatus(paymentStatus: string, expiryDate: string): CompanyStatus {
+  if (paymentStatus === "refunded") return "refunded";
+  if (paymentStatus === "pending") return "pending";
+
+  const today = new Date();
+  const expiry = new Date(expiryDate);
+
+  if (expiry < today) return "expired";
+  return "active";
+}
 
 // All company data comes from Airtable - no local in-memory storage
 // Airtable provides persistent storage and real-time synchronization
