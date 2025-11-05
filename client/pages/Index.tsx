@@ -28,7 +28,7 @@ export default function Index() {
       industry: "SaaS",
       yearsInBusiness: 5,
       employees: 12,
-      image: "bg-gradient-to-br from-blue-400 to-blue-600",
+      image: "bg-gradient-to-br from-primary to-primary-600",
       description: "Cloud-based project management platform",
       roi: "45%",
     },
@@ -500,7 +500,7 @@ function SalesStatisticsSection({ t }: { t: any }) {
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 via-transparent to-transparent group-hover:from-blue-500/10 transition-all duration-300"></div>
             <div className="relative space-y-6">
               <div className="w-14 h-14 bg-blue-500/10 group-hover:bg-blue-500/20 rounded-xl flex items-center justify-center transition-colors">
-                <BarChart3 className="w-7 h-7 text-blue-600" />
+                <BarChart3 className="w-7 h-7 text-primary" />
               </div>
 
               <div>
@@ -508,7 +508,7 @@ function SalesStatisticsSection({ t }: { t: any }) {
                   {t("homepage.salesSection.soldThisMonth")}
                 </p>
                 <div className="flex items-baseline gap-2">
-                  <p className="text-5xl md:text-6xl font-bold text-blue-600">
+                  <p className="text-5xl md:text-6xl font-bold text-primary">
                     {salesStats.month}
                   </p>
                   <p className="text-lg text-muted-foreground">
