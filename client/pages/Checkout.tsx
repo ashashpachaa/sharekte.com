@@ -204,14 +204,14 @@ export default function Checkout() {
         userData = JSON.parse(storedUser);
       } else {
         // Fallback if not authenticated (shouldn't happen with validation above)
-        const userEmail = authMode === "signin" ? email : signupEmail;
+        const fallbackEmail = authMode === "signin" ? email : signupEmail;
         const userFullName =
           authMode === "signin" ? email.split("@")[0] : fullName;
         const userCompany = authMode === "signup" ? company : "Not specified";
 
         userData = {
           fullName: userFullName,
-          email: userEmail,
+          email: fallbackEmail,
           company: userCompany,
           accountCreated: new Date().toISOString(),
           authenticated: true,
