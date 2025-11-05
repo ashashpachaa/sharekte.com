@@ -95,6 +95,12 @@ import {
   applyCoupon,
 } from "./routes/coupons";
 import { adminLogin, adminLogout, verifyAdminToken } from "./routes/admin-auth";
+import {
+  signupHandler,
+  loginHandler,
+  verifyHandler,
+  logoutHandler,
+} from "./routes/user-auth";
 
 export function createServer() {
   console.log("[createServer] Initializing Express app");
@@ -212,6 +218,12 @@ export function createServer() {
   app.post("/api/admin/login", adminLogin);
   app.post("/api/admin/logout", adminLogout);
   app.get("/api/admin/verify", verifyAdminToken);
+
+  // User Auth routes
+  app.post("/api/signup", signupHandler);
+  app.post("/api/login", loginHandler);
+  app.post("/api/logout", logoutHandler);
+  app.get("/api/verify", verifyHandler);
 
   // Legacy Airtable routes
   app.get("/api/countries", getCountries);
