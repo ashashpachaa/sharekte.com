@@ -667,7 +667,7 @@ export function TransferFormManagement({
                           const label = getActivityLabel(activity);
                           return (
                             <p key={idx} className="text-gray-700">
-                              • {label}
+                              �� {label}
                             </p>
                           );
                         })}
@@ -1128,10 +1128,10 @@ export function TransferFormManagement({
                     }
                   }}
                   className="gap-2"
-                  title="Download form as PDF (open in browser to print as PDF)"
+                  title="Download form as HTML - open in browser and press Ctrl+P to print as PDF"
                 >
                   <Download className="w-4 h-4" />
-                  Download PDF
+                  Download Form
                 </Button>
                 <Button
                   onClick={() => {
