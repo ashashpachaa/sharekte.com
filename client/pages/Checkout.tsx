@@ -323,7 +323,7 @@ export default function Checkout() {
           id: `ord-${Date.now()}`,
           orderId: `ORD-${new Date().getFullYear()}-${String(Date.now()).slice(-5)}`,
           customerName: billingFullName,
-          customerEmail: billingEmail,
+          customerEmail: userEmail,
           customerPhone: billingPhoneNumber,
           billingAddress: billingAddress,
           country: billingCountry,
