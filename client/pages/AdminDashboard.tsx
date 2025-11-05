@@ -74,7 +74,7 @@ export default function AdminDashboard() {
         {/* Welcome Section */}
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-foreground mb-2">
-            Welcome back, {currentAdmin.name}!
+            Welcome back, Admin!
           </h2>
           <p className="text-muted-foreground">
             Manage users, monitor system health, and handle administrative tasks
