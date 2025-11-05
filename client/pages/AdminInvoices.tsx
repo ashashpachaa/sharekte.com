@@ -69,6 +69,7 @@ export default function AdminInvoices() {
   const { isAdmin } = useAdmin();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { currency, setCurrency, rates } = useCurrency();
 
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [stats, setStats] = useState<Statistics>({
