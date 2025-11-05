@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import path from "path";
 
 // Server build configuration
 export default defineConfig({
@@ -45,8 +46,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@": "./client",
-      "@shared": "./shared",
+      "@": path.resolve(__dirname, "./client"),
+      "@shared": path.resolve(__dirname, "./shared"),
     },
     extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
   },
