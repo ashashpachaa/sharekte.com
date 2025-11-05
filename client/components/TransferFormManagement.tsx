@@ -170,24 +170,43 @@ export function TransferFormManagement({
           prevForms.map((f) => (f.id === selectedForm.id ? updatedForm : f)),
         );
 
-        // If status changed to "amend-required", save comment to company
+        // If status changed to "amend-required", update company with comment
         if (newStatus === "amend-required" && statusNotes) {
           try {
-            const apiBaseURL = getAPIBaseURL();
-            const companyId = selectedForm.companyName || selectedForm.id;
-            await fetch(
-              `${apiBaseURL}/api/companies/${companyId}/add-comment`,
-              {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  adminComments: statusNotes,
-                  timestamp: new Date().toISOString(),
-                }),
-              }
-            );
+            // Update localStorage for purchased companies
+            const purchasedCompaniesStr = localStorage.getItem("purchasedCompanies");
+            if (purchasedCompaniesStr) {
+              const purchasedCompanies = JSON.parse(purchasedCompaniesStr);
+              const updatedCompanies = purchasedCompanies.map(
+                (company: any) => {
+                  if (company.name === selectedForm.companyName || company.id === selectedForm.id) {
+                    return {
+                      ...company,
+                      adminComments: statusNotes,
+                      status: "amend-required",
+                      statusHistory: [
+                        ...(company.statusHistory || []),
+                        {
+                          id: `hist-${Date.now()}`,
+                          fromStatus: company.status || "under-review",
+                          toStatus: "amend-required",
+                          changedDate: new Date().toISOString().split("T")[0],
+                          changedBy: "admin",
+                          notes: `Status changed to amend-required. ${statusNotes}`,
+                        },
+                      ],
+                    };
+                  }
+                  return company;
+                }
+              );
+              localStorage.setItem(
+                "purchasedCompanies",
+                JSON.stringify(updatedCompanies)
+              );
+            }
           } catch (error) {
-            console.error("Error saving admin comment to company:", error);
+            console.error("Error updating company with comments:", error);
           }
         }
 
