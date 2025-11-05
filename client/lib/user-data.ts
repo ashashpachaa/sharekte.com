@@ -21,6 +21,16 @@ export interface RenewalHistoryEntry {
   status: "on-time" | "late" | "pending";
 }
 
+export interface StatusHistoryEntry {
+  id: string;
+  fromStatus: string;
+  toStatus: string;
+  changedDate: string;
+  changedBy: string;
+  reason?: string;
+  notes?: string;
+}
+
 export interface PurchasedCompanyData {
   id: string;
   name: string;
@@ -57,6 +67,7 @@ export interface PurchasedCompanyData {
   };
   transferFormFilled: boolean;
   adminComments?: string;
+  statusHistory?: StatusHistoryEntry[];
   renewalHistory: RenewalHistoryEntry[];
 }
 
