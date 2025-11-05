@@ -577,7 +577,7 @@ export default function Checkout() {
                 </div>
                 <div className="flex gap-4">
                   <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-sm flex-shrink-0">
-                    2
+                    3
                   </div>
                   <div>
                     <p className="font-semibold text-foreground">
@@ -591,7 +591,7 @@ export default function Checkout() {
                 </div>
                 <div className="flex gap-4">
                   <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-sm flex-shrink-0">
-                    3
+                    4
                   </div>
                   <div>
                     <p className="font-semibold text-foreground">
