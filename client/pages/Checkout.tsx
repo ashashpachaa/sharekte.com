@@ -64,6 +64,12 @@ export default function Checkout() {
   const [expiryDate, setExpiryDate] = useState("");
   const [cvv, setCvv] = useState("");
 
+  // Coupon state
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState<CouponValidationResponse | null>(null);
+  const [couponLoading, setCouponLoading] = useState(false);
+  const [couponError, setCouponError] = useState("");
+
   // Check if user is already logged in on component mount
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
