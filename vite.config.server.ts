@@ -16,6 +16,7 @@ const externalizeClientCode: Plugin = {
 
 // Server build configuration
 export default defineConfig({
+  plugins: [externalizeClientCode],
   build: {
     lib: {
       entry: "server/node-build.ts",
