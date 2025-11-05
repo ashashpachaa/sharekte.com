@@ -250,6 +250,20 @@ export function updatePurchasedCompanyStatus(
   }
 }
 
+export function updateCompanyAdminComments(
+  companyId: string,
+  comments: string,
+): void {
+  const userData = getUserData();
+  const company = userData.purchasedCompanies.find((c) => c.id === companyId);
+
+  if (company) {
+    company.adminComments = comments;
+    const key = getUserDataKey();
+    localStorage.setItem(key, JSON.stringify(userData));
+  }
+}
+
 export function renewCompany(companyId: string): void {
   const userData = getUserData();
   const company = userData.purchasedCompanies.find((c) => c.id === companyId);
