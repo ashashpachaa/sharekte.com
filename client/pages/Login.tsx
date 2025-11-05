@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { useUser } from "@/lib/user-context";
 
 export default function Login() {
-  const { t } = useTranslation();
+  const { t } = useTranslation("translation");
   const navigate = useNavigate();
   const { login } = useUser();
   const [email, setEmail] = useState("");

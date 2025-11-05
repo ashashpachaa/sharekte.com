@@ -19,7 +19,7 @@ import { toast } from "sonner";
 import { useUser } from "@/lib/user-context";
 
 export default function Signup() {
-  const { t } = useTranslation();
+  const { t } = useTranslation("translation");
   const navigate = useNavigate();
   const { signup } = useUser();
   const [fullName, setFullName] = useState("");
