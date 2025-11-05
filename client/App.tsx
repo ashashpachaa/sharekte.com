@@ -29,6 +29,7 @@ import AdminEmailTemplates from "./pages/AdminEmailTemplates";
 import AdminRoles from "./pages/AdminRoles";
 import { AdminFees } from "./pages/AdminFees";
 import NotFound from "./pages/NotFound";
+import { ProtectedAdminRoute } from "./components/ProtectedAdminRoute";
 
 const queryClient = new QueryClient();
 
