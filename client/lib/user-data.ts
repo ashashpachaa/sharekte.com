@@ -215,13 +215,36 @@ export function updatePurchasedCompanyStatus(
     | "pending-transfer"
     | "completed",
   statusLabel: string,
+  adminComments?: string,
 ): void {
   const userData = getUserData();
   const company = userData.purchasedCompanies.find((c) => c.id === companyId);
 
   if (company) {
+    const previousStatus = company.status;
+
+    // Create status history entry
+    if (!company.statusHistory) {
+      company.statusHistory = [];
+    }
+
+    company.statusHistory.push({
+      id: `status_${Date.now()}`,
+      fromStatus: previousStatus,
+      toStatus: status,
+      changedDate: new Date().toISOString(),
+      changedBy: "admin",
+      notes: adminComments || `Status changed from ${previousStatus} to ${status}`,
+    });
+
     company.status = status;
     company.statusLabel = statusLabel;
+
+    // Update admin comments if provided
+    if (adminComments) {
+      company.adminComments = adminComments;
+    }
+
     const key = getUserDataKey();
     localStorage.setItem(key, JSON.stringify(userData));
   }
