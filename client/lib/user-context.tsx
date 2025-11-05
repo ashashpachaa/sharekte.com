@@ -34,21 +34,30 @@ export function UserProvider({ children }: { children: ReactNode }) {
       const email = localStorage.getItem("userEmail");
       const name = localStorage.getItem("userName");
 
+      console.log("[checkSession] Checking for existing session...");
+      console.log("[checkSession] Found token:", token ? "✓" : "✗");
+      console.log("[checkSession] Found email:", email ? "✓" : "✗");
+      console.log("[checkSession] Found name:", name ? "✓" : "✗");
+
       if (token && email) {
         try {
+          console.log("[checkSession] Verifying token with /api/verify...");
           const response = await fetch("/api/verify", {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
 
+          console.log("[checkSession] /api/verify response status:", response.status);
           if (response.ok) {
+            console.log("[checkSession] ✓ Session verified, setting user state");
             setIsUser(true);
             setUserEmail(email);
             setUserName(name);
             setUserToken(token);
           } else {
             // Token is invalid
+            console.log("[checkSession] ✗ Token verification failed, clearing session");
             localStorage.removeItem("userToken");
             localStorage.removeItem("userEmail");
             localStorage.removeItem("userName");
