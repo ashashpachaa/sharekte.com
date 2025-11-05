@@ -136,6 +136,15 @@ interface PurchasedCompany {
   documents: Document[];
   transferFormFilled: boolean;
   adminComments?: string;
+  statusHistory?: Array<{
+    id: string;
+    fromStatus: string;
+    toStatus: string;
+    changedDate: string;
+    changedBy: string;
+    reason?: string;
+    notes?: string;
+  }>;
   renewalHistory: RenewalHistoryEntry[];
 }
 
