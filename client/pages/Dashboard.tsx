@@ -428,7 +428,8 @@ export default function Dashboard() {
   useEffect(() => {
     const loadOrderDocuments = async () => {
       try {
-        const response = await fetch("/api/orders");
+        const apiBaseURL = getAPIBaseURL();
+        const response = await fetch(`${apiBaseURL}/api/orders`);
         if (!response.ok) {
           console.error("[Dashboard] Failed to fetch orders:", response.status);
           return;
