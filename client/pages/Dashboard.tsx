@@ -2043,7 +2043,7 @@ export default function Dashboard() {
                     You haven't purchased any companies yet
                   </p>
                   <Button
-                    className="bg-primary hover:bg-primary-600 text-white"
+                    className="bg-accent hover:bg-accent/80 text-white"
                     asChild
                   >
                     <Link to="/">Browse Marketplace</Link>
