@@ -70,6 +70,18 @@ export interface TransferFormData {
   incorporationDate: string;
   incorporationYear: number;
 
+  // Seller Information
+  sellerName?: string;
+  sellerEmail?: string;
+  sellerPhone?: string;
+  sellerAddress?: string;
+
+  // Buyer Information
+  buyerName?: string;
+  buyerEmail?: string;
+  buyerPhone?: string;
+  buyerAddress?: string;
+
   // Company Shares Information
   totalShares: number;
   totalShareCapital: number;
