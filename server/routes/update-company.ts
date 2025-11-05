@@ -12,7 +12,7 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
 
   try {
     const { recordId, status } = req.body || {};
-    const pathRecordId = req.params.recordId;
+    const pathRecordId = req.params.id || req.params.recordId;
     const finalRecordId = recordId || pathRecordId;
 
     if (!finalRecordId || !status) {
