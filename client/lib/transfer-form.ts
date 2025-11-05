@@ -59,12 +59,20 @@ export interface TransferFormData {
   sellerEmail?: string;
   sellerPhone?: string;
   sellerAddress?: string;
+  sellerCity?: string;
+  sellerState?: string;
+  sellerPostalCode?: string;
+  sellerCountry?: string;
 
   // Buyer Information
   buyerName?: string;
   buyerEmail?: string;
   buyerPhone?: string;
   buyerAddress?: string;
+  buyerCity?: string;
+  buyerState?: string;
+  buyerPostalCode?: string;
+  buyerCountry?: string;
 
   // Company Shares Information
   totalShares: number;
