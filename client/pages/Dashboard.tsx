@@ -244,13 +244,13 @@ export default function Dashboard() {
   // User data state
   const [userData, setUserData] = useState<UserData>(() => {
     // Try to load from new login system first
-    const userEmail = localStorage.getItem("userEmail");
+    const userEmailStored = localStorage.getItem("userEmail");
     const userName = localStorage.getItem("userName");
 
-    if (userEmail && userName) {
+    if (userEmailStored && userName) {
       return {
         fullName: userName,
-        email: userEmail,
+        email: userEmailStored,
         phone: "+1 (555) 123-4567",
         address: "123 Business Street",
         city: "New York",
