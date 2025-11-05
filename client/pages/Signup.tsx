@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { createUser } from "@/lib/user-management";
+import { Input } from "@/components/ui/input";
 import {
   Mail,
   Lock,
@@ -13,12 +13,15 @@ import {
   Eye,
   EyeOff,
   CheckCircle,
+  AlertCircle,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useUser } from "@/lib/user-context";
 
 export default function Signup() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { signup } = useUser();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,198 +30,129 @@ export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
 
     // Validate inputs
     if (!fullName || !email || !password || !confirmPassword) {
-      toast.error("Please fill in all fields");
+      toast.error(t("auth.errorFillAll") || "Please fill in all fields");
       return;
     }
 
     if (!email.includes("@")) {
-      toast.error("Please enter a valid email");
+      toast.error(t("auth.errorInvalidEmail") || "Please enter a valid email");
       return;
     }
 
     if (password.length < 6) {
-      toast.error("Password must be at least 6 characters");
+      toast.error(t("auth.errorPasswordLength") || "Password must be at least 6 characters");
       return;
     }
 
     if (password !== confirmPassword) {
-      toast.error("Passwords do not match");
+      toast.error(t("auth.errorPasswordMismatch") || "Passwords do not match");
       return;
     }
 
     if (!agreedToTerms) {
-      toast.error("Please agree to the Terms of Service");
+      toast.error(t("auth.errorTerms") || "Please agree to the terms and conditions");
       return;
     }
 
     setLoading(true);
     try {
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      // Check if user already exists (in localStorage)
-      const existingUser = localStorage.getItem("user");
-      if (existingUser) {
-        const user = JSON.parse(existingUser);
-        if (user.email === email) {
-          toast.error("An account with this email already exists");
-          setLoading(false);
-          return;
-        }
-      }
-
-      // Create user account with "client" role
-      createUser({
-        name: fullName,
-        email: email,
-        role: "client",
-      });
-
-      // Store user session in localStorage (simple auth)
-      const userData = {
-        fullName: fullName,
-        email: email,
-        accountCreated: new Date().toISOString(),
-        lastLogin: new Date().toISOString(),
-        authenticated: true,
-      };
-
-      localStorage.setItem("user", JSON.stringify(userData));
-
-      // Show success message
-      toast.success(`Welcome ${fullName}! Account created successfully.`);
-
-      // Redirect to dashboard
+      await signup(email, password, fullName);
+      toast.success(t("auth.signupSuccess") || "Account created successfully!");
       navigate("/dashboard");
-    } catch (error) {
-      toast.error("Signup failed. Please try again.");
-      console.error(error);
+    } catch (err) {
+      const errorMsg = err instanceof Error ? err.message : "Signup failed";
+      setError(errorMsg);
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }
   };
 
-  // Password strength indicator
-  const passwordStrength = (() => {
-    if (!password) return { level: 0, text: "", color: "" };
-    if (password.length < 6)
-      return {
-        level: 1,
-        text: "Weak",
-        color: "text-red-500",
-      };
-    if (
-      password.length < 12 ||
-      !/[A-Z]/.test(password) ||
-      !/[0-9]/.test(password)
-    )
-      return {
-        level: 2,
-        text: "Fair",
-        color: "text-yellow-500",
-      };
-    return {
-      level: 3,
-      text: "Strong",
-      color: "text-green-500",
-    };
-  })();
-
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 flex flex-col">
       <Header />
-
-      <div className="flex-1 flex items-center justify-center py-12 px-4">
-        <div className="w-full max-w-md space-y-8">
-          {/* Logo/Title */}
-          <div className="text-center space-y-2">
-            <div className="flex justify-center mb-4">
-              <User className="w-8 h-8 text-primary" />
+      <div className="flex-1 flex items-center justify-center px-4 py-12">
+        <div className="w-full max-w-md">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-lg mb-4">
+              <User className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-foreground">
-              Create Account
+            <h1 className="text-3xl font-bold text-foreground mb-2">
+              {t("auth.signup.title") || "Create Account"}
             </h1>
             <p className="text-muted-foreground">
-              Join us to explore and purchase established businesses
+              {t("auth.signup.subtitle") || "Join us to start your journey"}
             </p>
           </div>
 
-          {/* Signup Form */}
-          <form onSubmit={handleSignup} className="space-y-4">
-            {/* Full Name Field */}
-            <div className="space-y-2">
-              <label
-                htmlFor="fullName"
-                className="block text-sm font-medium text-foreground"
-              >
-                Full Name
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex gap-3">
+              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+              <p className="text-sm text-red-600">{error}</p>
+            </div>
+          )}
+
+          <form onSubmit={handleSignup} className="space-y-4 mb-6">
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">
+                {t("auth.fullName") || "Full Name"}
               </label>
               <div className="relative">
                 <User className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
-                <input
-                  id="fullName"
+                <Input
                   type="text"
+                  placeholder="John Doe"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  placeholder="John Doe"
-                  className="w-full pl-10 pr-4 py-2 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-background text-foreground"
+                  className="pl-10"
                   disabled={loading}
                 />
               </div>
             </div>
 
-            {/* Email Field */}
-            <div className="space-y-2">
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-foreground"
-              >
-                Email Address
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">
+                {t("auth.email") || "Email Address"}
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
-                <input
-                  id="email"
+                <Input
                   type="email"
+                  placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Email Address"
-                  className="w-full pl-10 pr-4 py-2 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-background text-foreground"
+                  className="pl-10"
                   disabled={loading}
                 />
               </div>
             </div>
 
-            {/* Password Field */}
-            <div className="space-y-2">
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-foreground"
-              >
-                Password
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">
+                {t("auth.password") || "Password"}
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
-                <input
-                  id="password"
+                <Input
                   type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Password"
-                  className="w-full pl-10 pr-10 py-2 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-background text-foreground"
+                  className="pl-10 pr-10"
                   disabled={loading}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
-                  disabled={loading}
                 >
                   {showPassword ? (
                     <EyeOff className="w-5 h-5" />
@@ -227,50 +161,26 @@ export default function Signup() {
                   )}
                 </button>
               </div>
-              {password && (
-                <div className="flex items-center gap-2 text-xs">
-                  <div className="flex-1 bg-muted rounded-full h-1 overflow-hidden">
-                    <div
-                      className={`h-full transition-all ${
-                        passwordStrength.level === 1
-                          ? "w-1/3 bg-red-500"
-                          : passwordStrength.level === 2
-                            ? "w-2/3 bg-yellow-500"
-                            : "w-full bg-green-500"
-                      }`}
-                    />
-                  </div>
-                  <span className={passwordStrength.color}>
-                    {passwordStrength.text}
-                  </span>
-                </div>
-              )}
             </div>
 
-            {/* Confirm Password Field */}
-            <div className="space-y-2">
-              <label
-                htmlFor="confirmPassword"
-                className="block text-sm font-medium text-foreground"
-              >
-                Confirm Password
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">
+                {t("auth.confirmPassword") || "Confirm Password"}
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
-                <input
-                  id="confirmPassword"
+                <Input
                   type={showConfirm ? "text" : "password"}
+                  placeholder="••••••••"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Confirm Password"
-                  className="w-full pl-10 pr-10 py-2 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent bg-background text-foreground"
+                  className="pl-10 pr-10"
                   disabled={loading}
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirm(!showConfirm)}
                   className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
-                  disabled={loading}
                 >
                   {showConfirm ? (
                     <EyeOff className="w-5 h-5" />
@@ -279,74 +189,35 @@ export default function Signup() {
                   )}
                 </button>
               </div>
-              {confirmPassword && password === confirmPassword && (
-                <div className="flex items-center gap-2 text-xs text-green-600">
-                  <CheckCircle className="w-4 h-4" />
-                  Passwords match
-                </div>
-              )}
             </div>
 
-            {/* Terms Agreement */}
-            <div className="flex items-start gap-2">
+            <div className="flex items-start gap-3">
               <input
-                id="terms"
                 type="checkbox"
+                id="terms"
                 checked={agreedToTerms}
                 onChange={(e) => setAgreedToTerms(e.target.checked)}
-                className="mt-1 w-4 h-4 rounded border-input bg-background"
                 disabled={loading}
+                className="mt-1 rounded"
               />
-              <label htmlFor="terms" className="text-xs text-muted-foreground">
-                I agree to the Terms of Service and Privacy Policy
+              <label htmlFor="terms" className="text-sm text-muted-foreground">
+                {t("auth.agreeToTerms") || "I agree to the terms and conditions"}
               </label>
             </div>
 
-            {/* Submit Button */}
-            <Button
-              type="submit"
-              disabled={loading || !agreedToTerms}
-              className="w-full bg-primary hover:bg-primary-600 text-white py-2 rounded-lg font-medium flex items-center justify-center gap-2"
-            >
-              {loading ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  Creating account...
-                </>
-              ) : (
-                <>
-                  <LogIn className="w-4 h-4" />
-                  Create Account
-                </>
-              )}
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Creating account..." : t("auth.signup.button") || "Create Account"}
             </Button>
           </form>
 
-          {/* Divider */}
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-border"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-background text-muted-foreground">
-                Already have an account?
-              </span>
-            </div>
-          </div>
-
-          {/* Sign In Link */}
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full border-input"
-            onClick={() => navigate("/login")}
-            disabled={loading}
-          >
-            Sign In
-          </Button>
+          <p className="text-center text-sm text-muted-foreground">
+            {t("auth.haveAccount") || "Already have an account?"}{" "}
+            <Link to="/login" className="text-primary hover:underline font-medium">
+              {t("auth.login") || "Sign in"}
+            </Link>
+          </p>
         </div>
       </div>
-
       <Footer />
     </div>
   );
