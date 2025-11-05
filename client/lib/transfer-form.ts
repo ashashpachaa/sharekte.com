@@ -461,8 +461,9 @@ export async function deleteFormAttachment(
   attachmentId: string,
 ): Promise<boolean> {
   try {
+    const apiBaseURL = getAPIBaseURL();
     const response = await fetch(
-      `/api/transfer-forms/${formId}/attachments/${attachmentId}`,
+      `${apiBaseURL}/api/transfer-forms/${formId}/attachments/${attachmentId}`,
       {
         method: "DELETE",
       },
