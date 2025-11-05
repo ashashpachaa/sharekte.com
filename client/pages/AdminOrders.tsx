@@ -1050,6 +1050,62 @@ function OrderDetailsModal({
                 </option>
               ))}
             </select>
+
+            {/* Status History */}
+            {editedOrder.statusHistory && editedOrder.statusHistory.length > 0 && (
+              <div className="mt-6 pt-6 border-t border-border/40">
+                <h4 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <Clock className="w-4 h-4" />
+                  Status History
+                </h4>
+                <div className="space-y-3 max-h-48 overflow-y-auto">
+                  {[...editedOrder.statusHistory]
+                    .reverse()
+                    .map((history, index) => (
+                      <div
+                        key={history.id || index}
+                        className="bg-muted/30 border border-border/40 rounded-lg p-3 text-sm"
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex-1">
+                            <p className="font-medium text-foreground">
+                              {history.toStatus
+                                ? `${history.fromStatus?.replace(/-/g, " ").toUpperCase() || "PENDING"} → ${history.toStatus.replace(/-/g, " ").toUpperCase()}`
+                                : `Status: ${history.fromStatus?.replace(/-/g, " ").toUpperCase() || "UPDATED"}`}
+                            </p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {new Date(
+                                history.changedDate,
+                              ).toLocaleDateString("en-US", {
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric",
+                              })}{" "}
+                              {new Date(history.changedDate).toLocaleTimeString(
+                                "en-US",
+                                {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                },
+                              )}
+                            </p>
+                            {history.changedBy && (
+                              <p className="text-xs text-muted-foreground">
+                                By: {history.changedBy}
+                              </p>
+                            )}
+                            {history.notes && (
+                              <p className="text-xs text-muted-foreground mt-1 italic">
+                                {history.notes}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Refund Management */}
