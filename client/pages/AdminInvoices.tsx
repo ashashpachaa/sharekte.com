@@ -422,10 +422,24 @@ export default function AdminInvoices() {
               </Button>
               <h1 className="text-3xl font-bold text-foreground">Invoices</h1>
             </div>
-            <Button onClick={() => setFormOpen(true)} className="gap-2">
-              <Plus className="w-4 h-4" />
-              Create Invoice
-            </Button>
+            <div className="flex items-center gap-3">
+              <Select value={currency} onValueChange={(value) => setCurrency(value as any)}>
+                <SelectTrigger className="w-32">
+                  <SelectValue placeholder="Currency" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="USD">USD ($)</SelectItem>
+                  <SelectItem value="GBP">GBP (£)</SelectItem>
+                  <SelectItem value="AED">AED (د.إ)</SelectItem>
+                  <SelectItem value="SAR">SAR (﷼)</SelectItem>
+                  <SelectItem value="EUR">EUR (€)</SelectItem>
+                </SelectContent>
+              </Select>
+              <Button onClick={() => setFormOpen(true)} className="gap-2">
+                <Plus className="w-4 h-4" />
+                Create Invoice
+              </Button>
+            </div>
           </div>
 
           {/* Statistics */}
