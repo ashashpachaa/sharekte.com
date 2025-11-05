@@ -713,6 +713,11 @@ export function CompanyTransferForm({
   );
   const [activitiesSearchTerm, setActivitiesSearchTerm] = useState("");
 
+  // Get user info from localStorage for auto-population
+  const userInfo = JSON.parse(localStorage.getItem("user") || "{}");
+  const userEmail = localStorage.getItem("userEmail") || userInfo.email || "";
+  const userName = userInfo.name || userInfo.userName || "";
+
   // Declare formData state BEFORE useEffect that uses setFormData
   const [formData, setFormData] = useState<Partial<TransferFormData>>(
     initialForm || {
@@ -723,6 +728,18 @@ export function CompanyTransferForm({
       country,
       incorporationDate,
       incorporationYear,
+
+      // Auto-populate buyer info with logged-in user
+      buyerName: userName,
+      buyerEmail: userEmail,
+      buyerPhone: userInfo.phone || "",
+      buyerAddress: userInfo.address || "",
+
+      // Seller info left empty (can be filled in by admin)
+      sellerName: "",
+      sellerEmail: "",
+      sellerPhone: "",
+      sellerAddress: "",
 
       totalShares: 0,
       totalShareCapital: 0,
