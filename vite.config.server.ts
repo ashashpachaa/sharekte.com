@@ -32,6 +32,8 @@ export default defineConfig({
         // External dependencies that should not be bundled
         "express",
         "cors",
+        // Client-side code - should not be bundled in server
+        /^(?!\.)/,  // Mark all non-relative imports as external (node_modules + client code)
       ],
       output: {
         format: "es",
