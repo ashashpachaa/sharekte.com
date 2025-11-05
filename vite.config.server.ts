@@ -47,10 +47,7 @@ export default defineConfig({
     },
   },
   resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./client"),
-      "@shared": path.resolve(__dirname, "./shared"),
-    },
+    // No aliases for server - prevents issues with client-side imports
     extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
   },
   define: {
