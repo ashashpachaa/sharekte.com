@@ -554,11 +554,11 @@ function SalesStatisticsSection({ t }: { t: any }) {
             </div>
           </div>
 
-          <div className="group relative bg-white dark:bg-slate-950 border border-border/40 rounded-2xl p-8 hover:shadow-lg hover:border-primary/50 transition-all duration-300 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 via-transparent to-transparent group-hover:from-purple-500/10 transition-all duration-300"></div>
+          <div className="group relative bg-white dark:bg-slate-950 border border-border/40 rounded-2xl p-8 hover:shadow-lg hover:border-accent/50 transition-all duration-300 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-accent/0 via-transparent to-transparent group-hover:from-accent/10 transition-all duration-300"></div>
             <div className="relative space-y-6">
-              <div className="w-14 h-14 bg-purple-500/10 group-hover:bg-purple-500/20 rounded-xl flex items-center justify-center transition-colors">
-                <TrendingDown className="w-7 h-7 text-purple-600" style={{ transform: 'scaleY(-1)' }} />
+              <div className="w-14 h-14 bg-accent/10 group-hover:bg-accent/20 rounded-xl flex items-center justify-center transition-colors">
+                <TrendingDown className="w-7 h-7 text-accent" style={{ transform: 'scaleY(-1)' }} />
               </div>
 
               <div>
@@ -566,7 +566,7 @@ function SalesStatisticsSection({ t }: { t: any }) {
                   {t("homepage.salesSection.soldThisYear")}
                 </p>
                 <div className="flex items-baseline gap-2">
-                  <p className="text-5xl md:text-6xl font-bold text-purple-600">
+                  <p className="text-5xl md:text-6xl font-bold text-accent">
                     {salesStats.year}
                   </p>
                   <p className="text-lg text-muted-foreground">
