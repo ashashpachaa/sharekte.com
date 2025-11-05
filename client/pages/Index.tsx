@@ -452,3 +452,110 @@ export default function Index() {
     </div>
   );
 }
+
+function SalesStatisticsSection({ t }: { t: any }) {
+  const salesStats = useMemo(() => ({
+    today: Math.floor(Math.random() * 45) + 5,
+    month: Math.floor(Math.random() * 450) + 50,
+    year: Math.floor(Math.random() * 2500) + 500,
+  }), []);
+
+  return (
+    <section className="py-20 md:py-28 border-t border-border/40 bg-gradient-to-br from-primary/5 via-accent/5 to-primary/5">
+      <div className="container max-w-6xl mx-auto px-4">
+        <div className="text-center space-y-4 mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground">
+            {t("homepage.salesSection.title")}
+          </h2>
+          <p className="text-lg text-muted-foreground">
+            {t("homepage.salesSection.motivationText")}
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          <div className="group relative bg-white dark:bg-slate-950 border border-border/40 rounded-2xl p-8 hover:shadow-lg hover:border-primary/50 transition-all duration-300 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-green-500/0 via-transparent to-transparent group-hover:from-green-500/10 transition-all duration-300"></div>
+            <div className="relative space-y-6">
+              <div className="w-14 h-14 bg-green-500/10 group-hover:bg-green-500/20 rounded-xl flex items-center justify-center transition-colors">
+                <TrendingUp className="w-7 h-7 text-green-600" />
+              </div>
+
+              <div>
+                <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                  {t("homepage.salesSection.soldToday")}
+                </p>
+                <div className="flex items-baseline gap-2">
+                  <p className="text-5xl md:text-6xl font-bold text-green-600">
+                    {salesStats.today}
+                  </p>
+                  <p className="text-lg text-muted-foreground">
+                    {t("homepage.salesSection.companies")}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="group relative bg-white dark:bg-slate-950 border border-border/40 rounded-2xl p-8 hover:shadow-lg hover:border-primary/50 transition-all duration-300 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/0 via-transparent to-transparent group-hover:from-blue-500/10 transition-all duration-300"></div>
+            <div className="relative space-y-6">
+              <div className="w-14 h-14 bg-blue-500/10 group-hover:bg-blue-500/20 rounded-xl flex items-center justify-center transition-colors">
+                <BarChart3 className="w-7 h-7 text-blue-600" />
+              </div>
+
+              <div>
+                <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                  {t("homepage.salesSection.soldThisMonth")}
+                </p>
+                <div className="flex items-baseline gap-2">
+                  <p className="text-5xl md:text-6xl font-bold text-blue-600">
+                    {salesStats.month}
+                  </p>
+                  <p className="text-lg text-muted-foreground">
+                    {t("homepage.salesSection.companies")}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="group relative bg-white dark:bg-slate-950 border border-border/40 rounded-2xl p-8 hover:shadow-lg hover:border-primary/50 transition-all duration-300 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 via-transparent to-transparent group-hover:from-purple-500/10 transition-all duration-300"></div>
+            <div className="relative space-y-6">
+              <div className="w-14 h-14 bg-purple-500/10 group-hover:bg-purple-500/20 rounded-xl flex items-center justify-center transition-colors">
+                <TrendingDown className="w-7 h-7 text-purple-600" style={{ transform: 'scaleY(-1)' }} />
+              </div>
+
+              <div>
+                <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                  {t("homepage.salesSection.soldThisYear")}
+                </p>
+                <div className="flex items-baseline gap-2">
+                  <p className="text-5xl md:text-6xl font-bold text-purple-600">
+                    {salesStats.year}
+                  </p>
+                  <p className="text-lg text-muted-foreground">
+                    {t("homepage.salesSection.companies")}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="text-center mt-12">
+          <Button
+            size="lg"
+            className="bg-primary hover:bg-primary-600 text-white h-12 px-8 rounded-lg font-semibold"
+            asChild
+          >
+            <Link to="/dashboard" className="flex items-center gap-2">
+              Become an Entrepreneur
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          </Button>
+        </div>
+      </div>
+    </section>
+  );
+}
