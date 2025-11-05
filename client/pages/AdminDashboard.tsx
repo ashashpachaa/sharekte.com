@@ -51,8 +51,7 @@ export default function AdminDashboard() {
           <div>
             <h1 className="text-2xl font-bold text-primary">Sharekte Admin</h1>
             <p className="text-xs text-muted-foreground">
-              {currentAdmin.name} (
-              {currentAdmin.role.replace("-", " ").toUpperCase()})
+              {adminEmail || "Admin"}
             </p>
           </div>
           <div className="flex items-center gap-4">
