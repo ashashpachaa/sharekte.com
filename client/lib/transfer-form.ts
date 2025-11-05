@@ -5,11 +5,12 @@
 
 // Get the correct API base URL (use production URL for Fly.io or old deployments)
 export function getAPIBaseURL(): string {
+  // HOSTINGER DEPLOYMENT ONLY - No Fly.io support
   if (typeof window === "undefined") return "https://shareket.com";
 
   const hostname = window.location.hostname;
 
-  // If on localhost or localhost-like domain, use relative paths
+  // Development: localhost or private networks use relative paths
   if (
     hostname === "localhost" ||
     hostname === "127.0.0.1" ||
@@ -18,18 +19,14 @@ export function getAPIBaseURL(): string {
     return "";
   }
 
-  // If on Fly.io, use the Fly.io domain (current origin)
-  if (hostname.includes("fly.dev")) {
-    return window.location.origin;
-  }
-
-  // For shareket.com, use current origin
+  // Production: Always use Hostinger domain (https://shareket.com)
+  // For shareket.com domain, use current origin (same domain)
   if (hostname.includes("shareket.com")) {
     return window.location.origin;
   }
 
-  // Fallback: use relative paths (same origin as frontend)
-  return "";
+  // Fallback: Use Hostinger production URL for any other domain
+  return "https://shareket.com";
 }
 
 export type FormStatus =
