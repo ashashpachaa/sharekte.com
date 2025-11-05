@@ -472,6 +472,8 @@ export const updateOrder: RequestHandler = async (req, res) => {
     );
     if (inMemIndex >= 0) {
       inMemoryOrders[inMemIndex] = updatedOrder;
+      saveOrdersToFile(inMemoryOrders);
+      console.log("[updateOrder] ✓ Order updated and saved to file");
     }
 
     res.json(updatedOrder);
@@ -545,6 +547,8 @@ export const updateOrderStatus: RequestHandler = async (req, res) => {
     );
     if (inMemIndex >= 0) {
       inMemoryOrders[inMemIndex] = updatedOrder;
+      saveOrdersToFile(inMemoryOrders);
+      console.log("[updateOrderStatus] ✓ Order status updated and saved to file");
     }
 
     res.json(updatedOrder);
