@@ -164,22 +164,36 @@ export const loginHandler: RequestHandler = (req, res) => {
       return res.status(400).json({ error: "Email and password are required" });
     }
 
+    // Debug logging
+    console.log(`[loginHandler] Attempting login for email: ${email}`);
+    console.log(`[loginHandler] Total users in system: ${users.length}`);
+    console.log(`[loginHandler] Available users: ${users.map(u => u.email).join(", ")}`);
+
     // Find user
-    const user = users.find((u) => u.email === email.toLowerCase());
+    const user = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
 
     if (!user) {
+      console.log(`[loginHandler] User not found for email: ${email}`);
       return res.status(401).json({
         error: "Your email is not registered. Please sign up to create an account.",
         code: "USER_NOT_FOUND"
       });
     }
 
+    console.log(`[loginHandler] User found: ${user.email}`);
+    console.log(`[loginHandler] Stored password: "${user.password}"`);
+    console.log(`[loginHandler] Provided password: "${password}"`);
+    console.log(`[loginHandler] Password match: ${user.password === password}`);
+
     if (user.password !== password) {
+      console.log(`[loginHandler] Password mismatch for ${email}`);
       return res.status(401).json({
         error: "Incorrect password. Please try again.",
         code: "INVALID_PASSWORD"
       });
     }
+
+    console.log(`[loginHandler] ✓ Login successful for ${email}`);
 
     // Generate token
     const token = generateToken();
