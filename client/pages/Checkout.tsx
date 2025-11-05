@@ -386,6 +386,39 @@ export default function Checkout() {
       // Wait for all order creation to complete
       await Promise.all(orderPromises);
 
+      // Auto-create customer account if they don't have one
+      try {
+        const baseURL = getAPIBaseURL();
+        const autoPassword = Math.random().toString(36).slice(-12); // Generate random password
+
+        console.log(`[Checkout] Creating user account for ${userEmail}`);
+
+        await fetch(`${baseURL}/api/user-auth/signup`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: userEmail,
+            password: autoPassword,
+            name: billingFullName || userData.fullName || "Customer",
+          }),
+        }).then(async (response) => {
+          if (response.ok) {
+            const result = await response.json();
+            console.log(`[Checkout] ✓ User account created successfully`);
+            // Store the auto-generated password in a temporary place so we can show it
+            localStorage.setItem(`checkout_password_${userEmail}`, autoPassword);
+            localStorage.setItem(`checkout_password_email`, userEmail);
+          } else if (response.status === 409) {
+            console.log(`[Checkout] User account already exists for ${userEmail}`);
+          } else {
+            console.warn(`[Checkout] Failed to create user account:`, response.status);
+          }
+        });
+      } catch (error) {
+        console.warn(`[Checkout] Failed to create user account:`, error);
+        // Don't fail checkout if user account creation fails
+      }
+
       // Update status for each company to "sold" in Airtable
       const updatePromises = items.map(async (item) => {
         try {
