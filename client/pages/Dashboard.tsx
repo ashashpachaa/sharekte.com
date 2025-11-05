@@ -1781,7 +1781,7 @@ export default function Dashboard() {
                                   </p>
                                   <p className="text-lg font-bold text-primary">
                                     {formatPriceWithCurrency(
-                                      convertPrice(invoice.amount),
+                                      invoice.amount,
                                       currency,
                                       rates,
                                     )}
