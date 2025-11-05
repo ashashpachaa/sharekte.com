@@ -17,7 +17,7 @@ interface PDFOptions {
  */
 export function generateFormHTML(
   form: TransferFormData,
-  options: PDFOptions = {}
+  options: PDFOptions = {},
 ): string {
   // Ensure all required arrays exist
   const safeForm = {
@@ -40,9 +40,9 @@ export function generateFormHTML(
       "under-review": "#3B82F6",
       "amend-required": "#F59E0B",
       "confirm-application": "#A855F7",
-      "transferring": "#F97316",
+      transferring: "#F97316",
       "complete-transfer": "#22C55E",
-      "canceled": "#EF4444",
+      canceled: "#EF4444",
     };
     return colors[status] || "#6B7280";
   };
@@ -300,7 +300,9 @@ export function generateFormHTML(
           <div class="status-badge">${form.status.replace(/-/g, " ").toUpperCase()}</div>
         </header>
 
-        ${!compact ? `
+        ${
+          !compact
+            ? `
         <!-- Form Overview -->
         <section>
           <h2>Form Details</h2>
@@ -321,21 +323,31 @@ export function generateFormHTML(
               <div class="field-label">Last Updated</div>
               <div class="field-value">${formatDate(form.updatedAt)}</div>
             </div>
-            ${form.transferDate ? `
+            ${
+              form.transferDate
+                ? `
             <div class="field">
               <div class="field-label">Transfer Date</div>
               <div class="field-value">${formatDate(form.transferDate)}</div>
             </div>
-            ` : ''}
-            ${form.salePrice ? `
+            `
+                : ""
+            }
+            ${
+              form.salePrice
+                ? `
             <div class="field">
               <div class="field-label">Sale Price</div>
               <div class="field-value">${formatCurrency(form.salePrice)}</div>
             </div>
-            ` : ''}
+            `
+                : ""
+            }
           </div>
         </section>
-        ` : ''}
+        `
+            : ""
+        }
 
         <!-- Seller Information -->
         <section>
@@ -343,27 +355,27 @@ export function generateFormHTML(
           <div class="grid">
             <div class="field">
               <div class="field-label">Name</div>
-              <div class="field-value">${form.sellerName || 'N/A'}</div>
+              <div class="field-value">${form.sellerName || "N/A"}</div>
             </div>
             <div class="field">
               <div class="field-label">Email</div>
-              <div class="field-value">${form.sellerEmail || 'N/A'}</div>
+              <div class="field-value">${form.sellerEmail || "N/A"}</div>
             </div>
             <div class="field">
               <div class="field-label">Phone</div>
-              <div class="field-value">${form.sellerPhone || 'N/A'}</div>
+              <div class="field-value">${form.sellerPhone || "N/A"}</div>
             </div>
             <div class="field">
               <div class="field-label">Country</div>
-              <div class="field-value">${form.sellerCountry || 'N/A'}</div>
+              <div class="field-value">${form.sellerCountry || "N/A"}</div>
             </div>
             <div class="field grid full">
               <div class="field-label">Address</div>
-              <div class="field-value">${form.sellerAddress || 'N/A'}</div>
+              <div class="field-value">${form.sellerAddress || "N/A"}</div>
             </div>
             <div class="field grid full">
               <div class="field-label">City, State, Postal Code</div>
-              <div class="field-value">${[form.sellerCity, form.sellerState, form.sellerPostalCode].filter(Boolean).join(', ') || 'N/A'}</div>
+              <div class="field-value">${[form.sellerCity, form.sellerState, form.sellerPostalCode].filter(Boolean).join(", ") || "N/A"}</div>
             </div>
           </div>
         </section>
@@ -374,32 +386,34 @@ export function generateFormHTML(
           <div class="grid">
             <div class="field">
               <div class="field-label">Name</div>
-              <div class="field-value">${form.buyerName || 'N/A'}</div>
+              <div class="field-value">${form.buyerName || "N/A"}</div>
             </div>
             <div class="field">
               <div class="field-label">Email</div>
-              <div class="field-value">${form.buyerEmail || 'N/A'}</div>
+              <div class="field-value">${form.buyerEmail || "N/A"}</div>
             </div>
             <div class="field">
               <div class="field-label">Phone</div>
-              <div class="field-value">${form.buyerPhone || 'N/A'}</div>
+              <div class="field-value">${form.buyerPhone || "N/A"}</div>
             </div>
             <div class="field">
               <div class="field-label">Country</div>
-              <div class="field-value">${form.buyerCountry || 'N/A'}</div>
+              <div class="field-value">${form.buyerCountry || "N/A"}</div>
             </div>
             <div class="field grid full">
               <div class="field-label">Address</div>
-              <div class="field-value">${form.buyerAddress || 'N/A'}</div>
+              <div class="field-value">${form.buyerAddress || "N/A"}</div>
             </div>
             <div class="field grid full">
               <div class="field-label">City, State, Postal Code</div>
-              <div class="field-value">${[form.buyerCity, form.buyerState, form.buyerPostalCode].filter(Boolean).join(', ') || 'N/A'}</div>
+              <div class="field-value">${[form.buyerCity, form.buyerState, form.buyerPostalCode].filter(Boolean).join(", ") || "N/A"}</div>
             </div>
           </div>
         </section>
 
-        ${safeForm.directors.length > 0 ? `
+        ${
+          safeForm.directors.length > 0
+            ? `
         <!-- Directors Information -->
         <section>
           <h2>Directors</h2>
@@ -412,19 +426,27 @@ export function generateFormHTML(
               </tr>
             </thead>
             <tbody>
-              ${safeForm.directors.map(director => `
+              ${safeForm.directors
+                .map(
+                  (director) => `
                 <tr>
                   <td>${director.name}</td>
-                  <td>${director.nationality || 'N/A'}</td>
-                  <td>${director.appointmentDate ? formatDate(director.appointmentDate) : 'N/A'}</td>
+                  <td>${director.nationality || "N/A"}</td>
+                  <td>${director.appointmentDate ? formatDate(director.appointmentDate) : "N/A"}</td>
                 </tr>
-              `).join('')}
+              `,
+                )
+                .join("")}
             </tbody>
           </table>
         </section>
-        ` : ''}
+        `
+            : ""
+        }
 
-        ${safeForm.shareholders.length > 0 ? `
+        ${
+          safeForm.shareholders.length > 0
+            ? `
         <!-- Shareholders Information -->
         <section>
           <h2>Shareholders</h2>
@@ -437,50 +459,74 @@ export function generateFormHTML(
               </tr>
             </thead>
             <tbody>
-              ${safeForm.shareholders.map(shareholder => `
+              ${safeForm.shareholders
+                .map(
+                  (shareholder) => `
                 <tr>
                   <td>${shareholder.name}</td>
                   <td>${shareholder.shareholderType}</td>
                   <td>${shareholder.sharesPercentage}%</td>
                 </tr>
-              `).join('')}
+              `,
+                )
+                .join("")}
             </tbody>
           </table>
         </section>
-        ` : ''}
+        `
+            : ""
+        }
 
-        ${includeAttachments && safeForm.attachments.length > 0 ? `
+        ${
+          includeAttachments && safeForm.attachments.length > 0
+            ? `
         <!-- Attachments -->
         <section>
           <h2>Attachments (${safeForm.attachments.length})</h2>
           <ul class="attachment-list">
-            ${safeForm.attachments.map(attachment => `
+            ${safeForm.attachments
+              .map(
+                (attachment) => `
               <li class="attachment-item">
                 <div>
                   <div class="attachment-name">${attachment.name}</div>
                   <div class="attachment-size">${(attachment.size / 1024 / 1024).toFixed(2)} MB • Uploaded ${formatDate(attachment.uploadedDate)}</div>
                 </div>
               </li>
-            `).join('')}
+            `,
+              )
+              .join("")}
           </ul>
         </section>
-        ` : ''}
+        `
+            : ""
+        }
 
-        ${includeComments && safeForm.comments.length > 0 ? `
+        ${
+          includeComments && safeForm.comments.length > 0
+            ? `
         <!-- Comments -->
         <section class="page-break">
           <h2>Comments & Notes (${safeForm.comments.length})</h2>
-          ${safeForm.comments.map(comment => `
+          ${safeForm.comments
+            .map(
+              (comment) => `
             <div class="comment">
-              <div class="comment-header">${comment.author}${comment.isAdminOnly ? ' (Admin Only)' : ''}</div>
+              <div class="comment-header">${comment.author}${comment.isAdminOnly ? " (Admin Only)" : ""}</div>
               <div class="comment-text">${comment.text}</div>
               <div class="comment-date">${formatDate(comment.createdAt)}</div>
             </div>
-          `).join('')}
+          `,
+            )
+            .join("")}
         </section>
-        ` : ''}
+        `
+            : ""
+        }
 
-        ${includeAdminNotes && form.adminNotes ? `
+        ${
+          includeAdminNotes && form.adminNotes
+            ? `
         <!-- Admin Notes -->
         <section>
           <div class="notes-box">
@@ -488,7 +534,9 @@ export function generateFormHTML(
             <div class="notes-text">${form.adminNotes}</div>
           </div>
         </section>
-        ` : ''}
+        `
+            : ""
+        }
 
         <!-- Footer -->
         <div class="footer">
@@ -511,7 +559,7 @@ export function generateFormHTML(
  */
 export function getFormPDFHTML(
   form: TransferFormData,
-  options?: PDFOptions
+  options?: PDFOptions,
 ): string {
   return generateFormHTML(form, options);
 }
