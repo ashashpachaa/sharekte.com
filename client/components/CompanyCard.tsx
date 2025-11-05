@@ -433,6 +433,84 @@ export function CompanyCard({
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Status History Modal */}
+      <Dialog open={showStatusHistory} onOpenChange={setShowStatusHistory}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Status History</DialogTitle>
+            <DialogDescription>
+              {company.companyName} - All status changes and activity
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-3 max-h-96 overflow-y-auto">
+            {company.activityLog && company.activityLog.length > 0 ? (
+              company.activityLog
+                .sort(
+                  (a, b) =>
+                    new Date(b.timestamp).getTime() -
+                    new Date(a.timestamp).getTime()
+                )
+                .map((entry, index) => (
+                  <div
+                    key={entry.id || index}
+                    className="p-3 bg-gray-50 border border-gray-200 rounded-lg"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold text-gray-900">
+                          {entry.action}
+                        </p>
+                        {entry.details && (
+                          <p className="text-xs text-gray-700 mt-1">
+                            {entry.details}
+                          </p>
+                        )}
+                        {entry.previousStatus && entry.newStatus && (
+                          <p className="text-xs text-gray-600 mt-1">
+                            Status: <span className="font-medium">{entry.previousStatus}</span> → <span className="font-medium text-green-700">{entry.newStatus}</span>
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 mt-2 text-xs text-gray-600">
+                      <Clock className="w-3 h-3" />
+                      <span>
+                        {new Date(entry.timestamp).toLocaleString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          second: "2-digit",
+                        })}
+                      </span>
+                    </div>
+                    {entry.performedBy && (
+                      <p className="text-xs text-gray-600 mt-1">
+                        By: {entry.performedBy}
+                      </p>
+                    )}
+                  </div>
+                ))
+            ) : (
+              <p className="text-sm text-gray-600 text-center py-4">
+                No activity history available
+              </p>
+            )}
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setShowStatusHistory(false)}
+            >
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
