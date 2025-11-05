@@ -39,6 +39,9 @@ export default defineConfig({
     },
     minify: false, // Keep readable for debugging
     sourcemap: true,
+    commonjsOptions: {
+      transformMixedEsModules: true,
+    },
   },
   resolve: {
     alias: {
