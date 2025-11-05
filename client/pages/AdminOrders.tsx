@@ -42,6 +42,7 @@ export default function AdminOrders() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { addNotification } = useNotifications();
+  const { currency, rates } = useCurrency();
   const [notifiedOrderIds, setNotifiedOrderIds] = useState<Set<string>>(
     new Set(),
   );
