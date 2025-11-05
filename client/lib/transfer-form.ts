@@ -434,7 +434,8 @@ export async function uploadFormAttachment(
     }
     const base64Data = btoa(binary);
 
-    const response = await fetch(`/api/transfer-forms/${formId}/attachments`, {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/transfer-forms/${formId}/attachments`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
