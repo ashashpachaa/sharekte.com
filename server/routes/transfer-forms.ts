@@ -1,13 +1,68 @@
 import { RequestHandler } from "express";
-import type {
-  TransferFormData,
-  FormStatus,
-  DirectorInfo,
-  ShareholderInfo,
-} from "../../client/lib/transfer-form";
+
+// Type definitions - copied locally to avoid importing from client code
+type FormStatus = "under-review" | "amend-required" | "confirm-application" | "transferring" | "complete-transfer" | "canceled";
+
+interface DirectorInfo {
+  name: string;
+  nationality: string;
+  address: string;
+  city: string;
+  country: string;
+  phone?: string;
+}
+
+interface ShareholderInfo {
+  name: string;
+  nationality: string;
+  address: string;
+  city: string;
+  country: string;
+  shares: number;
+  amount: number;
+  percentage: number;
+}
+
+interface FormAttachment {
+  id: string;
+  name: string;
+  type: string;
+  size: number;
+  uploadedDate: string;
+  uploadedBy: string;
+  url?: string;
+  data?: string;
+}
+
+interface FormComment {
+  id: string;
+  author: string;
+  text: string;
+  createdAt: string;
+  isAdminOnly?: boolean;
+}
+
+interface TransferFormData {
+  id: string;
+  formId: string;
+  orderId: string;
+  companyName: string;
+  companyNumber: string;
+  country: string;
+  status: FormStatus;
+  createdAt: string;
+  updatedAt: string;
+  directors: DirectorInfo[];
+  shareholders: ShareholderInfo[];
+  pscDeclaration: { hasPSC: boolean; details: string };
+  amendments: string[];
+  comments: FormComment[];
+  attachments: FormAttachment[];
+  activities: string[];
+}
 
 // Import runtime function separately with proper bundling
-const createEmptyForm = (): any => ({
+const createEmptyForm = (): TransferFormData => ({
   id: `form_${Date.now()}`,
   formId: `FORM-${Date.now()}`,
   orderId: "",
