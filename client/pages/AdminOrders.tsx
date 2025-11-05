@@ -371,7 +371,7 @@ export default function AdminOrders() {
                   Total Revenue
                 </p>
                 <p className="text-2xl font-bold text-primary">
-                  £
+                  {rates[currency as keyof typeof rates]?.symbol || "$"}
                   {orders
                     .reduce((sum, o) => sum + o.amount, 0)
                     .toLocaleString()}
