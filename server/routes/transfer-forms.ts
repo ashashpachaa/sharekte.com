@@ -565,6 +565,19 @@ export const updateFormStatus: RequestHandler = async (req, res) => {
         ? form.amendmentsRequiredCount + 1
         : form.amendmentsRequiredCount;
 
+    const newComments = [...form.comments];
+
+    // Add comment to comments array if status is "amend-required" and notes provided
+    if (status === "amend-required" && notes) {
+      newComments.push({
+        id: `comment_${Date.now()}`,
+        author: "admin",
+        text: notes,
+        createdAt: new Date().toISOString(),
+        isAdminOnly: true,
+      });
+    }
+
     const updated: TransferFormData = {
       ...form,
       status: status as FormStatus,
@@ -574,6 +587,7 @@ export const updateFormStatus: RequestHandler = async (req, res) => {
           ? new Date().toISOString()
           : form.lastAmendmentDate,
       updatedAt: new Date().toISOString(),
+      comments: newComments,
       statusHistory: [
         ...form.statusHistory,
         {
