@@ -541,7 +541,7 @@ export default function AdminOrders() {
                           <td className="px-6 py-4 text-right font-semibold text-foreground">
                             {rates[currency as keyof typeof rates]?.symbol ||
                               "$"}
-                            {convertPrice(order.amount).toLocaleString()}
+                            {order.amount.toLocaleString()}
                           </td>
                           <td className="px-6 py-4">
                             <span
