@@ -168,11 +168,12 @@ export const loginHandler: RequestHandler = (req, res) => {
 
     // Generate token
     const token = generateToken();
-    tokens.set(token, {
+    tokens[token] = {
       email: user.email,
       name: user.name,
       expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
+    };
+    saveTokensToFile(tokens);
 
     res.json({
       token,
