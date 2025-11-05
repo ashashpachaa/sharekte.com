@@ -114,24 +114,27 @@ export function UserProvider({ children }: { children: ReactNode }) {
         body: JSON.stringify({ email, password }),
       });
 
-      let data;
+      let data: any = {};
+
+      // Try to parse response body with fallback
       try {
-        const text = await response.text();
-        data = text ? JSON.parse(text) : {};
+        // Clone response to safely read it
+        const clonedResponse = response.clone();
+        data = await clonedResponse.json();
       } catch (e) {
-        console.error("Failed to parse response:", e);
-        throw new Error("Server error: Invalid response format");
+        console.warn("Could not parse response body, continuing without data:", e);
+        // If response body can't be parsed, just use status code
       }
 
       if (!response.ok) {
-        throw new Error(data?.error || "Login failed");
+        throw new Error(data?.error || `Login failed (HTTP ${response.status})`);
       }
 
       setIsUser(true);
       setUserEmail(data.email);
       setUserName(data.name);
-      setUserToken(data.token);
-      localStorage.setItem("userToken", data.token);
+      setUserToken(data.token || "");
+      localStorage.setItem("userToken", data.token || "");
       localStorage.setItem("userEmail", data.email);
       localStorage.setItem("userName", data.name);
     } catch (error) {
