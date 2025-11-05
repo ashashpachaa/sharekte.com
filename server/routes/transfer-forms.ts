@@ -1028,10 +1028,13 @@ export const generatePDF: RequestHandler = async (req, res) => {
         "bytes",
       );
 
-      // Send HTML for viewing and printing to PDF
-      // User will print to PDF using browser print dialog (Ctrl+P or Cmd+P)
-      res.setHeader("Content-Type", "text/html; charset=utf-8");
+      // Send as downloadable PDF file (user opens in browser, then prints to PDF)
+      const filename = `transfer-form-${form.formId}.pdf`;
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
       res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+      res.setHeader("Pragma", "no-cache");
+      res.setHeader("Expires", "0");
       res.setHeader("Content-Length", Buffer.byteLength(htmlContent));
       res.send(htmlContent);
       console.log("[generatePDF] ✓ HTML sent successfully to client");
