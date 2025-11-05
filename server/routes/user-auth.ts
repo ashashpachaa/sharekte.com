@@ -16,6 +16,21 @@ const TOKENS_FILE = path.join(process.cwd(), "tokens.json");
 
 let users: User[] = loadUsersFromFile();
 
+// Initialize with demo user if no users exist
+if (users.length === 0) {
+  users = [
+    {
+      id: "demo_user_1",
+      email: "company@domainostartup.com",
+      name: "Company",
+      password: "Test123!",
+      createdAt: new Date().toISOString(),
+    },
+  ];
+  saveUsersToFile(users);
+  console.log("[init] ✓ Initialized with demo user");
+}
+
 interface TokenEntry {
   [key: string]: { email: string; name: string; expiresAt: number };
 }
