@@ -38,5 +38,45 @@
     "documents": [],
     "createdAt": "2025-11-05",
     "updatedAt": "2025-11-05"
+  },
+  {
+    "id": "ord-1762378478954",
+    "orderId": "ORD-2025-78954",
+    "customerName": "ashraf mohammed abdou awad ibrahim",
+    "customerEmail": "company@domainostartup.com",
+    "customerPhone": "+971505051790",
+    "billingAddress": "fkesfmkl;sdm",
+    "country": "unit",
+    "companyId": "recRNBSQAdrKX0rGf",
+    "companyName": "SHAREKTE10 LTD",
+    "companyNumber": "16716847",
+    "paymentMethod": "credit_card",
+    "paymentStatus": "completed",
+    "transactionId": "txn-1762378478954",
+    "amount": 3670,
+    "currency": "AED",
+    "paymentDate": "2025-11-05",
+    "status": "paid",
+    "statusChangedDate": "2025-11-05",
+    "statusHistory": [
+      {
+        "id": "hist-1762378478954",
+        "fromStatus": "pending-payment",
+        "toStatus": "paid",
+        "changedDate": "2025-11-05",
+        "changedBy": "system",
+        "notes": "Order created through checkout"
+      }
+    ],
+    "purchaseDate": "2025-11-05",
+    "lastUpdateDate": "2025-11-05",
+    "renewalDate": "2026-11-05",
+    "renewalFees": 1284.5,
+    "appliedFees": [],
+    "totalFees": 0,
+    "refundStatus": "none",
+    "documents": [],
+    "createdAt": "2025-11-05",
+    "updatedAt": "2025-11-05"
   }
 ]
