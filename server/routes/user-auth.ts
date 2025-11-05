@@ -196,14 +196,15 @@ export const verifyHandler: RequestHandler = (req, res) => {
       return res.status(401).json({ error: "No token provided" });
     }
 
-    const tokenData = tokens.get(token);
+    const tokenData = tokens[token];
 
     if (!tokenData) {
       return res.status(401).json({ error: "Invalid token" });
     }
 
     if (tokenData.expiresAt < Date.now()) {
-      tokens.delete(token);
+      delete tokens[token];
+      saveTokensToFile(tokens);
       return res.status(401).json({ error: "Token expired" });
     }
 
