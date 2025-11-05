@@ -453,25 +453,25 @@ export default function AdminInvoices() {
             <div className="bg-card p-4 rounded-lg border border-border/40">
               <p className="text-sm text-muted-foreground">Total Amount</p>
               <p className="text-2xl font-bold text-foreground">
-                {formatInvoiceAmount(stats.totalAmount)}
+                {formatInvoiceAmount(stats.totalAmount, currency)}
               </p>
             </div>
             <div className="bg-green-50 p-4 rounded-lg border border-green-200">
               <p className="text-sm text-green-900">Paid</p>
               <p className="text-2xl font-bold text-green-700">
-                {formatInvoiceAmount(stats.paidAmount)}
+                {formatInvoiceAmount(stats.paidAmount, currency)}
               </p>
             </div>
             <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
               <p className="text-sm text-yellow-900">Pending</p>
               <p className="text-2xl font-bold text-yellow-700">
-                {formatInvoiceAmount(stats.pendingAmount)}
+                {formatInvoiceAmount(stats.pendingAmount, currency)}
               </p>
             </div>
             <div className="bg-red-50 p-4 rounded-lg border border-red-200">
               <p className="text-sm text-red-900">Overdue</p>
               <p className="text-2xl font-bold text-red-700">
-                {formatInvoiceAmount(stats.overdueAmount)}
+                {formatInvoiceAmount(stats.overdueAmount, currency)}
               </p>
             </div>
           </div>
