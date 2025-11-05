@@ -1967,7 +1967,7 @@ export default function Dashboard() {
                           <span className="text-sm font-medium">
                             {formatPriceWithCurrency(
                               selectedInvoice.amount,
-                              selectedInvoice.currency,
+                              currency,
                               rates,
                             )}
                           </span>
