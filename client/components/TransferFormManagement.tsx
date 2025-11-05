@@ -169,6 +169,28 @@ export function TransferFormManagement({
         setForms((prevForms) =>
           prevForms.map((f) => (f.id === selectedForm.id ? updatedForm : f)),
         );
+
+        // If status changed to "amend-required", save comment to company
+        if (newStatus === "amend-required" && statusNotes) {
+          try {
+            const apiBaseURL = getAPIBaseURL();
+            const companyId = selectedForm.companyName || selectedForm.id;
+            await fetch(
+              `${apiBaseURL}/api/companies/${companyId}/add-comment`,
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  adminComments: statusNotes,
+                  timestamp: new Date().toISOString(),
+                }),
+              }
+            );
+          } catch (error) {
+            console.error("Error saving admin comment to company:", error);
+          }
+        }
+
         setShowStatusModal(false);
         setNewStatus("");
         setStatusNotes("");
