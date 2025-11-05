@@ -135,13 +135,22 @@ export function UserProvider({ children }: { children: ReactNode }) {
         throw new Error(errorMessage);
       }
 
+      console.log("[login] ✓ Login successful, saving to localStorage");
+      console.log("[login] Response data:", { email: data.email, name: data.name, token: data.token ? "***" : "missing" });
+
       setIsUser(true);
       setUserEmail(data.email);
       setUserName(data.name);
       setUserToken(data.token || "");
+
       localStorage.setItem("userToken", data.token || "");
       localStorage.setItem("userEmail", data.email);
       localStorage.setItem("userName", data.name);
+
+      console.log("[login] ✓ Stored in localStorage:");
+      console.log("[login] userToken:", localStorage.getItem("userToken") ? "✓ set" : "✗ missing");
+      console.log("[login] userEmail:", localStorage.getItem("userEmail"));
+      console.log("[login] userName:", localStorage.getItem("userName"));
     } catch (error) {
       if (error instanceof Error) {
         throw error;
