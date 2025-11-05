@@ -112,7 +112,9 @@ export const verifyAdminToken: RequestHandler = (req, res) => {
     });
   } catch (error) {
     console.error("[verifyAdminToken] Error:", error);
-    res.status(401).json({ isValid: false, error: "Token verification failed" });
+    res
+      .status(401)
+      .json({ isValid: false, error: "Token verification failed" });
   }
 };
 
