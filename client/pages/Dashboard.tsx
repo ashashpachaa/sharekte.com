@@ -13,7 +13,18 @@ import {
   DialogDescription,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Search, X, ShoppingCart } from "lucide-react";
+import {
+  Search,
+  X,
+  ShoppingCart,
+  Edit2,
+  FileText,
+  Clock,
+  AlertCircle,
+  Download,
+  CheckCircle,
+  Zap,
+} from "lucide-react";
 import { useSearch } from "@/hooks/use-search";
 import {
   getPurchasedCompanies,
