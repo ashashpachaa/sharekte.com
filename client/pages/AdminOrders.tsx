@@ -32,6 +32,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { useNotifications } from "@/lib/notifications-context";
 import { getAPIBaseURL } from "@/lib/transfer-form";
+import { useCurrency } from "@/lib/currency-context";
 import type { CompanyData } from "@/lib/company-management";
 
 type FilterStatus = "all" | OrderStatus;
