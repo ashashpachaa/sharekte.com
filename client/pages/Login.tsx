@@ -35,7 +35,10 @@ export default function Login() {
     }
 
     if (password.length < 6) {
-      toast.error(t("auth.errorPasswordLength") || "Password must be at least 6 characters");
+      toast.error(
+        t("auth.errorPasswordLength") ||
+          "Password must be at least 6 characters",
+      );
       return;
     }
 
@@ -66,7 +69,8 @@ export default function Login() {
               {t("auth.login.title") || "Sign In"}
             </h1>
             <p className="text-muted-foreground">
-              {t("auth.login.subtitle") || "Access your account to continue shopping"}
+              {t("auth.login.subtitle") ||
+                "Access your account to continue shopping"}
             </p>
           </div>
 
@@ -130,7 +134,10 @@ export default function Login() {
 
           <p className="text-center text-sm text-muted-foreground">
             {t("auth.noAccount") || "Don't have an account?"}{" "}
-            <Link to="/signup" className="text-primary hover:underline font-medium">
+            <Link
+              to="/signup"
+              className="text-primary hover:underline font-medium"
+            >
               {t("auth.signup") || "Create one"}
             </Link>
           </p>

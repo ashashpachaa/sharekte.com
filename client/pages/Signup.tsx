@@ -48,7 +48,10 @@ export default function Signup() {
     }
 
     if (password.length < 6) {
-      toast.error(t("auth.errorPasswordLength") || "Password must be at least 6 characters");
+      toast.error(
+        t("auth.errorPasswordLength") ||
+          "Password must be at least 6 characters",
+      );
       return;
     }
 
@@ -58,7 +61,9 @@ export default function Signup() {
     }
 
     if (!agreedToTerms) {
-      toast.error(t("auth.errorTerms") || "Please agree to the terms and conditions");
+      toast.error(
+        t("auth.errorTerms") || "Please agree to the terms and conditions",
+      );
       return;
     }
 
@@ -201,18 +206,24 @@ export default function Signup() {
                 className="mt-1 rounded"
               />
               <label htmlFor="terms" className="text-sm text-muted-foreground">
-                {t("auth.agreeToTerms") || "I agree to the terms and conditions"}
+                {t("auth.agreeToTerms") ||
+                  "I agree to the terms and conditions"}
               </label>
             </div>
 
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Creating account..." : t("auth.signup.button") || "Create Account"}
+              {loading
+                ? "Creating account..."
+                : t("auth.signup.button") || "Create Account"}
             </Button>
           </form>
 
           <p className="text-center text-sm text-muted-foreground">
             {t("auth.haveAccount") || "Already have an account?"}{" "}
-            <Link to="/login" className="text-primary hover:underline font-medium">
+            <Link
+              to="/login"
+              className="text-primary hover:underline font-medium"
+            >
               {t("auth.login") || "Sign in"}
             </Link>
           </p>

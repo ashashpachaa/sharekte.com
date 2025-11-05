@@ -79,7 +79,10 @@ export default function App() {
                           }
                         />
                         {/* Secret Admin Login - Hidden from Public */}
-                        <Route path="/secure-admin-access-7k9m2q" element={<AdminLogin />} />
+                        <Route
+                          path="/secure-admin-access-7k9m2q"
+                          element={<AdminLogin />}
+                        />
                         <Route
                           path="/admin/dashboard"
                           element={

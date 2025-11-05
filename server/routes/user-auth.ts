@@ -10,7 +10,10 @@ interface User {
 }
 
 let users: User[] = [];
-const tokens = new Map<string, { email: string; name: string; expiresAt: number }>();
+const tokens = new Map<
+  string,
+  { email: string; name: string; expiresAt: number }
+>();
 
 function generateToken(): string {
   return Math.random().toString(36).substring(2) + Date.now().toString(36);
@@ -26,11 +29,15 @@ export const signupHandler: RequestHandler = (req, res) => {
 
     // Validation
     if (!email || !password || !name) {
-      return res.status(400).json({ error: "Email, password, and name are required" });
+      return res
+        .status(400)
+        .json({ error: "Email, password, and name are required" });
     }
 
     if (password.length < 6) {
-      return res.status(400).json({ error: "Password must be at least 6 characters" });
+      return res
+        .status(400)
+        .json({ error: "Password must be at least 6 characters" });
     }
 
     // Check if user already exists
