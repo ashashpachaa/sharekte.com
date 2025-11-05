@@ -34,7 +34,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 
 export default function AdminUsers() {
-  const { currentAdmin, isAdmin } = useAdmin();
+  const { isAdmin } = useAdmin();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -147,7 +147,7 @@ export default function AdminUsers() {
     toast.success("User updated");
   };
 
-  if (!currentAdmin) return null;
+  if (!isAdmin) return null;
 
   return (
     <div className="min-h-screen bg-background">

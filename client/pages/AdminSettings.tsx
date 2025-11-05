@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Shield, Lock, Bell } from "lucide-react";
 
 export default function AdminSettings() {
-  const { currentAdmin, isAdmin } = useAdmin();
+  const { isAdmin, adminEmail } = useAdmin();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,7 +14,7 @@ export default function AdminSettings() {
     }
   }, [isAdmin, navigate]);
 
-  if (!currentAdmin) {
+  if (!isAdmin) {
     return null;
   }
 
@@ -47,26 +47,21 @@ export default function AdminSettings() {
 
           <div className="space-y-4">
             <div>
-              <label className="text-sm font-medium text-muted-foreground">Name</label>
-              <p className="text-foreground mt-1">{currentAdmin.name}</p>
-            </div>
-
-            <div>
               <label className="text-sm font-medium text-muted-foreground">Email</label>
-              <p className="text-foreground mt-1">{currentAdmin.email}</p>
+              <p className="text-foreground mt-1">{adminEmail || "Admin"}</p>
             </div>
 
             <div>
               <label className="text-sm font-medium text-muted-foreground">Role</label>
               <p className="text-foreground mt-1 capitalize">
-                {currentAdmin.role.replace("-", " ")}
+                Super Admin
               </p>
             </div>
 
             <div>
-              <label className="text-sm font-medium text-muted-foreground">Last Login</label>
-              <p className="text-foreground mt-1">
-                {currentAdmin.lastLogin ? new Date(currentAdmin.lastLogin).toLocaleString() : "Never"}
+              <label className="text-sm font-medium text-muted-foreground">Status</label>
+              <p className="text-foreground mt-1 capitalize">
+                Active
               </p>
             </div>
           </div>
