@@ -127,7 +127,12 @@ export function UserProvider({ children }: { children: ReactNode }) {
       }
 
       if (!response.ok) {
-        throw new Error(data?.error || `Login failed (HTTP ${response.status})`);
+        let errorMessage = data?.error || `Login failed (HTTP ${response.status})`;
+        // Include error code if available
+        if (data?.code) {
+          errorMessage += ` [${data.code}]`;
+        }
+        throw new Error(errorMessage);
       }
 
       setIsUser(true);
