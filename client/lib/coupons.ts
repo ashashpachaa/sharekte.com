@@ -46,7 +46,7 @@ export async function fetchCoupons(): Promise<Coupon[]> {
 // Validate and apply coupon
 export async function validateCoupon(
   code: string,
-  orderTotal: number
+  orderTotal: number,
 ): Promise<CouponValidationResponse> {
   try {
     const response = await fetch(`${getAPIBaseURL()}/api/coupons/validate`, {
@@ -78,7 +78,9 @@ export async function validateCoupon(
 }
 
 // Create coupon (admin)
-export async function createCoupon(coupon: Omit<Coupon, "id" | "createdAt" | "updatedAt" | "usedCount">): Promise<Coupon | null> {
+export async function createCoupon(
+  coupon: Omit<Coupon, "id" | "createdAt" | "updatedAt" | "usedCount">,
+): Promise<Coupon | null> {
   try {
     const response = await fetch(`${getAPIBaseURL()}/api/coupons`, {
       method: "POST",
@@ -95,7 +97,10 @@ export async function createCoupon(coupon: Omit<Coupon, "id" | "createdAt" | "up
 }
 
 // Update coupon (admin)
-export async function updateCoupon(id: string, updates: Partial<Coupon>): Promise<Coupon | null> {
+export async function updateCoupon(
+  id: string,
+  updates: Partial<Coupon>,
+): Promise<Coupon | null> {
   try {
     const response = await fetch(`${getAPIBaseURL()}/api/coupons/${id}`, {
       method: "PATCH",

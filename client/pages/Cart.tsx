@@ -17,9 +17,10 @@ export default function CartPage() {
     if (!searchQuery.trim()) return items;
 
     const query = searchQuery.toLowerCase();
-    return items.filter((item) =>
-      item.name.toLowerCase().includes(query) ||
-      item.companyNumber.toLowerCase().includes(query)
+    return items.filter(
+      (item) =>
+        item.name.toLowerCase().includes(query) ||
+        item.companyNumber.toLowerCase().includes(query),
     );
   }, [items, searchQuery]);
 
@@ -69,7 +70,8 @@ export default function CartPage() {
             Shopping Cart
           </h1>
           <p className="text-muted-foreground mt-2">
-            You have {items.length} {items.length === 1 ? "company" : "companies"} in your cart
+            You have {items.length}{" "}
+            {items.length === 1 ? "company" : "companies"} in your cart
           </p>
         </div>
       </section>
@@ -103,37 +105,39 @@ export default function CartPage() {
               <div className="space-y-4">
                 {filteredItems.length === 0 ? (
                   <div className="bg-card border border-border/40 rounded-lg p-8 text-center text-muted-foreground">
-                    {searchQuery ? "No items match your search" : "Your cart is empty"}
+                    {searchQuery
+                      ? "No items match your search"
+                      : "Your cart is empty"}
                   </div>
                 ) : (
                   filteredItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="bg-card border border-border/40 rounded-lg p-6 flex items-center justify-between hover:shadow-md transition-shadow"
-                >
-                  <div className="flex-1">
-                    <h3 className="text-lg font-bold text-foreground">
-                      {item.name}
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                      Company Number: {item.companyNumber}
-                    </p>
-                    <p className="text-lg font-semibold text-primary mt-2">
-                      {formatPrice(item.price)}
-                    </p>
-                  </div>
+                    <div
+                      key={item.id}
+                      className="bg-card border border-border/40 rounded-lg p-6 flex items-center justify-between hover:shadow-md transition-shadow"
+                    >
+                      <div className="flex-1">
+                        <h3 className="text-lg font-bold text-foreground">
+                          {item.name}
+                        </h3>
+                        <p className="text-sm text-muted-foreground">
+                          Company Number: {item.companyNumber}
+                        </p>
+                        <p className="text-lg font-semibold text-primary mt-2">
+                          {formatPrice(item.price)}
+                        </p>
+                      </div>
 
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-destructive hover:bg-destructive/10"
-                    onClick={() => removeItem(item.id)}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
-              )))
-              }
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-destructive hover:bg-destructive/10"
+                        onClick={() => removeItem(item.id)}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
 
@@ -164,17 +168,10 @@ export default function CartPage() {
                 className="w-full bg-primary hover:bg-primary-600 text-white mb-3"
                 asChild
               >
-                <Link to="/checkout">
-                  Proceed to Checkout
-                </Link>
+                <Link to="/checkout">Proceed to Checkout</Link>
               </Button>
 
-              <Button
-                size="lg"
-                variant="outline"
-                className="w-full"
-                asChild
-              >
+              <Button size="lg" variant="outline" className="w-full" asChild>
                 <Link to="/">Continue Shopping</Link>
               </Button>
 

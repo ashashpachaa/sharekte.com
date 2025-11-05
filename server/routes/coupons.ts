@@ -95,7 +95,7 @@ export const validateCoupon: RequestHandler = (req, res) => {
 
     // Find coupon by code (case-insensitive)
     const coupon = couponsDb.find(
-      (c) => c.code.toUpperCase() === code.toUpperCase()
+      (c) => c.code.toUpperCase() === code.toUpperCase(),
     );
 
     if (!coupon) {
@@ -246,8 +246,7 @@ export const updateCoupon: RequestHandler = (req, res) => {
       updates.code &&
       couponsDb.some(
         (c) =>
-          c.id !== id &&
-          c.code.toUpperCase() === updates.code.toUpperCase()
+          c.id !== id && c.code.toUpperCase() === updates.code.toUpperCase(),
       )
     ) {
       return res.status(409).json({
@@ -258,7 +257,9 @@ export const updateCoupon: RequestHandler = (req, res) => {
     const updatedCoupon: Coupon = {
       ...couponsDb[couponIndex],
       ...updates,
-      code: updates.code ? updates.code.toUpperCase() : couponsDb[couponIndex].code,
+      code: updates.code
+        ? updates.code.toUpperCase()
+        : couponsDb[couponIndex].code,
       updatedAt: new Date().toISOString(),
     };
 
@@ -298,7 +299,7 @@ export const applyCoupon: RequestHandler = (req, res) => {
     }
 
     const coupon = couponsDb.find(
-      (c) => c.code.toUpperCase() === couponCode.toUpperCase()
+      (c) => c.code.toUpperCase() === couponCode.toUpperCase(),
     );
 
     if (!coupon) {

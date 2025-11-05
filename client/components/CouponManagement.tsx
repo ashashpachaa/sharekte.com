@@ -153,7 +153,9 @@ export function CouponManagement() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-foreground">Coupon Management</h2>
+        <h2 className="text-2xl font-bold text-foreground">
+          Coupon Management
+        </h2>
         <Button onClick={() => handleOpenDialog()} className="gap-2">
           <Plus className="w-4 h-4" />
           Create Coupon
@@ -162,7 +164,9 @@ export function CouponManagement() {
 
       {coupons.length === 0 ? (
         <Alert>
-          <AlertDescription>No coupons found. Create your first coupon to get started.</AlertDescription>
+          <AlertDescription>
+            No coupons found. Create your first coupon to get started.
+          </AlertDescription>
         </Alert>
       ) : (
         <div className="grid gap-4">
@@ -180,9 +184,10 @@ export function CouponManagement() {
                     <Badge variant={coupon.active ? "default" : "outline"}>
                       {coupon.active ? "Active" : "Inactive"}
                     </Badge>
-                    {coupon.expiryDate && new Date(coupon.expiryDate) < new Date() && (
-                      <Badge variant="destructive">Expired</Badge>
-                    )}
+                    {coupon.expiryDate &&
+                      new Date(coupon.expiryDate) < new Date() && (
+                        <Badge variant="destructive">Expired</Badge>
+                      )}
                   </div>
 
                   {coupon.description && (
@@ -220,7 +225,9 @@ export function CouponManagement() {
 
                     {coupon.minOrderValue && (
                       <div>
-                        <span className="text-muted-foreground">Min Order:</span>
+                        <span className="text-muted-foreground">
+                          Min Order:
+                        </span>
                         <span className="ml-2 font-medium text-foreground">
                           ${coupon.minOrderValue}
                         </span>
@@ -259,7 +266,9 @@ export function CouponManagement() {
               {selectedCoupon ? "Edit Coupon" : "Create New Coupon"}
             </DialogTitle>
             <DialogDescription>
-              {selectedCoupon ? "Update coupon details" : "Add a new discount coupon"}
+              {selectedCoupon
+                ? "Update coupon details"
+                : "Add a new discount coupon"}
             </DialogDescription>
           </DialogHeader>
 
@@ -320,7 +329,8 @@ export function CouponManagement() {
 
               <div>
                 <label className="text-sm font-medium">
-                  Discount Value {formData.discountType === "percentage" ? "(%)" : "($)"}
+                  Discount Value{" "}
+                  {formData.discountType === "percentage" ? "(%)" : "($)"}
                 </label>
                 <Input
                   type="number"
@@ -362,14 +372,18 @@ export function CouponManagement() {
 
             {/* Min Order Value */}
             <div>
-              <label className="text-sm font-medium">Minimum Order Value (Optional)</label>
+              <label className="text-sm font-medium">
+                Minimum Order Value (Optional)
+              </label>
               <Input
                 type="number"
                 value={formData.minOrderValue || ""}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
-                    minOrderValue: e.target.value ? parseFloat(e.target.value) : undefined,
+                    minOrderValue: e.target.value
+                      ? parseFloat(e.target.value)
+                      : undefined,
                   }))
                 }
                 placeholder="e.g., 500"
@@ -385,7 +399,9 @@ export function CouponManagement() {
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
-                    maxUses: e.target.value ? parseInt(e.target.value) : undefined,
+                    maxUses: e.target.value
+                      ? parseInt(e.target.value)
+                      : undefined,
                   }))
                 }
                 placeholder="Leave empty for unlimited"
@@ -394,7 +410,9 @@ export function CouponManagement() {
 
             {/* Expiry Date */}
             <div>
-              <label className="text-sm font-medium">Expiry Date (Optional)</label>
+              <label className="text-sm font-medium">
+                Expiry Date (Optional)
+              </label>
               <Input
                 type="date"
                 value={formData.expiryDate}

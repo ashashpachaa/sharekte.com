@@ -7,11 +7,7 @@ import { NotificationBell } from "./NotificationBell";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useCurrency } from "@/lib/currency-context";
 import { Globe, LogOut, User, Menu, X } from "lucide-react";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 export function Header() {
   const { t } = useTranslation();

@@ -64,10 +64,7 @@ export default function App() {
                         path="/admin/services"
                         element={<AdminServices />}
                       />
-                      <Route
-                        path="/admin/coupons"
-                        element={<AdminCoupons />}
-                      />
+                      <Route path="/admin/coupons" element={<AdminCoupons />} />
                       <Route
                         path="/admin/invoices"
                         element={<AdminInvoices />}

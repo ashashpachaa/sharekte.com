@@ -67,7 +67,8 @@ export default function Checkout() {
 
   // Coupon state
   const [couponCode, setCouponCode] = useState("");
-  const [appliedCoupon, setAppliedCoupon] = useState<CouponValidationResponse | null>(null);
+  const [appliedCoupon, setAppliedCoupon] =
+    useState<CouponValidationResponse | null>(null);
   const [couponLoading, setCouponLoading] = useState(false);
   const [couponError, setCouponError] = useState("");
 
@@ -138,7 +139,7 @@ export default function Checkout() {
     }));
     const totalFees = feesDetails.reduce(
       (sum, fee) => sum + fee.calculatedAmount,
-      0
+      0,
     );
     const currentTotal = totalPrice + totalFees;
 
@@ -244,7 +245,9 @@ export default function Checkout() {
         const convertedAmount = item.price;
         // Renewal fees are stored in USD in Airtable, so convert them to selected currency
         const convertedRenewalFees =
-          currency !== "USD" ? convertPrice(item.renewalFees || 0) : item.renewalFees || 0;
+          currency !== "USD"
+            ? convertPrice(item.renewalFees || 0)
+            : item.renewalFees || 0;
 
         // Create purchased company record
         const purchasedCompany: PurchasedCompanyData = {
@@ -1129,7 +1132,7 @@ export default function Checkout() {
                   {formatPrice(
                     appliedCoupon?.valid
                       ? appliedCoupon.discountedTotal
-                      : finalTotal
+                      : finalTotal,
                   )}
                 </span>
               </div>

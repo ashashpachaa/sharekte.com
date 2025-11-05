@@ -386,7 +386,10 @@ export function createServer() {
 
   // Service Order Comments & Status Management
   app.get("/api/service-orders/:id/comments", getServiceOrderCommentsHandler);
-  app.post("/api/service-orders/:id/comments", createServiceOrderCommentHandler);
+  app.post(
+    "/api/service-orders/:id/comments",
+    createServiceOrderCommentHandler,
+  );
   app.patch("/api/service-orders/:id/status", updateServiceOrderStatusHandler);
 
   // Coupon routes
@@ -419,7 +422,9 @@ export function createServer() {
       });
     });
   } else {
-    console.warn("[createServer] ⚠️ SPA path not found, root route will not be available");
+    console.warn(
+      "[createServer] ⚠️ SPA path not found, root route will not be available",
+    );
   }
 
   return app;
@@ -431,10 +436,10 @@ function findSPAPath(): string | null {
 
   // Try multiple paths
   const candidates = [
-    path.resolve(__dirname, "../dist/spa"),        // Dev relative
-    "/app/code/dist/spa",                          // Docker
-    "/var/www/shareket.com/dist/spa",             // Hostinger
-    path.resolve(process.cwd(), "dist/spa"),       // CWD based
+    path.resolve(__dirname, "../dist/spa"), // Dev relative
+    "/app/code/dist/spa", // Docker
+    "/var/www/shareket.com/dist/spa", // Hostinger
+    path.resolve(process.cwd(), "dist/spa"), // CWD based
   ];
 
   for (const candidate of candidates) {
