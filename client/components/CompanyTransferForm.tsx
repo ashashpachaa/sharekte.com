@@ -1148,7 +1148,7 @@ export function CompanyTransferForm({
               formData.totalShares &&
               formData.totalShareCapital &&
               formData.totalShares > 0
-                ? (formData.totalShares ? (formData.totalShareCapital / formData.totalShares) : 0).toFixed(2)
+                ? ((typeof formData.totalShareCapital === 'number' && typeof formData.totalShares === 'number' && !isNaN(formData.totalShareCapital) && !isNaN(formData.totalShares)) ? (formData.totalShareCapital / formData.totalShares) : 0).toFixed(2)
                 : "0.00"
             }
             disabled
