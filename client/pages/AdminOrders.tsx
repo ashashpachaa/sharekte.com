@@ -634,7 +634,11 @@ function OrderDetailsModal({
   onClose,
   onStatusChange,
 }: OrderDetailsModalProps) {
-  const [editedOrder, setEditedOrder] = useState<Order>(order);
+  const [editedOrder, setEditedOrder] = useState<Order>({
+    ...order,
+    amount: typeof order.amount === 'number' && !isNaN(order.amount) ? order.amount : 0,
+    renewalFees: typeof order.renewalFees === 'number' && !isNaN(order.renewalFees) ? order.renewalFees : 0,
+  });
   const [isSaving, setIsSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
   const { toast } = useToast();
