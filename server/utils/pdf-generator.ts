@@ -484,9 +484,9 @@ export function generateFormHTML(
                 .map(
                   (shareholder) => `
                 <tr>
-                  <td>${shareholder.name}</td>
-                  <td>${shareholder.shareholderType}</td>
-                  <td>${shareholder.sharesPercentage}%</td>
+                  <td>${shareholder.name || "N/A"}</td>
+                  <td>${shareholder.shareholderType || shareholder.type || "Individual"}</td>
+                  <td>${shareholder.shareholderPercentage || shareholder.sharesPercentage || 0}%</td>
                 </tr>
               `,
                 )
