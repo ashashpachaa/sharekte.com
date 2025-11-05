@@ -85,7 +85,7 @@ export default function AdminLogin() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@shareket.com"
+                placeholder="admin@sharekte.com"
                 className="w-full"
                 required
                 disabled={loading}
@@ -126,7 +126,7 @@ export default function AdminLogin() {
               Demo Admin Credentials:
             </p>
             <div className="text-xs text-blue-800 space-y-1 font-mono">
-              <p>Email: admin@shareket.com</p>
+              <p>Email: admin@sharekte.com</p>
               <p>Password: Ash@shpachaa2010</p>
             </div>
           </div>
