@@ -526,6 +526,22 @@ export default function Checkout() {
               </p>
             </div>
 
+            {/* Account Created Info */}
+            <div className="bg-green-50 border border-green-200 rounded-lg p-6 my-6">
+              <div className="flex gap-3 items-start">
+                <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
+                <div className="text-left">
+                  <p className="font-semibold text-green-900">Account Created! ✓</p>
+                  <p className="text-sm text-green-800 mt-1">
+                    We've automatically created your account with email: <strong>{userEmail}</strong>
+                  </p>
+                  <p className="text-sm text-green-800 mt-2">
+                    You can now sign in to your dashboard to view your purchases and complete the transfer form.
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {/* What's Next */}
             <div className="bg-card border border-border/40 rounded-lg p-8 my-8">
               <h2 className="text-xl font-bold text-foreground mb-6">
@@ -535,6 +551,19 @@ export default function Checkout() {
                 <div className="flex gap-4">
                   <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-sm flex-shrink-0">
                     1
+                  </div>
+                  <div>
+                    <p className="font-semibold text-foreground">
+                      Sign In to Your Account
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Log in with your email address to access your dashboard (we'll send you a password reset link shortly)
+                    </p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-sm flex-shrink-0">
+                    2
                   </div>
                   <div>
                     <p className="font-semibold text-foreground">
