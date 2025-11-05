@@ -190,20 +190,20 @@ function getDemoOrders(): Order[] {
  */
 export async function getAllOrders(): Promise<Order[]> {
   try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 30000);
-
     const apiBaseURL = getAPIBaseURL();
     const url = `${apiBaseURL}/api/orders`;
     console.log("[getAllOrders] Fetching from:", url);
+    console.log("[getAllOrders] Full URL:", window.location.origin + url);
 
-    const response = await fetch(url, {
-      signal: controller.signal,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    clearTimeout(timeoutId);
+    // First test if API is reachable
+    try {
+      const healthCheck = await fetch(`${apiBaseURL}/api/health`);
+      console.log("[getAllOrders] Health check status:", healthCheck.status);
+    } catch (healthError) {
+      console.warn("[getAllOrders] Health check failed:", healthError);
+    }
+
+    const response = await fetch(url);
 
     console.log("[getAllOrders] Response status:", response.status);
 
