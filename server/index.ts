@@ -217,6 +217,7 @@ export function createServer() {
   // Orders routes - Specific routes before parameterized ones
   app.get("/api/orders", getOrders);
   app.post("/api/orders", createOrder);
+  app.delete("/api/orders/clear", clearAllOrders);
 
   app.get("/api/orders/:orderId", getOrderById);
   app.patch("/api/orders/:orderId", updateOrder);
