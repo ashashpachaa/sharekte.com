@@ -103,25 +103,38 @@ export function UserProvider({ children }: { children: ReactNode }) {
   };
 
   const login = async (email: string, password: string) => {
-    const response = await fetch("/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-    const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch (e) {
+        console.error("Failed to parse response:", e);
+        throw new Error("Server returned an invalid response");
+      }
 
-    if (!response.ok) {
-      throw new Error(data.error || "Login failed");
+      if (!response.ok) {
+        throw new Error(data?.error || "Login failed");
+      }
+
+      setIsUser(true);
+      setUserEmail(data.email);
+      setUserName(data.name);
+      setUserToken(data.token);
+      localStorage.setItem("userToken", data.token);
+      localStorage.setItem("userEmail", data.email);
+      localStorage.setItem("userName", data.name);
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error("An unexpected error occurred during login");
     }
-
-    setIsUser(true);
-    setUserEmail(data.email);
-    setUserName(data.name);
-    setUserToken(data.token);
-    localStorage.setItem("userToken", data.token);
-    localStorage.setItem("userEmail", data.email);
-    localStorage.setItem("userName", data.name);
   };
 
   const logout = async () => {
