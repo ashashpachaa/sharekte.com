@@ -22,8 +22,9 @@ export function Footer() {
               />
             </Link>
             <p className="text-sm text-muted-foreground">
-              Sharekte is a global marketplace for buying and selling established,
-              revenue-generating companies. Skip the startup phase and step into profitability.
+              Sharekte is a global marketplace for buying and selling
+              established, revenue-generating companies. Skip the startup phase
+              and step into profitability.
             </p>
           </div>
 
@@ -130,8 +131,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-border/40 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            © {currentYear} Sharekte. {t("common.all")}{" "}
-            {t("common.search")}.
+            © {currentYear} Sharekte. {t("common.all")} {t("common.search")}.
           </p>
           <div className="flex items-center gap-6">
             <a
