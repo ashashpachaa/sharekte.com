@@ -393,7 +393,7 @@ export default function Checkout() {
 
         console.log(`[Checkout] Creating user account for ${userEmail}`);
 
-        await fetch(`${baseURL}/api/user-auth/signup`, {
+        await fetch(`${baseURL}/api/signup`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -404,10 +404,11 @@ export default function Checkout() {
         }).then(async (response) => {
           if (response.ok) {
             const result = await response.json();
-            console.log(`[Checkout] ✓ User account created successfully`);
-            // Store the auto-generated password in a temporary place so we can show it
+            console.log(`[Checkout] ✓ User account created successfully for ${userEmail}`);
+            // Store the credentials for the success page to show to user
             localStorage.setItem(`checkout_password_${userEmail}`, autoPassword);
             localStorage.setItem(`checkout_password_email`, userEmail);
+            toast.info(`Account created! Login with email: ${userEmail}`);
           } else if (response.status === 409) {
             console.log(`[Checkout] User account already exists for ${userEmail}`);
           } else {
