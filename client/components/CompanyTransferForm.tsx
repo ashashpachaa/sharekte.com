@@ -731,7 +731,7 @@ export function CompanyTransferForm({
 
       // Auto-populate buyer info with logged-in user
       buyerName: userName,
-      buyerEmail: userEmail,
+      buyerEmail: userEmailStored,
       buyerPhone: userInfo.phone || "",
       buyerAddress: userInfo.address || "",
 
