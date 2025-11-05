@@ -116,18 +116,18 @@ export function UserProvider({ children }: { children: ReactNode }) {
 
       let data: any = {};
 
-      // Try to parse response body with fallback
+      // Read response body once
       try {
-        // Clone response to safely read it
-        const clonedResponse = response.clone();
-        data = await clonedResponse.json();
+        const responseText = await response.text();
+        if (responseText) {
+          data = JSON.parse(responseText);
+        }
       } catch (e) {
-        console.warn("Could not parse response body, continuing without data:", e);
-        // If response body can't be parsed, just use status code
+        console.warn("Could not parse response body:", e);
       }
 
       if (!response.ok) {
-        let errorMessage = data?.error || `Login failed (HTTP ${response.status})`;
+        let errorMessage = data?.error || `Login failed`;
         // Include error code if available
         if (data?.code) {
           errorMessage += ` [${data.code}]`;
