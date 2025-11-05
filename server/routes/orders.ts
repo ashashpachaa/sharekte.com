@@ -1044,3 +1044,38 @@ export const deleteOrderDocument: RequestHandler = async (req, res) => {
     res.status(500).json({ error: "Failed to delete document" });
   }
 };
+
+/**
+ * Clear all orders from in-memory and file-based storage
+ * Admin only action to reset orders to zero
+ */
+export const clearAllOrders: RequestHandler = async (req, res) => {
+  try {
+    console.log("[clearAllOrders] Starting clear all orders operation");
+
+    // Clear in-memory orders
+    inMemoryOrders = [];
+    console.log("[clearAllOrders] ✓ In-memory orders cleared");
+
+    // Clear persistent file storage
+    saveOrdersToFile([]);
+    console.log("[clearAllOrders] ✓ Orders file cleared");
+
+    // Note: Airtable records can be cleared separately if needed
+    // This would require fetching all records and deleting them individually
+    // For now, we just clear local storage
+
+    res.status(200).json({
+      success: true,
+      message: "All orders cleared successfully. System is now starting from zero orders.",
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error("[clearAllOrders] Error clearing orders:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to clear orders",
+      details: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
+};
