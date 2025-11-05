@@ -45,7 +45,18 @@
     "agreeToTerms": "I agree to the Terms of Service and Privacy Policy",
     "demoTitle": "Demo Credentials",
     "demoEmail": "Email",
-    "demoPassword": "Password"
+    "demoPassword": "Password",
+    "errorFillAll": "Please fill in all fields",
+    "errorInvalidEmail": "Please enter a valid email",
+    "errorPasswordLength": "Password must be at least 6 characters",
+    "errorPasswordMismatch": "Passwords do not match",
+    "errorTerms": "Please agree to the terms and conditions",
+    "loginSuccess": "Login successful!",
+    "signupSuccess": "Account created successfully!",
+    "signup": "Create one",
+    "login": "Sign in",
+    "haveAccount": "Already have an account?",
+    "noAccount": "Don't have an account?"
   },
   "dashboard": {
     "title": "Dashboard",
