@@ -455,6 +455,9 @@ export default function Index() {
 
 function SalesStatisticsSection({ t }: { t: any }) {
   const salesStats = useMemo(() => {
+    // Define the increment pattern
+    const incrementPattern = [10, 8, 15, 11, 25];
+
     // Load or initialize sales counters from localStorage
     const storedStats = localStorage.getItem('shareket_sales_stats');
     let stats = {
@@ -462,6 +465,7 @@ function SalesStatisticsSection({ t }: { t: any }) {
       month: 142,
       year: 1247,
       lastUpdateDate: new Date().toDateString(),
+      dayCount: 0, // Track which day in the pattern we're on
     };
 
     if (storedStats) {
@@ -469,16 +473,19 @@ function SalesStatisticsSection({ t }: { t: any }) {
         const parsed = JSON.parse(storedStats);
         const today = new Date().toDateString();
 
-        // Check if it's a new day to reset the "today" counter
+        // Check if it's a new day to increment the counters
         if (parsed.lastUpdateDate === today) {
           stats = parsed;
         } else {
-          // New day - increment "today" counter and carry over to month/year
-          const prevToday = parsed.today || 8;
-          stats.today = prevToday + Math.floor(Math.random() * 4) + 1; // Increase by 1-4 companies
-          stats.month = (parsed.month || 142) + stats.today; // Add new sales to monthly
-          stats.year = (parsed.year || 1247) + stats.today; // Add new sales to yearly
+          // New day - get the increment from the pattern
+          const dayIndex = (parsed.dayCount || 0) % incrementPattern.length;
+          const dailyIncrement = incrementPattern[dayIndex];
+
+          stats.today = (parsed.today || 8) + dailyIncrement;
+          stats.month = (parsed.month || 142) + dailyIncrement;
+          stats.year = (parsed.year || 1247) + dailyIncrement;
           stats.lastUpdateDate = today;
+          stats.dayCount = (parsed.dayCount || 0) + 1;
         }
       } catch (e) {
         // If parsing fails, use defaults
