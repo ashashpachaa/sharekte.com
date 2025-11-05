@@ -479,9 +479,6 @@ export default function Dashboard() {
   }, []); // Run once on mount
 
   const [showTransferForm, setShowTransferForm] = useState<string | null>(null);
-  const [showTransferFormModal, setShowTransferFormModal] = useState(false);
-  const [selectedCompanyForTransferForm, setSelectedCompanyForTransferForm] =
-    useState<PurchasedCompany | null>(null);
   const [formData, setFormData] = useState({
     directorName: "",
     directorEmail: "",
@@ -1768,7 +1765,7 @@ export default function Dashboard() {
                                     }`}
                                   >
                                     {invoice.status === "paid" && "�� Paid"}
-                                    {invoice.status === "unpaid" && "⏳ Unpaid"}
+                                    {invoice.status === "unpaid" && "��� Unpaid"}
                                     {invoice.status === "canceled" &&
                                       "✗ Canceled"}
                                   </div>
