@@ -1765,7 +1765,7 @@ export default function Dashboard() {
                                     }`}
                                   >
                                     {invoice.status === "paid" && "�� Paid"}
-                                    {invoice.status === "unpaid" && "��� Unpaid"}
+                                    {invoice.status === "unpaid" && "⏳ Unpaid"}
                                     {invoice.status === "canceled" &&
                                       "✗ Canceled"}
                                   </div>
@@ -2559,10 +2559,7 @@ export default function Dashboard() {
                                     <Button
                                       className="gap-2 bg-accent hover:bg-accent/80 text-white flex-1"
                                       size="sm"
-                                      onClick={() => {
-                                        setShowTransferFormModal(true);
-                                        setSelectedCompanyForTransferForm(company);
-                                      }}
+                                      onClick={() => setShowTransferForm(company.id)}
                                     >
                                       <Edit2 className="w-4 h-4" />
                                       Make Amendments
@@ -2572,10 +2569,7 @@ export default function Dashboard() {
                                     <Button
                                       className="gap-2 bg-accent hover:bg-accent/80 text-white flex-1"
                                       size="sm"
-                                      onClick={() => {
-                                        setShowTransferFormModal(true);
-                                        setSelectedCompanyForTransferForm(company);
-                                      }}
+                                      onClick={() => setShowTransferForm(company.id)}
                                     >
                                       <FileText className="w-4 h-4" />
                                       Complete Form
