@@ -308,11 +308,14 @@ export async function requestRefund(
   requestedAmount: number,
 ): Promise<Order> {
   const apiBaseURL = getAPIBaseURL();
-  const response = await fetch(`${apiBaseURL}/api/orders/${orderId}/refund-request`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ reason, requestedAmount }),
-  });
+  const response = await fetch(
+    `${apiBaseURL}/api/orders/${orderId}/refund-request`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reason, requestedAmount }),
+    },
+  );
   if (!response.ok) throw new Error("Failed to request refund");
   return response.json();
 }
@@ -326,11 +329,14 @@ export async function approveRefund(
   refundFee?: number,
 ): Promise<Order> {
   const apiBaseURL = getAPIBaseURL();
-  const response = await fetch(`${apiBaseURL}/api/orders/${orderId}/refund-approve`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ approvedAmount, refundFee }),
-  });
+  const response = await fetch(
+    `${apiBaseURL}/api/orders/${orderId}/refund-approve`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ approvedAmount, refundFee }),
+    },
+  );
   if (!response.ok) throw new Error("Failed to approve refund");
   return response.json();
 }
@@ -343,11 +349,14 @@ export async function rejectRefund(
   reason: string,
 ): Promise<Order> {
   const apiBaseURL = getAPIBaseURL();
-  const response = await fetch(`${apiBaseURL}/api/orders/${orderId}/refund-reject`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ reason }),
-  });
+  const response = await fetch(
+    `${apiBaseURL}/api/orders/${orderId}/refund-reject`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reason }),
+    },
+  );
   if (!response.ok) throw new Error("Failed to reject refund");
   return response.json();
 }
@@ -383,19 +392,22 @@ export async function uploadOrderDocument(
     `[uploadOrderDocument] Sending POST request to /api/orders/${orderId}/documents`,
   );
   const apiBaseURL = getAPIBaseURL();
-  const response = await fetch(`${apiBaseURL}/api/orders/${orderId}/documents`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+  const response = await fetch(
+    `${apiBaseURL}/api/orders/${orderId}/documents`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        file: fileData,
+        fileName: file.name,
+        fileType: file.type,
+        fileSize: file.size,
+        visibility,
+      }),
     },
-    body: JSON.stringify({
-      file: fileData,
-      fileName: file.name,
-      fileType: file.type,
-      fileSize: file.size,
-      visibility,
-    }),
-  });
+  );
 
   console.log(`[uploadOrderDocument] Response status: ${response.status}`);
 

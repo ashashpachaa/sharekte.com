@@ -376,7 +376,10 @@ export default function Checkout() {
           localStorage.setItem("userOrders", JSON.stringify(existingOrders));
           console.log("[Checkout] Order saved to localStorage");
         } catch (error) {
-          console.warn("[Checkout] Failed to save order to localStorage:", error);
+          console.warn(
+            "[Checkout] Failed to save order to localStorage:",
+            error,
+          );
         }
       });
 

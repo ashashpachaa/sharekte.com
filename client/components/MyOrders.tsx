@@ -73,7 +73,9 @@ export function MyOrders({ userEmail }: MyOrdersProps) {
         if (response.ok) {
           allOrders = await response.json();
           apiSuccess = true;
-          console.log(`[MyOrders] ✅ Loaded ${allOrders.length} orders from API`);
+          console.log(
+            `[MyOrders] ✅ Loaded ${allOrders.length} orders from API`,
+          );
         } else {
           console.warn(`[MyOrders] API returned status ${response.status}`);
         }
@@ -86,7 +88,9 @@ export function MyOrders({ userEmail }: MyOrdersProps) {
         if (savedOrders) {
           try {
             allOrders = JSON.parse(savedOrders);
-            console.log(`[MyOrders] ✅ Loaded ${allOrders.length} orders from localStorage`);
+            console.log(
+              `[MyOrders] ✅ Loaded ${allOrders.length} orders from localStorage`,
+            );
           } catch (e) {
             console.warn("[MyOrders] Failed to parse localStorage orders");
             allOrders = [];
