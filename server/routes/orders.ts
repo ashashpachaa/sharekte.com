@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import {
+import type {
   Order,
   OrderStatus,
   RefundStatus,

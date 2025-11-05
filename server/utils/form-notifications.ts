@@ -3,7 +3,7 @@
  * Handles email and in-app notifications for form status changes
  */
 
-import { TransferFormData, FormStatus } from "../../client/lib/transfer-form";
+import type { TransferFormData, FormStatus } from "../../client/lib/transfer-form";
 import nodemailer from "nodemailer";
 
 interface EmailOptions {
