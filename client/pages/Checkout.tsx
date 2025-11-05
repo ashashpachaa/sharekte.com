@@ -243,7 +243,9 @@ export default function Checkout() {
 
       const orderPromises = items.map(async (item, index) => {
         // Prices in cart are already converted to selected currency (from CompanyTable)
-        const convertedAmount = item.price;
+        // Convert purchase price to selected currency (item.price is in USD from Airtable)
+        const convertedAmount =
+          currency !== "USD" ? convertPrice(item.price) : item.price;
         // Renewal fees are stored in USD in Airtable, so convert them to selected currency
         const convertedRenewalFees =
           currency !== "USD"
