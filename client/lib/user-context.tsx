@@ -77,14 +77,14 @@ export function UserProvider({ children }: { children: ReactNode }) {
 
       let data: any = {};
 
-      // Try to parse response body
-      if (response.headers.get("content-type")?.includes("application/json")) {
-        try {
-          data = await response.json();
-        } catch (e) {
-          console.error("Failed to parse JSON response:", e);
-          // If we can't parse, continue with empty data
-        }
+      // Try to parse response body with fallback
+      try {
+        // Clone response to safely read it
+        const clonedResponse = response.clone();
+        data = await clonedResponse.json();
+      } catch (e) {
+        console.warn("Could not parse response body, continuing without data:", e);
+        // If response body can't be parsed, just use status code
       }
 
       if (!response.ok) {
@@ -92,12 +92,12 @@ export function UserProvider({ children }: { children: ReactNode }) {
       }
 
       setIsUser(true);
-      setUserEmail(data.email);
-      setUserName(data.name);
-      setUserToken(data.token);
-      localStorage.setItem("userToken", data.token);
-      localStorage.setItem("userEmail", data.email);
-      localStorage.setItem("userName", data.name);
+      setUserEmail(data.email || email);
+      setUserName(data.name || name);
+      setUserToken(data.token || "");
+      localStorage.setItem("userToken", data.token || "");
+      localStorage.setItem("userEmail", data.email || email);
+      localStorage.setItem("userName", data.name || name);
     } catch (error) {
       if (error instanceof Error) {
         throw error;
