@@ -497,7 +497,8 @@ export async function addFormComment(
 
 export async function generateFormPDF(formId: string): Promise<Blob | null> {
   try {
-    const response = await fetch(`/api/transfer-forms/${formId}/pdf`, {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/transfer-forms/${formId}/pdf`, {
       method: "GET",
     });
     if (!response.ok) throw new Error("Failed to generate PDF");
