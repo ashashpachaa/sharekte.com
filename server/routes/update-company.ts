@@ -16,7 +16,9 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
     const finalRecordId = recordId || pathRecordId;
 
     if (!finalRecordId || !status) {
-      return res.status(400).json({ error: "recordId and status are required" });
+      return res
+        .status(400)
+        .json({ error: "recordId and status are required" });
     }
 
     console.log(`📝 Updating company ${finalRecordId} status to: ${status}`);
@@ -40,10 +42,7 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error(
-        `❌ Airtable API error [${response.status}]:`,
-        errorText
-      );
+      console.error(`❌ Airtable API error [${response.status}]:`, errorText);
       return res.status(response.status).json({
         error: `Airtable API error: ${response.status} ${response.statusText}`,
         details: errorText,
