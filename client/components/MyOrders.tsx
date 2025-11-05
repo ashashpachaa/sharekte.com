@@ -51,18 +51,32 @@ export function MyOrders({ userEmail }: MyOrdersProps) {
   const loadOrders = async () => {
     try {
       setLoading(true);
-      const allOrders = await getAllOrders();
-
-      // Debug logging
       console.log(`[MyOrders] Loading orders for user email: ${userEmail}`);
-      console.log(`[MyOrders] Total orders from API: ${allOrders.length}`);
-      if (allOrders.length > 0) {
-        console.log(
-          `[MyOrders] Sample order emails: ${allOrders
-            .slice(0, 3)
-            .map((o) => o.customerEmail)
-            .join(", ")}`,
-        );
+
+      // First try API, with timeout and fallback
+      let allOrders: Order[] = [];
+      try {
+        // Simple fetch without complex options that might fail
+        const response = await fetch("/api/orders");
+        if (response.ok) {
+          allOrders = await response.json();
+          console.log(`[MyOrders] Loaded ${allOrders.length} orders from API`);
+        } else {
+          console.warn(`[MyOrders] API returned status ${response.status}`);
+        }
+      } catch (apiError) {
+        console.warn("[MyOrders] API fetch failed, checking localStorage...", apiError);
+
+        // Fallback to localStorage orders
+        const savedOrders = localStorage.getItem("userOrders");
+        if (savedOrders) {
+          try {
+            allOrders = JSON.parse(savedOrders);
+            console.log(`[MyOrders] Loaded ${allOrders.length} orders from localStorage`);
+          } catch (e) {
+            console.warn("[MyOrders] Failed to parse localStorage orders");
+          }
+        }
       }
 
       // Filter orders for current user
@@ -71,20 +85,24 @@ export function MyOrders({ userEmail }: MyOrdersProps) {
           order.customerEmail.toLowerCase() === userEmail.toLowerCase(),
       );
 
-      console.log(`[MyOrders] Filtered user orders: ${userOrders.length}`);
-
-      // If no orders found, check if there are any orders with this company name
-      // This helps with troubleshooting
-      if (userOrders.length === 0 && allOrders.length > 0) {
-        console.log(
-          `[MyOrders] No orders found for email "${userEmail}". Available companies in orders: ${allOrders.map((o) => o.companyName).join(", ")}`,
-        );
-      }
+      console.log(
+        `[MyOrders] Found ${userOrders.length} orders for ${userEmail}`,
+      );
 
       setOrders(userOrders);
+
+      // Save to localStorage for future access
+      if (allOrders.length > 0) {
+        try {
+          localStorage.setItem("userOrders", JSON.stringify(allOrders));
+        } catch (e) {
+          console.warn("[MyOrders] Failed to save orders to localStorage");
+        }
+      }
     } catch (error) {
       console.error("Failed to load orders:", error);
       toast.error("Failed to load orders");
+      setOrders([]);
     } finally {
       setLoading(false);
     }
