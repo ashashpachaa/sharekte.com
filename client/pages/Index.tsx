@@ -454,11 +454,46 @@ export default function Index() {
 }
 
 function SalesStatisticsSection({ t }: { t: any }) {
-  const salesStats = useMemo(() => ({
-    today: Math.floor(Math.random() * 45) + 5,
-    month: Math.floor(Math.random() * 450) + 50,
-    year: Math.floor(Math.random() * 2500) + 500,
-  }), []);
+  const salesStats = useMemo(() => {
+    // Load or initialize sales counters from localStorage
+    const storedStats = localStorage.getItem('shareket_sales_stats');
+    let stats = {
+      today: 8,
+      month: 142,
+      year: 1247,
+      lastUpdateDate: new Date().toDateString(),
+    };
+
+    if (storedStats) {
+      try {
+        const parsed = JSON.parse(storedStats);
+        const today = new Date().toDateString();
+
+        // Check if it's a new day to reset the "today" counter
+        if (parsed.lastUpdateDate === today) {
+          stats = parsed;
+        } else {
+          // New day - increment "today" counter and carry over to month/year
+          const prevToday = parsed.today || 8;
+          stats.today = prevToday + Math.floor(Math.random() * 4) + 1; // Increase by 1-4 companies
+          stats.month = (parsed.month || 142) + stats.today; // Add new sales to monthly
+          stats.year = (parsed.year || 1247) + stats.today; // Add new sales to yearly
+          stats.lastUpdateDate = today;
+        }
+      } catch (e) {
+        // If parsing fails, use defaults
+      }
+    }
+
+    // Save updated stats to localStorage
+    localStorage.setItem('shareket_sales_stats', JSON.stringify(stats));
+
+    return {
+      today: stats.today,
+      month: stats.month,
+      year: stats.year,
+    };
+  }, []);
 
   return (
     <section className="py-20 md:py-28 border-t border-border/40 bg-gradient-to-br from-primary/5 via-accent/5 to-primary/5">
