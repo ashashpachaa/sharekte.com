@@ -1,5 +1,9 @@
 import { RequestHandler } from "express";
 
+import * as fs from "fs";
+import * as path from "path";
+import { RequestHandler } from "express";
+
 // In-memory user storage (replace with database in production)
 interface User {
   id: string;
@@ -9,11 +13,38 @@ interface User {
   createdAt: string;
 }
 
-let users: User[] = [];
+const USERS_FILE = path.join(process.cwd(), "users.json");
+
+let users: User[] = loadUsersFromFile();
+
 const tokens = new Map<
   string,
   { email: string; name: string; expiresAt: number }
 >();
+
+function loadUsersFromFile(): User[] {
+  try {
+    if (fs.existsSync(USERS_FILE)) {
+      const data = fs.readFileSync(USERS_FILE, "utf-8");
+      console.log("[loadUsersFromFile] ✓ Loaded users from file");
+      return JSON.parse(data);
+    }
+  } catch (error) {
+    console.error("[loadUsersFromFile] Error reading file:", error);
+  }
+  return [];
+}
+
+function saveUsersToFile(usersList: User[]): void {
+  try {
+    fs.writeFileSync(USERS_FILE, JSON.stringify(usersList, null, 2), "utf-8");
+    console.log(
+      `[saveUsersToFile] ✓ Saved ${usersList.length} users to file`
+    );
+  } catch (error) {
+    console.error("[saveUsersToFile] Error writing file:", error);
+  }
+}
 
 function generateToken(): string {
   return Math.random().toString(36).substring(2) + Date.now().toString(36);
