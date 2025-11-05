@@ -670,6 +670,10 @@ function OrderDetailsModal({
       setIsSaving(true);
       const changes: Partial<Order> = {};
 
+      // Check if status has changed
+      const statusChanged = editedOrder.status !== order.status;
+      let updatedStatusHistory = [...(editedOrder.statusHistory || [])];
+
       // Only include changed fields
       Object.keys(editedOrder).forEach((key) => {
         if (editedOrder[key as keyof Order] !== order[key as keyof Order]) {
@@ -680,6 +684,24 @@ function OrderDetailsModal({
       if (Object.keys(changes).length === 0) {
         toast.info("No changes to save");
         return;
+      }
+
+      // If status changed, add to history
+      if (statusChanged) {
+        const today = new Date().toISOString().split("T")[0];
+        const newHistoryEntry = {
+          id: `hist-${Date.now()}`,
+          fromStatus: order.status,
+          toStatus: editedOrder.status,
+          changedDate: today,
+          changedBy: "admin",
+          notes: editedOrder.adminNotes
+            ? `Status updated to ${editedOrder.status}. Notes: ${editedOrder.adminNotes}`
+            : `Status updated to ${editedOrder.status}`,
+        };
+        updatedStatusHistory.push(newHistoryEntry);
+        changes.statusHistory = updatedStatusHistory;
+        changes.statusChangedDate = today;
       }
 
       await updateOrder(order.id, changes);
