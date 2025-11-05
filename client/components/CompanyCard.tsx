@@ -250,6 +250,21 @@ export function CompanyCard({
             </div>
           )}
 
+          {/* Status History */}
+          {company.activityLog && company.activityLog.length > 0 && (
+            <div className="pt-2 border-t">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-full h-8 text-xs text-gray-600"
+                onClick={() => setShowStatusHistory(true)}
+              >
+                <History className="w-3 h-3 mr-2" />
+                View Status History ({company.activityLog.length})
+              </Button>
+            </div>
+          )}
+
           {/* Tags */}
           {company.tags && company.tags.length > 0 && (
             <div className="flex flex-wrap gap-1">
