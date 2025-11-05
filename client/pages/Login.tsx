@@ -60,9 +60,7 @@ export default function Login() {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-lg mb-4">
               <LogIn className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-foreground mb-2">
-              Sign In
-            </h1>
+            <h1 className="text-3xl font-bold text-foreground mb-2">Sign In</h1>
             <p className="text-muted-foreground">
               Access your account to continue shopping
             </p>
@@ -128,7 +126,10 @@ export default function Login() {
 
           <p className="text-center text-sm text-muted-foreground">
             Don't have an account?{" "}
-            <Link to="/signup" className="text-primary hover:underline font-medium">
+            <Link
+              to="/signup"
+              className="text-primary hover:underline font-medium"
+            >
               Create one
             </Link>
           </p>
