@@ -325,6 +325,14 @@
       "step4": "Manage",
       "step4Desc": "Access your Sharekte dashboard and scale your business portfolio"
     },
+    "salesSection": {
+      "title": "Become an Entrepreneur Right Now",
+      "soldToday": "Companies sold today",
+      "companies": "companies",
+      "soldThisMonth": "Companies sold this month",
+      "soldThisYear": "Companies sold this year",
+      "motivationText": "Join our community of successful entrepreneurs"
+    },
     "cta": {
       "title": "Ready to Own Your Next Business?",
       "description": "Join thousands of entrepreneurs on Sharekte, building their portfolio of profitable companies",
