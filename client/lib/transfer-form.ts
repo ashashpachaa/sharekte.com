@@ -196,7 +196,7 @@ export const FORM_STATUS_LABELS: Record<FormStatus, string> = {
 
 export const FORM_STATUS_ICONS: Record<FormStatus, string> = {
   "under-review": "👀",
-  "amend-required": "🔄",
+  "amend-required": "���",
   "confirm-application": "📝",
   transferring: "🚚",
   "complete-transfer": "🎉",
@@ -223,6 +223,16 @@ export function createEmptyForm(
     country: country || "",
     incorporationDate: incorporationDate || "",
     incorporationYear: incorporationYear || new Date().getFullYear(),
+
+    // Seller and Buyer information (optional, can be filled in later)
+    sellerName: "",
+    sellerEmail: "",
+    sellerPhone: "",
+    sellerAddress: "",
+    buyerName: "",
+    buyerEmail: "",
+    buyerPhone: "",
+    buyerAddress: "",
 
     totalShares: 0,
     totalShareCapital: 0,
