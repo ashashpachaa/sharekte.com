@@ -771,18 +771,32 @@ export function CompanyTransferForm({
   useEffect(() => {
     if (!initialForm && isEditing && companyId) {
       setLoading(true);
-      fetch(`/api/transfer-forms?companyId=${companyId}`)
-        .then((res) => res.json())
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
+      fetch(`/api/transfer-forms?companyId=${companyId}`, {
+        signal: controller.signal,
+      })
+        .then((res) => {
+          clearTimeout(timeoutId);
+          return res.json();
+        })
         .then((forms) => {
-          if (forms[0]) {
+          if (forms && forms.length > 0 && forms[0]) {
             console.log(
               "Loaded transfer form with comments:",
               forms[0].comments,
             );
             setFormData(forms[0]);
+          } else {
+            console.log("No existing form found, using defaults");
           }
         })
-        .catch((err) => console.error("Error loading transfer form:", err))
+        .catch((err) => {
+          clearTimeout(timeoutId);
+          console.warn("Error loading transfer form (using defaults):", err);
+          // Continue with default form on error
+        })
         .finally(() => setLoading(false));
     }
   }, [companyId, isEditing, initialForm]);
