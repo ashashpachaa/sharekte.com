@@ -298,7 +298,7 @@ function getTodayString(): string {
 // Get all transfer forms
 export const getTransferForms: RequestHandler = async (req, res) => {
   try {
-    const { orderId } = req.query;
+    const { orderId, companyId, companyName } = req.query;
 
     // Return local forms (demo + in-memory)
     // In-memory forms have the most up-to-date status since they're updated immediately when status changes
@@ -313,6 +313,25 @@ export const getTransferForms: RequestHandler = async (req, res) => {
       result = result.filter((f) => f.orderId === orderId);
       console.log(
         `[getTransferForms] Filtered to ${result.length} forms by orderId: ${orderId}`,
+      );
+    }
+
+    // Filter by companyId if provided
+    if (companyId && !orderId) {
+      result = result.filter((f) => f.companyNumber === companyId);
+      console.log(
+        `[getTransferForms] Filtered to ${result.length} forms by companyId: ${companyId}`,
+      );
+    }
+
+    // Filter by companyName if provided (case-insensitive)
+    if (companyName && !orderId && !companyId) {
+      const searchName = String(companyName).toLowerCase();
+      result = result.filter((f) =>
+        f.companyName.toLowerCase().includes(searchName),
+      );
+      console.log(
+        `[getTransferForms] Filtered to ${result.length} forms by companyName: ${companyName}`,
       );
     }
 
