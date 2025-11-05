@@ -119,8 +119,18 @@ export const loginHandler: RequestHandler = (req, res) => {
     // Find user
     const user = users.find((u) => u.email === email.toLowerCase());
 
-    if (!user || user.password !== password) {
-      return res.status(401).json({ error: "Invalid email or password" });
+    if (!user) {
+      return res.status(401).json({
+        error: "Your email is not registered. Please sign up to create an account.",
+        code: "USER_NOT_FOUND"
+      });
+    }
+
+    if (user.password !== password) {
+      return res.status(401).json({
+        error: "Incorrect password. Please try again.",
+        code: "INVALID_PASSWORD"
+      });
     }
 
     // Generate token
