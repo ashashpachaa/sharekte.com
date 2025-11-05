@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useNavigate, Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -19,7 +18,6 @@ import { toast } from "sonner";
 import { useUser } from "@/lib/user-context";
 
 export default function Signup() {
-  const { t } = useTranslation("translation");
   const navigate = useNavigate();
   const { signup } = useUser();
   const [fullName, setFullName] = useState("");
@@ -38,39 +36,34 @@ export default function Signup() {
 
     // Validate inputs
     if (!fullName || !email || !password || !confirmPassword) {
-      toast.error(t("auth.errorFillAll") || "Please fill in all fields");
+      toast.error("Please fill in all fields");
       return;
     }
 
     if (!email.includes("@")) {
-      toast.error(t("auth.errorInvalidEmail") || "Please enter a valid email");
+      toast.error("Please enter a valid email");
       return;
     }
 
     if (password.length < 6) {
-      toast.error(
-        t("auth.errorPasswordLength") ||
-          "Password must be at least 6 characters",
-      );
+      toast.error("Password must be at least 6 characters");
       return;
     }
 
     if (password !== confirmPassword) {
-      toast.error(t("auth.errorPasswordMismatch") || "Passwords do not match");
+      toast.error("Passwords do not match");
       return;
     }
 
     if (!agreedToTerms) {
-      toast.error(
-        t("auth.errorTerms") || "Please agree to the terms and conditions",
-      );
+      toast.error("Please agree to the terms and conditions");
       return;
     }
 
     setLoading(true);
     try {
       await signup(email, password, fullName);
-      toast.success(t("auth.signupSuccess") || "Account created successfully!");
+      toast.success("Account created successfully!");
       navigate("/dashboard");
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : "Signup failed";
@@ -91,10 +84,10 @@ export default function Signup() {
               <User className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-foreground mb-2">
-              {t("auth.signup.title") || "Create Account"}
+              Create Account
             </h1>
             <p className="text-muted-foreground">
-              {t("auth.signup.subtitle") || "Join us to start your journey"}
+              Join us to start your journey
             </p>
           </div>
 
@@ -108,7 +101,7 @@ export default function Signup() {
           <form onSubmit={handleSignup} className="space-y-4 mb-6">
             <div>
               <label className="block text-sm font-medium text-foreground mb-2">
-                {t("auth.fullName") || "Full Name"}
+                Full Name
               </label>
               <div className="relative">
                 <User className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
@@ -125,7 +118,7 @@ export default function Signup() {
 
             <div>
               <label className="block text-sm font-medium text-foreground mb-2">
-                {t("auth.email") || "Email Address"}
+                Email Address
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
@@ -142,7 +135,7 @@ export default function Signup() {
 
             <div>
               <label className="block text-sm font-medium text-foreground mb-2">
-                {t("auth.password") || "Password"}
+                Password
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
@@ -170,7 +163,7 @@ export default function Signup() {
 
             <div>
               <label className="block text-sm font-medium text-foreground mb-2">
-                {t("auth.confirmPassword") || "Confirm Password"}
+                Confirm Password
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
@@ -206,25 +199,19 @@ export default function Signup() {
                 className="mt-1 rounded"
               />
               <label htmlFor="terms" className="text-sm text-muted-foreground">
-                {t("auth.agreeToTerms") ||
-                  "I agree to the terms and conditions"}
+                I agree to the terms and conditions
               </label>
             </div>
 
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading
-                ? "Creating account..."
-                : t("auth.signup.button") || "Create Account"}
+              {loading ? "Creating account..." : "Create Account"}
             </Button>
           </form>
 
           <p className="text-center text-sm text-muted-foreground">
-            {t("auth.haveAccount") || "Already have an account?"}{" "}
-            <Link
-              to="/login"
-              className="text-primary hover:underline font-medium"
-            >
-              {t("auth.login") || "Sign in"}
+            Already have an account?{" "}
+            <Link to="/login" className="text-primary hover:underline font-medium">
+              Sign in
             </Link>
           </p>
         </div>

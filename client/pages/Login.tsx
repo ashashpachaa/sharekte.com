@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { useNavigate, Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -10,7 +9,6 @@ import { toast } from "sonner";
 import { useUser } from "@/lib/user-context";
 
 export default function Login() {
-  const { t } = useTranslation("translation");
   const navigate = useNavigate();
   const { login } = useUser();
   const [email, setEmail] = useState("");
@@ -25,27 +23,24 @@ export default function Login() {
 
     // Validate inputs
     if (!email || !password) {
-      toast.error(t("auth.errorFillAll") || "Please fill in all fields");
+      toast.error("Please fill in all fields");
       return;
     }
 
     if (!email.includes("@")) {
-      toast.error(t("auth.errorInvalidEmail") || "Please enter a valid email");
+      toast.error("Please enter a valid email");
       return;
     }
 
     if (password.length < 6) {
-      toast.error(
-        t("auth.errorPasswordLength") ||
-          "Password must be at least 6 characters",
-      );
+      toast.error("Password must be at least 6 characters");
       return;
     }
 
     setLoading(true);
     try {
       await login(email, password);
-      toast.success(t("auth.loginSuccess") || "Login successful!");
+      toast.success("Login successful!");
       navigate("/dashboard");
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : "Login failed";
@@ -66,11 +61,10 @@ export default function Login() {
               <LogIn className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-foreground mb-2">
-              {t("auth.login.title") || "Sign In"}
+              Sign In
             </h1>
             <p className="text-muted-foreground">
-              {t("auth.login.subtitle") ||
-                "Access your account to continue shopping"}
+              Access your account to continue shopping
             </p>
           </div>
 
@@ -84,7 +78,7 @@ export default function Login() {
           <form onSubmit={handleLogin} className="space-y-4 mb-6">
             <div>
               <label className="block text-sm font-medium text-foreground mb-2">
-                {t("auth.email") || "Email Address"}
+                Email Address
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
@@ -101,7 +95,7 @@ export default function Login() {
 
             <div>
               <label className="block text-sm font-medium text-foreground mb-2">
-                {t("auth.password") || "Password"}
+                Password
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
@@ -133,12 +127,9 @@ export default function Login() {
           </form>
 
           <p className="text-center text-sm text-muted-foreground">
-            {t("auth.noAccount") || "Don't have an account?"}{" "}
-            <Link
-              to="/signup"
-              className="text-primary hover:underline font-medium"
-            >
-              {t("auth.signup") || "Create one"}
+            Don't have an account?{" "}
+            <Link to="/signup" className="text-primary hover:underline font-medium">
+              Create one
             </Link>
           </p>
         </div>
