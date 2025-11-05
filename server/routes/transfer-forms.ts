@@ -819,20 +819,31 @@ export const uploadAttachment: RequestHandler = async (req, res) => {
           try {
             const buffer = Buffer.from(trimmedData, "base64");
             if (buffer.length === 0) {
-              console.warn("[uploadAttachment] ⚠ Empty decoded data for:", filename);
+              console.warn(
+                "[uploadAttachment] ⚠ Empty decoded data for:",
+                filename,
+              );
             }
           } catch (bufferError) {
-            console.error("[uploadAttachment] ⚠ Invalid base64 data:", bufferError);
+            console.error(
+              "[uploadAttachment] ⚠ Invalid base64 data:",
+              bufferError,
+            );
             return res.status(400).json({
-              error: "Invalid file data format. Please ensure the file is properly encoded."
+              error:
+                "Invalid file data format. Please ensure the file is properly encoded.",
             });
           }
         }
         validatedData = trimmedData;
       } catch (validateError) {
-        console.error("[uploadAttachment] ⚠ Error validating base64 data:", validateError);
+        console.error(
+          "[uploadAttachment] ⚠ Error validating base64 data:",
+          validateError,
+        );
         return res.status(400).json({
-          error: "Invalid file data format. Please ensure the file is properly encoded."
+          error:
+            "Invalid file data format. Please ensure the file is properly encoded.",
         });
       }
     }

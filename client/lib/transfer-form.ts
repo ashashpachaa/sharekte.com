@@ -408,11 +408,14 @@ export async function updateFormStatus(
 ): Promise<boolean> {
   try {
     const apiBaseURL = getAPIBaseURL();
-    const response = await fetch(`${apiBaseURL}/api/transfer-forms/${formId}/status`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: newStatus, notes, reason }),
-    });
+    const response = await fetch(
+      `${apiBaseURL}/api/transfer-forms/${formId}/status`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus, notes, reason }),
+      },
+    );
     return response.ok;
   } catch (error) {
     console.error("Error updating form status:", error);
@@ -435,18 +438,21 @@ export async function uploadFormAttachment(
     const base64Data = btoa(binary);
 
     const apiBaseURL = getAPIBaseURL();
-    const response = await fetch(`${apiBaseURL}/api/transfer-forms/${formId}/attachments`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `${apiBaseURL}/api/transfer-forms/${formId}/attachments`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          filename: file.name,
+          filesize: file.size,
+          filetype: file.type || "application/octet-stream",
+          data: base64Data,
+        }),
       },
-      body: JSON.stringify({
-        filename: file.name,
-        filesize: file.size,
-        filetype: file.type || "application/octet-stream",
-        data: base64Data,
-      }),
-    });
+    );
     if (!response.ok) throw new Error("Failed to upload attachment");
     const attachment = await response.json();
     return attachment;
@@ -482,11 +488,14 @@ export async function addFormComment(
 ): Promise<FormComment | null> {
   try {
     const apiBaseURL = getAPIBaseURL();
-    const response = await fetch(`${apiBaseURL}/api/transfer-forms/${formId}/comments`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text, isAdminOnly }),
-    });
+    const response = await fetch(
+      `${apiBaseURL}/api/transfer-forms/${formId}/comments`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text, isAdminOnly }),
+      },
+    );
     if (!response.ok) throw new Error("Failed to add comment");
     return await response.json();
   } catch (error) {
@@ -498,9 +507,12 @@ export async function addFormComment(
 export async function generateFormPDF(formId: string): Promise<Blob | null> {
   try {
     const apiBaseURL = getAPIBaseURL();
-    const response = await fetch(`${apiBaseURL}/api/transfer-forms/${formId}/pdf`, {
-      method: "GET",
-    });
+    const response = await fetch(
+      `${apiBaseURL}/api/transfer-forms/${formId}/pdf`,
+      {
+        method: "GET",
+      },
+    );
     if (!response.ok) throw new Error("Failed to generate PDF");
     return await response.blob();
   } catch (error) {

@@ -837,8 +837,8 @@ export function TransferFormManagement({
                                   let base64String = attachment.data.trim();
 
                                   // Remove any data URL prefix if present (data:application/pdf;base64,)
-                                  if (base64String.includes(',')) {
-                                    base64String = base64String.split(',')[1];
+                                  if (base64String.includes(",")) {
+                                    base64String = base64String.split(",")[1];
                                   }
 
                                   // Replace URL-safe characters with standard base64 characters if needed
@@ -856,7 +856,9 @@ export function TransferFormManagement({
                                       byteNumbers[i] =
                                         byteCharacters.charCodeAt(i);
                                     }
-                                    const byteArray = new Uint8Array(byteNumbers);
+                                    const byteArray = new Uint8Array(
+                                      byteNumbers,
+                                    );
                                     const blob = new Blob([byteArray], {
                                       type:
                                         attachment.type ||
