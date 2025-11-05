@@ -118,11 +118,12 @@ export const signupHandler: RequestHandler = (req, res) => {
 
     // Generate token
     const token = generateToken();
-    tokens.set(token, {
+    tokens[token] = {
       email: newUser.email,
       name: newUser.name,
       expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
+    };
+    saveTokensToFile(tokens);
 
     console.log(
       `[signupHandler] ✓ User ${newUser.email} created and saved to file`,
