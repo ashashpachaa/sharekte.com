@@ -715,7 +715,7 @@ export function CompanyTransferForm({
 
   // Get user info from localStorage for auto-population
   const userInfo = JSON.parse(localStorage.getItem("user") || "{}");
-  const userEmail = localStorage.getItem("userEmail") || userInfo.email || "";
+  const userEmailStored = localStorage.getItem("userEmail") || userInfo.email || "";
   const userName = localStorage.getItem("userName") || userInfo.name || userInfo.userName || "";
 
   // Declare formData state BEFORE useEffect that uses setFormData
