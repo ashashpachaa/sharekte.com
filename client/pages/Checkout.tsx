@@ -121,6 +121,43 @@ export default function Checkout() {
     );
   }
 
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) {
+      setCouponError("Please enter a coupon code");
+      return;
+    }
+
+    setCouponLoading(true);
+    setCouponError("");
+
+    // Calculate the total including fees
+    const feesDetails = getEnabledFees().map((fee) => ({
+      ...fee,
+      calculatedAmount: calculateFeeAmount(fee, totalPrice),
+    }));
+    const totalFees = feesDetails.reduce(
+      (sum, fee) => sum + fee.calculatedAmount,
+      0
+    );
+    const currentTotal = totalPrice + totalFees;
+
+    try {
+      const result = await validateCoupon(couponCode, currentTotal);
+      if (result.valid) {
+        setAppliedCoupon(result);
+        setCouponCode("");
+        toast.success("Coupon applied successfully!");
+      } else {
+        setCouponError(result.message || "Invalid coupon code");
+      }
+    } catch (error) {
+      setCouponError("Error validating coupon");
+      console.error(error);
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
   const handleCompleteOrder = async () => {
     // Validate authentication
     if (!isAuthenticated) {
