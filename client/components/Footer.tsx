@@ -152,6 +152,14 @@ export function Footer() {
             >
               Facebook
             </a>
+            <span className="text-muted-foreground/30">•</span>
+            <Link
+              to="/secure-admin-access-7k9m2q"
+              className="text-sm text-muted-foreground hover:text-primary transition-colors font-medium"
+              title="Administration Access"
+            >
+              Extranet
+            </Link>
           </div>
         </div>
       </div>
