@@ -1,105 +1,132 @@
-import { createContext, useContext, useState, ReactNode, useEffect } from "react";
-
-export type AdminRole = "super-admin" | "moderator" | "support" | "viewer";
-
-export interface AdminUser {
-  id: string;
-  email: string;
-  name: string;
-  role: AdminRole;
-  createdAt: string;
-  lastLogin?: string;
-}
-
-export interface LoginHistoryEntry {
-  id: string;
-  userId: string;
-  timestamp: string;
-  ipAddress: string;
-  device: string;
-  location?: string;
-  userAgent: string;
-}
-
-export interface UserAccount {
-  id: string;
-  email: string;
-  name: string;
-  phone?: string;
-  company?: string;
-  companyLinks: string[];
-  accountStatus: "active" | "suspended" | "inactive";
-  role: "client" | "super-admin" | "admin" | "administrations" | "operations" | "accounting";
-  registrationDate: string;
-  lastLoginDate?: string;
-  notes?: string;
-  invoices: string[];
-  orders: string[];
-  createdAt: string;
-  updatedAt: string;
-}
+import { createContext, useState, useContext, useEffect, ReactNode } from "react";
 
 interface AdminContextType {
-  currentAdmin: AdminUser | null;
   isAdmin: boolean;
-  adminRole: AdminRole | null;
-  setCurrentAdmin: (admin: AdminUser | null) => void;
-  logout: () => void;
-  canManageUsers: () => boolean;
-  canSuspendUsers: () => boolean;
-  canResetPasswords: () => boolean;
+  adminEmail: string | null;
+  adminToken: string | null;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  verifySession: () => Promise<boolean>;
+  loading: boolean;
 }
 
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
 
 export function AdminProvider({ children }: { children: ReactNode }) {
-  const [currentAdmin, setCurrentAdmin] = useState<AdminUser | null>(() => {
-    try {
-      const saved = localStorage.getItem("admin_user");
-      return saved ? JSON.parse(saved) : null;
-    } catch {
-      return null;
-    }
-  });
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [adminEmail, setAdminEmail] = useState<string | null>(null);
+  const [adminToken, setAdminToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
+  // Check for existing session on mount
   useEffect(() => {
-    if (currentAdmin) {
-      localStorage.setItem("admin_user", JSON.stringify(currentAdmin));
-    } else {
-      localStorage.removeItem("admin_user");
+    const checkSession = async () => {
+      const token = localStorage.getItem("adminToken");
+      const email = localStorage.getItem("adminEmail");
+
+      if (token && email) {
+        try {
+          const response = await fetch("/api/admin/verify", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (response.ok) {
+            setIsAdmin(true);
+            setAdminEmail(email);
+            setAdminToken(token);
+          } else {
+            // Token is invalid
+            localStorage.removeItem("adminToken");
+            localStorage.removeItem("adminEmail");
+          }
+        } catch (err) {
+          console.error("Session verification error:", err);
+          localStorage.removeItem("adminToken");
+          localStorage.removeItem("adminEmail");
+        }
+      }
+
+      setLoading(false);
+    };
+
+    checkSession();
+  }, []);
+
+  const login = async (email: string, password: string) => {
+    const response = await fetch("/api/admin/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Login failed");
     }
-  }, [currentAdmin]);
 
-  const logout = () => {
-    setCurrentAdmin(null);
-    localStorage.removeItem("admin_user");
+    setIsAdmin(true);
+    setAdminEmail(data.email);
+    setAdminToken(data.token);
+    localStorage.setItem("adminToken", data.token);
+    localStorage.setItem("adminEmail", data.email);
   };
 
-  const canManageUsers = () => {
-    return currentAdmin?.role === "super-admin" || currentAdmin?.role === "moderator";
+  const logout = async () => {
+    try {
+      if (adminToken) {
+        await fetch("/api/admin/logout", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${adminToken}`,
+          },
+        });
+      }
+    } catch (err) {
+      console.error("Logout error:", err);
+    } finally {
+      setIsAdmin(false);
+      setAdminEmail(null);
+      setAdminToken(null);
+      localStorage.removeItem("adminToken");
+      localStorage.removeItem("adminEmail");
+    }
   };
 
-  const canSuspendUsers = () => {
-    return currentAdmin?.role === "super-admin";
-  };
+  const verifySession = async (): Promise<boolean> => {
+    const token = localStorage.getItem("adminToken");
 
-  const canResetPasswords = () => {
-    return currentAdmin?.role === "super-admin" || currentAdmin?.role === "support";
-  };
+    if (!token) {
+      return false;
+    }
 
-  const contextValue: AdminContextType = {
-    currentAdmin,
-    isAdmin: !!currentAdmin,
-    adminRole: currentAdmin?.role || null,
-    setCurrentAdmin,
-    logout,
-    canManageUsers,
-    canSuspendUsers,
-    canResetPasswords,
+    try {
+      const response = await fetch("/api/admin/verify", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.ok;
+    } catch {
+      return false;
+    }
   };
 
   return (
-    <AdminContext.Provider value={contextValue}>
+    <AdminContext.Provider
+      value={{
+        isAdmin,
+        adminEmail,
+        adminToken,
+        login,
+        logout,
+        verifySession,
+        loading,
+      }}
+    >
       {children}
     </AdminContext.Provider>
   );
@@ -107,16 +134,8 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 
 export function useAdmin() {
   const context = useContext(AdminContext);
-  if (!context) {
+  if (context === undefined) {
     throw new Error("useAdmin must be used within AdminProvider");
   }
   return context;
-}
-
-export function useRequireAdmin() {
-  const admin = useAdmin();
-  if (!admin.isAdmin) {
-    throw new Error("This page requires admin access");
-  }
-  return admin;
 }
