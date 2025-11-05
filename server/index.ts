@@ -212,6 +212,11 @@ export function createServer() {
   app.post("/api/companies/:id/refund-approve", approveCompanyRefund);
   app.post("/api/companies/:id/mark-sold", markCompanyAsSold);
 
+  // Admin Auth routes
+  app.post("/api/admin/login", adminLogin);
+  app.post("/api/admin/logout", adminLogout);
+  app.get("/api/admin/verify", verifyAdminToken);
+
   // Legacy Airtable routes
   app.get("/api/countries", getCountries);
   app.get("/api/years", getYears);
