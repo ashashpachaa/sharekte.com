@@ -803,12 +803,39 @@ export const uploadAttachment: RequestHandler = async (req, res) => {
       return res.status(400).json({ error: "File size exceeds 50MB limit" });
     }
 
+    // Validate base64 data if provided
+    let validatedData = data || "";
+    if (validatedData) {
+      try {
+        // Clean up data URL prefix if present
+        if (validatedData.includes(",")) {
+          validatedData = validatedData.split(",")[1];
+        }
+
+        // Validate it's proper base64 by attempting to decode
+        const trimmedData = validatedData.trim();
+        if (trimmedData.length > 0) {
+          // Test decode to validate format
+          const testDecode = atob(trimmedData);
+          if (testDecode.length === 0) {
+            console.warn("[uploadAttachment] ⚠ Empty decoded data for:", filename);
+          }
+        }
+        validatedData = trimmedData;
+      } catch (validateError) {
+        console.error("[uploadAttachment] ⚠ Invalid base64 data:", validateError);
+        return res.status(400).json({
+          error: "Invalid file data format. Please ensure the file is properly encoded."
+        });
+      }
+    }
+
     const attachment = {
       id: `attachment_${Date.now()}`,
       name: filename,
       type: filetype || "application/octet-stream",
       size: filesize || 0,
-      data: data || "",
+      data: validatedData,
       uploadedDate: new Date().toISOString(),
       uploadedBy: "user",
     };
@@ -823,7 +850,7 @@ export const uploadAttachment: RequestHandler = async (req, res) => {
     // Save form to persistent storage
     saveFormToFile(form);
     console.log(
-      `[uploadAttachment] ✓ Attachment saved to form ${targetFormId}`,
+      `[uploadAttachment] ✓ Attachment saved to form ${targetFormId} (${validatedData.length} bytes)`,
     );
 
     // Return attachment (including data so client can download immediately)
