@@ -70,6 +70,7 @@ export function CompanyCard({
   } = useCurrency();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showAmendmentHistory, setShowAmendmentHistory] = useState(false);
+  const [showStatusHistory, setShowStatusHistory] = useState(false);
   const [amendmentComments, setAmendmentComments] = useState<FormComment[]>([]);
   const [loadingAmendments, setLoadingAmendments] = useState(false);
 
