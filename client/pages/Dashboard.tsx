@@ -479,6 +479,9 @@ export default function Dashboard() {
   }, []); // Run once on mount
 
   const [showTransferForm, setShowTransferForm] = useState<string | null>(null);
+  const [showTransferFormModal, setShowTransferFormModal] = useState(false);
+  const [selectedCompanyForTransferForm, setSelectedCompanyForTransferForm] =
+    useState<PurchasedCompany | null>(null);
   const [formData, setFormData] = useState({
     directorName: "",
     directorEmail: "",
