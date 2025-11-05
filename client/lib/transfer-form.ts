@@ -407,7 +407,8 @@ export async function updateFormStatus(
   reason?: string,
 ): Promise<boolean> {
   try {
-    const response = await fetch(`/api/transfer-forms/${formId}/status`, {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/transfer-forms/${formId}/status`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: newStatus, notes, reason }),
