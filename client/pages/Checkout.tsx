@@ -887,7 +887,7 @@ export default function Checkout() {
                                 setSignupPassword(e.target.value)
                               }
                               className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                              placeholder="••••••••"
+                              placeholder="••••��•••"
                               required
                             />
                             <p className="text-xs text-muted-foreground mt-1">
@@ -1077,6 +1077,47 @@ export default function Checkout() {
                     </span>
                   </div>
                 ))}
+                {appliedCoupon && appliedCoupon.valid && (
+                  <div className="flex justify-between text-green-600">
+                    <span className="text-sm font-medium">
+                      Discount ({appliedCoupon.coupon?.code})
+                    </span>
+                    <span className="font-semibold">
+                      -{formatPrice(appliedCoupon.discount)}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* Coupon Input */}
+              <div className="mb-6">
+                <div className="flex gap-2 mb-2">
+                  <Input
+                    placeholder="Enter coupon code"
+                    value={couponCode}
+                    onChange={(e) => {
+                      setCouponCode(e.target.value.toUpperCase());
+                      setCouponError("");
+                    }}
+                    disabled={couponLoading || (appliedCoupon?.valid ?? false)}
+                  />
+                  <Button
+                    onClick={handleApplyCoupon}
+                    disabled={couponLoading || (appliedCoupon?.valid ?? false)}
+                    variant="outline"
+                    size="sm"
+                  >
+                    {couponLoading ? "..." : "Apply"}
+                  </Button>
+                </div>
+                {couponError && (
+                  <p className="text-xs text-destructive">{couponError}</p>
+                )}
+                {appliedCoupon?.valid && (
+                  <p className="text-xs text-green-600">
+                    ✓ {appliedCoupon.coupon?.description || "Coupon applied"}
+                  </p>
+                )}
               </div>
 
               <div className="flex justify-between mb-6">
@@ -1084,7 +1125,11 @@ export default function Checkout() {
                   {t("checkout.total")}
                 </span>
                 <span className="text-2xl font-bold text-primary">
-                  {formatPrice(finalTotal)}
+                  {formatPrice(
+                    appliedCoupon?.valid
+                      ? appliedCoupon.discountedTotal
+                      : finalTotal
+                  )}
                 </span>
               </div>
 
