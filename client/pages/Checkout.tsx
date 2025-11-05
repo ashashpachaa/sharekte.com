@@ -404,15 +404,25 @@ export default function Checkout() {
         }).then(async (response) => {
           if (response.ok) {
             const result = await response.json();
-            console.log(`[Checkout] ✓ User account created successfully for ${userEmail}`);
+            console.log(
+              `[Checkout] ✓ User account created successfully for ${userEmail}`,
+            );
             // Store the credentials for the success page to show to user
-            localStorage.setItem(`checkout_password_${userEmail}`, autoPassword);
+            localStorage.setItem(
+              `checkout_password_${userEmail}`,
+              autoPassword,
+            );
             localStorage.setItem(`checkout_password_email`, userEmail);
             toast.info(`Account created! Login with email: ${userEmail}`);
           } else if (response.status === 409) {
-            console.log(`[Checkout] User account already exists for ${userEmail}`);
+            console.log(
+              `[Checkout] User account already exists for ${userEmail}`,
+            );
           } else {
-            console.warn(`[Checkout] Failed to create user account:`, response.status);
+            console.warn(
+              `[Checkout] Failed to create user account:`,
+              response.status,
+            );
           }
         });
       } catch (error) {
@@ -531,12 +541,16 @@ export default function Checkout() {
               <div className="flex gap-3 items-start">
                 <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
                 <div className="text-left">
-                  <p className="font-semibold text-green-900">Account Created! ✓</p>
+                  <p className="font-semibold text-green-900">
+                    Account Created! ✓
+                  </p>
                   <p className="text-sm text-green-800 mt-1">
-                    We've automatically created your account with email: <strong>{userEmail}</strong>
+                    We've automatically created your account with email:{" "}
+                    <strong>{userEmail}</strong>
                   </p>
                   <p className="text-sm text-green-800 mt-2">
-                    You can now sign in to your dashboard to view your purchases and complete the transfer form.
+                    You can now sign in to your dashboard to view your purchases
+                    and complete the transfer form.
                   </p>
                 </div>
               </div>
@@ -557,7 +571,8 @@ export default function Checkout() {
                       Sign In to Your Account
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      Log in with your email address to access your dashboard (we'll send you a password reset link shortly)
+                      Log in with your email address to access your dashboard
+                      (we'll send you a password reset link shortly)
                     </p>
                   </div>
                 </div>

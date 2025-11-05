@@ -38,9 +38,7 @@ function loadUsersFromFile(): User[] {
 function saveUsersToFile(usersList: User[]): void {
   try {
     fs.writeFileSync(USERS_FILE, JSON.stringify(usersList, null, 2), "utf-8");
-    console.log(
-      `[saveUsersToFile] ✓ Saved ${usersList.length} users to file`
-    );
+    console.log(`[saveUsersToFile] ✓ Saved ${usersList.length} users to file`);
   } catch (error) {
     console.error("[saveUsersToFile] Error writing file:", error);
   }
@@ -97,7 +95,7 @@ export const signupHandler: RequestHandler = (req, res) => {
     });
 
     console.log(
-      `[signupHandler] ✓ User ${newUser.email} created and saved to file`
+      `[signupHandler] ✓ User ${newUser.email} created and saved to file`,
     );
     res.status(201).json({
       token,
