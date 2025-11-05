@@ -79,7 +79,13 @@ export default function AdminInvoices() {
     pendingAmount: 0,
     overdueAmount: 0,
     byStatus: { pending: 0, paid: 0, overdue: 0, refunded: 0, partial: 0 },
-    byPaymentMethod: { stripe: 0, wise: 0, manual: 0, bank_transfer: 0, paypal: 0 },
+    byPaymentMethod: {
+      stripe: 0,
+      wise: 0,
+      manual: 0,
+      bank_transfer: 0,
+      paypal: 0,
+    },
   });
 
   const [loading, setLoading] = useState(true);
@@ -100,14 +106,14 @@ export default function AdminInvoices() {
   // Bulk actions
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [showBulkActions, setShowBulkActions] = useState(false);
-  const [bulkStatusAction, setBulkStatusAction] = useState<InvoiceStatus | "none">(
-    "none"
-  );
+  const [bulkStatusAction, setBulkStatusAction] = useState<
+    InvoiceStatus | "none"
+  >("none");
 
   // Sorting
-  const [sortField, setSortField] = useState<"invoiceNumber" | "invoiceDate" | "dueDate" | "amount" | "status">(
-    "invoiceDate"
-  );
+  const [sortField, setSortField] = useState<
+    "invoiceNumber" | "invoiceDate" | "dueDate" | "amount" | "status"
+  >("invoiceDate");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
 
   useEffect(() => {
@@ -152,15 +158,16 @@ export default function AdminInvoices() {
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       result = result.filter((inv) =>
-        inv.invoiceNumber.toLowerCase().includes(query)
+        inv.invoiceNumber.toLowerCase().includes(query),
       );
     }
 
     if (clientSearch) {
       const query = clientSearch.toLowerCase();
-      result = result.filter((inv) =>
-        inv.clientName.toLowerCase().includes(query) ||
-        inv.clientEmail.toLowerCase().includes(query)
+      result = result.filter(
+        (inv) =>
+          inv.clientName.toLowerCase().includes(query) ||
+          inv.clientEmail.toLowerCase().includes(query),
       );
     }
 
@@ -169,7 +176,7 @@ export default function AdminInvoices() {
       result = result.filter(
         (inv) =>
           inv.companyName.toLowerCase().includes(query) ||
-          inv.companyNumber.toLowerCase().includes(query)
+          inv.companyNumber.toLowerCase().includes(query),
       );
     }
 
@@ -183,18 +190,20 @@ export default function AdminInvoices() {
 
     // Payment method filter
     if (filterPaymentMethod && filterPaymentMethod !== "all") {
-      result = result.filter((inv) => inv.paymentMethod === filterPaymentMethod);
+      result = result.filter(
+        (inv) => inv.paymentMethod === filterPaymentMethod,
+      );
     }
 
     // Date range filter
     if (dateFrom) {
       result = result.filter(
-        (inv) => new Date(inv.invoiceDate) >= new Date(dateFrom)
+        (inv) => new Date(inv.invoiceDate) >= new Date(dateFrom),
       );
     }
     if (dateTo) {
       result = result.filter(
-        (inv) => new Date(inv.invoiceDate) <= new Date(dateTo)
+        (inv) => new Date(inv.invoiceDate) <= new Date(dateTo),
       );
     }
 
@@ -270,13 +279,13 @@ export default function AdminInvoices() {
   const handleStatusChange = async (
     invoiceId: string,
     status: InvoiceStatus,
-    reason?: string
+    reason?: string,
   ) => {
     try {
       const updated = await updateInvoiceStatus(invoiceId, status, reason);
       if (updated) {
         setInvoices(
-          invoices.map((inv) => (inv.id === invoiceId ? updated : inv))
+          invoices.map((inv) => (inv.id === invoiceId ? updated : inv)),
         );
         setSelectedInvoice(updated);
         toast.success("Invoice status updated");
@@ -360,12 +369,17 @@ export default function AdminInvoices() {
   };
 
   const handleBulkStatusUpdate = async () => {
-    if (!bulkStatusAction || bulkStatusAction === "none" || selectedIds.size === 0) return;
+    if (
+      !bulkStatusAction ||
+      bulkStatusAction === "none" ||
+      selectedIds.size === 0
+    )
+      return;
 
     try {
       const success = await bulkUpdateInvoiceStatus(
         Array.from(selectedIds),
-        bulkStatusAction
+        bulkStatusAction,
       );
       if (success) {
         setSelectedIds(new Set());
@@ -423,7 +437,10 @@ export default function AdminInvoices() {
               <h1 className="text-3xl font-bold text-foreground">Invoices</h1>
             </div>
             <div className="flex items-center gap-3">
-              <Select value={currency} onValueChange={(value) => setCurrency(value as any)}>
+              <Select
+                value={currency}
+                onValueChange={(value) => setCurrency(value as any)}
+              >
                 <SelectTrigger className="w-32">
                   <SelectValue placeholder="Currency" />
                 </SelectTrigger>
@@ -601,7 +618,8 @@ export default function AdminInvoices() {
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="font-semibold text-blue-900">
-                  {selectedIds.size} invoice{selectedIds.size !== 1 ? "s" : ""} selected
+                  {selectedIds.size} invoice{selectedIds.size !== 1 ? "s" : ""}{" "}
+                  selected
                 </p>
               </div>
               <div className="flex gap-2">
@@ -685,7 +703,7 @@ export default function AdminInvoices() {
                         onClick={() => {
                           setSortField("invoiceNumber");
                           setSortDirection(
-                            sortDirection === "asc" ? "desc" : "asc"
+                            sortDirection === "asc" ? "desc" : "asc",
                           );
                         }}
                         className="flex items-center gap-2 hover:text-foreground"
@@ -707,7 +725,7 @@ export default function AdminInvoices() {
                         onClick={() => {
                           setSortField("invoiceDate");
                           setSortDirection(
-                            sortDirection === "asc" ? "desc" : "asc"
+                            sortDirection === "asc" ? "desc" : "asc",
                           );
                         }}
                         className="flex items-center gap-2 hover:text-foreground"
@@ -727,7 +745,7 @@ export default function AdminInvoices() {
                         onClick={() => {
                           setSortField("dueDate");
                           setSortDirection(
-                            sortDirection === "asc" ? "desc" : "asc"
+                            sortDirection === "asc" ? "desc" : "asc",
                           );
                         }}
                         className="flex items-center gap-2 hover:text-foreground"
@@ -747,7 +765,7 @@ export default function AdminInvoices() {
                         onClick={() => {
                           setSortField("amount");
                           setSortDirection(
-                            sortDirection === "asc" ? "desc" : "asc"
+                            sortDirection === "asc" ? "desc" : "asc",
                           );
                         }}
                         className="flex items-center justify-end gap-2 hover:text-foreground ml-auto"
@@ -813,7 +831,9 @@ export default function AdminInvoices() {
                           {formatInvoiceAmount(invoice.amount, currency)}
                         </td>
                         <td className="p-4">
-                          <Badge className={INVOICE_STATUS_COLORS[displayStatus]}>
+                          <Badge
+                            className={INVOICE_STATUS_COLORS[displayStatus]}
+                          >
                             {INVOICE_STATUS_LABELS[displayStatus]}
                           </Badge>
                         </td>
