@@ -23,12 +23,22 @@ export interface CouponValidationResponse {
 }
 
 const getAPIBaseURL = () => {
-  if (typeof window === "undefined") return "";
-  const domain = window.location.hostname;
-  if (domain === "localhost" || domain === "127.0.0.1") {
-    return "http://localhost:5000";
+  // HOSTINGER DEPLOYMENT ONLY - No Fly.io or hardcoded localhost support
+  if (typeof window === "undefined") return "https://shareket.com";
+  const hostname = window.location.hostname;
+
+  // Development: localhost uses relative paths
+  if (hostname === "localhost" || hostname === "127.0.0.1" || hostname.startsWith("192.168.")) {
+    return "";
   }
-  return `https://${domain}`;
+
+  // Production: Always use Hostinger domain
+  if (hostname.includes("shareket.com")) {
+    return window.location.origin;
+  }
+
+  // Fallback to Hostinger
+  return "https://shareket.com";
 };
 
 // Fetch all coupons
