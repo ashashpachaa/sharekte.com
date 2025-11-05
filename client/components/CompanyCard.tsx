@@ -79,8 +79,10 @@ export function CompanyCard({
   useEffect(() => {
     if (company.status === "amend-required") {
       setLoadingAmendments(true);
-      getAmendmentComments(company.id)
+      // Use companyNumber to match with transfer form records
+      getAmendmentComments(company.companyNumber)
         .then((comments) => {
+          console.log("[CompanyCard] Amendment comments loaded:", comments);
           setAmendmentComments(comments);
         })
         .catch((error) => {
