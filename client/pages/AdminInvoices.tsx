@@ -810,7 +810,7 @@ export default function AdminInvoices() {
                           {formatInvoiceDate(invoice.dueDate)}
                         </td>
                         <td className="p-4 text-right text-sm font-semibold">
-                          {formatInvoiceAmount(invoice.amount, invoice.currency)}
+                          {formatInvoiceAmount(invoice.amount, currency)}
                         </td>
                         <td className="p-4">
                           <Badge className={INVOICE_STATUS_COLORS[displayStatus]}>
