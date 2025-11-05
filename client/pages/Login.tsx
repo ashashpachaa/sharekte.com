@@ -128,7 +128,7 @@ export default function Login() {
             </div>
 
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Signing in..." : t("auth.login.button") || "Sign In"}
+              {loading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
 
