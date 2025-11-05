@@ -319,49 +319,64 @@ export default function Checkout() {
         }
 
         // Create order in API
+        const newOrder = {
+          id: `ord-${Date.now()}`,
+          orderId: `ORD-${new Date().getFullYear()}-${String(Date.now()).slice(-5)}`,
+          customerName: billingFullName,
+          customerEmail: billingEmail,
+          customerPhone: billingPhoneNumber,
+          billingAddress: billingAddress,
+          country: billingCountry,
+          companyId: item.id,
+          companyName: item.name,
+          companyNumber: item.companyNumber,
+          paymentMethod: "credit_card",
+          paymentStatus: "completed",
+          transactionId: `txn-${Date.now()}`,
+          amount: convertedAmount,
+          currency: currency,
+          paymentDate: today,
+          status: "paid",
+          statusChangedDate: today,
+          statusHistory: [
+            {
+              id: `hist-${Date.now()}`,
+              fromStatus: "pending-payment",
+              toStatus: "paid",
+              changedDate: today,
+              changedBy: "system",
+              notes: "Order created through checkout",
+            },
+          ],
+          purchaseDate: today,
+          lastUpdateDate: today,
+          renewalDate: oneYearLater,
+          renewalFees: convertedRenewalFees,
+          appliedFees: feesDetails,
+          totalFees: totalFees,
+          refundStatus: "none",
+          documents: [],
+          createdAt: today,
+          updatedAt: today,
+        };
+
         try {
-          await createOrder({
-            orderId: `ORD-${new Date().getFullYear()}-${String(Date.now()).slice(-5)}`,
-            customerName: billingFullName,
-            customerEmail: billingEmail,
-            customerPhone: billingPhoneNumber,
-            billingAddress: billingAddress,
-            country: billingCountry,
-            companyId: item.id,
-            companyName: item.name,
-            companyNumber: item.companyNumber,
-            paymentMethod: "credit_card",
-            paymentStatus: "completed",
-            transactionId: `txn-${Date.now()}`,
-            amount: convertedAmount,
-            currency: currency,
-            paymentDate: today,
-            status: "paid",
-            statusChangedDate: today,
-            statusHistory: [
-              {
-                id: `hist-${Date.now()}`,
-                fromStatus: "pending-payment",
-                toStatus: "paid",
-                changedDate: today,
-                changedBy: "system",
-                notes: "Order created through checkout",
-              },
-            ],
-            purchaseDate: today,
-            lastUpdateDate: today,
-            renewalDate: oneYearLater,
-            renewalFees: convertedRenewalFees,
-            appliedFees: feesDetails,
-            totalFees: totalFees,
-            refundStatus: "none",
-            documents: [],
-            createdAt: today,
-            updatedAt: today,
-          });
+          await createOrder(newOrder);
+          console.log(`[Checkout] Order created for ${item.name}`);
         } catch (error) {
           console.warn(`Failed to create order for ${item.name}:`, error);
-          // Non-blocking error - order may have been saved to localStorage anyway
+        }
+
+        // Save order to localStorage for persistence across page refreshes
+        try {
+          const existingOrders = JSON.parse(
+            localStorage.getItem("userOrders") || "[]",
+          );
+          existingOrders.push(newOrder);
+          localStorage.setItem("userOrders", JSON.stringify(existingOrders));
+          console.log("[Checkout] Order saved to localStorage");
+        } catch (error) {
+          console.warn("[Checkout] Failed to save order to localStorage:", error);
         }
       });
 
