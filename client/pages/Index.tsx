@@ -588,7 +588,7 @@ function SalesStatisticsSection({ t }: { t: any }) {
         <div className="text-center mt-12">
           <Button
             size="lg"
-            className="bg-primary hover:bg-primary-600 text-white h-12 px-8 rounded-lg font-semibold"
+            className="bg-accent hover:bg-accent/80 text-white h-12 px-8 rounded-lg font-semibold"
             asChild
           >
             <Link to="/dashboard" className="flex items-center gap-2">
