@@ -231,27 +231,50 @@ export default function Dashboard() {
 
   // User data state
   const [userData, setUserData] = useState<UserData>(() => {
-    const saved = localStorage.getItem("user");
-    if (saved) {
-      const parsed = JSON.parse(saved);
+    // Try to load from new login system first
+    const userEmail = localStorage.getItem("userEmail");
+    const userName = localStorage.getItem("userName");
+
+    if (userEmail && userName) {
       return {
-        fullName: parsed.fullName || "",
-        email: parsed.email || "",
-        phone: parsed.phone || "+1 (555) 123-4567",
-        address: parsed.address || "123 Business Street",
-        city: parsed.city || "New York",
-        country: parsed.country || "United States",
-        company: parsed.company || "",
+        fullName: userName,
+        email: userEmail,
+        phone: "+1 (555) 123-4567",
+        address: "123 Business Street",
+        city: "New York",
+        country: "United States",
+        company: "",
       };
     }
+
+    // Fallback to old "user" object format for backwards compatibility
+    const saved = localStorage.getItem("user");
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        return {
+          fullName: parsed.fullName || "",
+          email: parsed.email || "",
+          phone: parsed.phone || "+1 (555) 123-4567",
+          address: parsed.address || "123 Business Street",
+          city: parsed.city || "New York",
+          country: parsed.country || "United States",
+          company: parsed.company || "",
+        };
+      } catch (e) {
+        console.warn("Could not parse user data from localStorage");
+      }
+    }
+
+    // Default values
     return {
-      fullName: "John Doe",
-      email: "john@example.com",
+      fullName: "User",
+      email: "user@example.com",
       phone: "+1 (555) 123-4567",
       address: "123 Business Street",
       city: "New York",
       country: "United States",
-      company: "My Business Corp",
+      company: "",
     };
   });
 
