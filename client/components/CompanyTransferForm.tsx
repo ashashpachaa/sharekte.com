@@ -901,12 +901,14 @@ export function CompanyTransferForm({
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const reader = new FileReader();
-        reader.onload = () => {
+        reader.onload = (e) => {
+          const base64Data = e.target?.result as string;
           const newAttachment = {
             id: `att_${Date.now()}_${i}`,
             name: file.name,
             type: file.type,
             size: file.size,
+            data: base64Data,
             uploadedDate: new Date().toISOString(),
             uploadedBy: "user",
           };
