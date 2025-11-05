@@ -225,7 +225,8 @@ export const logoutHandler: RequestHandler = (req, res) => {
     const token = authHeader?.replace("Bearer ", "");
 
     if (token) {
-      tokens.delete(token);
+      delete tokens[token];
+      saveTokensToFile(tokens);
     }
 
     res.json({ message: "Logged out successfully" });
