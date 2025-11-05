@@ -17,17 +17,20 @@ export function Header() {
   const [showUserMenu, setShowUserMenu] = useState(false);
 
   // Get user from localStorage
-  const user = (() => {
-    try {
-      const stored = localStorage.getItem("user");
-      return stored ? JSON.parse(stored) : null;
-    } catch {
-      return null;
-    }
-  })();
+  const userToken = localStorage.getItem("userToken");
+  const userEmail = localStorage.getItem("userEmail");
+  const userName = localStorage.getItem("userName");
+
+  const user = userToken && userEmail && userName ? {
+    authenticated: true,
+    email: userEmail,
+    fullName: userName,
+  } : null;
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
+    localStorage.removeItem("userToken");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userName");
     setShowUserMenu(false);
     navigate("/");
   };
