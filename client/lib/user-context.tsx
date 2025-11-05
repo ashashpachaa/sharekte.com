@@ -75,17 +75,20 @@ export function UserProvider({ children }: { children: ReactNode }) {
         body: JSON.stringify({ email, password, name }),
       });
 
-      let data;
-      try {
-        const text = await response.text();
-        data = text ? JSON.parse(text) : {};
-      } catch (e) {
-        console.error("Failed to parse response:", e);
-        throw new Error("Server error: Invalid response format");
+      let data: any = {};
+
+      // Try to parse response body
+      if (response.headers.get("content-type")?.includes("application/json")) {
+        try {
+          data = await response.json();
+        } catch (e) {
+          console.error("Failed to parse JSON response:", e);
+          // If we can't parse, continue with empty data
+        }
       }
 
       if (!response.ok) {
-        throw new Error(data?.error || "Signup failed");
+        throw new Error(data?.error || `Signup failed (HTTP ${response.status})`);
       }
 
       setIsUser(true);
