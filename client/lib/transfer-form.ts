@@ -257,7 +257,8 @@ export async function fetchExistingTransferForm(
   companyId: string,
 ): Promise<TransferFormData | null> {
   try {
-    const response = await fetch(`/api/transfer-forms?companyId=${companyId}`);
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/transfer-forms?companyId=${companyId}`);
     if (response.ok) {
       const data = await response.json();
       // Return the first form (most recent)
