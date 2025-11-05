@@ -23,26 +23,9 @@ export interface CouponValidationResponse {
 }
 
 const getAPIBaseURL = () => {
-  // HOSTINGER DEPLOYMENT ONLY - No Fly.io or hardcoded localhost support
+  // Use current origin for all deployments (Fly.io, Hostinger, localhost)
   if (typeof window === "undefined") return "https://shareket.com";
-  const hostname = window.location.hostname;
-
-  // Development: localhost uses relative paths
-  if (
-    hostname === "localhost" ||
-    hostname === "127.0.0.1" ||
-    hostname.startsWith("192.168.")
-  ) {
-    return "";
-  }
-
-  // Production: Always use Hostinger domain
-  if (hostname.includes("shareket.com")) {
-    return window.location.origin;
-  }
-
-  // Fallback to Hostinger
-  return "https://shareket.com";
+  return window.location.origin;
 };
 
 // Fetch all coupons
