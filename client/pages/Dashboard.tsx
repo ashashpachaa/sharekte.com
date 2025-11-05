@@ -508,7 +508,8 @@ export default function Dashboard() {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
 
-        const response = await fetch("/api/transfer-forms", {
+        const apiBaseURL = getAPIBaseURL();
+        const response = await fetch(`${apiBaseURL}/api/transfer-forms`, {
           signal: controller.signal,
         });
 
