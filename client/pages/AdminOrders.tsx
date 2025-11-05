@@ -42,7 +42,7 @@ export default function AdminOrders() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { addNotification } = useNotifications();
-  const { currency, rates } = useCurrency();
+  const { currency, rates, convertPrice } = useCurrency();
   const [notifiedOrderIds, setNotifiedOrderIds] = useState<Set<string>>(
     new Set(),
   );
@@ -373,7 +373,7 @@ export default function AdminOrders() {
                 <p className="text-2xl font-bold text-primary">
                   {rates[currency as keyof typeof rates]?.symbol || "$"}
                   {orders
-                    .reduce((sum, o) => sum + o.amount, 0)
+                    .reduce((sum, o) => sum + convertPrice(o.amount), 0)
                     .toLocaleString()}
                 </p>
               </div>
@@ -537,7 +537,7 @@ export default function AdminOrders() {
                             {order.companyName}
                           </td>
                           <td className="px-6 py-4 text-right font-semibold text-foreground">
-                            {order.currency} {order.amount.toLocaleString()}
+                            {rates[currency as keyof typeof rates]?.symbol || "$"}{convertPrice(order.amount).toLocaleString()}
                           </td>
                           <td className="px-6 py-4">
                             <span
