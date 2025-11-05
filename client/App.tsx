@@ -57,29 +57,84 @@ export default function App() {
                       <Route path="/admin/login" element={<AdminLogin />} />
                       <Route
                         path="/admin/dashboard"
-                        element={<AdminDashboard />}
+                        element={
+                          <ProtectedAdminRoute>
+                            <AdminDashboard />
+                          </ProtectedAdminRoute>
+                        }
                       />
-                      <Route path="/admin/users" element={<AdminUsers />} />
-                      <Route path="/admin/orders" element={<AdminOrders />} />
+                      <Route
+                        path="/admin/users"
+                        element={
+                          <ProtectedAdminRoute>
+                            <AdminUsers />
+                          </ProtectedAdminRoute>
+                        }
+                      />
+                      <Route
+                        path="/admin/orders"
+                        element={
+                          <ProtectedAdminRoute>
+                            <AdminOrders />
+                          </ProtectedAdminRoute>
+                        }
+                      />
                       <Route
                         path="/admin/services"
-                        element={<AdminServices />}
+                        element={
+                          <ProtectedAdminRoute>
+                            <AdminServices />
+                          </ProtectedAdminRoute>
+                        }
                       />
-                      <Route path="/admin/coupons" element={<AdminCoupons />} />
+                      <Route
+                        path="/admin/coupons"
+                        element={
+                          <ProtectedAdminRoute>
+                            <AdminCoupons />
+                          </ProtectedAdminRoute>
+                        }
+                      />
                       <Route
                         path="/admin/invoices"
-                        element={<AdminInvoices />}
+                        element={
+                          <ProtectedAdminRoute>
+                            <AdminInvoices />
+                          </ProtectedAdminRoute>
+                        }
                       />
                       <Route
                         path="/admin/settings"
-                        element={<AdminSettings />}
+                        element={
+                          <ProtectedAdminRoute>
+                            <AdminSettings />
+                          </ProtectedAdminRoute>
+                        }
                       />
                       <Route
                         path="/admin/email-templates"
-                        element={<AdminEmailTemplates />}
+                        element={
+                          <ProtectedAdminRoute>
+                            <AdminEmailTemplates />
+                          </ProtectedAdminRoute>
+                        }
                       />
-                      <Route path="/admin/roles" element={<AdminRoles />} />
-                      <Route path="/admin/fees" element={<AdminFees />} />
+                      <Route
+                        path="/admin/roles"
+                        element={
+                          <ProtectedAdminRoute>
+                            <AdminRoles />
+                          </ProtectedAdminRoute>
+                        }
+                      />
+                      <Route
+                        path="/admin/fees"
+                        element={
+                          <ProtectedAdminRoute>
+                            <AdminFees />
+                          </ProtectedAdminRoute>
+                        }
+                      />
                       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                       <Route path="*" element={<NotFound />} />
                     </Routes>
