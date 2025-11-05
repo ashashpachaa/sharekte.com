@@ -2542,6 +2542,69 @@ export default function Dashboard() {
                                     </div>
                                   )}
 
+                                {/* Transfer Form Action Buttons */}
+                                <div className="flex gap-2 flex-wrap pt-2">
+                                  {company.status === "amend-required" && (
+                                    <Button
+                                      className="gap-2 bg-accent hover:bg-accent/80 text-white flex-1"
+                                      size="sm"
+                                      onClick={() => {
+                                        setShowTransferFormModal(true);
+                                        setSelectedCompanyForTransferForm(company);
+                                      }}
+                                    >
+                                      <Edit2 className="w-4 h-4" />
+                                      Make Amendments
+                                    </Button>
+                                  )}
+                                  {company.status === "pending-form" && (
+                                    <Button
+                                      className="gap-2 bg-accent hover:bg-accent/80 text-white flex-1"
+                                      size="sm"
+                                      onClick={() => {
+                                        setShowTransferFormModal(true);
+                                        setSelectedCompanyForTransferForm(company);
+                                      }}
+                                    >
+                                      <FileText className="w-4 h-4" />
+                                      Complete Form
+                                    </Button>
+                                  )}
+                                  {company.status === "under-review" && (
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      className="flex-1"
+                                      disabled
+                                    >
+                                      <Clock className="w-4 h-4 mr-2" />
+                                      Under Review
+                                    </Button>
+                                  )}
+                                  {company.status === "pending-transfer" && (
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      className="flex-1"
+                                      disabled
+                                    >
+                                      <Zap className="w-4 h-4 mr-2" />
+                                      Transfer in Progress
+                                    </Button>
+                                  )}
+                                  {company.status === "completed" && (
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      className="flex-1 text-green-600"
+                                      disabled
+                                    >
+                                      <CheckCircle className="w-4 h-4 mr-2" />
+                                      Completed
+                                    </Button>
+                                  )}
+                                </div>
+
                                 {/* Documents Section */}
                                 <div>
                                   <h4 className="font-semibold text-foreground mb-4">
