@@ -392,7 +392,8 @@ export const createOrder: RequestHandler = async (req, res) => {
 
     // Always store in in-memory first (primary persistence for documents)
     inMemoryOrders.push(order);
-    console.log("[createOrder] ✓ Stored order in-memory storage");
+    saveOrdersToFile(inMemoryOrders);
+    console.log("[createOrder] ✓ Stored order in-memory and saved to file");
 
     // Sync to Airtable immediately (wait for completion)
     if (AIRTABLE_API_TOKEN) {
