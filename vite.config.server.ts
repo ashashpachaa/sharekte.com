@@ -1,5 +1,18 @@
-import { defineConfig } from "vite";
+import { defineConfig, Plugin } from "vite";
 import path from "path";
+
+// Plugin to externalize imports from client code
+const externalizeClientCode: Plugin = {
+  name: 'externalize-client-code',
+  enforce: 'pre',
+  resolveId(id) {
+    // Mark any import starting with @ or containing client/ as external
+    if (id.includes('@/lib') || id.includes('@/') || id.includes('client/lib')) {
+      return { id, external: true };
+    }
+    return null;
+  },
+};
 
 // Server build configuration
 export default defineConfig({
