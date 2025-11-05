@@ -55,27 +55,45 @@ export function MyOrders({ userEmail }: MyOrdersProps) {
 
       // First try API, with timeout and fallback
       let allOrders: Order[] = [];
+      let apiSuccess = false;
+
       try {
+        console.log("[MyOrders] Attempting to fetch from /api/orders...");
         // Simple fetch without complex options that might fail
-        const response = await fetch("/api/orders");
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+        const response = await fetch("/api/orders", {
+          signal: controller.signal,
+          headers: { "Content-Type": "application/json" },
+        });
+        clearTimeout(timeoutId);
+
+        console.log(`[MyOrders] API response status: ${response.status}`);
         if (response.ok) {
           allOrders = await response.json();
-          console.log(`[MyOrders] Loaded ${allOrders.length} orders from API`);
+          apiSuccess = true;
+          console.log(`[MyOrders] ✅ Loaded ${allOrders.length} orders from API`);
         } else {
           console.warn(`[MyOrders] API returned status ${response.status}`);
         }
       } catch (apiError) {
-        console.warn("[MyOrders] API fetch failed, checking localStorage...", apiError);
+        console.warn("[MyOrders] ❌ API fetch failed:", apiError);
 
         // Fallback to localStorage orders
+        console.log("[MyOrders] Checking localStorage for orders...");
         const savedOrders = localStorage.getItem("userOrders");
         if (savedOrders) {
           try {
             allOrders = JSON.parse(savedOrders);
-            console.log(`[MyOrders] Loaded ${allOrders.length} orders from localStorage`);
+            console.log(`[MyOrders] ✅ Loaded ${allOrders.length} orders from localStorage`);
           } catch (e) {
             console.warn("[MyOrders] Failed to parse localStorage orders");
+            allOrders = [];
           }
+        } else {
+          console.log("[MyOrders] No orders in localStorage either");
+          allOrders = [];
         }
       }
 
