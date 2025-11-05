@@ -31,7 +31,9 @@ export default function AdminSettings() {
             >
               <ArrowLeft className="w-4 h-4" />
             </Button>
-            <h1 className="text-2xl font-bold text-foreground">Admin Settings</h1>
+            <h1 className="text-2xl font-bold text-foreground">
+              Admin Settings
+            </h1>
           </div>
         </div>
       </header>
@@ -47,22 +49,24 @@ export default function AdminSettings() {
 
           <div className="space-y-4">
             <div>
-              <label className="text-sm font-medium text-muted-foreground">Email</label>
+              <label className="text-sm font-medium text-muted-foreground">
+                Email
+              </label>
               <p className="text-foreground mt-1">{adminEmail || "Admin"}</p>
             </div>
 
             <div>
-              <label className="text-sm font-medium text-muted-foreground">Role</label>
-              <p className="text-foreground mt-1 capitalize">
-                Super Admin
-              </p>
+              <label className="text-sm font-medium text-muted-foreground">
+                Role
+              </label>
+              <p className="text-foreground mt-1 capitalize">Super Admin</p>
             </div>
 
             <div>
-              <label className="text-sm font-medium text-muted-foreground">Status</label>
-              <p className="text-foreground mt-1 capitalize">
-                Active
-              </p>
+              <label className="text-sm font-medium text-muted-foreground">
+                Status
+              </label>
+              <p className="text-foreground mt-1 capitalize">Active</p>
             </div>
           </div>
         </div>
@@ -77,8 +81,12 @@ export default function AdminSettings() {
           <div className="space-y-4">
             <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
               <div>
-                <p className="font-medium text-foreground">Two-Factor Authentication</p>
-                <p className="text-sm text-muted-foreground">Add an extra layer of security</p>
+                <p className="font-medium text-foreground">
+                  Two-Factor Authentication
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Add an extra layer of security
+                </p>
               </div>
               <Button variant="outline" disabled>
                 Coming Soon
@@ -88,7 +96,9 @@ export default function AdminSettings() {
             <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
               <div>
                 <p className="font-medium text-foreground">Change Password</p>
-                <p className="text-sm text-muted-foreground">Update your admin password</p>
+                <p className="text-sm text-muted-foreground">
+                  Update your admin password
+                </p>
               </div>
               <Button variant="outline" disabled>
                 Coming Soon
@@ -98,7 +108,9 @@ export default function AdminSettings() {
             <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
               <div>
                 <p className="font-medium text-foreground">Login History</p>
-                <p className="text-sm text-muted-foreground">View your recent login activity</p>
+                <p className="text-sm text-muted-foreground">
+                  View your recent login activity
+                </p>
               </div>
               <Button variant="outline" disabled>
                 Coming Soon
@@ -117,16 +129,24 @@ export default function AdminSettings() {
           <div className="space-y-4">
             <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
               <div>
-                <p className="font-medium text-foreground">Email Notifications</p>
-                <p className="text-sm text-muted-foreground">Receive email alerts for important events</p>
+                <p className="font-medium text-foreground">
+                  Email Notifications
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Receive email alerts for important events
+                </p>
               </div>
               <input type="checkbox" defaultChecked className="w-5 h-5" />
             </div>
 
             <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
               <div>
-                <p className="font-medium text-foreground">User Management Alerts</p>
-                <p className="text-sm text-muted-foreground">Alerts for new users and suspicious activity</p>
+                <p className="font-medium text-foreground">
+                  User Management Alerts
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Alerts for new users and suspicious activity
+                </p>
               </div>
               <input type="checkbox" defaultChecked className="w-5 h-5" />
             </div>
@@ -134,7 +154,9 @@ export default function AdminSettings() {
             <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg">
               <div>
                 <p className="font-medium text-foreground">System Alerts</p>
-                <p className="text-sm text-muted-foreground">Alerts for system errors and maintenance</p>
+                <p className="text-sm text-muted-foreground">
+                  Alerts for system errors and maintenance
+                </p>
               </div>
               <input type="checkbox" defaultChecked className="w-5 h-5" />
             </div>
@@ -143,7 +165,9 @@ export default function AdminSettings() {
 
         {/* System Information */}
         <div className="bg-card border border-border/40 rounded-lg p-6">
-          <h2 className="text-xl font-semibold text-foreground mb-6">System Information</h2>
+          <h2 className="text-xl font-semibold text-foreground mb-6">
+            System Information
+          </h2>
 
           <div className="space-y-3 text-sm">
             <div className="flex justify-between py-2 border-b border-border/20">

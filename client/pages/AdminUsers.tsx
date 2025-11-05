@@ -40,7 +40,9 @@ export default function AdminUsers() {
 
   const [users, setUsers] = useState<UserAccount[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterStatus, setFilterStatus] = useState<"all" | "active" | "suspended" | "inactive">("all");
+  const [filterStatus, setFilterStatus] = useState<
+    "all" | "active" | "suspended" | "inactive"
+  >("all");
   const [selectedUser, setSelectedUser] = useState<UserAccount | null>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [editingNote, setEditingNote] = useState("");
@@ -77,7 +79,10 @@ export default function AdminUsers() {
       result = result.filter((u) => u.accountStatus === filterStatus);
     }
 
-    return result.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    return result.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    );
   }, [users, searchQuery, filterStatus]);
 
   const handleSuspendUser = (userId: string) => {
@@ -93,7 +98,11 @@ export default function AdminUsers() {
   };
 
   const handleDeleteUser = (userId: string) => {
-    if (confirm("Are you sure you want to delete this user? This action cannot be undone.")) {
+    if (
+      confirm(
+        "Are you sure you want to delete this user? This action cannot be undone.",
+      )
+    ) {
       deleteUser(userId);
       refreshUsers();
       setShowDetailsModal(false);
@@ -131,12 +140,22 @@ export default function AdminUsers() {
     });
 
     refreshUsers();
-    setNewUserData({ name: "", email: "", phone: "", company: "", role: "client" });
+    setNewUserData({
+      name: "",
+      email: "",
+      phone: "",
+      company: "",
+      role: "client",
+    });
     setShowNewUserModal(false);
     toast.success("User created");
   };
 
-  const handleEditUserDetail = (userId: string, field: string, value: string) => {
+  const handleEditUserDetail = (
+    userId: string,
+    field: string,
+    value: string,
+  ) => {
     updateUserDetails(userId, { [field]: value });
     refreshUsers();
 
@@ -162,7 +181,9 @@ export default function AdminUsers() {
             >
               <ArrowLeft className="w-4 h-4" />
             </Button>
-            <h1 className="text-2xl font-bold text-foreground">Users Management</h1>
+            <h1 className="text-2xl font-bold text-foreground">
+              Users Management
+            </h1>
           </div>
           <Button
             className="bg-primary hover:bg-primary-600 text-white gap-2"
@@ -215,46 +236,74 @@ export default function AdminUsers() {
             <table className="w-full">
               <thead className="bg-muted/50 border-b border-border/40">
                 <tr>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Name</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Email</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Role</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Company</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Status</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">Registered</th>
-                  <th className="px-6 py-4 text-center text-sm font-semibold text-foreground">Actions</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
+                    Name
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
+                    Email
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
+                    Role
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
+                    Company
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
+                    Status
+                  </th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-foreground">
+                    Registered
+                  </th>
+                  <th className="px-6 py-4 text-center text-sm font-semibold text-foreground">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/40">
                 {filteredUsers.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="px-6 py-8 text-center text-muted-foreground">
+                    <td
+                      colSpan={6}
+                      className="px-6 py-8 text-center text-muted-foreground"
+                    >
                       No users found
                     </td>
                   </tr>
                 ) : (
                   filteredUsers.map((user) => (
-                    <tr key={user.id} className="hover:bg-muted/50 transition-colors">
+                    <tr
+                      key={user.id}
+                      className="hover:bg-muted/50 transition-colors"
+                    >
                       <td className="px-6 py-4">
                         <div>
-                          <p className="font-semibold text-foreground">{user.name}</p>
-                          <p className="text-xs text-muted-foreground">{user.id}</p>
+                          <p className="font-semibold text-foreground">
+                            {user.name}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {user.id}
+                          </p>
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-sm text-foreground">{user.email}</td>
+                      <td className="px-6 py-4 text-sm text-foreground">
+                        {user.email}
+                      </td>
                       <td className="px-6 py-4 text-sm">
                         <span className="inline-block px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700 capitalize">
                           {user.role}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-sm text-foreground">{user.company || "—"}</td>
+                      <td className="px-6 py-4 text-sm text-foreground">
+                        {user.company || "—"}
+                      </td>
                       <td className="px-6 py-4">
                         <span
                           className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
                             user.accountStatus === "active"
                               ? "bg-green-100 text-green-700"
                               : user.accountStatus === "suspended"
-                              ? "bg-orange-100 text-orange-700"
-                              : "bg-gray-100 text-gray-700"
+                                ? "bg-orange-100 text-orange-700"
+                                : "bg-gray-100 text-gray-700"
                           }`}
                         >
                           {user.accountStatus}
@@ -319,7 +368,9 @@ export default function AdminUsers() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-background rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between p-6 border-b border-border/40 sticky top-0 bg-background">
-              <h2 className="text-xl font-bold text-foreground">User Details</h2>
+              <h2 className="text-xl font-bold text-foreground">
+                User Details
+              </h2>
               <Button
                 variant="ghost"
                 size="sm"
@@ -338,38 +389,70 @@ export default function AdminUsers() {
                 </h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs text-muted-foreground font-semibold">Name</label>
+                    <label className="text-xs text-muted-foreground font-semibold">
+                      Name
+                    </label>
                     <div className="flex gap-2 mt-1">
                       <Input
                         value={selectedUser.name}
-                        onChange={(e) => handleEditUserDetail(selectedUser.id, "name", e.target.value)}
+                        onChange={(e) =>
+                          handleEditUserDetail(
+                            selectedUser.id,
+                            "name",
+                            e.target.value,
+                          )
+                        }
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="text-xs text-muted-foreground font-semibold">Email</label>
+                    <label className="text-xs text-muted-foreground font-semibold">
+                      Email
+                    </label>
                     <div className="flex gap-2 mt-1">
                       <Input
                         value={selectedUser.email}
-                        onChange={(e) => handleEditUserDetail(selectedUser.id, "email", e.target.value)}
+                        onChange={(e) =>
+                          handleEditUserDetail(
+                            selectedUser.id,
+                            "email",
+                            e.target.value,
+                          )
+                        }
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="text-xs text-muted-foreground font-semibold">Phone</label>
+                    <label className="text-xs text-muted-foreground font-semibold">
+                      Phone
+                    </label>
                     <div className="flex gap-2 mt-1">
                       <Input
                         value={selectedUser.phone || ""}
-                        onChange={(e) => handleEditUserDetail(selectedUser.id, "phone", e.target.value)}
+                        onChange={(e) =>
+                          handleEditUserDetail(
+                            selectedUser.id,
+                            "phone",
+                            e.target.value,
+                          )
+                        }
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="text-xs text-muted-foreground font-semibold">Company</label>
+                    <label className="text-xs text-muted-foreground font-semibold">
+                      Company
+                    </label>
                     <div className="flex gap-2 mt-1">
                       <Input
                         value={selectedUser.company || ""}
-                        onChange={(e) => handleEditUserDetail(selectedUser.id, "company", e.target.value)}
+                        onChange={(e) =>
+                          handleEditUserDetail(
+                            selectedUser.id,
+                            "company",
+                            e.target.value,
+                          )
+                        }
                       />
                     </div>
                   </div>
@@ -384,7 +467,9 @@ export default function AdminUsers() {
                   onChange={(e) => {
                     updateUserRole(selectedUser.id, e.target.value as any);
                     refreshUsers();
-                    const updated = getAllUsers().find((u) => u.id === selectedUser.id);
+                    const updated = getAllUsers().find(
+                      (u) => u.id === selectedUser.id,
+                    );
                     if (updated) setSelectedUser(updated);
                     toast.success("Role updated");
                   }}
@@ -401,10 +486,16 @@ export default function AdminUsers() {
 
               {/* Status */}
               <div className="space-y-3">
-                <h3 className="font-semibold text-foreground">Account Status</h3>
+                <h3 className="font-semibold text-foreground">
+                  Account Status
+                </h3>
                 <div className="flex gap-2">
                   <Button
-                    variant={selectedUser.accountStatus === "active" ? "default" : "outline"}
+                    variant={
+                      selectedUser.accountStatus === "active"
+                        ? "default"
+                        : "outline"
+                    }
                     size="sm"
                     onClick={() => handleReactivateUser(selectedUser.id)}
                   >
@@ -412,7 +503,11 @@ export default function AdminUsers() {
                     Active
                   </Button>
                   <Button
-                    variant={selectedUser.accountStatus === "suspended" ? "default" : "outline"}
+                    variant={
+                      selectedUser.accountStatus === "suspended"
+                        ? "default"
+                        : "outline"
+                    }
                     size="sm"
                     onClick={() => handleSuspendUser(selectedUser.id)}
                   >
@@ -424,10 +519,14 @@ export default function AdminUsers() {
 
               {/* Login History */}
               <div className="space-y-3">
-                <h3 className="font-semibold text-foreground">Recent Login History</h3>
+                <h3 className="font-semibold text-foreground">
+                  Recent Login History
+                </h3>
                 <div className="bg-muted/30 rounded-lg p-4 max-h-48 overflow-y-auto">
                   {getLoginHistory(selectedUser.id).length === 0 ? (
-                    <p className="text-sm text-muted-foreground">No login history</p>
+                    <p className="text-sm text-muted-foreground">
+                      No login history
+                    </p>
                   ) : (
                     <div className="space-y-2">
                       {getLoginHistory(selectedUser.id)
@@ -435,9 +534,16 @@ export default function AdminUsers() {
                         .reverse()
                         .slice(0, 10)
                         .map((login) => (
-                          <div key={login.id} className="text-xs border-l-2 border-primary pl-3 py-1">
-                            <p className="font-semibold text-foreground">{login.device}</p>
-                            <p className="text-muted-foreground">IP: {login.ipAddress}</p>
+                          <div
+                            key={login.id}
+                            className="text-xs border-l-2 border-primary pl-3 py-1"
+                          >
+                            <p className="font-semibold text-foreground">
+                              {login.device}
+                            </p>
+                            <p className="text-muted-foreground">
+                              IP: {login.ipAddress}
+                            </p>
                             <p className="text-muted-foreground">
                               {new Date(login.timestamp).toLocaleString()}
                             </p>
@@ -450,22 +556,32 @@ export default function AdminUsers() {
 
               {/* Orders and Invoices */}
               <div className="space-y-3">
-                <h3 className="font-semibold text-foreground">Orders & Invoices</h3>
+                <h3 className="font-semibold text-foreground">
+                  Orders & Invoices
+                </h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-muted/30 p-4 rounded-lg">
                     <p className="text-xs text-muted-foreground mb-1">Orders</p>
-                    <p className="text-2xl font-bold text-foreground">{selectedUser.orders.length}</p>
+                    <p className="text-2xl font-bold text-foreground">
+                      {selectedUser.orders.length}
+                    </p>
                   </div>
                   <div className="bg-muted/30 p-4 rounded-lg">
-                    <p className="text-xs text-muted-foreground mb-1">Invoices</p>
-                    <p className="text-2xl font-bold text-foreground">{selectedUser.invoices.length}</p>
+                    <p className="text-xs text-muted-foreground mb-1">
+                      Invoices
+                    </p>
+                    <p className="text-2xl font-bold text-foreground">
+                      {selectedUser.invoices.length}
+                    </p>
                   </div>
                 </div>
               </div>
 
               {/* Notes Section */}
               <div className="space-y-3">
-                <h3 className="font-semibold text-foreground">Internal Notes</h3>
+                <h3 className="font-semibold text-foreground">
+                  Internal Notes
+                </h3>
                 <div className="bg-muted/30 rounded-lg p-4 max-h-32 overflow-y-auto min-h-20">
                   <p className="text-xs text-muted-foreground whitespace-pre-wrap">
                     {selectedUser.notes || "No notes yet"}
@@ -489,7 +605,9 @@ export default function AdminUsers() {
 
               {/* Danger Zone */}
               <div className="space-y-3 pt-4 border-t border-border/40">
-                <h3 className="font-semibold text-destructive text-sm">Danger Zone</h3>
+                <h3 className="font-semibold text-destructive text-sm">
+                  Danger Zone
+                </h3>
                 <Button
                   variant="destructive"
                   className="w-full"
@@ -509,7 +627,9 @@ export default function AdminUsers() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-background rounded-lg max-w-md w-full">
             <div className="flex items-center justify-between p-6 border-b border-border/40">
-              <h2 className="text-xl font-bold text-foreground">Add New User</h2>
+              <h2 className="text-xl font-bold text-foreground">
+                Add New User
+              </h2>
               <Button
                 variant="ghost"
                 size="sm"
@@ -527,7 +647,9 @@ export default function AdminUsers() {
                 <Input
                   placeholder="John Doe"
                   value={newUserData.name}
-                  onChange={(e) => setNewUserData({ ...newUserData, name: e.target.value })}
+                  onChange={(e) =>
+                    setNewUserData({ ...newUserData, name: e.target.value })
+                  }
                 />
               </div>
 
@@ -538,7 +660,9 @@ export default function AdminUsers() {
                 <Input
                   placeholder="john@example.com"
                   value={newUserData.email}
-                  onChange={(e) => setNewUserData({ ...newUserData, email: e.target.value })}
+                  onChange={(e) =>
+                    setNewUserData({ ...newUserData, email: e.target.value })
+                  }
                 />
               </div>
 
@@ -549,7 +673,9 @@ export default function AdminUsers() {
                 <Input
                   placeholder="+1 234 567 8900"
                   value={newUserData.phone}
-                  onChange={(e) => setNewUserData({ ...newUserData, phone: e.target.value })}
+                  onChange={(e) =>
+                    setNewUserData({ ...newUserData, phone: e.target.value })
+                  }
                 />
               </div>
 
@@ -560,7 +686,9 @@ export default function AdminUsers() {
                 <Input
                   placeholder="Company Name"
                   value={newUserData.company}
-                  onChange={(e) => setNewUserData({ ...newUserData, company: e.target.value })}
+                  onChange={(e) =>
+                    setNewUserData({ ...newUserData, company: e.target.value })
+                  }
                 />
               </div>
 
@@ -570,7 +698,12 @@ export default function AdminUsers() {
                 </label>
                 <select
                   value={newUserData.role}
-                  onChange={(e) => setNewUserData({ ...newUserData, role: e.target.value as any })}
+                  onChange={(e) =>
+                    setNewUserData({
+                      ...newUserData,
+                      role: e.target.value as any,
+                    })
+                  }
                   className="w-full px-3 py-2 border border-input rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                 >
                   <option value="client">Client</option>
