@@ -8,6 +8,7 @@ import { CartProvider } from "@/lib/cart-context";
 import { NotificationsProvider } from "@/lib/notifications-context";
 import { CurrencyProvider } from "@/lib/currency-context";
 import { AdminProvider } from "@/lib/admin-context";
+import { UserProvider } from "@/lib/user-context";
 import i18n from "@/lib/i18n";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
@@ -30,6 +31,7 @@ import AdminRoles from "./pages/AdminRoles";
 import { AdminFees } from "./pages/AdminFees";
 import NotFound from "./pages/NotFound";
 import { ProtectedAdminRoute } from "./components/ProtectedAdminRoute";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
