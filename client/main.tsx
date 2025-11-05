@@ -3,6 +3,9 @@ import "./global.css";
 import { createRoot } from "react-dom/client";
 import App from "./App";
 
+// Log app load for debugging
+console.log("[main.tsx] App initializing at", new Date().toISOString());
+
 const container = document.getElementById("root");
 if (!container) throw new Error("Root element not found");
 
