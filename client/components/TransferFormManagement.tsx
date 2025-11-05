@@ -884,8 +884,9 @@ export function TransferFormManagement({
 
                                 try {
                                   // Try to fetch the full form with fresh attachment data
+                                  const apiBaseURL = getAPIBaseURL();
                                   const response = await fetch(
-                                    `/api/transfer-forms/${selectedForm.formId}`,
+                                    `${apiBaseURL}/api/transfer-forms/${selectedForm.formId}`,
                                   );
                                   if (response.ok) {
                                     const freshForm = await response.json();
