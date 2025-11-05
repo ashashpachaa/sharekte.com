@@ -200,6 +200,23 @@ export default function AdminDashboard() {
             </Button>
           </div>
 
+          {/* Coupons Management */}
+          <div className="bg-card border border-border/40 rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <DollarSign className="w-5 h-5" />
+              Discount Coupons
+            </h3>
+            <p className="text-muted-foreground text-sm mb-4">
+              Create and manage discount codes for promotions
+            </p>
+            <Button
+              className="w-full bg-violet-600 hover:bg-violet-700 text-white"
+              asChild
+            >
+              <Link to="/admin/coupons">Manage Coupons</Link>
+            </Button>
+          </div>
+
           {/* Invoices Management */}
           <div className="bg-card border border-border/40 rounded-lg p-6">
             <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
