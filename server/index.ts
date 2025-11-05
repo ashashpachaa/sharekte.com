@@ -84,6 +84,15 @@ import {
   createServiceOrderCommentHandler,
   updateServiceOrderStatusHandler,
 } from "./routes/services";
+import {
+  getCoupons,
+  getCoupon,
+  validateCoupon,
+  createCoupon,
+  updateCoupon,
+  deleteCoupon,
+  applyCoupon,
+} from "./routes/coupons";
 
 export function createServer() {
   console.log("[createServer] Initializing Express app");
