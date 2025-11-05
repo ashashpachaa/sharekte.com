@@ -35,10 +35,34 @@ export function MyOrders({ userEmail }: MyOrdersProps) {
     try {
       setLoading(true);
       const allOrders = await getAllOrders();
+
+      // Debug logging
+      console.log(`[MyOrders] Loading orders for user email: ${userEmail}`);
+      console.log(`[MyOrders] Total orders from API: ${allOrders.length}`);
+      if (allOrders.length > 0) {
+        console.log(
+          `[MyOrders] Sample order emails: ${allOrders
+            .slice(0, 3)
+            .map((o) => o.customerEmail)
+            .join(", ")}`
+        );
+      }
+
       // Filter orders for current user
       const userOrders = allOrders.filter(
         (order) => order.customerEmail.toLowerCase() === userEmail.toLowerCase()
       );
+
+      console.log(`[MyOrders] Filtered user orders: ${userOrders.length}`);
+
+      // If no orders found, check if there are any orders with this company name
+      // This helps with troubleshooting
+      if (userOrders.length === 0 && allOrders.length > 0) {
+        console.log(
+          `[MyOrders] No orders found for email "${userEmail}". Available companies in orders: ${allOrders.map((o) => o.companyName).join(", ")}`
+        );
+      }
+
       setOrders(userOrders);
     } catch (error) {
       console.error("Failed to load orders:", error);
