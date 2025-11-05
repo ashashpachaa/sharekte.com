@@ -4,12 +4,14 @@
  */
 
 // Type definitions - copied locally to avoid importing from client code
+type FormStatus = "under-review" | "amend-required" | "confirm-application" | "transferring" | "complete-transfer" | "canceled";
+
 interface TransferFormData {
   id: string;
   formId: string;
   orderId: string;
   companyName: string;
-  status: string;
+  status: FormStatus;
   directors?: any[];
   shareholders?: any[];
   attachments?: any[];

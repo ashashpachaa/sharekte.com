@@ -1,9 +1,14 @@
 import { RequestHandler } from "express";
-import type {
-  CompanyData,
-  CompanyStatus,
-  PaymentStatus,
-} from "../../client/lib/company-management";
+// Type definitions - copied locally to avoid importing from client code
+type CompanyStatus = "active" | "expired" | "cancelled" | "refunded" | "pending" | "sold";
+type PaymentStatus = "pending" | "completed" | "failed" | "refunded";
+
+interface CompanyData {
+  id: string;
+  name: string;
+  status: CompanyStatus;
+  [key: string]: any;
+}
 
 // Re-implement these functions locally since we can't import from client
 function calculateExpiryDate(purchaseDate: string): string {
