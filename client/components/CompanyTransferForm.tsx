@@ -1101,34 +1101,162 @@ export function CompanyTransferForm({
   };
 
   const renderCompanyInfo = () => (
-    <Card>
-      <CardHeader>
-        <CardTitle>Company Information</CardTitle>
-        <CardDescription>
-          Auto-filled from company details (non-editable)
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <Label>Company Name</Label>
-            <Input value={companyName} disabled />
+    <div className="space-y-4">
+      {/* Company Information */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Company Information</CardTitle>
+          <CardDescription>
+            Auto-filled from company details (non-editable)
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Company Name</Label>
+              <Input value={companyName} disabled />
+            </div>
+            <div>
+              <Label>Company Number</Label>
+              <Input value={companyNumber} disabled />
+            </div>
+            <div>
+              <Label>Incorporation Date</Label>
+              <Input value={incorporationDate} disabled />
+            </div>
+            <div>
+              <Label>Incorporation Year</Label>
+              <Input value={incorporationYear} disabled />
+            </div>
           </div>
-          <div>
-            <Label>Company Number</Label>
-            <Input value={companyNumber} disabled />
+        </CardContent>
+      </Card>
+
+      {/* Seller Information */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Seller Information</CardTitle>
+          <CardDescription>
+            Current company owner details
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Name</Label>
+              <Input
+                value={formData.sellerName || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, sellerName: e.target.value })
+                }
+                placeholder="e.g., John Smith"
+              />
+            </div>
+            <div>
+              <Label>Email</Label>
+              <Input
+                type="email"
+                value={formData.sellerEmail || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, sellerEmail: e.target.value })
+                }
+                placeholder="seller@example.com"
+              />
+            </div>
+            <div>
+              <Label>Phone</Label>
+              <Input
+                value={formData.sellerPhone || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, sellerPhone: e.target.value })
+                }
+                placeholder="+44 7700 123456"
+              />
+            </div>
+            <div>
+              <Label>Country</Label>
+              <Input
+                value={formData.sellerCountry || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, sellerCountry: e.target.value })
+                }
+                placeholder="United Kingdom"
+              />
+            </div>
+            <div className="col-span-2">
+              <Label>Address</Label>
+              <Input
+                value={formData.sellerAddress || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, sellerAddress: e.target.value })
+                }
+                placeholder="123 Business Street"
+              />
+            </div>
           </div>
-          <div>
-            <Label>Incorporation Date</Label>
-            <Input value={incorporationDate} disabled />
+        </CardContent>
+      </Card>
+
+      {/* Buyer Information */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Buyer Information</CardTitle>
+          <CardDescription>
+            Auto-filled from your account (editable)
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Name</Label>
+              <Input
+                value={formData.buyerName || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, buyerName: e.target.value })
+                }
+              />
+            </div>
+            <div>
+              <Label>Email</Label>
+              <Input
+                type="email"
+                value={formData.buyerEmail || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, buyerEmail: e.target.value })
+                }
+              />
+            </div>
+            <div>
+              <Label>Phone</Label>
+              <Input
+                value={formData.buyerPhone || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, buyerPhone: e.target.value })
+                }
+              />
+            </div>
+            <div>
+              <Label>Country</Label>
+              <Input
+                value={formData.buyerCountry || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, buyerCountry: e.target.value })
+                }
+              />
+            </div>
+            <div className="col-span-2">
+              <Label>Address</Label>
+              <Input
+                value={formData.buyerAddress || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, buyerAddress: e.target.value })
+                }
+              />
+            </div>
           </div>
-          <div>
-            <Label>Incorporation Year</Label>
-            <Input value={incorporationYear} disabled />
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </div>
   );
 
   const renderSharesInfo = () => (
