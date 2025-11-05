@@ -2559,7 +2559,7 @@ export default function Dashboard() {
                                     </DialogHeader>
                                     <div className="px-6 pb-6">
                                       <CompanyTransferForm
-                                        orderId={`order_${company.id}`}
+                                        orderId={company.id}
                                         companyId={company.id}
                                         companyName={company.name}
                                         companyNumber={company.number || ""}
