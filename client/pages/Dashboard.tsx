@@ -11,6 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Search, X, ShoppingCart } from "lucide-react";
 import { useSearch } from "@/hooks/use-search";
