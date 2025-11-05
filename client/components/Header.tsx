@@ -18,12 +18,12 @@ export function Header() {
 
   // Get user from localStorage
   const userToken = localStorage.getItem("userToken");
-  const userEmail = localStorage.getItem("userEmail");
+  const userEmailStored = localStorage.getItem("userEmail");
   const userName = localStorage.getItem("userName");
 
-  const user = userToken && userEmail && userName ? {
+  const user = userToken && userEmailStored && userName ? {
     authenticated: true,
-    email: userEmail,
+    email: userEmailStored,
     fullName: userName,
   } : null;
 
