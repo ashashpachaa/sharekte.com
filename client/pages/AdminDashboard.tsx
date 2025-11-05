@@ -339,7 +339,7 @@ export default function AdminDashboard() {
             <div className="flex justify-between items-center py-2">
               <span className="text-muted-foreground">Admin Role</span>
               <span className="font-semibold text-primary capitalize">
-                {currentAdmin.role.replace("-", " ")}
+                Super Admin
               </span>
             </div>
           </div>
