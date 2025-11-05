@@ -41,109 +41,132 @@ export default function App() {
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <AdminProvider>
-            <CurrencyProvider>
-              <NotificationsProvider>
-                <CartProvider>
-                  <Toaster />
-                  <Sonner />
-                  <BrowserRouter>
-                    <Routes>
-                      <Route path="/" element={<Index />} />
-                      <Route path="/login" element={<Login />} />
-                      <Route path="/signup" element={<Signup />} />
-                      <Route path="/dashboard" element={<Dashboard />} />
-                      <Route path="/support" element={<Support />} />
-                      <Route path="/companies" element={<Companies />} />
-                      <Route path="/cart" element={<Cart />} />
-                      <Route path="/checkout" element={<Checkout />} />
-                      <Route path="/admin/login" element={<AdminLogin />} />
-                      <Route
-                        path="/admin/dashboard"
-                        element={
-                          <ProtectedAdminRoute>
-                            <AdminDashboard />
-                          </ProtectedAdminRoute>
-                        }
-                      />
-                      <Route
-                        path="/admin/users"
-                        element={
-                          <ProtectedAdminRoute>
-                            <AdminUsers />
-                          </ProtectedAdminRoute>
-                        }
-                      />
-                      <Route
-                        path="/admin/orders"
-                        element={
-                          <ProtectedAdminRoute>
-                            <AdminOrders />
-                          </ProtectedAdminRoute>
-                        }
-                      />
-                      <Route
-                        path="/admin/services"
-                        element={
-                          <ProtectedAdminRoute>
-                            <AdminServices />
-                          </ProtectedAdminRoute>
-                        }
-                      />
-                      <Route
-                        path="/admin/coupons"
-                        element={
-                          <ProtectedAdminRoute>
-                            <AdminCoupons />
-                          </ProtectedAdminRoute>
-                        }
-                      />
-                      <Route
-                        path="/admin/invoices"
-                        element={
-                          <ProtectedAdminRoute>
-                            <AdminInvoices />
-                          </ProtectedAdminRoute>
-                        }
-                      />
-                      <Route
-                        path="/admin/settings"
-                        element={
-                          <ProtectedAdminRoute>
-                            <AdminSettings />
-                          </ProtectedAdminRoute>
-                        }
-                      />
-                      <Route
-                        path="/admin/email-templates"
-                        element={
-                          <ProtectedAdminRoute>
-                            <AdminEmailTemplates />
-                          </ProtectedAdminRoute>
-                        }
-                      />
-                      <Route
-                        path="/admin/roles"
-                        element={
-                          <ProtectedAdminRoute>
-                            <AdminRoles />
-                          </ProtectedAdminRoute>
-                        }
-                      />
-                      <Route
-                        path="/admin/fees"
-                        element={
-                          <ProtectedAdminRoute>
-                            <AdminFees />
-                          </ProtectedAdminRoute>
-                        }
-                      />
-                      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                      <Route path="*" element={<NotFound />} />
-                    </Routes>
-                  </BrowserRouter>
-                </CartProvider>
-              </NotificationsProvider>
-            </CurrencyProvider>
+            <UserProvider>
+              <CurrencyProvider>
+                <NotificationsProvider>
+                  <CartProvider>
+                    <Toaster />
+                    <Sonner />
+                    <BrowserRouter>
+                      <Routes>
+                        <Route path="/" element={<Index />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/signup" element={<Signup />} />
+                        <Route
+                          path="/dashboard"
+                          element={
+                            <ProtectedRoute>
+                              <Dashboard />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route path="/support" element={<Support />} />
+                        <Route path="/companies" element={<Companies />} />
+                        <Route
+                          path="/cart"
+                          element={
+                            <ProtectedRoute>
+                              <Cart />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="/checkout"
+                          element={
+                            <ProtectedRoute>
+                              <Checkout />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route path="/admin/login" element={<AdminLogin />} />
+                        <Route
+                          path="/admin/dashboard"
+                          element={
+                            <ProtectedAdminRoute>
+                              <AdminDashboard />
+                            </ProtectedAdminRoute>
+                          }
+                        />
+                        <Route
+                          path="/admin/users"
+                          element={
+                            <ProtectedAdminRoute>
+                              <AdminUsers />
+                            </ProtectedAdminRoute>
+                          }
+                        />
+                        <Route
+                          path="/admin/orders"
+                          element={
+                            <ProtectedAdminRoute>
+                              <AdminOrders />
+                            </ProtectedAdminRoute>
+                          }
+                        />
+                        <Route
+                          path="/admin/services"
+                          element={
+                            <ProtectedAdminRoute>
+                              <AdminServices />
+                            </ProtectedAdminRoute>
+                          }
+                        />
+                        <Route
+                          path="/admin/coupons"
+                          element={
+                            <ProtectedAdminRoute>
+                              <AdminCoupons />
+                            </ProtectedAdminRoute>
+                          }
+                        />
+                        <Route
+                          path="/admin/invoices"
+                          element={
+                            <ProtectedAdminRoute>
+                              <AdminInvoices />
+                            </ProtectedAdminRoute>
+                          }
+                        />
+                        <Route
+                          path="/admin/settings"
+                          element={
+                            <ProtectedAdminRoute>
+                              <AdminSettings />
+                            </ProtectedAdminRoute>
+                          }
+                        />
+                        <Route
+                          path="/admin/email-templates"
+                          element={
+                            <ProtectedAdminRoute>
+                              <AdminEmailTemplates />
+                            </ProtectedAdminRoute>
+                          }
+                        />
+                        <Route
+                          path="/admin/roles"
+                          element={
+                            <ProtectedAdminRoute>
+                              <AdminRoles />
+                            </ProtectedAdminRoute>
+                          }
+                        />
+                        <Route
+                          path="/admin/fees"
+                          element={
+                            <ProtectedAdminRoute>
+                              <AdminFees />
+                            </ProtectedAdminRoute>
+                          }
+                        />
+                        {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                        <Route path="*" element={<NotFound />} />
+                      </Routes>
+                    </BrowserRouter>
+                  </CartProvider>
+                </NotificationsProvider>
+              </CurrencyProvider>
+            </UserProvider>
           </AdminProvider>
         </TooltipProvider>
       </QueryClientProvider>
