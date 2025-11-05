@@ -143,7 +143,10 @@ export async function getAllOrders(): Promise<Order[]> {
     const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout (increased from 10s for slower networks)
 
     const apiBaseURL = getAPIBaseURL();
-    const response = await fetch(`${apiBaseURL}/api/orders`, {
+    const url = `${apiBaseURL}/api/orders`;
+    console.log("[getAllOrders] Fetching from:", url);
+
+    const response = await fetch(url, {
       signal: controller.signal,
       headers: {
         "Content-Type": "application/json",
@@ -151,19 +154,27 @@ export async function getAllOrders(): Promise<Order[]> {
     });
     clearTimeout(timeoutId);
 
+    console.log("[getAllOrders] Response status:", response.status);
+
     if (!response.ok) {
-      const errorData = await response
-        .json()
-        .catch(() => ({ error: "Unknown error" }));
+      let errorData = { error: "Unknown error" };
+      try {
+        errorData = await response.json();
+      } catch (e) {
+        console.error("[getAllOrders] Failed to parse error response as JSON");
+      }
       throw new Error(
         errorData.error || `Failed to fetch orders: ${response.statusText}`,
       );
     }
-    return response.json();
+
+    const orders = await response.json();
+    console.log("[getAllOrders] Successfully fetched", orders.length, "orders");
+    return orders;
   } catch (error) {
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error occurred";
-    console.error("Failed to fetch orders:", errorMessage);
+    console.error("[getAllOrders] Error:", errorMessage);
     throw new Error(`Failed to fetch orders: ${errorMessage}`);
   }
 }
