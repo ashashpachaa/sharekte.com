@@ -44,6 +44,36 @@ function saveUsersToFile(usersList: User[]): void {
   }
 }
 
+function loadTokensFromFile(): TokenEntry {
+  try {
+    if (fs.existsSync(TOKENS_FILE)) {
+      const data = fs.readFileSync(TOKENS_FILE, "utf-8");
+      const parsed = JSON.parse(data);
+      // Clean up expired tokens
+      const now = Date.now();
+      Object.keys(parsed).forEach((key) => {
+        if (parsed[key].expiresAt < now) {
+          delete parsed[key];
+        }
+      });
+      console.log(`[loadTokensFromFile] ✓ Loaded tokens from file`);
+      saveTokensToFile(parsed);
+      return parsed;
+    }
+  } catch (error) {
+    console.error("[loadTokensFromFile] Error reading file:", error);
+  }
+  return {};
+}
+
+function saveTokensToFile(tokensData: TokenEntry): void {
+  try {
+    fs.writeFileSync(TOKENS_FILE, JSON.stringify(tokensData, null, 2), "utf-8");
+  } catch (error) {
+    console.error("[saveTokensToFile] Error writing file:", error);
+  }
+}
+
 function generateToken(): string {
   return Math.random().toString(36).substring(2) + Date.now().toString(36);
 }
