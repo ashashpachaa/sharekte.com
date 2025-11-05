@@ -667,7 +667,7 @@ export function TransferFormManagement({
                           const label = getActivityLabel(activity);
                           return (
                             <p key={idx} className="text-gray-700">
-                              �� {label}
+                              • {label}
                             </p>
                           );
                         })}
@@ -943,7 +943,7 @@ export function TransferFormManagement({
                                 }
 
                                 toast.error(
-                                  "File data not available - attachment may need to be re-uploaded",
+                                  `Cannot download ${attachment.name} - file data not available. Please try uploading the file again.`,
                                 );
                                 return;
                               }
