@@ -1,10 +1,32 @@
 import { RequestHandler } from "express";
-import type {
-  Invoice,
-  InvoiceStatus,
-  InvoiceFilter,
-  InvoiceLineItem,
-} from "../../client/lib/invoices";
+// Type definitions - copied locally to avoid importing from client code
+type InvoiceStatus = "draft" | "sent" | "paid" | "overdue" | "cancelled";
+
+interface InvoiceLineItem {
+  id: string;
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  total: number;
+}
+
+interface InvoiceFilter {
+  status?: InvoiceStatus;
+  customerId?: string;
+  dateFrom?: string;
+  dateTo?: string;
+}
+
+interface Invoice {
+  id: string;
+  invoiceNumber: string;
+  customerId: string;
+  customerName: string;
+  amount: number;
+  currency: string;
+  status: InvoiceStatus;
+  [key: string]: any;
+}
 
 const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
 const AIRTABLE_BASE_ID = "app0PK34gyJDizR3Q";

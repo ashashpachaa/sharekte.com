@@ -3,7 +3,20 @@
  * Generates PDFs from transfer forms with embedded data and attachments
  */
 
-import type { TransferFormData } from "../../client/lib/transfer-form";
+// Type definitions - copied locally to avoid importing from client code
+interface TransferFormData {
+  id: string;
+  formId: string;
+  orderId: string;
+  companyName: string;
+  status: string;
+  directors?: any[];
+  shareholders?: any[];
+  attachments?: any[];
+  comments?: any[];
+  pscDeclaration?: any;
+  [key: string]: any;
+}
 
 interface PDFOptions {
   includeAttachments?: boolean;

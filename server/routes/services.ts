@@ -1,5 +1,26 @@
 import { RequestHandler } from "express";
-import type { ServiceData, ServiceOrder } from "../../client/lib/services";
+
+// Type definitions - copied locally to avoid importing from client code
+interface ServiceData {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  currency: string;
+  [key: string]: any;
+}
+
+interface ServiceOrder {
+  id: string;
+  serviceId: string;
+  serviceName: string;
+  customerName: string;
+  customerEmail: string;
+  amount: number;
+  currency: string;
+  status: string;
+  [key: string]: any;
+}
 
 // In-memory storage for services and orders
 let servicesDb: ServiceData[] = [];

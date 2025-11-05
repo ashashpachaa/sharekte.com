@@ -3,8 +3,18 @@
  * Handles email and in-app notifications for form status changes
  */
 
-import type { TransferFormData, FormStatus } from "../../client/lib/transfer-form";
 import nodemailer from "nodemailer";
+
+// Type definitions - copied locally to avoid importing from client code
+type FormStatus = "under-review" | "amend-required" | "confirm-application" | "transferring" | "complete-transfer" | "canceled";
+interface TransferFormData {
+  id: string;
+  formId: string;
+  orderId: string;
+  companyName: string;
+  status: FormStatus;
+  [key: string]: any;
+}
 
 interface EmailOptions {
   to: string;

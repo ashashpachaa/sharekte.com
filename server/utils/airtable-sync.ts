@@ -12,11 +12,25 @@
  * - AIRTABLE_TABLE_ORDERS: Table ID for orders (tbl01DTvrGtsAaPfZ)
  */
 
-import type {
-  TransferFormData,
-  FormStatus,
-} from "../../client/lib/transfer-form";
-import type { Order } from "../../client/lib/orders";
+// Type definitions - copied locally to avoid importing from client code
+type FormStatus = "under-review" | "amend-required" | "confirm-application" | "transferring" | "complete-transfer" | "canceled";
+
+interface TransferFormData {
+  id: string;
+  formId: string;
+  orderId: string;
+  companyName: string;
+  status: FormStatus;
+  [key: string]: any;
+}
+
+interface Order {
+  id: string;
+  orderId: string;
+  customerName: string;
+  customerEmail: string;
+  [key: string]: any;
+}
 
 const AIRTABLE_API_URL = "https://api.airtable.com/v0";
 

@@ -1,10 +1,30 @@
 import { RequestHandler } from "express";
-import type {
-  Order,
-  OrderStatus,
-  RefundStatus,
-  OrderDocument,
-} from "../../client/lib/orders";
+// Type definitions - copied locally to avoid importing from client code
+type OrderStatus = "pending" | "completed" | "failed" | "refunded" | "cancelled";
+type RefundStatus = "none" | "requested" | "approved" | "rejected" | "completed";
+
+interface OrderDocument {
+  id: string;
+  name: string;
+  type: string;
+  size: number;
+  uploadedDate: string;
+  uploadedBy: string;
+}
+
+interface Order {
+  id: string;
+  orderId: string;
+  customerName: string;
+  customerEmail: string;
+  customerPhone: string;
+  amount: number;
+  currency: string;
+  status: OrderStatus;
+  refundStatus: RefundStatus;
+  purchaseDate: string;
+  [key: string]: any;
+}
 import {
   syncOrderToAirtable,
   fetchOrdersFromAirtable,
