@@ -19,6 +19,7 @@ import {
   deleteOrder,
   uploadOrderDocument,
   deleteOrderDocument,
+  clearAllOrders,
 } from "./routes/orders";
 import {
   sendEmailNotification,
