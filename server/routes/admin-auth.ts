@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 
 // Admin credentials (in production, this should be in a database with hashed passwords)
-const ADMIN_EMAIL = "admin@shareket.com";
+const ADMIN_EMAIL = "admin@sharekte.com";
 const ADMIN_PASSWORD = "Ash@shpachaa2010";
 
 // Simple JWT-like token generation (in production, use proper JWT)
