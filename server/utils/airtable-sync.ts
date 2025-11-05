@@ -12,8 +12,8 @@
  * - AIRTABLE_TABLE_ORDERS: Table ID for orders (tbl01DTvrGtsAaPfZ)
  */
 
-import type { TransferFormData, FormStatus } from "@/lib/transfer-form";
-import type { Order } from "@/lib/orders";
+import type { TransferFormData, FormStatus } from "../../client/lib/transfer-form";
+import type { Order } from "../../client/lib/orders";
 
 const AIRTABLE_API_URL = "https://api.airtable.com/v0";
 
