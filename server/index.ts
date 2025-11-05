@@ -389,6 +389,15 @@ export function createServer() {
   app.post("/api/service-orders/:id/comments", createServiceOrderCommentHandler);
   app.patch("/api/service-orders/:id/status", updateServiceOrderStatusHandler);
 
+  // Coupon routes
+  app.get("/api/coupons", getCoupons);
+  app.get("/api/coupons/:id", getCoupon);
+  app.post("/api/coupons/validate", validateCoupon);
+  app.post("/api/coupons", createCoupon);
+  app.patch("/api/coupons/:id", updateCoupon);
+  app.delete("/api/coupons/:id", deleteCoupon);
+  app.post("/api/coupons/apply", applyCoupon);
+
   console.log("[createServer] ✅ All routes registered successfully");
 
   // Serve SPA static files and handle fallback to index.html
