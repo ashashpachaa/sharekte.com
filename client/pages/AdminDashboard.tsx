@@ -29,10 +29,6 @@ export default function AdminDashboard() {
     }
   }, [isAdmin, navigate]);
 
-  if (!currentAdmin) {
-    return null;
-  }
-
   const allUsers = getAllUsers();
   const activeUsers = allUsers.filter(
     (u) => u.accountStatus === "active",
@@ -42,9 +38,9 @@ export default function AdminDashboard() {
   ).length;
   const totalUsers = allUsers.length;
 
-  const handleLogout = () => {
-    logout();
-    navigate("/");
+  const handleLogout = async () => {
+    await logout();
+    navigate("/admin/login");
   };
 
   return (
