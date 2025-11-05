@@ -27,6 +27,7 @@ import {
 import { useCurrency } from "@/lib/currency-context";
 import { MyOrders } from "@/components/MyOrders";
 import { CompanyTransferForm } from "@/components/CompanyTransferForm";
+import { StatusHistoryTimeline } from "@/components/StatusHistoryTimeline";
 import {
   BarChart3,
   Plus,
