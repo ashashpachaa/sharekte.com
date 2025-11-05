@@ -1359,7 +1359,7 @@ export function CompanyTransferForm({
                   min="0"
                   max="100"
                   step="0.01"
-                  value={shareholder.shareholderPercentage}
+                  value={typeof shareholder.shareholderPercentage === 'number' && !isNaN(shareholder.shareholderPercentage) ? shareholder.shareholderPercentage : 0}
                   onChange={(e) =>
                     updateShareholder(
                       index,
@@ -1378,7 +1378,7 @@ export function CompanyTransferForm({
                 <Label>Shares (Auto-calculated)</Label>
                 <Input
                   type="number"
-                  value={Math.round(shareholder.shares)}
+                  value={Math.round(typeof shareholder.shares === 'number' && !isNaN(shareholder.shares) ? shareholder.shares : 0)}
                   disabled
                 />
               </div>
@@ -1386,7 +1386,7 @@ export function CompanyTransferForm({
                 <Label>Amount £ (Auto-calculated)</Label>
                 <Input
                   type="number"
-                  value={(shareholder.amount || 0).toFixed(2)}
+                  value={((typeof shareholder.amount === 'number' && !isNaN(shareholder.amount)) ? shareholder.amount : 0).toFixed(2)}
                   disabled
                 />
               </div>
