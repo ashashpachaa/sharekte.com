@@ -82,11 +82,11 @@ function generateOrderPDF(order: Order): string {
         * { margin: 0; padding: 0; }
         body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
         .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
-        .header { border-bottom: 3px solid #2563EB; padding-bottom: 20px; margin-bottom: 30px; }
-        .header h1 { color: #2563EB; font-size: 28px; margin-bottom: 5px; }
+        .header { border-bottom: 3px solid #004580; padding-bottom: 20px; margin-bottom: 30px; }
+        .header h1 { color: #004580; font-size: 28px; margin-bottom: 5px; }
         .header p { color: #666; font-size: 14px; }
         .section { margin-bottom: 30px; page-break-inside: avoid; }
-        .section h2 { color: #2563EB; font-size: 16px; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px; margin-bottom: 15px; }
+        .section h2 { color: #004580; font-size: 16px; border-bottom: 1px solid #e5e7eb; padding-bottom: 10px; margin-bottom: 15px; }
         .row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 15px; }
         .row.full { grid-template-columns: 1fr; }
         .field { }
@@ -100,9 +100,9 @@ function generateOrderPDF(order: Order): string {
         .badge.success { background: #d1fae5; color: #065f46; }
         .badge.warning { background: #fef3c7; color: #92400e; }
         .badge.danger { background: #fee2e2; color: #991b1b; }
-        .badge.primary { background: #dbeafe; color: #1e40af; }
+        .badge.primary { background: #e6f1ff; color: #004580; }
         .footer { border-top: 1px solid #e5e7eb; padding-top: 20px; margin-top: 40px; color: #666; font-size: 12px; }
-        .amount { font-size: 24px; font-weight: bold; color: #2563EB; }
+        .amount { font-size: 24px; font-weight: bold; color: #004580; }
         @media print {
           body { padding: 0; }
           .container { padding: 0; }
