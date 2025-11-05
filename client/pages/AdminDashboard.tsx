@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useEffect } from "react";
 import { useAdmin } from "@/lib/admin-context";
 import { getAllUsers, searchUsers } from "@/lib/user-management";
 import { Button } from "@/components/ui/button";
@@ -19,7 +20,7 @@ import {
 } from "lucide-react";
 
 export default function AdminDashboard() {
-  const { currentAdmin, isAdmin, logout } = useAdmin();
+  const { adminEmail, isAdmin, logout } = useAdmin();
   const navigate = useNavigate();
 
   useEffect(() => {
