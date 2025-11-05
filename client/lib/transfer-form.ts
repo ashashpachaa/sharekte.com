@@ -338,9 +338,10 @@ export async function fetchTransferForms(
   orderId?: string,
 ): Promise<TransferFormData[]> {
   try {
+    const apiBaseURL = getAPIBaseURL();
     const url = orderId
-      ? `/api/transfer-forms?orderId=${orderId}`
-      : "/api/transfer-forms";
+      ? `${apiBaseURL}/api/transfer-forms?orderId=${orderId}`
+      : `${apiBaseURL}/api/transfer-forms`;
     const response = await fetch(url);
     if (!response.ok) throw new Error("Failed to fetch forms");
     return await response.json();
