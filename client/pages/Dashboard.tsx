@@ -1869,7 +1869,7 @@ export default function Dashboard() {
                       >
                         {selectedInvoice.status === "paid" && "✓ Paid"}
                         {selectedInvoice.status === "unpaid" && "⏳ Unpaid"}
-                        {selectedInvoice.status === "canceled" && "✗ Canceled"}
+                        {selectedInvoice.status === "canceled" && "�� Canceled"}
                       </div>
                     </div>
                   </div>
@@ -1979,7 +1979,7 @@ export default function Dashboard() {
                           <span className="text-lg font-bold text-primary">
                             {formatPriceWithCurrency(
                               selectedInvoice.amount,
-                              selectedInvoice.currency,
+                              currency,
                               rates,
                             )}
                           </span>
