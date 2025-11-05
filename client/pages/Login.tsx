@@ -83,7 +83,16 @@ export default function Login() {
           {error && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex gap-3">
               <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-red-600">{error}</p>
+              <div className="flex-1">
+                <p className="text-sm text-red-600">{error}</p>
+                {errorCode === "USER_NOT_FOUND" && (
+                  <p className="text-sm text-red-600 mt-2">
+                    <Link to="/signup" className="font-semibold underline hover:text-red-700">
+                      Click here to sign up
+                    </Link>
+                  </p>
+                )}
+              </div>
             </div>
           )}
 
