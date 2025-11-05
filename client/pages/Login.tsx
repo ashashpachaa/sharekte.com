@@ -16,10 +16,12 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [errorCode, setErrorCode] = useState<string | null>(null);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setErrorCode(null);
 
     // Validate inputs
     if (!email || !password) {
@@ -43,8 +45,20 @@ export default function Login() {
       toast.success("Login successful!");
       navigate("/dashboard");
     } catch (err) {
-      const errorMsg = err instanceof Error ? err.message : "Login failed";
+      let errorMsg = err instanceof Error ? err.message : "Login failed";
+      let code = null;
+
+      // Extract error code from message if present
+      if (errorMsg.includes("USER_NOT_FOUND")) {
+        code = "USER_NOT_FOUND";
+        errorMsg = "Your email is not registered. Please sign up to create an account.";
+      } else if (errorMsg.includes("INVALID_PASSWORD")) {
+        code = "INVALID_PASSWORD";
+        errorMsg = "Incorrect password. Please try again.";
+      }
+
       setError(errorMsg);
+      setErrorCode(code);
       toast.error(errorMsg);
     } finally {
       setLoading(false);
