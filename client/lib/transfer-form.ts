@@ -353,7 +353,8 @@ export async function getTransferForm(
   formId: string,
 ): Promise<TransferFormData | null> {
   try {
-    const response = await fetch(`/api/transfer-forms/${formId}`);
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/transfer-forms/${formId}`);
     if (!response.ok) throw new Error("Failed to fetch form");
     return await response.json();
   } catch (error) {
