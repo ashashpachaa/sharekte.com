@@ -73,29 +73,29 @@ export const getInvoices: RequestHandler = async (req, res) => {
     if (clientName) {
       const query = (clientName as string).toLowerCase();
       result = result.filter((inv) =>
-        inv.clientName.toLowerCase().includes(query)
+        inv.clientName.toLowerCase().includes(query),
       );
     }
     if (companyName) {
       const query = (companyName as string).toLowerCase();
       result = result.filter((inv) =>
-        inv.companyName.toLowerCase().includes(query)
+        inv.companyName.toLowerCase().includes(query),
       );
     }
     if (invoiceNumber) {
       const query = (invoiceNumber as string).toLowerCase();
       result = result.filter((inv) =>
-        inv.invoiceNumber.toLowerCase().includes(query)
+        inv.invoiceNumber.toLowerCase().includes(query),
       );
     }
     if (dateFrom) {
       result = result.filter(
-        (inv) => new Date(inv.invoiceDate) >= new Date(dateFrom as string)
+        (inv) => new Date(inv.invoiceDate) >= new Date(dateFrom as string),
       );
     }
     if (dateTo) {
       result = result.filter(
-        (inv) => new Date(inv.invoiceDate) <= new Date(dateTo as string)
+        (inv) => new Date(inv.invoiceDate) <= new Date(dateTo as string),
       );
     }
 
@@ -288,7 +288,7 @@ export const deleteAttachment: RequestHandler = async (req, res) => {
     }
 
     invoice.attachments = invoice.attachments.filter(
-      (att) => att.id !== attachmentId
+      (att) => att.id !== attachmentId,
     );
     return res.json({ success: true });
   } catch (error) {
@@ -399,7 +399,7 @@ export const exportCSV: RequestHandler = async (req, res) => {
     res.setHeader("Content-Type", "text/csv");
     res.setHeader(
       "Content-Disposition",
-      `attachment; filename="invoices-${new Date().toISOString().split("T")[0]}.csv"`
+      `attachment; filename="invoices-${new Date().toISOString().split("T")[0]}.csv"`,
     );
     return res.send(csv);
   } catch (error) {
@@ -435,7 +435,7 @@ export const getAnalyticsSummary: RequestHandler = async (req, res) => {
         wise: invoices.filter((inv) => inv.paymentMethod === "wise").length,
         manual: invoices.filter((inv) => inv.paymentMethod === "manual").length,
         bank_transfer: invoices.filter(
-          (inv) => inv.paymentMethod === "bank_transfer"
+          (inv) => inv.paymentMethod === "bank_transfer",
         ).length,
         paypal: invoices.filter((inv) => inv.paymentMethod === "paypal").length,
       },
@@ -476,7 +476,7 @@ async function syncInvoiceToAirtable(invoice: Invoice): Promise<boolean> {
             Description: invoice.description,
           },
         }),
-      }
+      },
     );
 
     return response.ok;
@@ -502,7 +502,7 @@ async function syncInvoiceStatusToAirtable(invoice: Invoice): Promise<boolean> {
             "Paid Amount": invoice.paidAmount,
           },
         }),
-      }
+      },
     );
 
     return response.ok;
@@ -513,7 +513,7 @@ async function syncInvoiceStatusToAirtable(invoice: Invoice): Promise<boolean> {
 }
 
 async function sendInvoiceEmailNotification(
-  invoice: Invoice
+  invoice: Invoice,
 ): Promise<boolean> {
   try {
     const emailContent = generateInvoiceEmailHTML(invoice);
@@ -541,7 +541,8 @@ async function sendInvoiceEmailNotification(
 function generateInvoiceHTML(invoice: Invoice): string {
   const subtotal = invoice.lineItems.reduce((sum, item) => sum + item.total, 0);
   const taxes = invoice.taxAmount || 0;
-  const total = subtotal + taxes + (invoice.customFee || 0) - (invoice.discountAmount || 0);
+  const total =
+    subtotal + taxes + (invoice.customFee || 0) - (invoice.discountAmount || 0);
 
   return `
     <!DOCTYPE html>
@@ -611,7 +612,7 @@ function generateInvoiceHTML(invoice: Invoice): string {
                 <td>${item.quantity}</td>
                 <td>£${item.unitPrice.toFixed(2)}</td>
                 <td>£${item.total.toFixed(2)}</td>
-              </tr>`
+              </tr>`,
                 )
                 .join("")}
             </tbody>
@@ -684,7 +685,7 @@ function generateInvoiceCSV(invoiceList: Invoice[]): string {
   const csvContent = [
     headers.join(","),
     ...rows.map((row) =>
-      row.map((cell) => `"${cell.replace(/"/g, '""')}"`).join(",")
+      row.map((cell) => `"${cell.replace(/"/g, '""')}"`).join(","),
     ),
   ].join("\n");
 

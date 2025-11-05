@@ -42,7 +42,8 @@ const DEMO_SERVICES: ServiceData[] = [
   {
     id: "svc_1",
     name: "Apostille",
-    description: "Get your company documents certified with an apostille for international use",
+    description:
+      "Get your company documents certified with an apostille for international use",
     longDescription:
       "Get your company documents certified with an apostille for international use. Apostille is a form of authentication issued to documents for use in countries that are parties to the Hague Apostille Convention.",
     price: 150,
@@ -173,7 +174,9 @@ function initializeDemoOrders() {
           copies_needed: "3",
           delivery_method: "digital",
         },
-        purchaseDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+        purchaseDate: new Date(
+          Date.now() - 2 * 24 * 60 * 60 * 1000,
+        ).toISOString(),
         createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
         updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
       },
@@ -193,7 +196,9 @@ function initializeDemoOrders() {
           country: "United States",
           state: "California",
         },
-        purchaseDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+        purchaseDate: new Date(
+          Date.now() - 1 * 24 * 60 * 60 * 1000,
+        ).toISOString(),
         createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
         updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
       },
@@ -213,7 +218,9 @@ function initializeDemoOrders() {
           copies_needed: "2",
           delivery_method: "courier",
         },
-        purchaseDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+        purchaseDate: new Date(
+          Date.now() - 5 * 24 * 60 * 60 * 1000,
+        ).toISOString(),
         createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
         updatedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
       },
@@ -260,7 +267,16 @@ export const getService: RequestHandler = (req, res) => {
 export const createServiceHandler: RequestHandler = (req, res) => {
   try {
     initializeDemoServices();
-    const { name, description, price, currency, category, includes, applicationFormFields, status } = req.body;
+    const {
+      name,
+      description,
+      price,
+      currency,
+      category,
+      includes,
+      applicationFormFields,
+      status,
+    } = req.body;
 
     if (!name || !description || price === undefined) {
       return res.status(400).json({ error: "Missing required fields" });
@@ -390,9 +406,9 @@ export const getServiceOrdersHandler: RequestHandler = (req, res) => {
     }
     if (req.query.customerEmail) {
       orders = orders.filter((o) =>
-        o.customerEmail.toLowerCase().includes(
-          (req.query.customerEmail as string).toLowerCase()
-        )
+        o.customerEmail
+          .toLowerCase()
+          .includes((req.query.customerEmail as string).toLowerCase()),
       );
     }
 
@@ -461,7 +477,8 @@ export const createServiceOrderCommentHandler: RequestHandler = (req, res) => {
     }
 
     const newComment: OrderComment = {
-      id: "comment_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9),
+      id:
+        "comment_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9),
       orderId: req.params.id,
       author,
       text,

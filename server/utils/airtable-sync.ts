@@ -13,7 +13,13 @@
  */
 
 // Type definitions - copied locally to avoid importing from client code
-type FormStatus = "under-review" | "amend-required" | "confirm-application" | "transferring" | "complete-transfer" | "canceled";
+type FormStatus =
+  | "under-review"
+  | "amend-required"
+  | "confirm-application"
+  | "transferring"
+  | "complete-transfer"
+  | "canceled";
 
 interface TransferFormData {
   id: string;

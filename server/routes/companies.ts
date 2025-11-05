@@ -1,6 +1,12 @@
 import { RequestHandler } from "express";
 // Type definitions - copied locally to avoid importing from client code
-type CompanyStatus = "active" | "expired" | "cancelled" | "refunded" | "pending" | "sold";
+type CompanyStatus =
+  | "active"
+  | "expired"
+  | "cancelled"
+  | "refunded"
+  | "pending"
+  | "sold";
 type PaymentStatus = "pending" | "completed" | "failed" | "refunded";
 
 interface CompanyData {
@@ -24,7 +30,10 @@ function calculateRenewalDaysLeft(expiryDate: string): number {
   return Math.ceil(diff / (1000 * 60 * 60 * 24));
 }
 
-function determineStatus(paymentStatus: string, expiryDate: string): CompanyStatus {
+function determineStatus(
+  paymentStatus: string,
+  expiryDate: string,
+): CompanyStatus {
   if (paymentStatus === "refunded") return "refunded";
   if (paymentStatus === "pending") return "pending";
 

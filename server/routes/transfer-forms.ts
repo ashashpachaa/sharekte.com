@@ -1,7 +1,13 @@
 import { RequestHandler } from "express";
 
 // Type definitions - copied locally to avoid importing from client code
-type FormStatus = "under-review" | "amend-required" | "confirm-application" | "transferring" | "complete-transfer" | "canceled";
+type FormStatus =
+  | "under-review"
+  | "amend-required"
+  | "confirm-application"
+  | "transferring"
+  | "complete-transfer"
+  | "canceled";
 
 interface DirectorInfo {
   name: string;
@@ -85,16 +91,23 @@ import * as path from "path";
 
 // Persistent storage directory for forms
 // Use environment variable or fallback (note: /tmp is ephemeral on Fly.io, use Airtable for true persistence)
-const FORMS_STORAGE_DIR = process.env.FORMS_STORAGE_DIR || "/tmp/shareket-forms";
+const FORMS_STORAGE_DIR =
+  process.env.FORMS_STORAGE_DIR || "/tmp/shareket-forms";
 
 // Try to ensure storage directory exists (may fail on ephemeral Fly.io /tmp)
 try {
   if (!fs.existsSync(FORMS_STORAGE_DIR)) {
     fs.mkdirSync(FORMS_STORAGE_DIR, { recursive: true });
-    console.log("[transferForms] Created storage directory:", FORMS_STORAGE_DIR);
+    console.log(
+      "[transferForms] Created storage directory:",
+      FORMS_STORAGE_DIR,
+    );
   }
 } catch (error) {
-  console.warn("[transferForms] Storage directory not available (expected on Fly.io /tmp):", error);
+  console.warn(
+    "[transferForms] Storage directory not available (expected on Fly.io /tmp):",
+    error,
+  );
 }
 
 // Helper: Load form from persistent storage
@@ -106,7 +119,10 @@ function loadFormFromFile(formId: string): TransferFormData | null {
       return JSON.parse(data);
     }
   } catch (error) {
-    console.error(`[transferForms] Error loading form ${formId} from file:`, error);
+    console.error(
+      `[transferForms] Error loading form ${formId} from file:`,
+      error,
+    );
   }
   return null;
 }
@@ -135,7 +151,11 @@ function generateId(): string {
 
 // Helper function to find forms by either internal id or user-facing formId
 // Checks memory first, then file storage, then db
-function findForm(searchId: string, inMem: TransferFormData[], db: TransferFormData[]): TransferFormData | undefined {
+function findForm(
+  searchId: string,
+  inMem: TransferFormData[],
+  db: TransferFormData[],
+): TransferFormData | undefined {
   // Check in-memory first
   const memForm = inMem.find((f) => f.formId === searchId || f.id === searchId);
   if (memForm) return memForm;
@@ -149,7 +169,10 @@ function findForm(searchId: string, inMem: TransferFormData[], db: TransferFormD
 }
 
 // Helper function to find form index in memory
-function findFormIndexInMem(searchId: string, inMem: TransferFormData[]): number {
+function findFormIndexInMem(
+  searchId: string,
+  inMem: TransferFormData[],
+): number {
   return inMem.findIndex((f) => f.formId === searchId || f.id === searchId);
 }
 
@@ -288,7 +311,9 @@ export const getTransferForms: RequestHandler = async (req, res) => {
     // Filter by orderId if provided
     if (orderId) {
       result = result.filter((f) => f.orderId === orderId);
-      console.log(`[getTransferForms] Filtered to ${result.length} forms by orderId: ${orderId}`);
+      console.log(
+        `[getTransferForms] Filtered to ${result.length} forms by orderId: ${orderId}`,
+      );
     }
 
     res.json(result);
@@ -404,9 +429,20 @@ export const createTransferForm: RequestHandler = async (req, res) => {
 
     console.log(
       "[createTransferForm] ✓ Form stored in memory and file storage",
-      { formId: newForm.formId, id: newForm.id, totalForms: inMemoryForms.length }
+      {
+        formId: newForm.formId,
+        id: newForm.id,
+        totalForms: inMemoryForms.length,
+      },
     );
-    console.log("[createTransferForm] Current inMemoryForms:", inMemoryForms.map(f => ({ id: f.id, formId: f.formId, company: f.companyName })));
+    console.log(
+      "[createTransferForm] Current inMemoryForms:",
+      inMemoryForms.map((f) => ({
+        id: f.id,
+        formId: f.formId,
+        company: f.companyName,
+      })),
+    );
 
     // Sync to Airtable if configured (wait for completion)
     if (process.env.AIRTABLE_API_TOKEN) {
@@ -451,8 +487,7 @@ export const updateTransferForm: RequestHandler = async (req, res) => {
     const { id } = req.params;
 
     // Search in both in-memory and demo forms
-    let form =
-      findForm(id, inMemoryForms, formsDb);
+    let form = findForm(id, inMemoryForms, formsDb);
 
     if (!form) {
       return res.status(404).json({ error: "Form not found" });
@@ -496,8 +531,7 @@ export const updateFormStatus: RequestHandler = async (req, res) => {
     const { status, notes, reason } = req.body;
 
     // Search in both in-memory and demo forms
-    let form =
-      findForm(id, inMemoryForms, formsDb);
+    let form = findForm(id, inMemoryForms, formsDb);
     if (!form) {
       return res.status(404).json({ error: "Form not found" });
     }
@@ -553,7 +587,9 @@ export const updateFormStatus: RequestHandler = async (req, res) => {
 
     // Note: Airtable sync is handled separately - status updates persist in local storage
     console.log("[updateFormStatus] ✓ Form status updated in local storage");
-    console.log(`[updateFormStatus] Status changed: ${previousStatus} → ${status}`);
+    console.log(
+      `[updateFormStatus] Status changed: ${previousStatus} → ${status}`,
+    );
 
     // Send status notification email (async - don't wait for response)
     (async () => {
@@ -586,8 +622,7 @@ export const deleteTransferForm: RequestHandler = async (req, res) => {
     const { id } = req.params;
 
     // Search in both in-memory and demo forms
-    let form =
-      findForm(id, inMemoryForms, formsDb);
+    let form = findForm(id, inMemoryForms, formsDb);
 
     if (!form) {
       return res.status(404).json({ error: "Form not found" });
@@ -610,8 +645,7 @@ export const addDirector: RequestHandler = async (req, res) => {
     const directorData = req.body;
 
     // Search in both in-memory and demo forms
-    let form =
-      findForm(id, inMemoryForms, formsDb);
+    let form = findForm(id, inMemoryForms, formsDb);
     if (!form) {
       return res.status(404).json({ error: "Form not found" });
     }
@@ -637,8 +671,7 @@ export const removeDirector: RequestHandler = async (req, res) => {
     const { id, directorId } = req.params;
 
     // Search in both in-memory and demo forms
-    let form =
-      findForm(id, inMemoryForms, formsDb);
+    let form = findForm(id, inMemoryForms, formsDb);
 
     if (!form) {
       return res.status(404).json({ error: "Form not found" });
@@ -782,8 +815,7 @@ export const deleteAttachment: RequestHandler = async (req, res) => {
     const { id, attachmentId } = req.params;
 
     // Search in both in-memory and demo forms
-    let form =
-      findForm(id, inMemoryForms, formsDb);
+    let form = findForm(id, inMemoryForms, formsDb);
 
     if (!form) {
       return res.status(404).json({ error: "Form not found" });
@@ -811,19 +843,27 @@ export const generatePDF: RequestHandler = async (req, res) => {
     console.log("[generatePDF] Request method:", req.method);
     console.log("[generatePDF] Request body exists:", !!req.body);
     console.log("[generatePDF] Request body type:", typeof req.body);
-    console.log("[generatePDF] Request body constructor:", req.body?.constructor?.name);
+    console.log(
+      "[generatePDF] Request body constructor:",
+      req.body?.constructor?.name,
+    );
 
     // Try to get form from request body - be very lenient
-    if (req.body && typeof req.body === 'object') {
+    if (req.body && typeof req.body === "object") {
       const bodyKeys = Object.keys(req.body);
       console.log("[generatePDF] Request body keys:", bodyKeys.slice(0, 10)); // Log first 10 keys
 
       // Check if any key indicates this is a form
-      const isFormLike = bodyKeys.some(key =>
-        key.includes('form') || key.includes('Form') ||
-        key.includes('buyer') || key.includes('Buyer') ||
-        key.includes('seller') || key.includes('Seller') ||
-        key.includes('company') || key.includes('Company')
+      const isFormLike = bodyKeys.some(
+        (key) =>
+          key.includes("form") ||
+          key.includes("Form") ||
+          key.includes("buyer") ||
+          key.includes("Buyer") ||
+          key.includes("seller") ||
+          key.includes("Seller") ||
+          key.includes("company") ||
+          key.includes("Company"),
       );
 
       if (isFormLike || bodyKeys.length > 5) {
@@ -838,11 +878,18 @@ export const generatePDF: RequestHandler = async (req, res) => {
 
     // If no form data in body, try to find it in local storage
     if (!form) {
-      console.log("[generatePDF] Searching local storage for form with id:", id);
-      form = inMemoryForms.find((f) => f.formId === id || f.id === id) ||
-             formsDb.find((f) => f.formId === id || f.id === id);
+      console.log(
+        "[generatePDF] Searching local storage for form with id:",
+        id,
+      );
+      form =
+        inMemoryForms.find((f) => f.formId === id || f.id === id) ||
+        formsDb.find((f) => f.formId === id || f.id === id);
       if (form) {
-        console.log("[generatePDF] ✓ Found form in local storage:", form.formId);
+        console.log(
+          "[generatePDF] ✓ Found form in local storage:",
+          form.formId,
+        );
       } else {
         console.log("[generatePDF] Form not found in local storage");
       }
@@ -852,7 +899,9 @@ export const generatePDF: RequestHandler = async (req, res) => {
     if (!form && process.env.AIRTABLE_API_TOKEN) {
       console.log("[generatePDF] Form not found locally, checking Airtable...");
       try {
-        const { fetchFormsFromAirtable } = await import("../utils/airtable-sync");
+        const { fetchFormsFromAirtable } = await import(
+          "../utils/airtable-sync"
+        );
         const airtableForms = await fetchFormsFromAirtable();
         form = airtableForms.find((f) => f.formId === id || f.id === id);
         if (form) {
@@ -870,14 +919,21 @@ export const generatePDF: RequestHandler = async (req, res) => {
     // If still not found, return detailed error
     if (!form) {
       console.error("[generatePDF] ❌ Form not found with ID:", id);
-      console.error("[generatePDF] Available in-memory forms:", inMemoryForms.map(f => f.formId).join(", ") || "none");
-      console.error("[generatePDF] Available db forms:", formsDb.map(f => f.formId).join(", ") || "none");
+      console.error(
+        "[generatePDF] Available in-memory forms:",
+        inMemoryForms.map((f) => f.formId).join(", ") || "none",
+      );
+      console.error(
+        "[generatePDF] Available db forms:",
+        formsDb.map((f) => f.formId).join(", ") || "none",
+      );
 
       return res.status(404).json({
         error: "Form not found",
-        detail: "The requested form could not be found. The form data may not have been saved properly or the server instance may have restarted.",
+        detail:
+          "The requested form could not be found. The form data may not have been saved properly or the server instance may have restarted.",
         searchedFor: id,
-        hint: "Please refresh the page and try downloading the PDF again. If the problem persists, try submitting the form again."
+        hint: "Please refresh the page and try downloading the PDF again. If the problem persists, try submitting the form again.",
       });
     }
 
@@ -892,7 +948,11 @@ export const generatePDF: RequestHandler = async (req, res) => {
         compact: false,
       });
 
-      console.log("[generatePDF] ✓ HTML generated successfully, size:", htmlContent.length, "bytes");
+      console.log(
+        "[generatePDF] ✓ HTML generated successfully, size:",
+        htmlContent.length,
+        "bytes",
+      );
 
       // Return HTML for viewing and printing to PDF
       // User will print to PDF using browser print dialog (Ctrl+P or Cmd+P)
@@ -903,11 +963,15 @@ export const generatePDF: RequestHandler = async (req, res) => {
       console.log("[generatePDF] ✓ HTML sent successfully to client");
     } catch (htmlError) {
       console.error("[generatePDF] HTML generation error:", htmlError);
-      res.status(500).json({ error: "HTML generation failed", details: String(htmlError) });
+      res
+        .status(500)
+        .json({ error: "HTML generation failed", details: String(htmlError) });
     }
   } catch (error) {
     console.error("[generatePDF] Unexpected error:", error);
-    res.status(500).json({ error: "Failed to generate PDF", details: String(error) });
+    res
+      .status(500)
+      .json({ error: "Failed to generate PDF", details: String(error) });
   }
 };
 

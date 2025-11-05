@@ -1,7 +1,17 @@
 import { RequestHandler } from "express";
 // Type definitions - copied locally to avoid importing from client code
-type OrderStatus = "pending" | "completed" | "failed" | "refunded" | "cancelled";
-type RefundStatus = "none" | "requested" | "approved" | "rejected" | "completed";
+type OrderStatus =
+  | "pending"
+  | "completed"
+  | "failed"
+  | "refunded"
+  | "cancelled";
+type RefundStatus =
+  | "none"
+  | "requested"
+  | "approved"
+  | "rejected"
+  | "completed";
 
 interface OrderDocument {
   id: string;
