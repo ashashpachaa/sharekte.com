@@ -12,13 +12,15 @@ interface User {
 }
 
 const USERS_FILE = path.join(process.cwd(), "users.json");
+const TOKENS_FILE = path.join(process.cwd(), "tokens.json");
 
 let users: User[] = loadUsersFromFile();
 
-const tokens = new Map<
-  string,
-  { email: string; name: string; expiresAt: number }
->();
+interface TokenEntry {
+  [key: string]: { email: string; name: string; expiresAt: number };
+}
+
+let tokens: TokenEntry = loadTokensFromFile();
 
 function loadUsersFromFile(): User[] {
   try {
