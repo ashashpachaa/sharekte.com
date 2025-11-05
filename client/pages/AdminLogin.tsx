@@ -38,6 +38,7 @@ export default function AdminLogin() {
       localStorage.setItem("adminEmail", data.email);
 
       toast.success("Admin login successful!");
+      navigate("/admin/dashboard");
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : "Login failed";
       setError(errorMsg);
