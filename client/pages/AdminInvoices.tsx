@@ -51,6 +51,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useCurrency } from "@/lib/currency-context";
 
 type FilterStatus = InvoiceStatus | "all";
 
