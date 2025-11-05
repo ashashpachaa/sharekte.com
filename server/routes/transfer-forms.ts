@@ -1,11 +1,30 @@
 import { RequestHandler } from "express";
-import {
+import type {
   TransferFormData,
   FormStatus,
-  createEmptyForm,
-  type DirectorInfo,
-  type ShareholderInfo,
+  DirectorInfo,
+  ShareholderInfo,
 } from "../../client/lib/transfer-form";
+
+// Import runtime function separately with proper bundling
+const createEmptyForm = (): any => ({
+  id: `form_${Date.now()}`,
+  formId: `FORM-${Date.now()}`,
+  orderId: "",
+  companyName: "",
+  companyNumber: "",
+  country: "",
+  status: "under-review",
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+  directors: [],
+  shareholders: [],
+  pscDeclaration: { hasPSC: false, details: "" },
+  amendments: [],
+  comments: [],
+  attachments: [],
+  activities: [],
+});
 import * as fs from "fs";
 import * as path from "path";
 
