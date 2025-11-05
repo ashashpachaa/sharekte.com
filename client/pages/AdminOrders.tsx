@@ -538,7 +538,9 @@ export default function AdminOrders() {
                             {order.companyName}
                           </td>
                           <td className="px-6 py-4 text-right font-semibold text-foreground">
-                            {rates[currency as keyof typeof rates]?.symbol || "$"}{convertPrice(order.amount).toLocaleString()}
+                            {rates[currency as keyof typeof rates]?.symbol ||
+                              "$"}
+                            {convertPrice(order.amount).toLocaleString()}
                           </td>
                           <td className="px-6 py-4">
                             <span
@@ -637,8 +639,14 @@ function OrderDetailsModal({
 }: OrderDetailsModalProps) {
   const [editedOrder, setEditedOrder] = useState<Order>({
     ...order,
-    amount: typeof order.amount === 'number' && !isNaN(order.amount) ? order.amount : 0,
-    renewalFees: typeof order.renewalFees === 'number' && !isNaN(order.renewalFees) ? order.renewalFees : 0,
+    amount:
+      typeof order.amount === "number" && !isNaN(order.amount)
+        ? order.amount
+        : 0,
+    renewalFees:
+      typeof order.renewalFees === "number" && !isNaN(order.renewalFees)
+        ? order.renewalFees
+        : 0,
   });
   const [isSaving, setIsSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
@@ -999,7 +1007,9 @@ function OrderDetailsModal({
                       // Auto-calculate renewal fees based on company's standard renewal fee
                       // Get the linked company to check its renewal fee
                       if (!companies || companies.length === 0) {
-                        toast.error("Companies data not loaded yet. Please try again.");
+                        toast.error(
+                          "Companies data not loaded yet. Please try again.",
+                        );
                         return;
                       }
 
@@ -1075,60 +1085,60 @@ function OrderDetailsModal({
             </select>
 
             {/* Status History */}
-            {editedOrder.statusHistory && editedOrder.statusHistory.length > 0 && (
-              <div className="mt-6 pt-6 border-t border-border/40">
-                <h4 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
-                  <Clock className="w-4 h-4" />
-                  Status History
-                </h4>
-                <div className="space-y-3 max-h-48 overflow-y-auto">
-                  {[...editedOrder.statusHistory]
-                    .reverse()
-                    .map((history, index) => (
-                      <div
-                        key={history.id || index}
-                        className="bg-muted/30 border border-border/40 rounded-lg p-3 text-sm"
-                      >
-                        <div className="flex items-start justify-between gap-2">
-                          <div className="flex-1">
-                            <p className="font-medium text-foreground">
-                              {history.toStatus
-                                ? `${history.fromStatus?.replace(/-/g, " ").toUpperCase() || "PENDING"} → ${history.toStatus.replace(/-/g, " ").toUpperCase()}`
-                                : `Status: ${history.fromStatus?.replace(/-/g, " ").toUpperCase() || "UPDATED"}`}
-                            </p>
-                            <p className="text-xs text-muted-foreground mt-1">
-                              {new Date(
-                                history.changedDate,
-                              ).toLocaleDateString("en-US", {
-                                year: "numeric",
-                                month: "short",
-                                day: "numeric",
-                              })}{" "}
-                              {new Date(history.changedDate).toLocaleTimeString(
-                                "en-US",
-                                {
+            {editedOrder.statusHistory &&
+              editedOrder.statusHistory.length > 0 && (
+                <div className="mt-6 pt-6 border-t border-border/40">
+                  <h4 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
+                    <Clock className="w-4 h-4" />
+                    Status History
+                  </h4>
+                  <div className="space-y-3 max-h-48 overflow-y-auto">
+                    {[...editedOrder.statusHistory]
+                      .reverse()
+                      .map((history, index) => (
+                        <div
+                          key={history.id || index}
+                          className="bg-muted/30 border border-border/40 rounded-lg p-3 text-sm"
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="flex-1">
+                              <p className="font-medium text-foreground">
+                                {history.toStatus
+                                  ? `${history.fromStatus?.replace(/-/g, " ").toUpperCase() || "PENDING"} → ${history.toStatus.replace(/-/g, " ").toUpperCase()}`
+                                  : `Status: ${history.fromStatus?.replace(/-/g, " ").toUpperCase() || "UPDATED"}`}
+                              </p>
+                              <p className="text-xs text-muted-foreground mt-1">
+                                {new Date(
+                                  history.changedDate,
+                                ).toLocaleDateString("en-US", {
+                                  year: "numeric",
+                                  month: "short",
+                                  day: "numeric",
+                                })}{" "}
+                                {new Date(
+                                  history.changedDate,
+                                ).toLocaleTimeString("en-US", {
                                   hour: "2-digit",
                                   minute: "2-digit",
-                                },
+                                })}
+                              </p>
+                              {history.changedBy && (
+                                <p className="text-xs text-muted-foreground">
+                                  By: {history.changedBy}
+                                </p>
                               )}
-                            </p>
-                            {history.changedBy && (
-                              <p className="text-xs text-muted-foreground">
-                                By: {history.changedBy}
-                              </p>
-                            )}
-                            {history.notes && (
-                              <p className="text-xs text-muted-foreground mt-1 italic">
-                                {history.notes}
-                              </p>
-                            )}
+                              {history.notes && (
+                                <p className="text-xs text-muted-foreground mt-1 italic">
+                                  {history.notes}
+                                </p>
+                              )}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
 
           {/* Refund Management */}

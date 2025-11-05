@@ -879,7 +879,9 @@ export const updateCompanyStatus: RequestHandler = async (req, res) => {
         {
           id: `activity_${Date.now()}`,
           action: `Status changed to ${newStatusValue}`,
-          details: notes || `Company status updated from ${currentStatusValue} to ${newStatusValue}`,
+          details:
+            notes ||
+            `Company status updated from ${currentStatusValue} to ${newStatusValue}`,
           timestamp: new Date().toISOString(),
           performedBy: req.user?.email || "Admin",
           previousStatus: currentStatusValue,

@@ -775,7 +775,10 @@ export function CompanyTransferForm({
         .then((res) => res.json())
         .then((forms) => {
           if (forms[0]) {
-            console.log("Loaded transfer form with comments:", forms[0].comments);
+            console.log(
+              "Loaded transfer form with comments:",
+              forms[0].comments,
+            );
             setFormData(forms[0]);
           }
         })
@@ -1167,7 +1170,13 @@ export function CompanyTransferForm({
               formData.totalShares &&
               formData.totalShareCapital &&
               formData.totalShares > 0
-                ? ((typeof formData.totalShareCapital === 'number' && typeof formData.totalShares === 'number' && !isNaN(formData.totalShareCapital) && !isNaN(formData.totalShares)) ? (formData.totalShareCapital / formData.totalShares) : 0).toFixed(2)
+                ? (typeof formData.totalShareCapital === "number" &&
+                  typeof formData.totalShares === "number" &&
+                  !isNaN(formData.totalShareCapital) &&
+                  !isNaN(formData.totalShares)
+                    ? formData.totalShareCapital / formData.totalShares
+                    : 0
+                  ).toFixed(2)
                 : "0.00"
             }
             disabled
@@ -1378,7 +1387,12 @@ export function CompanyTransferForm({
                   min="0"
                   max="100"
                   step="0.01"
-                  value={typeof shareholder.shareholderPercentage === 'number' && !isNaN(shareholder.shareholderPercentage) ? shareholder.shareholderPercentage : 0}
+                  value={
+                    typeof shareholder.shareholderPercentage === "number" &&
+                    !isNaN(shareholder.shareholderPercentage)
+                      ? shareholder.shareholderPercentage
+                      : 0
+                  }
                   onChange={(e) =>
                     updateShareholder(
                       index,
@@ -1397,7 +1411,12 @@ export function CompanyTransferForm({
                 <Label>Shares (Auto-calculated)</Label>
                 <Input
                   type="number"
-                  value={Math.round(typeof shareholder.shares === 'number' && !isNaN(shareholder.shares) ? shareholder.shares : 0)}
+                  value={Math.round(
+                    typeof shareholder.shares === "number" &&
+                      !isNaN(shareholder.shares)
+                      ? shareholder.shares
+                      : 0,
+                  )}
                   disabled
                 />
               </div>
@@ -1405,7 +1424,11 @@ export function CompanyTransferForm({
                 <Label>Amount £ (Auto-calculated)</Label>
                 <Input
                   type="number"
-                  value={((typeof shareholder.amount === 'number' && !isNaN(shareholder.amount)) ? shareholder.amount : 0).toFixed(2)}
+                  value={(typeof shareholder.amount === "number" &&
+                  !isNaN(shareholder.amount)
+                    ? shareholder.amount
+                    : 0
+                  ).toFixed(2)}
                   disabled
                 />
               </div>
@@ -2167,7 +2190,7 @@ export function CompanyTransferForm({
                       .sort(
                         (a, b) =>
                           new Date(b.createdAt).getTime() -
-                          new Date(a.createdAt).getTime()
+                          new Date(a.createdAt).getTime(),
                       )
                       .map((comment) => (
                         <div
@@ -2175,7 +2198,8 @@ export function CompanyTransferForm({
                           className="bg-white p-3 rounded border border-red-200"
                         >
                           <p className="text-sm font-medium text-gray-700">
-                            {comment.author} ({new Date(comment.createdAt).toLocaleDateString()})
+                            {comment.author} (
+                            {new Date(comment.createdAt).toLocaleDateString()})
                           </p>
                           <p className="text-sm text-gray-600 mt-1">
                             {comment.text}

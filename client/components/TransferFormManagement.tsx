@@ -1035,18 +1035,26 @@ export function TransferFormManagement({
                       const apiBaseURL = getAPIBaseURL();
                       const pdfUrl = `${apiBaseURL}/api/transfer-forms/${selectedForm.formId}/pdf`;
 
-                      console.log("[Transfer Form Download] Generating PDF for form:", selectedForm.formId);
+                      console.log(
+                        "[Transfer Form Download] Generating PDF for form:",
+                        selectedForm.formId,
+                      );
 
                       // Send complete form data to server for PDF generation
                       // This ensures PDF can be generated even if form isn't in server memory
                       const formDataSize = JSON.stringify(selectedForm).length;
-                      console.log("[Transfer Form Download] Sending form data to server:", {
-                        url: pdfUrl,
-                        formId: selectedForm.formId,
-                        companyName: selectedForm.companyName,
-                        dataSize: formDataSize,
-                        hasAllRequiredFields: !!(selectedForm.formId && selectedForm.companyName),
-                      });
+                      console.log(
+                        "[Transfer Form Download] Sending form data to server:",
+                        {
+                          url: pdfUrl,
+                          formId: selectedForm.formId,
+                          companyName: selectedForm.companyName,
+                          dataSize: formDataSize,
+                          hasAllRequiredFields: !!(
+                            selectedForm.formId && selectedForm.companyName
+                          ),
+                        },
+                      );
 
                       const response = await fetch(pdfUrl, {
                         method: "POST",
@@ -1056,11 +1064,17 @@ export function TransferFormManagement({
                         body: JSON.stringify(selectedForm),
                       });
 
-                      console.log("[Transfer Form Download] Response status:", response.status);
-                      console.log("[Transfer Form Download] Response headers:", {
-                        contentType: response.headers.get("content-type"),
-                        contentLength: response.headers.get("content-length"),
-                      });
+                      console.log(
+                        "[Transfer Form Download] Response status:",
+                        response.status,
+                      );
+                      console.log(
+                        "[Transfer Form Download] Response headers:",
+                        {
+                          contentType: response.headers.get("content-type"),
+                          contentLength: response.headers.get("content-length"),
+                        },
+                      );
 
                       if (!response.ok) {
                         let errorDetail = `HTTP ${response.status}`;
@@ -1075,20 +1089,28 @@ export function TransferFormManagement({
                           if (errorBody.hint) {
                             friendlyMessage = `${errorBody.error}. ${errorBody.hint}`;
                           } else if (response.status === 404) {
-                            friendlyMessage = "Form data could not be found. Please refresh the page and try downloading again.";
+                            friendlyMessage =
+                              "Form data could not be found. Please refresh the page and try downloading again.";
                           }
                         } catch {
                           // Could not parse error response
                           if (response.status === 404) {
-                            friendlyMessage = "Form not found. Please refresh the page and try downloading again.";
+                            friendlyMessage =
+                              "Form not found. Please refresh the page and try downloading again.";
                           }
                         }
-                        console.error("[Transfer Form Download] Server error:", errorDetail);
-                        console.error("[Transfer Form Download] Sent form details:", {
-                          formId: selectedForm?.formId,
-                          companyName: selectedForm?.companyName,
-                          dataSize: formDataSize,
-                        });
+                        console.error(
+                          "[Transfer Form Download] Server error:",
+                          errorDetail,
+                        );
+                        console.error(
+                          "[Transfer Form Download] Sent form details:",
+                          {
+                            formId: selectedForm?.formId,
+                            companyName: selectedForm?.companyName,
+                            dataSize: formDataSize,
+                          },
+                        );
                         throw new Error(friendlyMessage);
                       }
 
@@ -1099,7 +1121,11 @@ export function TransferFormManagement({
                         throw new Error("Server returned empty file");
                       }
 
-                      console.log("[Transfer Form Download] Success, blob size:", blob.size, "bytes");
+                      console.log(
+                        "[Transfer Form Download] Success, blob size:",
+                        blob.size,
+                        "bytes",
+                      );
 
                       // Create download link and trigger download
                       const downloadUrl = window.URL.createObjectURL(blob);
@@ -1117,13 +1143,15 @@ export function TransferFormManagement({
                         window.URL.revokeObjectURL(downloadUrl);
                       }, 200);
 
-                      toast.success("Form downloaded as HTML. Open in browser, then use Ctrl+P (Cmd+P on Mac) to print as PDF.");
+                      toast.success(
+                        "Form downloaded as HTML. Open in browser, then use Ctrl+P (Cmd+P on Mac) to print as PDF.",
+                      );
                     } catch (error) {
                       console.error("[Transfer Form Download] Error:", error);
                       toast.error(
                         error instanceof Error
                           ? `Download failed: ${error.message}`
-                          : "Failed to download form"
+                          : "Failed to download form",
                       );
                     }
                   }}

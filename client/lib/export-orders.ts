@@ -3,7 +3,10 @@ import { Order } from "./orders";
 /**
  * Export orders to CSV format (Excel compatible)
  */
-export function exportOrdersToCSV(orders: Order[], filename = "orders.csv"): void {
+export function exportOrdersToCSV(
+  orders: Order[],
+  filename = "orders.csv",
+): void {
   const headers = [
     "Order ID",
     "Customer Name",
@@ -38,7 +41,9 @@ export function exportOrdersToCSV(orders: Order[], filename = "orders.csv"): voi
 
   const csvContent = [
     headers.map((h) => `"${h}"`).join(","),
-    ...rows.map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(",")),
+    ...rows.map((row) =>
+      row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(","),
+    ),
   ].join("\n");
 
   downloadFile(csvContent, filename, "text/csv");
@@ -47,7 +52,10 @@ export function exportOrdersToCSV(orders: Order[], filename = "orders.csv"): voi
 /**
  * Export orders to JSON format
  */
-export function exportOrdersToJSON(orders: Order[], filename = "orders.json"): void {
+export function exportOrdersToJSON(
+  orders: Order[],
+  filename = "orders.json",
+): void {
   const jsonContent = JSON.stringify(orders, null, 2);
   downloadFile(jsonContent, filename, "application/json");
 }
@@ -219,7 +227,9 @@ function generateOrderPDF(order: Order): string {
         </div>
 
         <!-- Renewal Info -->
-        ${order.renewalFees ? `
+        ${
+          order.renewalFees
+            ? `
         <div class="section">
           <h2>Renewal Information</h2>
           <div class="row">
@@ -233,7 +243,9 @@ function generateOrderPDF(order: Order): string {
             </div>
           </div>
         </div>
-        ` : ""}
+        `
+            : ""
+        }
 
         <!-- Footer -->
         <div class="footer">
@@ -250,9 +262,16 @@ function generateOrderPDF(order: Order): string {
 /**
  * Download file helper
  */
-function downloadFile(content: string, filename: string, mimeType: string): void {
+function downloadFile(
+  content: string,
+  filename: string,
+  mimeType: string,
+): void {
   const element = document.createElement("a");
-  element.setAttribute("href", `data:${mimeType};charset=utf-8,${encodeURIComponent(content)}`);
+  element.setAttribute(
+    "href",
+    `data:${mimeType};charset=utf-8,${encodeURIComponent(content)}`,
+  );
   element.setAttribute("download", filename);
   element.style.display = "none";
   document.body.appendChild(element);
@@ -265,13 +284,13 @@ function downloadFile(content: string, filename: string, mimeType: string): void
  */
 function getStatusClass(status: string): string {
   const statusMap: Record<string, string> = {
-    "completed": "success",
-    "paid": "success",
-    "pending": "warning",
+    completed: "success",
+    paid: "success",
+    pending: "warning",
     "under-review": "warning",
-    "refunded": "primary",
-    "cancelled": "danger",
-    "rejected": "danger",
+    refunded: "primary",
+    cancelled: "danger",
+    rejected: "danger",
   };
 
   return statusMap[status] || "primary";
@@ -304,21 +323,21 @@ export function generateOrdersReport(orders: Order[]): {
         acc[o.status] = (acc[o.status] || 0) + 1;
         return acc;
       },
-      {} as Record<string, number>
+      {} as Record<string, number>,
     ),
     byPaymentStatus: orders.reduce(
       (acc, o) => {
         acc[o.paymentStatus] = (acc[o.paymentStatus] || 0) + 1;
         return acc;
       },
-      {} as Record<string, number>
+      {} as Record<string, number>,
     ),
     byCountry: orders.reduce(
       (acc, o) => {
         acc[o.country] = (acc[o.country] || 0) + 1;
         return acc;
       },
-      {} as Record<string, number>
+      {} as Record<string, number>,
     ),
   };
 }

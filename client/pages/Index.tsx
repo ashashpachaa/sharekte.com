@@ -459,7 +459,7 @@ function SalesStatisticsSection({ t }: { t: any }) {
     const incrementPattern = [10, 8, 15, 11, 25];
 
     // Load or initialize sales counters from localStorage
-    const storedStats = localStorage.getItem('shareket_sales_stats');
+    const storedStats = localStorage.getItem("shareket_sales_stats");
     let stats = {
       today: 8,
       month: 142,
@@ -493,7 +493,7 @@ function SalesStatisticsSection({ t }: { t: any }) {
     }
 
     // Save updated stats to localStorage
-    localStorage.setItem('shareket_sales_stats', JSON.stringify(stats));
+    localStorage.setItem("shareket_sales_stats", JSON.stringify(stats));
 
     return {
       today: stats.today,
@@ -565,7 +565,10 @@ function SalesStatisticsSection({ t }: { t: any }) {
             <div className="absolute inset-0 bg-gradient-to-br from-accent/0 via-transparent to-transparent group-hover:from-accent/10 transition-all duration-300"></div>
             <div className="relative space-y-6">
               <div className="w-14 h-14 bg-accent/10 group-hover:bg-accent/20 rounded-xl flex items-center justify-center transition-colors">
-                <TrendingDown className="w-7 h-7 text-accent" style={{ transform: 'scaleY(-1)' }} />
+                <TrendingDown
+                  className="w-7 h-7 text-accent"
+                  style={{ transform: "scaleY(-1)" }}
+                />
               </div>
 
               <div>

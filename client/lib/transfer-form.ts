@@ -259,12 +259,10 @@ export function createEmptyForm(
 
 // Fetch existing transfer form by company ID (for amendments)
 export async function fetchExistingTransferForm(
-  companyId: string
+  companyId: string,
 ): Promise<TransferFormData | null> {
   try {
-    const response = await fetch(
-      `/api/transfer-forms?companyId=${companyId}`
-    );
+    const response = await fetch(`/api/transfer-forms?companyId=${companyId}`);
     if (response.ok) {
       const data = await response.json();
       // Return the first form (most recent)
@@ -278,7 +276,7 @@ export async function fetchExistingTransferForm(
 
 // Get amendment comments for a company
 export async function getAmendmentComments(
-  companyId: string
+  companyId: string,
 ): Promise<FormComment[]> {
   try {
     const form = await fetchExistingTransferForm(companyId);
@@ -288,7 +286,7 @@ export async function getAmendmentComments(
         .filter((c) => c.isAdminOnly)
         .sort(
           (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         );
     }
   } catch (error) {

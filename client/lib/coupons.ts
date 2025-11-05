@@ -28,7 +28,11 @@ const getAPIBaseURL = () => {
   const hostname = window.location.hostname;
 
   // Development: localhost uses relative paths
-  if (hostname === "localhost" || hostname === "127.0.0.1" || hostname.startsWith("192.168.")) {
+  if (
+    hostname === "localhost" ||
+    hostname === "127.0.0.1" ||
+    hostname.startsWith("192.168.")
+  ) {
     return "";
   }
 

@@ -96,7 +96,8 @@ export function CompanyCard({
   const isRenewingSoon = company.renewalDaysLeft <= 30;
   const isExpired = company.status === "expired";
   const hasAmendmentRequired = company.status === "amend-required";
-  const recentAmendment = amendmentComments.length > 0 ? amendmentComments[0] : null;
+  const recentAmendment =
+    amendmentComments.length > 0 ? amendmentComments[0] : null;
 
   const handleDelete = () => {
     if (onDelete) {
@@ -224,7 +225,7 @@ export function CompanyCard({
                             year: "numeric",
                             hour: "2-digit",
                             minute: "2-digit",
-                          }
+                          },
                         )}
                       </p>
                       {amendmentComments.length > 1 && (
@@ -372,7 +373,10 @@ export function CompanyCard({
       </Dialog>
 
       {/* Amendment History Modal */}
-      <Dialog open={showAmendmentHistory} onOpenChange={setShowAmendmentHistory}>
+      <Dialog
+        open={showAmendmentHistory}
+        onOpenChange={setShowAmendmentHistory}
+      >
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>Amendment History</DialogTitle>
@@ -451,7 +455,7 @@ export function CompanyCard({
                 .sort(
                   (a, b) =>
                     new Date(b.timestamp).getTime() -
-                    new Date(a.timestamp).getTime()
+                    new Date(a.timestamp).getTime(),
                 )
                 .map((entry, index) => (
                   <div
@@ -470,7 +474,14 @@ export function CompanyCard({
                         )}
                         {entry.previousStatus && entry.newStatus && (
                           <p className="text-xs text-gray-600 mt-1">
-                            Status: <span className="font-medium">{entry.previousStatus}</span> → <span className="font-medium text-green-700">{entry.newStatus}</span>
+                            Status:{" "}
+                            <span className="font-medium">
+                              {entry.previousStatus}
+                            </span>{" "}
+                            →{" "}
+                            <span className="font-medium text-green-700">
+                              {entry.newStatus}
+                            </span>
                           </p>
                         )}
                       </div>
