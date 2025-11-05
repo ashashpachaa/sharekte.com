@@ -347,6 +347,9 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Sales Statistics Section - Motivation */}
+      <SalesStatisticsSection t={t} />
+
       {/* Features Section */}
       <section
         id="features"
