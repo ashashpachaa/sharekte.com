@@ -481,7 +481,8 @@ export async function addFormComment(
   isAdminOnly: boolean = false,
 ): Promise<FormComment | null> {
   try {
-    const response = await fetch(`/api/transfer-forms/${formId}/comments`, {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/transfer-forms/${formId}/comments`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text, isAdminOnly }),
