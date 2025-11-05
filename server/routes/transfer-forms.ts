@@ -828,6 +828,10 @@ export const deleteAttachment: RequestHandler = async (req, res) => {
     form.attachments = form.attachments.filter((a) => a.id !== attachmentId);
     form.updatedAt = new Date().toISOString();
 
+    // Save form to persistent storage
+    saveFormToFile(form);
+    console.log(`[deleteAttachment] ✓ Attachment deleted and form saved`);
+
     res.json({ message: "Attachment deleted" });
   } catch (error) {
     console.error("Error deleting attachment:", error);
