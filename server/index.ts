@@ -94,6 +94,11 @@ import {
   deleteCoupon,
   applyCoupon,
 } from "./routes/coupons";
+import {
+  adminLogin,
+  adminLogout,
+  verifyAdminToken,
+} from "./routes/admin-auth";
 
 export function createServer() {
   console.log("[createServer] Initializing Express app");
