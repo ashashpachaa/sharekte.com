@@ -14,6 +14,7 @@ export default function LanguageSwitcher() {
   const languages = [
     { code: "en", name: "English", flag: "🇬🇧" },
     { code: "ar", name: "العربية", flag: "🇸🇦" },
+    { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
   ];
 
   return (
