@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AlertCircle, LogIn } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAdmin } from "@/lib/admin-context";
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -12,6 +13,7 @@ export default function AdminLogin() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { login } = useAdmin();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,24 +21,7 @@ export default function AdminLogin() {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/admin/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.error || "Login failed");
-        toast.error(data.error || "Invalid email or password");
-        return;
-      }
-
-      // Store admin token in localStorage
-      localStorage.setItem("adminToken", data.token);
-      localStorage.setItem("adminEmail", data.email);
-
+      await login(email, password);
       toast.success("Admin login successful!");
       navigate("/admin/dashboard");
     } catch (err) {
