@@ -833,43 +833,70 @@ export function TransferFormManagement({
                               } else if (attachment.data) {
                                 // If base64 data exists, create blob download
                                 try {
-                                  const byteCharacters = atob(attachment.data);
-                                  const byteNumbers = new Array(
-                                    byteCharacters.length,
-                                  );
-                                  for (
-                                    let i = 0;
-                                    i < byteCharacters.length;
-                                    i++
-                                  ) {
-                                    byteNumbers[i] =
-                                      byteCharacters.charCodeAt(i);
-                                  }
-                                  const byteArray = new Uint8Array(byteNumbers);
-                                  const blob = new Blob([byteArray], {
-                                    type:
-                                      attachment.type ||
-                                      "application/octet-stream",
-                                  });
-                                  link.href = URL.createObjectURL(blob);
-                                  link.download = attachment.name;
-                                  document.body.appendChild(link);
-                                  link.click();
-                                  document.body.removeChild(link);
+                                  // Clean and validate base64 data
+                                  let base64String = attachment.data.trim();
 
-                                  // Clean up object URL
-                                  setTimeout(() => {
-                                    URL.revokeObjectURL(link.href);
-                                  }, 100);
-                                } catch (decodeError) {
+                                  // Remove any data URL prefix if present (data:application/pdf;base64,)
+                                  if (base64String.includes(',')) {
+                                    base64String = base64String.split(',')[1];
+                                  }
+
+                                  // Replace URL-safe characters with standard base64 characters if needed
+                                  // This handles some edge cases in base64 encoding
+                                  try {
+                                    const byteCharacters = atob(base64String);
+                                    const byteNumbers = new Array(
+                                      byteCharacters.length,
+                                    );
+                                    for (
+                                      let i = 0;
+                                      i < byteCharacters.length;
+                                      i++
+                                    ) {
+                                      byteNumbers[i] =
+                                        byteCharacters.charCodeAt(i);
+                                    }
+                                    const byteArray = new Uint8Array(byteNumbers);
+                                    const blob = new Blob([byteArray], {
+                                      type:
+                                        attachment.type ||
+                                        "application/octet-stream",
+                                    });
+                                    link.href = URL.createObjectURL(blob);
+                                    link.download = attachment.name;
+                                    document.body.appendChild(link);
+                                    link.click();
+                                    document.body.removeChild(link);
+
+                                    // Clean up object URL
+                                    setTimeout(() => {
+                                      URL.revokeObjectURL(link.href);
+                                    }, 100);
+                                  } catch (decodeError) {
+                                    console.error(
+                                      "Base64 decode error:",
+                                      decodeError,
+                                    );
+                                    console.error(
+                                      "Base64 data length:",
+                                      base64String.length,
+                                    );
+                                    console.error(
+                                      "First 100 chars of data:",
+                                      base64String.substring(0, 100),
+                                    );
+                                    toast.error(
+                                      "File format error - cannot decode attachment. The file data may be corrupted. Please re-upload the file.",
+                                    );
+                                  }
+                                } catch (outerError) {
                                   console.error(
-                                    "Base64 decode error:",
-                                    decodeError,
+                                    "Attachment processing error:",
+                                    outerError,
                                   );
                                   toast.error(
-                                    "File format error - cannot decode attachment",
+                                    "Error processing attachment - please try again",
                                   );
-                                  return;
                                 }
                               } else {
                                 // Fallback: Try to fetch attachment data from server if available
