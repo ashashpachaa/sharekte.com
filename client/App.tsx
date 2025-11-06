@@ -29,6 +29,7 @@ import AdminSettings from "./pages/AdminSettings";
 import AdminEmailTemplates from "./pages/AdminEmailTemplates";
 import AdminRoles from "./pages/AdminRoles";
 import { AdminFees } from "./pages/AdminFees";
+import AdminSocialMedia from "./pages/AdminSocialMedia";
 import NotFound from "./pages/NotFound";
 import { ProtectedAdminRoute } from "./components/ProtectedAdminRoute";
 import { ProtectedRoute } from "./components/ProtectedRoute";
