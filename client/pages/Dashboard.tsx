@@ -2294,7 +2294,7 @@ export default function Dashboard() {
                                                   }`}
                                                 >
                                                   {renewal.status === "on-time"
-                                                    ? "✓ On Time"
+                                                    ? "��� On Time"
                                                     : `⚠ ${renewal.daysLate}d Late`}
                                                 </span>
                                               </div>
@@ -2625,11 +2625,11 @@ export default function Dashboard() {
                                       className="gap-2 bg-accent hover:bg-accent/80 text-white flex-1"
                                       size="sm"
                                       onClick={() =>
-                                        setShowTransferForm(company.id)
+                                        setShowAmendmentComments(company.id)
                                       }
                                     >
-                                      <Edit2 className="w-4 h-4" />
-                                      Make Amendments
+                                      <MessageCircle className="w-4 h-4" />
+                                      View Comments
                                     </Button>
                                   )}
                                   {company.status === "pending-form" && (
