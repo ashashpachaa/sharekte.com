@@ -1,9 +1,25 @@
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { fetchSocialMediaLinks, type SocialMediaLink } from "@/lib/social-media";
 
 export function Footer() {
   const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
+  const [socialLinks, setSocialLinks] = useState<SocialMediaLink[]>([]);
+
+  useEffect(() => {
+    loadSocialLinks();
+  }, []);
+
+  async function loadSocialLinks() {
+    try {
+      const links = await fetchSocialMediaLinks();
+      setSocialLinks(links.filter((link) => link.isActive).sort((a, b) => a.order - b.order));
+    } catch (error) {
+      console.error("Error loading social media links:", error);
+    }
+  }
 
   return (
     <footer className="w-full border-t border-border/40 bg-muted/30 py-12">
