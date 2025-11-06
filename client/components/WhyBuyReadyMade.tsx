@@ -117,8 +117,7 @@ export function WhyBuyReadyMade() {
             </div>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-foreground">
-            {t("homepage.whyBuy.title") ||
-              "Why Buy a Ready-Made Company?"}
+            {t("homepage.whyBuy.title") || "Why Buy a Ready-Made Company?"}
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             {t("homepage.whyBuy.subtitle") ||
@@ -225,8 +224,7 @@ export function WhyBuyReadyMade() {
             <div className="space-y-4">
               <div className="bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl p-8 border border-primary/20">
                 <h4 className="font-bold text-lg text-foreground mb-6">
-                  {t("homepage.whyBuy.cta.options") ||
-                    "Choose Your Path:"}
+                  {t("homepage.whyBuy.cta.options") || "Choose Your Path:"}
                 </h4>
 
                 <div className="space-y-3">

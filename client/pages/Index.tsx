@@ -37,10 +37,12 @@ function SalesStatisticsSection({ t }: { t: (key: string) => string }) {
       <div className="container max-w-6xl mx-auto px-4">
         <div className="text-center space-y-6 mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground">
-            {t("homepage.salesSection.title") || "Become an Entrepreneur Right Now"}
+            {t("homepage.salesSection.title") ||
+              "Become an Entrepreneur Right Now"}
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            {t("homepage.salesSection.motivationText") || "Join our community of successful entrepreneurs"}
+            {t("homepage.salesSection.motivationText") ||
+              "Join our community of successful entrepreneurs"}
           </p>
         </div>
 
@@ -63,7 +65,8 @@ function SalesStatisticsSection({ t }: { t: (key: string) => string }) {
             </div>
             <p className="text-4xl font-bold text-blue-500">{stats.month}+</p>
             <p className="text-sm text-muted-foreground uppercase font-semibold mt-2">
-              {t("homepage.salesSection.soldThisMonth") || "Companies sold this month"}
+              {t("homepage.salesSection.soldThisMonth") ||
+                "Companies sold this month"}
             </p>
           </div>
 
@@ -74,7 +77,8 @@ function SalesStatisticsSection({ t }: { t: (key: string) => string }) {
             </div>
             <p className="text-4xl font-bold text-purple-500">{stats.year}+</p>
             <p className="text-sm text-muted-foreground uppercase font-semibold mt-2">
-              {t("homepage.salesSection.soldThisYear") || "Companies sold this year"}
+              {t("homepage.salesSection.soldThisYear") ||
+                "Companies sold this year"}
             </p>
           </div>
         </div>
@@ -106,7 +110,10 @@ export default function Index() {
               data-loc="client/pages/Index.tsx:137:17"
             >
               {t("homepage.hero.title1") || "Discover & Buy"}{" "}
-              <span className="text-primary" data-loc="client/pages/Index.tsx:139:19">
+              <span
+                className="text-primary"
+                data-loc="client/pages/Index.tsx:139:19"
+              >
                 {t("homepage.hero.title2") || "Established Businesses Today"}
               </span>
             </h1>
@@ -117,7 +124,10 @@ export default function Index() {
               {t("homepage.hero.description") ||
                 "Welcome to Sharekte - Your marketplace for buying and selling established, revenue-generating companies globally. Skip the startup phase and step into profitability."}
             </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4" data-loc="client/pages/Index.tsx:148:15">
+            <div
+              className="flex flex-col sm:flex-row justify-center gap-4"
+              data-loc="client/pages/Index.tsx:148:15"
+            >
               <Button
                 size="lg"
                 className="h-14 px-8 text-lg font-bold rounded-lg bg-primary hover:bg-primary-600 text-white"
