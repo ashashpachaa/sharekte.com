@@ -515,8 +515,7 @@ export async function syncOrderToAirtable(
           ? JSON.stringify(order.refundRequest)
           : "",
 
-        // Documents & Transfer Form
-        Documents: JSON.stringify(order.documents || []),
+        // Transfer Form
         "Transfer Form URL": order.transferFormUrl || "",
 
         // Admin & Internal Notes
