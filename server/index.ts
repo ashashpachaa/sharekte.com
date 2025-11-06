@@ -109,6 +109,13 @@ import {
   reorderSocialMediaLinksHandler,
   getAvailablePlatformsHandler,
 } from "./routes/social-media";
+import {
+  robotsHandler,
+  sitemapHandler,
+  sitemapIndexHandler,
+  schemaHandler,
+  seoStatusHandler,
+} from "./routes/seo";
 
 export function createServer() {
   console.log("[createServer] Initializing Express app");
@@ -158,6 +165,13 @@ export function createServer() {
       });
     }
   });
+
+  // SEO routes
+  app.get("/robots.txt", robotsHandler);
+  app.get("/sitemap.xml", sitemapHandler);
+  app.get("/sitemap_index.xml", sitemapIndexHandler);
+  app.get("/api/schema.json", schemaHandler);
+  app.get("/api/seo/status", seoStatusHandler);
 
   app.get("/api/demo", handleDemo);
 
