@@ -428,6 +428,27 @@ export default function Checkout() {
       // Wait for all order creation to complete
       await Promise.all(orderPromises);
 
+      // Deduct from wallet if it has sufficient balance
+      try {
+        const walletId = userData.id || billingEmail.split("@")[0];
+        const walletDeductResult = await deductFromWallet(
+          walletId,
+          orderFinalTotal,
+          `Payment for ${items.map((i) => i.name).join(", ")}`,
+          ""
+        );
+
+        if (!walletDeductResult.success) {
+          console.warn("[Checkout] Wallet deduction failed (insufficient balance or wallet frozen)");
+          // Continue with order as wallet was optional
+        } else {
+          console.log(`[Checkout] ✓ Deducted ${currency} ${orderFinalTotal} from wallet`);
+        }
+      } catch (walletError) {
+        console.warn("[Checkout] Wallet deduction error (continuing with order):", walletError);
+        // Continue with order even if wallet deduction fails
+      }
+
       // Auto-create customer account if they don't have one
       try {
         const baseURL = getAPIBaseURL();
