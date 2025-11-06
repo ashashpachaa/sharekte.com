@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CompanyTable } from "@/components/CompanyTable";
+import { WhyBuyReadyMade } from "@/components/WhyBuyReadyMade";
 import { useMemo } from "react";
 import { useSEO, getPageSEOMetadata } from "@/lib/seo";
 import {
