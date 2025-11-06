@@ -477,15 +477,15 @@ export function createServer() {
   app.delete("/api/social-media/:id", deleteSocialMediaLinkHandler);
   app.post("/api/social-media/reorder", reorderSocialMediaLinksHandler);
 
-  // Wallet routes
-  app.get("/api/wallets/:userId", getUserWalletHandler);
-  app.get("/api/wallets", getAllWalletsHandler);
+  // Wallet routes - IMPORTANT: Specific routes MUST come before parameterized routes
+  app.get("/api/wallets/report", getWalletReportHandler); // Specific route first!
+  app.get("/api/wallets", getAllWalletsHandler); // General list route
+  app.get("/api/wallets/:userId", getUserWalletHandler); // Parameterized routes after
   app.post("/api/wallets/:userId/add-funds", addFundsHandler);
   app.get("/api/wallets/:userId/transactions", getTransactionsHandler);
   app.patch("/api/wallets/:userId/freeze", freezeWalletHandler);
   app.patch("/api/wallets/:userId/unfreeze", unfreezeWalletHandler);
   app.post("/api/wallets/:userId/deduct", deductFromWalletHandler);
-  app.get("/api/wallets/report", getWalletReportHandler);
 
   console.log("[createServer] ✅ All routes registered successfully");
 
