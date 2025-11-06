@@ -101,6 +101,13 @@ import {
   verifyHandler,
   logoutHandler,
 } from "./routes/user-auth";
+import {
+  getSocialMediaLinksHandler,
+  createSocialMediaLinkHandler,
+  updateSocialMediaLinkHandler,
+  deleteSocialMediaLinkHandler,
+  reorderSocialMediaLinksHandler,
+} from "./routes/social-media";
 
 export function createServer() {
   console.log("[createServer] Initializing Express app");
