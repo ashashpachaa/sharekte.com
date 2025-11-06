@@ -24,6 +24,7 @@ import {
   Download,
   CheckCircle,
   Zap,
+  MessageCircle,
 } from "lucide-react";
 import { useSearch } from "@/hooks/use-search";
 import {
@@ -2294,7 +2295,7 @@ export default function Dashboard() {
                                                   }`}
                                                 >
                                                   {renewal.status === "on-time"
-                                                    ? "��� On Time"
+                                                    ? "✓ On Time"
                                                     : `⚠ ${renewal.daysLate}d Late`}
                                                 </span>
                                               </div>
