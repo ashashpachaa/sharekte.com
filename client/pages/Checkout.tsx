@@ -276,6 +276,12 @@ export default function Checkout() {
 
         savePurchasedCompany(purchasedCompany);
 
+        // Calculate final total with coupon and fees
+        const invoiceSubtotal = convertedAmount;
+        const invoiceTotalFees = feesDetails.reduce((sum, fee) => sum + fee.calculatedAmount, 0);
+        const invoiceDiscount = appliedCoupon?.valid ? appliedCoupon.discount : 0;
+        const invoiceFinalTotal = invoiceSubtotal + invoiceTotalFees - invoiceDiscount;
+
         // Create invoice record
         const invoice: InvoiceData = {
           id: `inv-${Date.now()}-${index}`,
@@ -288,7 +294,7 @@ export default function Checkout() {
           companyNumber: item.companyNumber,
           clientName: userData.fullName,
           clientEmail: billingEmail,
-          amount: convertedAmount,
+          amount: invoiceFinalTotal,
           currency: currency,
           description: `Company Purchase - ${item.name}`,
           status: "paid",
@@ -296,11 +302,25 @@ export default function Checkout() {
             {
               description: `${item.name} - Company Purchase`,
               quantity: 1,
-              unitPrice: convertedAmount,
-              total: convertedAmount,
+              unitPrice: invoiceSubtotal,
+              total: invoiceSubtotal,
             },
+            ...feesDetails.map(fee => ({
+              description: `${fee.name}${fee.type === "percentage" ? ` (${fee.amount}%)` : ""}`,
+              quantity: 1,
+              unitPrice: fee.calculatedAmount,
+              total: fee.calculatedAmount,
+            })),
+            ...(invoiceDiscount > 0 ? [{
+              description: `Discount (${appliedCoupon?.coupon?.code || "COUPON"})`,
+              quantity: 1,
+              unitPrice: -invoiceDiscount,
+              total: -invoiceDiscount,
+            }] : []),
           ],
           orderId: `order-${Date.now()}`,
+          couponCode: appliedCoupon?.coupon?.code,
+          couponDiscount: invoiceDiscount,
         };
 
         addInvoice(invoice);
