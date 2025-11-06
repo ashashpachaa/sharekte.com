@@ -284,6 +284,50 @@ export function AdminSocialLinks() {
         </div>
       )}
 
+      {/* Platforms Reference */}
+      <div className="pt-8 border-t">
+        <h3 className="text-lg font-semibold mb-4">Available Platforms</h3>
+        <div className="space-y-4">
+          {Object.entries(platformCategories).map(([category, platforms]) => (
+            <div key={category}>
+              <h4 className="text-sm font-medium text-muted-foreground mb-2">
+                {category}
+              </h4>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
+                {platforms
+                  .filter((p) => AVAILABLE_PLATFORMS.includes(p))
+                  .map((platform) => (
+                    <button
+                      key={platform}
+                      onClick={() => {
+                        const defaultIcon = SOCIAL_MEDIA_ICONS[platform] || "";
+                        setFormData({
+                          ...formData,
+                          platform,
+                          icon: defaultIcon,
+                        });
+                        setEditingLink(null);
+                        setShowDialog(true);
+                      }}
+                      className="p-2 rounded-lg border border-border hover:bg-muted transition-colors flex items-center justify-center gap-2 text-sm"
+                      title={`Add ${platform}`}
+                    >
+                      <span className="text-lg">
+                        {SOCIAL_MEDIA_ICONS[platform] || "🔗"}
+                      </span>
+                      <span className="hidden sm:inline text-xs">
+                        {platform.length > 12
+                          ? platform.substring(0, 12) + "..."
+                          : platform}
+                      </span>
+                    </button>
+                  ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Add/Edit Dialog */}
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent className="max-w-md">
