@@ -123,11 +123,11 @@ import * as fs from "fs";
 import * as path from "path";
 
 // Persistent storage directory for forms
-// Use environment variable or fallback (note: /tmp is ephemeral on Fly.io, use Airtable for true persistence)
+// Use environment variable or fallback
 const FORMS_STORAGE_DIR =
   process.env.FORMS_STORAGE_DIR || "/tmp/shareket-forms";
 
-// Try to ensure storage directory exists (may fail on ephemeral Fly.io /tmp)
+// Try to ensure storage directory exists
 try {
   if (!fs.existsSync(FORMS_STORAGE_DIR)) {
     fs.mkdirSync(FORMS_STORAGE_DIR, { recursive: true });
@@ -138,7 +138,7 @@ try {
   }
 } catch (error) {
   console.warn(
-    "[transferForms] Storage directory not available (expected on Fly.io /tmp):",
+    "[transferForms] Storage directory not available:",
     error,
   );
 }

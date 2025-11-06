@@ -3,15 +3,15 @@
  * Handles company ownership transfer forms with attachments, status tracking, and notifications
  */
 
-// Get the correct API base URL (supports localhost, Fly.io, and Hostinger)
+// Get the correct API base URL (supports localhost and Hostinger production)
 export function getAPIBaseURL(): string {
   // Server-side: use Hostinger production URL
   if (typeof window === "undefined") return "https://shareket.com";
 
   const hostname = window.location.hostname;
 
-  // Development & All Production: Use relative paths on same domain
-  // This works for: localhost, Fly.io, Hostinger, and any other deployment
+  // Development & Production: Use relative paths on same domain
+  // This works for: localhost and Hostinger production
   // because API endpoints are served on the same domain as the frontend
   return "";
 }

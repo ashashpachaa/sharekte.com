@@ -41,11 +41,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const possiblePaths = [
   // Path 1: Relative to server directory (dist/server/../spa = dist/spa)
   path.resolve(__dirname, "../spa"),
-  // Path 2: Relative to cwd (for Docker, Hostinger, Fly.io)
+  // Path 2: Relative to cwd (for Docker and production deployments)
   path.resolve(process.cwd(), "dist/spa"),
-  // Path 3: Absolute in case cwd is different
+  // Path 3: Absolute path for Hostinger production
   path.resolve("/var/www/sharekte.com/dist/spa"),
-  path.resolve("/app/dist/spa"),
 ];
 
 let spaDir = null;
