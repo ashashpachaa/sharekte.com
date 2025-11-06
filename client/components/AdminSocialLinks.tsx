@@ -145,6 +145,49 @@ export function AdminSocialLinks() {
     return <div className="text-center py-8">Loading social media links...</div>;
   }
 
+  // Show all available platforms grouped by category
+  const platformCategories: Record<string, string[]> = {
+    "Social Networks": [
+      "Twitter (X)",
+      "Facebook",
+      "Instagram",
+      "LinkedIn",
+      "Reddit",
+      "Snapchat",
+      "Pinterest",
+      "Threads",
+      "Bluesky",
+      "Mastodon",
+    ],
+    "Video Platforms": [
+      "YouTube",
+      "TikTok",
+      "Twitch",
+      "Vimeo",
+    ],
+    "Developer & Tech": [
+      "GitHub",
+      "GitLab",
+      "Dev.to",
+      "Medium",
+      "Hashnode",
+      "Stack Overflow",
+    ],
+    "Messaging": [
+      "Discord",
+      "Telegram",
+      "WhatsApp",
+      "Signal",
+      "WeChat",
+      "Viber",
+    ],
+    "Contact": [
+      "Email",
+      "Phone",
+      "Website",
+    ],
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
