@@ -366,14 +366,8 @@ export default function Dashboard() {
         ];
   });
 
-  // Utility function to calculate days remaining
-  const calculateDaysRemaining = (renewalDate: string): number => {
-    const renewal = new Date(renewalDate);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const diffMs = renewal.getTime() - today.getTime();
-    return Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-  };
+  // calculateDaysRemaining is now imported from @/lib/renewal-utils
+  const calculateDaysRemaining = calculateDaysRemainingUtil;
 
   // Purchased companies state - fetch user-specific data
   const [purchasedCompanies, setPurchasedCompanies] = useState<
