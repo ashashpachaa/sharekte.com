@@ -477,6 +477,16 @@ export function createServer() {
   app.delete("/api/social-media/:id", deleteSocialMediaLinkHandler);
   app.post("/api/social-media/reorder", reorderSocialMediaLinksHandler);
 
+  // Wallet routes
+  app.get("/api/wallets/:userId", getUserWalletHandler);
+  app.get("/api/wallets", getAllWalletsHandler);
+  app.post("/api/wallets/:userId/add-funds", addFundsHandler);
+  app.get("/api/wallets/:userId/transactions", getTransactionsHandler);
+  app.patch("/api/wallets/:userId/freeze", freezeWalletHandler);
+  app.patch("/api/wallets/:userId/unfreeze", unfreezeWalletHandler);
+  app.post("/api/wallets/:userId/deduct", deductFromWalletHandler);
+  app.get("/api/wallets/report", getWalletReportHandler);
+
   console.log("[createServer] ✅ All routes registered successfully");
 
   // Serve SPA static files and handle fallback to index.html
