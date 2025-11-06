@@ -115,6 +115,11 @@ export interface Order {
   }>;
   totalFees?: number;
 
+  // Coupon & Discount
+  couponCode?: string;
+  couponDiscount?: number;
+  discountedTotal?: number;
+
   // Refund Info
   refundStatus: RefundStatus;
   refundRequest?: RefundRequest;
