@@ -1067,8 +1067,25 @@ export default function Dashboard() {
           </div>
 
           <div class="total-section">
-            <div>Subtotal: ${invoice.currency}${invoice.amount.toLocaleString()}</div>
-            <div class="total-row">Total: ${invoice.currency}${invoice.amount.toLocaleString()}</div>
+            ${
+              (() => {
+                const subtotal = invoice.items
+                  .filter(item => !item.description.includes("Discount") && item.unitPrice >= 0)
+                  .reduce((sum, item) => sum + item.total, 0);
+                const feesTotal = invoice.items
+                  .filter(item => item.description.includes("(") && item.description.includes("%"))
+                  .reduce((sum, item) => sum + item.total, 0);
+                const discount = invoice.couponDiscount || 0;
+                const total = invoice.amount;
+
+                return `
+                  <div style="margin-bottom: 10px;">Subtotal: ${invoice.currency}${subtotal.toLocaleString()}</div>
+                  ${feesTotal > 0 ? `<div style="margin-bottom: 5px; color: #d97706;">Applied Fees: ${invoice.currency}${feesTotal.toLocaleString()}</div>` : ""}
+                  ${discount > 0 ? `<div style="margin-bottom: 10px; color: #16a34a;">Discount (${invoice.couponCode || "Coupon"}): -${invoice.currency}${discount.toLocaleString()}</div>` : ""}
+                  <div class="total-row">Total: ${invoice.currency}${total.toLocaleString()}</div>
+                `;
+              })()
+            }
           </div>
 
           <div class="footer">
@@ -1836,7 +1853,7 @@ export default function Dashboard() {
                                           : "bg-red-100 text-red-800"
                                     }`}
                                   >
-                                    {invoice.status === "paid" && "�� Paid"}
+                                    {invoice.status === "paid" && "���� Paid"}
                                     {invoice.status === "unpaid" && "⏳ Unpaid"}
                                     {invoice.status === "canceled" &&
                                       "✗ Canceled"}
