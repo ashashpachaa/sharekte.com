@@ -442,7 +442,8 @@ export async function fetchAllCompanies(): Promise<CompanyData[]> {
 
 export async function getCompany(id: string): Promise<CompanyData | null> {
   try {
-    const response = await fetch(`/api/companies/${id}`);
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/companies/${id}`);
     if (!response.ok) throw new Error("Failed to fetch company");
     return await response.json();
   } catch (error) {
@@ -505,7 +506,8 @@ export async function updateCompanyStatus(
   notes?: string
 ): Promise<boolean> {
   try {
-    const response = await fetch(`/api/companies/${id}/status`, {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/companies/${id}/status`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: newStatus, notes }),
@@ -522,7 +524,8 @@ export async function renewCompany(
   notes?: string
 ): Promise<CompanyData | null> {
   try {
-    const response = await fetch(`/api/companies/${id}/renew`, {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/companies/${id}/renew`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ notes }),
@@ -541,7 +544,8 @@ export async function requestRefund(
   notes?: string
 ): Promise<boolean> {
   try {
-    const response = await fetch(`/api/companies/${id}/refund-request`, {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/companies/${id}/refund-request`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ reason, notes }),
@@ -559,7 +563,8 @@ export async function approveRefund(
   notes?: string
 ): Promise<boolean> {
   try {
-    const response = await fetch(`/api/companies/${id}/refund-approve`, {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/companies/${id}/refund-approve`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ refundAmount, notes }),
