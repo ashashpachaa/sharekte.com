@@ -372,6 +372,9 @@ export default function Dashboard() {
   const [purchasedCompanies, setPurchasedCompanies] = useState<
     PurchasedCompany[]
   >(() => {
+    // Populate demo amendment data if needed
+    populateDemoAmendmentData();
+
     const userCompanies = getPurchasedCompanies();
     return userCompanies.map((uc) => {
       // Ensure renewalStatus exists
