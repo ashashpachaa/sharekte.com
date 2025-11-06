@@ -29,7 +29,7 @@ export const SOCIAL_MEDIA_ICONS: Record<string, string> = {
   LinkedIn: "in",
   YouTube: "▶️",
   TikTok: "♪",
-  Snapchat: "👻",
+  Snapchat: "����",
   Pinterest: "P",
   Reddit: "🔥",
   Threads: "📝",
@@ -115,7 +115,7 @@ export const SOCIAL_MEDIA_ICONS: Record<string, string> = {
 export async function fetchSocialMediaLinks(): Promise<SocialMediaLink[]> {
   try {
     const apiBaseURL = getAPIBaseURL();
-    const response = await fetch(`${apiBaseURL}/api/social-media-links`);
+    const response = await fetch(`${apiBaseURL}/api/social-media`);
     if (!response.ok) throw new Error("Failed to fetch social media links");
     const data = await response.json();
     return data.links || [];
