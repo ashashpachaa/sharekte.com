@@ -44,6 +44,13 @@ import { CompanyTransferForm } from "@/components/CompanyTransferForm";
 import { StatusHistoryTimeline } from "@/components/StatusHistoryTimeline";
 import { getAPIBaseURL } from "@/lib/transfer-form";
 import {
+  calculateDaysRemaining as calculateDaysRemainingUtil,
+  calculateRenewalStatus,
+  getRenewalButtonState,
+  calculateSmartRenewalDate,
+  getRenewalStatusConfig,
+} from "@/lib/renewal-utils";
+import {
   BarChart3,
   Plus,
   TrendingUp,
