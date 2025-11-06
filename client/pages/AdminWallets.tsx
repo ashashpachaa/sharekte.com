@@ -178,6 +178,40 @@ export default function AdminWallets() {
     }
   };
 
+  const handleFreezeWallet = async (wallet: any) => {
+    try {
+      const response = await fetch(`/api/wallets/${wallet.userId}/freeze`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!response.ok) throw new Error("Failed to freeze wallet");
+
+      toast.success(`Wallet for ${wallet.userName} has been frozen`);
+      loadWallets();
+    } catch (error) {
+      console.error("Error freezing wallet:", error);
+      toast.error("Failed to freeze wallet");
+    }
+  };
+
+  const handleUnfreezeWallet = async (wallet: any) => {
+    try {
+      const response = await fetch(`/api/wallets/${wallet.userId}/unfreeze`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!response.ok) throw new Error("Failed to unfreeze wallet");
+
+      toast.success(`Wallet for ${wallet.userName} has been unfrozen`);
+      loadWallets();
+    } catch (error) {
+      console.error("Error unfreezing wallet:", error);
+      toast.error("Failed to unfreeze wallet");
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
