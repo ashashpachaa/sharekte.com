@@ -1216,17 +1216,36 @@ export default function Dashboard() {
           </table>
 
           <div class="total-section">
-            <div class="detail-row">
-              <span>Subtotal:</span>
-              <span>£${invoice.amount.toLocaleString()}</span>
-            </div>
-            <div class="detail-row">
-              <span>Tax:</span>
-              <span>£0.00</span>
-            </div>
-            <div class="total-amount">
-              Total: £${invoice.amount.toLocaleString()}
-            </div>
+            ${
+              (() => {
+                const subtotal = invoice.items
+                  .filter(item => !item.description.includes("Discount") && item.unitPrice >= 0)
+                  .reduce((sum, item) => sum + item.total, 0);
+                const feesTotal = invoice.items
+                  .filter(item => item.description.includes("(") && item.description.includes("%"))
+                  .reduce((sum, item) => sum + item.total, 0);
+                const discount = invoice.couponDiscount || 0;
+                const total = invoice.amount;
+
+                return `
+                  <div class="detail-row">
+                    <span>Subtotal:</span>
+                    <span>${invoice.currency}${subtotal.toLocaleString()}</span>
+                  </div>
+                  ${feesTotal > 0 ? `<div class="detail-row" style="color: #d97706;">
+                    <span>Applied Fees:</span>
+                    <span>${invoice.currency}${feesTotal.toLocaleString()}</span>
+                  </div>` : ""}
+                  ${discount > 0 ? `<div class="detail-row" style="color: #16a34a;">
+                    <span>Discount (${invoice.couponCode || "Coupon"}):</span>
+                    <span>-${invoice.currency}${discount.toLocaleString()}</span>
+                  </div>` : ""}
+                  <div class="total-amount">
+                    Total: ${invoice.currency}${total.toLocaleString()}
+                  </div>
+                `;
+              })()
+            }
             <div class="status-badge status-${invoice.status}">
               ${invoice.status.toUpperCase()}
             </div>
