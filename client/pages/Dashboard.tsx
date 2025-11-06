@@ -35,6 +35,7 @@ import {
   addInvoice,
   renewCompany,
   updateCompanyRenewalStatus,
+  populateDemoAmendmentData,
   type PurchasedCompanyData,
 } from "@/lib/user-data";
 import { useCurrency } from "@/lib/currency-context";
