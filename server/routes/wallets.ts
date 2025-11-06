@@ -19,7 +19,13 @@ interface Wallet {
 interface WalletTransaction {
   id: string;
   walletId: string;
-  type: "deposit" | "withdrawal" | "payment" | "refund" | "admin_add" | "admin_deduct";
+  type:
+    | "deposit"
+    | "withdrawal"
+    | "payment"
+    | "refund"
+    | "admin_add"
+    | "admin_deduct";
   amount: number;
   currency: string;
   balanceBefore: number;
@@ -283,7 +289,9 @@ export const getTransactionsHandler: RequestHandler = (req, res) => {
       return res.status(404).json({ error: "Wallet not found" });
     }
 
-    let transactions = inMemoryTransactions.filter((t) => t.walletId === wallet.id);
+    let transactions = inMemoryTransactions.filter(
+      (t) => t.walletId === wallet.id,
+    );
 
     // Apply filters
     if (req.query.type) {
@@ -291,11 +299,15 @@ export const getTransactionsHandler: RequestHandler = (req, res) => {
     }
     if (req.query.startDate) {
       const startDate = new Date(req.query.startDate as string);
-      transactions = transactions.filter((t) => new Date(t.createdAt) >= startDate);
+      transactions = transactions.filter(
+        (t) => new Date(t.createdAt) >= startDate,
+      );
     }
     if (req.query.endDate) {
       const endDate = new Date(req.query.endDate as string);
-      transactions = transactions.filter((t) => new Date(t.createdAt) <= endDate);
+      transactions = transactions.filter(
+        (t) => new Date(t.createdAt) <= endDate,
+      );
     }
 
     // Pagination
@@ -361,15 +373,21 @@ export const deductFromWalletHandler: RequestHandler = (req, res) => {
 
     const wallet = inMemoryWallets.find((w) => w.userId === userId);
     if (!wallet) {
-      return res.status(404).json({ error: "Wallet not found", success: false });
+      return res
+        .status(404)
+        .json({ error: "Wallet not found", success: false });
     }
 
     if (wallet.status === "frozen") {
-      return res.status(400).json({ error: "Wallet is frozen", success: false });
+      return res
+        .status(400)
+        .json({ error: "Wallet is frozen", success: false });
     }
 
     if (wallet.balance < amount) {
-      return res.status(400).json({ error: "Insufficient balance", success: false });
+      return res
+        .status(400)
+        .json({ error: "Insufficient balance", success: false });
     }
 
     // Record transaction
@@ -400,7 +418,9 @@ export const deductFromWalletHandler: RequestHandler = (req, res) => {
     res.json({ success: true, newBalance: wallet.balance });
   } catch (error) {
     console.error("[deductFromWalletHandler] Error:", error);
-    res.status(500).json({ error: "Failed to deduct from wallet", success: false });
+    res
+      .status(500)
+      .json({ error: "Failed to deduct from wallet", success: false });
   }
 };
 
@@ -412,15 +432,21 @@ export const getWalletReportHandler: RequestHandler = (req, res) => {
     // Apply filters
     if (req.query.currency) {
       wallets = wallets.filter((w) => w.currency === req.query.currency);
-      transactions = transactions.filter((t) => t.currency === req.query.currency);
+      transactions = transactions.filter(
+        (t) => t.currency === req.query.currency,
+      );
     }
     if (req.query.startDate) {
       const startDate = new Date(req.query.startDate as string);
-      transactions = transactions.filter((t) => new Date(t.createdAt) >= startDate);
+      transactions = transactions.filter(
+        (t) => new Date(t.createdAt) >= startDate,
+      );
     }
     if (req.query.endDate) {
       const endDate = new Date(req.query.endDate as string);
-      transactions = transactions.filter((t) => new Date(t.createdAt) <= endDate);
+      transactions = transactions.filter(
+        (t) => new Date(t.createdAt) <= endDate,
+      );
     }
 
     const totalBalance = wallets.reduce((sum, w) => sum + w.balance, 0);

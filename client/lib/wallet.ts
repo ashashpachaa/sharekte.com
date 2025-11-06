@@ -1,6 +1,12 @@
 import { getAPIBaseURL } from "./transfer-form";
 
-export type WalletTransactionType = "deposit" | "withdrawal" | "payment" | "refund" | "admin_add" | "admin_deduct";
+export type WalletTransactionType =
+  | "deposit"
+  | "withdrawal"
+  | "payment"
+  | "refund"
+  | "admin_add"
+  | "admin_deduct";
 export type WalletStatus = "active" | "frozen";
 
 export interface Wallet {
@@ -57,20 +63,20 @@ export async function getUserWallet(userId: string): Promise<Wallet> {
   return response.json();
 }
 
-export async function getAllWallets(
-  filters?: {
-    status?: WalletStatus;
-    currency?: string;
-    minBalance?: number;
-    maxBalance?: number;
-  }
-): Promise<Wallet[]> {
+export async function getAllWallets(filters?: {
+  status?: WalletStatus;
+  currency?: string;
+  minBalance?: number;
+  maxBalance?: number;
+}): Promise<Wallet[]> {
   const baseURL = getAPIBaseURL_Internal();
   const params = new URLSearchParams();
   if (filters?.status) params.append("status", filters.status);
   if (filters?.currency) params.append("currency", filters.currency);
-  if (filters?.minBalance) params.append("minBalance", filters.minBalance.toString());
-  if (filters?.maxBalance) params.append("maxBalance", filters.maxBalance.toString());
+  if (filters?.minBalance)
+    params.append("minBalance", filters.minBalance.toString());
+  if (filters?.maxBalance)
+    params.append("maxBalance", filters.maxBalance.toString());
 
   const response = await fetch(`${baseURL}/api/wallets?${params}`, {
     method: "GET",
@@ -83,7 +89,7 @@ export async function getAllWallets(
 export async function addFundsToWallet(
   userId: string,
   amount: number,
-  reason: string
+  reason: string,
 ): Promise<Wallet> {
   const baseURL = getAPIBaseURL_Internal();
   const response = await fetch(`${baseURL}/api/wallets/${userId}/add-funds`, {
@@ -103,7 +109,7 @@ export async function getWalletTransactions(
     endDate?: string;
     limit?: number;
     offset?: number;
-  }
+  },
 ): Promise<WalletTransaction[]> {
   const baseURL = getAPIBaseURL_Internal();
   const params = new URLSearchParams();
@@ -113,10 +119,13 @@ export async function getWalletTransactions(
   if (filters?.limit) params.append("limit", filters.limit.toString());
   if (filters?.offset) params.append("offset", filters.offset.toString());
 
-  const response = await fetch(`${baseURL}/api/wallets/${userId}/transactions?${params}`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-  });
+  const response = await fetch(
+    `${baseURL}/api/wallets/${userId}/transactions?${params}`,
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    },
+  );
   if (!response.ok) throw new Error("Failed to fetch transactions");
   return response.json();
 }
@@ -152,10 +161,13 @@ export async function getWalletReport(filters?: {
   if (filters?.startDate) params.append("startDate", filters.startDate);
   if (filters?.endDate) params.append("endDate", filters.endDate);
 
-  const response = await fetch(`${baseURL}/api/wallets/report${params ? `?${params}` : ""}`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-  });
+  const response = await fetch(
+    `${baseURL}/api/wallets/report${params ? `?${params}` : ""}`,
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    },
+  );
   if (!response.ok) throw new Error("Failed to fetch wallet report");
   return response.json();
 }
@@ -164,7 +176,7 @@ export async function deductFromWallet(
   userId: string,
   amount: number,
   reason: string,
-  orderId?: string
+  orderId?: string,
 ): Promise<{ success: boolean; newBalance: number }> {
   const baseURL = getAPIBaseURL_Internal();
   const response = await fetch(`${baseURL}/api/wallets/${userId}/deduct`, {

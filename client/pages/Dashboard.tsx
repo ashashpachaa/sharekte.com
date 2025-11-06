@@ -436,14 +436,16 @@ export default function Dashboard() {
 
         const response = await fetch(
           `/api/wallets/${userEmail.split("@")[0]}`,
-          { method: "GET", headers: { "Content-Type": "application/json" } }
+          { method: "GET", headers: { "Content-Type": "application/json" } },
         );
 
         if (response.ok) {
           const wallet = await response.json();
           setWalletBalance(wallet.balance || 0);
           setWalletCurrency(wallet.currency || currency);
-          console.log(`[Dashboard] Wallet balance: ${wallet.currency} ${wallet.balance}`);
+          console.log(
+            `[Dashboard] Wallet balance: ${wallet.currency} ${wallet.balance}`,
+          );
         }
       } catch (error) {
         console.warn("[Dashboard] Failed to load wallet:", error);

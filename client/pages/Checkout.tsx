@@ -435,17 +435,24 @@ export default function Checkout() {
           walletId,
           orderFinalTotal,
           `Payment for ${items.map((i) => i.name).join(", ")}`,
-          ""
+          "",
         );
 
         if (!walletDeductResult.success) {
-          console.warn("[Checkout] Wallet deduction failed (insufficient balance or wallet frozen)");
+          console.warn(
+            "[Checkout] Wallet deduction failed (insufficient balance or wallet frozen)",
+          );
           // Continue with order as wallet was optional
         } else {
-          console.log(`[Checkout] ✓ Deducted ${currency} ${orderFinalTotal} from wallet`);
+          console.log(
+            `[Checkout] ✓ Deducted ${currency} ${orderFinalTotal} from wallet`,
+          );
         }
       } catch (walletError) {
-        console.warn("[Checkout] Wallet deduction error (continuing with order):", walletError);
+        console.warn(
+          "[Checkout] Wallet deduction error (continuing with order):",
+          walletError,
+        );
         // Continue with order even if wallet deduction fails
       }
 

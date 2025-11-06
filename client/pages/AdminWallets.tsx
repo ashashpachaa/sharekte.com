@@ -49,11 +49,15 @@ export default function AdminWallets() {
   const [filteredWallets, setFilteredWallets] = useState<Wallet[]>([]);
   const [transactions, setTransactions] = useState<WalletTransaction[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"wallets" | "transactions" | "report">("wallets");
+  const [activeTab, setActiveTab] = useState<
+    "wallets" | "transactions" | "report"
+  >("wallets");
 
   // Filters
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"all" | "active" | "frozen">("all");
+  const [statusFilter, setStatusFilter] = useState<"all" | "active" | "frozen">(
+    "all",
+  );
   const [currencyFilter, setCurrencyFilter] = useState<string>("");
 
   // Dialog states
@@ -77,9 +81,10 @@ export default function AdminWallets() {
       setWallets(data);
 
       // Apply search filter
-      const filtered = data.filter((w) =>
-        w.userName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        w.userEmail?.toLowerCase().includes(searchTerm.toLowerCase())
+      const filtered = data.filter(
+        (w) =>
+          w.userName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          w.userEmail?.toLowerCase().includes(searchTerm.toLowerCase()),
       );
       setFilteredWallets(filtered);
     } catch (error) {
@@ -108,7 +113,9 @@ export default function AdminWallets() {
   const loadReport = async () => {
     try {
       setLoading(true);
-      const data = await getWalletReport({ currency: currencyFilter || undefined });
+      const data = await getWalletReport({
+        currency: currencyFilter || undefined,
+      });
       setReportData(data);
     } catch (error) {
       console.error("Failed to load report:", error);
@@ -130,9 +137,10 @@ export default function AdminWallets() {
 
   useEffect(() => {
     if (activeTab === "wallets") {
-      const filtered = wallets.filter((w) =>
-        w.userName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        w.userEmail?.toLowerCase().includes(searchTerm.toLowerCase())
+      const filtered = wallets.filter(
+        (w) =>
+          w.userName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          w.userEmail?.toLowerCase().includes(searchTerm.toLowerCase()),
       );
       setFilteredWallets(filtered);
     }
@@ -154,11 +162,11 @@ export default function AdminWallets() {
             amount: parseFloat(addAmount),
             reason: addReason || "Admin credit",
           }),
-        }
+        },
       );
 
       if (!response.ok) throw new Error("Failed to add funds");
-      
+
       toast.success("Funds added successfully");
       setShowAddFundsDialog(false);
       setAddAmount("");
@@ -180,7 +188,8 @@ export default function AdminWallets() {
               {t("admin.wallets.title") || "Wallet Management"}
             </h1>
             <p className="text-muted-foreground">
-              {t("admin.wallets.description") || "Manage user wallets and transactions"}
+              {t("admin.wallets.description") ||
+                "Manage user wallets and transactions"}
             </p>
           </div>
 
@@ -245,7 +254,10 @@ export default function AdminWallets() {
                     <label className="text-sm font-semibold text-foreground mb-2 block">
                       Status
                     </label>
-                    <Select value={statusFilter} onValueChange={(v: any) => setStatusFilter(v)}>
+                    <Select
+                      value={statusFilter}
+                      onValueChange={(v: any) => setStatusFilter(v)}
+                    >
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -260,7 +272,10 @@ export default function AdminWallets() {
                     <label className="text-sm font-semibold text-foreground mb-2 block">
                       Currency
                     </label>
-                    <Select value={currencyFilter} onValueChange={setCurrencyFilter}>
+                    <Select
+                      value={currencyFilter}
+                      onValueChange={setCurrencyFilter}
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="All currencies" />
                       </SelectTrigger>
@@ -305,16 +320,22 @@ export default function AdminWallets() {
                             <h3 className="text-lg font-bold text-foreground">
                               {wallet.userName || "Unknown User"}
                             </h3>
-                            <p className="text-sm text-muted-foreground">{wallet.userEmail}</p>
+                            <p className="text-sm text-muted-foreground">
+                              {wallet.userEmail}
+                            </p>
                             <div className="flex gap-4 mt-4">
                               <div>
-                                <p className="text-sm text-muted-foreground">Balance</p>
+                                <p className="text-sm text-muted-foreground">
+                                  Balance
+                                </p>
                                 <p className="text-2xl font-bold text-primary">
                                   {wallet.currency} {wallet.balance.toFixed(2)}
                                 </p>
                               </div>
                               <div>
-                                <p className="text-sm text-muted-foreground">Status</p>
+                                <p className="text-sm text-muted-foreground">
+                                  Status
+                                </p>
                                 <span
                                   className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
                                     wallet.status === "active"
@@ -357,12 +378,17 @@ export default function AdminWallets() {
                       <th className="text-left p-4 font-semibold">Amount</th>
                       <th className="text-left p-4 font-semibold">Reason</th>
                       <th className="text-left p-4 font-semibold">Date</th>
-                      <th className="text-left p-4 font-semibold">Balance After</th>
+                      <th className="text-left p-4 font-semibold">
+                        Balance After
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {transactions.map((txn) => (
-                      <tr key={txn.id} className="border-b border-border hover:bg-muted/50">
+                      <tr
+                        key={txn.id}
+                        className="border-b border-border hover:bg-muted/50"
+                      >
                         <td className="p-4">
                           <span
                             className={`px-2 py-1 rounded text-xs font-semibold ${
@@ -374,12 +400,16 @@ export default function AdminWallets() {
                             {txn.type.toUpperCase()}
                           </span>
                         </td>
-                        <td className="p-4 font-semibold">{txn.currency} {txn.amount.toFixed(2)}</td>
+                        <td className="p-4 font-semibold">
+                          {txn.currency} {txn.amount.toFixed(2)}
+                        </td>
                         <td className="p-4">{txn.reason}</td>
                         <td className="p-4 text-sm text-muted-foreground">
                           {new Date(txn.createdAt).toLocaleDateString()}
                         </td>
-                        <td className="p-4 font-semibold">{txn.currency} {txn.balanceAfter.toFixed(2)}</td>
+                        <td className="p-4 font-semibold">
+                          {txn.currency} {txn.balanceAfter.toFixed(2)}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -401,23 +431,33 @@ export default function AdminWallets() {
                   {/* Summary Cards */}
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div className="bg-card border border-border/40 rounded-lg p-6">
-                      <p className="text-sm text-muted-foreground mb-2">Total Users</p>
-                      <p className="text-3xl font-bold text-primary">{reportData.totalUsers}</p>
+                      <p className="text-sm text-muted-foreground mb-2">
+                        Total Users
+                      </p>
+                      <p className="text-3xl font-bold text-primary">
+                        {reportData.totalUsers}
+                      </p>
                     </div>
                     <div className="bg-card border border-border/40 rounded-lg p-6">
-                      <p className="text-sm text-muted-foreground mb-2">Total Balance</p>
+                      <p className="text-sm text-muted-foreground mb-2">
+                        Total Balance
+                      </p>
                       <p className="text-3xl font-bold text-green-600">
                         {reportData.totalBalance.toFixed(2)}
                       </p>
                     </div>
                     <div className="bg-card border border-border/40 rounded-lg p-6">
-                      <p className="text-sm text-muted-foreground mb-2">Total Deposited</p>
+                      <p className="text-sm text-muted-foreground mb-2">
+                        Total Deposited
+                      </p>
                       <p className="text-3xl font-bold text-blue-600">
                         {reportData.totalDeposited.toFixed(2)}
                       </p>
                     </div>
                     <div className="bg-card border border-border/40 rounded-lg p-6">
-                      <p className="text-sm text-muted-foreground mb-2">Total Payments</p>
+                      <p className="text-sm text-muted-foreground mb-2">
+                        Total Payments
+                      </p>
                       <p className="text-3xl font-bold text-red-600">
                         {reportData.totalPayments.toFixed(2)}
                       </p>
@@ -430,32 +470,43 @@ export default function AdminWallets() {
                       <thead className="bg-muted border-b border-border">
                         <tr>
                           <th className="text-left p-4 font-semibold">Type</th>
-                          <th className="text-left p-4 font-semibold">Amount</th>
-                          <th className="text-left p-4 font-semibold">Reason</th>
+                          <th className="text-left p-4 font-semibold">
+                            Amount
+                          </th>
+                          <th className="text-left p-4 font-semibold">
+                            Reason
+                          </th>
                           <th className="text-left p-4 font-semibold">Date</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {reportData.transactions.map((txn: WalletTransaction) => (
-                          <tr key={txn.id} className="border-b border-border hover:bg-muted/50">
-                            <td className="p-4">
-                              <span
-                                className={`px-2 py-1 rounded text-xs font-semibold ${
-                                  txn.type === "payment"
-                                    ? "bg-red-100 text-red-800"
-                                    : "bg-green-100 text-green-800"
-                                }`}
-                              >
-                                {txn.type.toUpperCase()}
-                              </span>
-                            </td>
-                            <td className="p-4 font-semibold">{txn.amount.toFixed(2)}</td>
-                            <td className="p-4">{txn.reason}</td>
-                            <td className="p-4 text-sm text-muted-foreground">
-                              {new Date(txn.createdAt).toLocaleDateString()}
-                            </td>
-                          </tr>
-                        ))}
+                        {reportData.transactions.map(
+                          (txn: WalletTransaction) => (
+                            <tr
+                              key={txn.id}
+                              className="border-b border-border hover:bg-muted/50"
+                            >
+                              <td className="p-4">
+                                <span
+                                  className={`px-2 py-1 rounded text-xs font-semibold ${
+                                    txn.type === "payment"
+                                      ? "bg-red-100 text-red-800"
+                                      : "bg-green-100 text-green-800"
+                                  }`}
+                                >
+                                  {txn.type.toUpperCase()}
+                                </span>
+                              </td>
+                              <td className="p-4 font-semibold">
+                                {txn.amount.toFixed(2)}
+                              </td>
+                              <td className="p-4">{txn.reason}</td>
+                              <td className="p-4 text-sm text-muted-foreground">
+                                {new Date(txn.createdAt).toLocaleDateString()}
+                              </td>
+                            </tr>
+                          ),
+                        )}
                       </tbody>
                     </table>
                   </div>
@@ -500,7 +551,10 @@ export default function AdminWallets() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowAddFundsDialog(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setShowAddFundsDialog(false)}
+            >
               Cancel
             </Button>
             <Button onClick={handleAddFunds}>Add Funds</Button>

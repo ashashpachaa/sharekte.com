@@ -137,10 +137,7 @@ try {
     );
   }
 } catch (error) {
-  console.warn(
-    "[transferForms] Storage directory not available:",
-    error,
-  );
+  console.warn("[transferForms] Storage directory not available:", error);
 }
 
 // Helper: Load form from persistent storage

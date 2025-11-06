@@ -306,7 +306,8 @@ export default function AdminDashboard() {
               Wallet Management
             </h3>
             <p className="text-muted-foreground text-sm mb-4">
-              Manage user wallet balances, view transactions, and generate reports
+              Manage user wallet balances, view transactions, and generate
+              reports
             </p>
             <Button
               className="w-full bg-purple-600 hover:bg-purple-700 text-white"
