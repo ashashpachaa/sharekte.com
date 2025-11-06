@@ -251,32 +251,80 @@ export function AdminSocialLinks() {
           </DialogHeader>
 
           <div className="space-y-4">
-            {/* Platform */}
+            {/* Platform Selector */}
             <div>
               <Label htmlFor="platform">Platform Name</Label>
-              <Input
-                id="platform"
-                placeholder="e.g., Twitter, Facebook, LinkedIn"
+              <Select
                 value={formData.platform}
-                onChange={(e) =>
-                  setFormData({ ...formData, platform: e.target.value })
-                }
-              />
+                onValueChange={(value) => {
+                  const defaultIcon = SOCIAL_MEDIA_ICONS[value] || "";
+                  setFormData({
+                    ...formData,
+                    platform: value,
+                    icon: defaultIcon,
+                  });
+                }}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select a platform..." />
+                </SelectTrigger>
+                <SelectContent className="max-h-60">
+                  {AVAILABLE_PLATFORMS.map((platform) => (
+                    <SelectItem key={platform} value={platform}>
+                      <div className="flex items-center gap-2">
+                        <span className="text-lg">
+                          {SOCIAL_MEDIA_ICONS[platform] || "🔗"}
+                        </span>
+                        <span>{platform}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground mt-1">
+                Or type a custom platform name below
+              </p>
             </div>
+
+            {/* Custom Platform (if needed) */}
+            {!AVAILABLE_PLATFORMS.includes(formData.platform) && formData.platform && (
+              <div>
+                <Label htmlFor="customPlatform">Custom Platform Name</Label>
+                <Input
+                  id="customPlatform"
+                  placeholder="Enter custom platform name"
+                  value={formData.platform}
+                  onChange={(e) =>
+                    setFormData({ ...formData, platform: e.target.value })
+                  }
+                />
+              </div>
+            )}
 
             {/* Icon */}
             <div>
               <Label htmlFor="icon">Icon (emoji or text)</Label>
-              <Input
-                id="icon"
-                placeholder="e.g., 𝕏, f, 📷 (optional)"
-                value={formData.icon}
-                onChange={(e) =>
-                  setFormData({ ...formData, icon: e.target.value })
-                }
-              />
+              <div className="flex gap-2">
+                <Input
+                  id="icon"
+                  placeholder="e.g., 𝕏, f, 📷"
+                  value={formData.icon}
+                  onChange={(e) =>
+                    setFormData({ ...formData, icon: e.target.value })
+                  }
+                  className="flex-1"
+                />
+                {formData.icon && (
+                  <div className="flex items-center justify-center px-3 bg-muted rounded-md text-2xl">
+                    {formData.icon}
+                  </div>
+                )}
+              </div>
               <p className="text-xs text-muted-foreground mt-1">
-                Leave empty for default icon or enter your custom emoji/text
+                {formData.platform &&
+                SOCIAL_MEDIA_ICONS[formData.platform]
+                  ? "Using default icon for this platform. Leave empty or customize."
+                  : "Enter custom emoji or text icon"}
               </p>
             </div>
 
