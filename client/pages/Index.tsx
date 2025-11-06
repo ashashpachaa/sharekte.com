@@ -88,66 +88,6 @@ export default function Index() {
   const seoMetadata = getPageSEOMetadata("home", i18n.language);
   useSEO(seoMetadata, i18n.language);
 
-  const featuredCompanies = useMemo(
-    () => [
-      {
-        id: 1,
-        name: "TechFlow Solutions",
-        revenue: "$2.5M",
-        industry: "SaaS",
-        roi: "340%",
-        country: "UK",
-        incorporationDate: "2020-01-15",
-        purchasePrice: 350000,
-        currency: "USD",
-        status: "active",
-        clientName: "Ahmed M.",
-        clientEmail: "ahmed.m@example.com",
-      },
-      {
-        id: 2,
-        name: "Global Connect Ltd",
-        revenue: "$4.2M",
-        industry: "E-commerce",
-        roi: "280%",
-        country: "Sweden",
-        incorporationDate: "2019-05-20",
-        purchasePrice: 450000,
-        currency: "SEK",
-        status: "active",
-        clientName: "John S.",
-        clientEmail: "john.s@example.com",
-      },
-      {
-        id: 3,
-        name: "EuroTrade FZCO",
-        revenue: "$1.8M",
-        industry: "Trading",
-        roi: "210%",
-        country: "UAE",
-        incorporationDate: "2021-03-10",
-        purchasePrice: 600,
-        currency: "AED",
-        status: "active",
-        clientName: "Fatima A.",
-        clientEmail: "fatima.a@example.com",
-      },
-    ],
-    []
-  );
-
-  const stats = useMemo(() => {
-    const today = Math.floor(Math.random() * 45) + 5; // 5-50
-    const month = Math.floor(Math.random() * 450) + 50; // 50-500
-    const year = Math.floor(Math.random() * 2500) + 500; // 500-3000
-
-    return {
-      today: today,
-      month: month,
-      year: year,
-    };
-  }, []);
-
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
