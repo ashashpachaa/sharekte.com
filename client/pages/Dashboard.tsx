@@ -2860,6 +2860,102 @@ export default function Dashboard() {
                                     </div>
                                   </DialogContent>
                                 </Dialog>
+
+                                {/* Amendment Comments & Status History Modal */}
+                                <Dialog
+                                  open={showAmendmentComments === company.id}
+                                  onOpenChange={(open) =>
+                                    !open && setShowAmendmentComments(null)
+                                  }
+                                >
+                                  <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                                    <DialogHeader>
+                                      <DialogTitle>Amendment Request Details</DialogTitle>
+                                      <DialogDescription>
+                                        Review the admin comments and status history for{" "}
+                                        {company.name}
+                                      </DialogDescription>
+                                    </DialogHeader>
+
+                                    <div className="space-y-6">
+                                      {/* Admin Comments */}
+                                      {company.adminComments && (
+                                        <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                                          <h3 className="text-sm font-semibold text-orange-900 mb-3 flex items-center gap-2">
+                                            <AlertCircle className="w-4 h-4" />
+                                            Admin Comments
+                                          </h3>
+                                          <p className="text-sm text-orange-800 whitespace-pre-wrap">
+                                            {company.adminComments}
+                                          </p>
+                                        </div>
+                                      )}
+
+                                      {/* Status History */}
+                                      {company.statusHistory &&
+                                        company.statusHistory.length > 0 && (
+                                          <div className="space-y-3">
+                                            <h3 className="text-sm font-semibold flex items-center gap-2">
+                                              <Clock className="w-4 h-4" />
+                                              Status History
+                                            </h3>
+                                            <div className="space-y-2 pl-6 border-l-2 border-border">
+                                              {company.statusHistory
+                                                .slice()
+                                                .reverse()
+                                                .map((entry, idx) => (
+                                                  <div
+                                                    key={entry.id}
+                                                    className="relative pb-4"
+                                                  >
+                                                    <div className="absolute -left-[1.625rem] top-1 w-3 h-3 bg-primary rounded-full border-2 border-background" />
+                                                    <div>
+                                                      <p className="text-sm font-medium">
+                                                        {entry.fromStatus} →{" "}
+                                                        {entry.toStatus}
+                                                      </p>
+                                                      <p className="text-xs text-muted-foreground">
+                                                        {new Date(
+                                                          entry.changedDate,
+                                                        ).toLocaleString()}
+                                                      </p>
+                                                      {entry.notes && (
+                                                        <p className="text-xs text-foreground mt-1">
+                                                          {entry.notes}
+                                                        </p>
+                                                      )}
+                                                    </div>
+                                                  </div>
+                                                ))}
+                                            </div>
+                                          </div>
+                                        )}
+                                    </div>
+
+                                    {/* Action Buttons */}
+                                    <div className="flex gap-2 pt-6 border-t">
+                                      <Button
+                                        variant="outline"
+                                        className="flex-1"
+                                        onClick={() =>
+                                          setShowAmendmentComments(null)
+                                        }
+                                      >
+                                        Close
+                                      </Button>
+                                      <Button
+                                        className="gap-2 bg-accent hover:bg-accent/80 text-white flex-1"
+                                        onClick={() => {
+                                          setShowAmendmentComments(null);
+                                          setShowTransferForm(company.id);
+                                        }}
+                                      >
+                                        <Edit2 className="w-4 h-4" />
+                                        Make Amendments
+                                      </Button>
+                                    </div>
+                                  </DialogContent>
+                                </Dialog>
                               </div>
                             </div>
                           );
