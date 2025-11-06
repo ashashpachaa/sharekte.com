@@ -398,7 +398,8 @@ export function populateDemoAmendmentData(): void {
           changedDate: new Date().toISOString(),
           changedBy: "admin@sharekte.com",
           reason: "Additional information required",
-          notes: "We need clarifications on company information. Please review admin comments.",
+          notes:
+            "We need clarifications on company information. Please review admin comments.",
         },
       ];
     }

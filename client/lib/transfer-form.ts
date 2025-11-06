@@ -16,10 +16,14 @@ export function getAPIBaseURL(): string {
   return "";
 }
 
-export async function fetchExistingTransferForm(companyId: string): Promise<TransferFormData | null> {
+export async function fetchExistingTransferForm(
+  companyId: string,
+): Promise<TransferFormData | null> {
   try {
     const apiBaseURL = getAPIBaseURL();
-    const response = await fetch(`${apiBaseURL}/api/transfer-forms?companyId=${companyId}`);
+    const response = await fetch(
+      `${apiBaseURL}/api/transfer-forms?companyId=${companyId}`,
+    );
 
     if (!response.ok) {
       console.error("Failed to fetch transfer form:", response.statusText);

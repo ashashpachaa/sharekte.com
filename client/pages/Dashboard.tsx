@@ -425,32 +425,39 @@ export default function Dashboard() {
   useEffect(() => {
     const handleCompaniesUpdated = (e: Event) => {
       if (e instanceof CustomEvent) {
-        console.log("[Dashboard] Detected purchasedCompanies update from custom event");
+        console.log(
+          "[Dashboard] Detected purchasedCompanies update from custom event",
+        );
         const updatedCompanies = getPurchasedCompanies();
-        setPurchasedCompanies(updatedCompanies.map((uc) => ({
-          id: uc.id,
-          name: uc.name,
-          number: uc.number,
-          price: uc.price,
-          incorporationDate: uc.incorporationDate,
-          incorporationYear: uc.incorporationYear,
-          country: uc.country,
-          purchasedDate: uc.purchasedDate,
-          renewalDate: uc.renewalDate,
-          renewalFees: uc.renewalFees,
-          status: uc.status,
-          statusLabel: uc.statusLabel,
-          documents: uc.documents || [],
-          transferFormFilled: uc.transferFormFilled,
-          adminComments: uc.adminComments,
-          statusHistory: uc.statusHistory,
-          renewalStatus: uc.renewalStatus || "active",
-          renewalHistory: uc.renewalHistory || [],
-        })));
+        setPurchasedCompanies(
+          updatedCompanies.map((uc) => ({
+            id: uc.id,
+            name: uc.name,
+            number: uc.number,
+            price: uc.price,
+            incorporationDate: uc.incorporationDate,
+            incorporationYear: uc.incorporationYear,
+            country: uc.country,
+            purchasedDate: uc.purchasedDate,
+            renewalDate: uc.renewalDate,
+            renewalFees: uc.renewalFees,
+            status: uc.status,
+            statusLabel: uc.statusLabel,
+            documents: uc.documents || [],
+            transferFormFilled: uc.transferFormFilled,
+            adminComments: uc.adminComments,
+            statusHistory: uc.statusHistory,
+            renewalStatus: uc.renewalStatus || "active",
+            renewalHistory: uc.renewalHistory || [],
+          })),
+        );
       }
     };
 
-    window.addEventListener("purchasedCompaniesUpdated", handleCompaniesUpdated);
+    window.addEventListener(
+      "purchasedCompaniesUpdated",
+      handleCompaniesUpdated,
+    );
     // Also listen for storage changes (for when updates come from different tabs)
     window.addEventListener("storage", (e: StorageEvent) => {
       if (e.key === "purchasedCompanies") {
@@ -459,7 +466,10 @@ export default function Dashboard() {
     });
 
     return () => {
-      window.removeEventListener("purchasedCompaniesUpdated", handleCompaniesUpdated);
+      window.removeEventListener(
+        "purchasedCompaniesUpdated",
+        handleCompaniesUpdated,
+      );
       window.removeEventListener("storage", handleCompaniesUpdated as any);
     };
   }, []);
@@ -477,7 +487,7 @@ export default function Dashboard() {
           console.error(
             "[Dashboard] Failed to fetch orders:",
             response.status,
-            response.statusText
+            response.statusText,
           );
           return;
         }
@@ -523,9 +533,12 @@ export default function Dashboard() {
           error instanceof Error ? error.message : JSON.stringify(error);
         console.error(
           "[Dashboard] Error loading order documents:",
-          errorMessage
+          errorMessage,
         );
-        console.error("[Dashboard] Stack:", error instanceof Error ? error.stack : "N/A");
+        console.error(
+          "[Dashboard] Stack:",
+          error instanceof Error ? error.stack : "N/A",
+        );
         // Don't throw - silently fail so dashboard still works
       }
     };
@@ -534,7 +547,9 @@ export default function Dashboard() {
   }, []); // Run once on mount
 
   const [showTransferForm, setShowTransferForm] = useState<string | null>(null);
-  const [showAmendmentComments, setShowAmendmentComments] = useState<string | null>(null);
+  const [showAmendmentComments, setShowAmendmentComments] = useState<
+    string | null
+  >(null);
   const [formData, setFormData] = useState({
     directorName: "",
     directorEmail: "",
@@ -2310,12 +2325,18 @@ export default function Dashboard() {
                                   const daysRemaining = calculateDaysRemaining(
                                     company.renewalDate,
                                   );
-                                  const renewalStatus = calculateRenewalStatus(company.renewalDate);
-                                  const { isVisible, isEnabled } = getRenewalButtonState(company.renewalDate);
+                                  const renewalStatus = calculateRenewalStatus(
+                                    company.renewalDate,
+                                  );
+                                  const { isVisible, isEnabled } =
+                                    getRenewalButtonState(company.renewalDate);
 
                                   const handleRenewal = () => {
                                     renewCompany(company.id);
-                                    const newRenewalDate = calculateSmartRenewalDate(company.renewalDate);
+                                    const newRenewalDate =
+                                      calculateSmartRenewalDate(
+                                        company.renewalDate,
+                                      );
                                     setPurchasedCompanies((prev) =>
                                       prev.map((c) =>
                                         c.id === company.id
@@ -2341,10 +2362,12 @@ export default function Dashboard() {
                                             <AlertCircle className="w-4 h-4 text-yellow-600 flex-shrink-0 mt-0.5" />
                                             <div className="flex-1">
                                               <p className="text-xs font-semibold text-yellow-900 mb-1">
-                                                Renewal Required - {daysRemaining} days remaining
+                                                Renewal Required -{" "}
+                                                {daysRemaining} days remaining
                                               </p>
                                               <p className="text-xs text-yellow-800 leading-tight">
-                                                Renew now to maintain your company ownership
+                                                Renew now to maintain your
+                                                company ownership
                                               </p>
                                             </div>
                                           </div>
@@ -2366,10 +2389,14 @@ export default function Dashboard() {
                                             <AlertCircle className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
                                             <div className="flex-1">
                                               <p className="text-sm font-semibold text-orange-900 mb-1">
-                                                Expired - {Math.abs(daysRemaining)} days overdue
+                                                Expired -{" "}
+                                                {Math.abs(daysRemaining)} days
+                                                overdue
                                               </p>
                                               <p className="text-sm text-orange-800">
-                                                Your company ownership has expired. Renew immediately to prevent cancellation.
+                                                Your company ownership has
+                                                expired. Renew immediately to
+                                                prevent cancellation.
                                               </p>
                                             </div>
                                           </div>
@@ -2396,7 +2423,9 @@ export default function Dashboard() {
                                                 Ownership Cancelled
                                               </p>
                                               <p className="text-sm text-red-800">
-                                                Your company ownership has been cancelled. Renewal is no longer available.
+                                                Your company ownership has been
+                                                cancelled. Renewal is no longer
+                                                available.
                                               </p>
                                             </div>
                                           </div>
@@ -2410,10 +2439,12 @@ export default function Dashboard() {
                                             <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                                             <div className="flex-1">
                                               <p className="text-sm font-semibold text-green-900">
-                                                Active - {daysRemaining} days until renewal required
+                                                Active - {daysRemaining} days
+                                                until renewal required
                                               </p>
                                               <p className="text-sm text-green-800">
-                                                Your company is active and in good standing
+                                                Your company is active and in
+                                                good standing
                                               </p>
                                             </div>
                                           </div>
@@ -2822,10 +2853,12 @@ export default function Dashboard() {
                                 >
                                   <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                                     <DialogHeader>
-                                      <DialogTitle>Amendment Request Details</DialogTitle>
+                                      <DialogTitle>
+                                        Amendment Request Details
+                                      </DialogTitle>
                                       <DialogDescription>
-                                        Review the admin comments and status history for{" "}
-                                        {company.name}
+                                        Review the admin comments and status
+                                        history for {company.name}
                                       </DialogDescription>
                                     </DialogHeader>
 

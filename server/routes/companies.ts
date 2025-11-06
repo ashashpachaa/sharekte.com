@@ -30,7 +30,7 @@ function calculateExpiryDate(purchaseDate: string): string {
  */
 function calculateSmartRenewalDate(
   originalRenewalDate: string,
-  currentDate: Date = new Date()
+  currentDate: Date = new Date(),
 ): string {
   try {
     const original = new Date(originalRenewalDate);
@@ -1006,7 +1006,8 @@ export const renewCompany: RequestHandler = async (req, res) => {
     const record = await getResponse.json();
     const fields = record.fields;
     const incorporationDate = fields["Incorporate date"] || getTodayString();
-    const currentRenewalDate = fields["Renewal Date"] || calculateExpiryDate(getTodayString());
+    const currentRenewalDate =
+      fields["Renewal Date"] || calculateExpiryDate(getTodayString());
     const newRenewalDate = calculateSmartRenewalDate(currentRenewalDate);
 
     // Clear cache since we're updating

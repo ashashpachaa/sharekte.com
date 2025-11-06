@@ -1137,7 +1137,6 @@ export function CompanyTransferForm({
           </div>
         </CardContent>
       </Card>
-
     </div>
   );
 

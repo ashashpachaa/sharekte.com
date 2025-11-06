@@ -333,17 +333,23 @@ function initializeDemoForms() {
             id: "log_1",
             fromStatus: "under-review",
             toStatus: "amend-required",
-            changedDate: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
+            changedDate: new Date(
+              Date.now() - 3 * 60 * 60 * 1000,
+            ).toISOString(),
             changedBy: "admin",
-            notes: "Please provide detailed information about all shareholders. We need names, nationalities, and ownership percentages for each shareholder.",
+            notes:
+              "Please provide detailed information about all shareholders. We need names, nationalities, and ownership percentages for each shareholder.",
           },
           {
             id: "log_2",
             fromStatus: "amend-required",
             toStatus: "amend-required",
-            changedDate: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+            changedDate: new Date(
+              Date.now() - 2 * 60 * 60 * 1000,
+            ).toISOString(),
             changedBy: "admin",
-            notes: "Also, please update the company activities list. The current description is too vague. We need specific NACE codes and detailed business operations.",
+            notes:
+              "Also, please update the company activities list. The current description is too vague. We need specific NACE codes and detailed business operations.",
           },
         ],
       },
@@ -1210,10 +1216,7 @@ export const generatePDF: RequestHandler = async (req, res) => {
           waitUntil: "networkidle2",
         };
 
-        const pdfBuffer = await generatePdf(
-          { content: htmlContent },
-          options
-        );
+        const pdfBuffer = await generatePdf({ content: htmlContent }, options);
 
         console.log(
           "[generatePDF] ✓ PDF generated successfully, size:",
@@ -1237,7 +1240,7 @@ export const generatePDF: RequestHandler = async (req, res) => {
       } catch (pdfConvertError) {
         console.warn(
           "[generatePDF] PDF conversion failed, falling back to HTML:",
-          pdfConvertError
+          pdfConvertError,
         );
         // Fallback: send HTML for manual printing
         const filename = `transfer-form-${form.formId}.html`;
@@ -1249,7 +1252,7 @@ export const generatePDF: RequestHandler = async (req, res) => {
         res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         res.send(htmlContent);
         console.log(
-          "[generatePDF] ⚠ HTML sent as fallback (PDF conversion unavailable)"
+          "[generatePDF] ⚠ HTML sent as fallback (PDF conversion unavailable)",
         );
       }
     } catch (htmlError) {

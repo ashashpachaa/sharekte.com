@@ -1,6 +1,6 @@
 /**
  * Renewal System Utilities
- * 
+ *
  * Rules:
  * - Renewal Required: 15+ days remaining (days >= 15)
  * - Expired: 0 to -24 days (0 > days >= -24)
@@ -8,7 +8,11 @@
  * - Button visible/enabled: 15 to -25 days
  */
 
-export type RenewalStatus = "renewal-required" | "expired" | "cancelled" | "active";
+export type RenewalStatus =
+  | "renewal-required"
+  | "expired"
+  | "cancelled"
+  | "active";
 
 /**
  * Calculate days remaining until renewal date
@@ -37,7 +41,7 @@ export function calculateDaysRemaining(renewalDate: string): number {
  */
 export function calculateRenewalStatus(renewalDate: string): RenewalStatus {
   const daysRemaining = calculateDaysRemaining(renewalDate);
-  
+
   if (daysRemaining >= 15) {
     return "active";
   } else if (daysRemaining >= 0 && daysRemaining < 15) {
@@ -68,43 +72,43 @@ export function getRenewalButtonState(renewalDate: string): {
 
 /**
  * Calculate new renewal date that preserves original month/day
- * 
+ *
  * Example:
  * - Original: 21-9-2025 (renewal: 21-9-2026)
  * - Renewed on: 1-10-2026
  * - Next renewal: 21-9-2027 (keeps month/day, advances year)
- * 
+ *
  * @param originalRenewalDate The original renewal date (YYYY-MM-DD)
  * @param currentDate Current date for calculation (defaults to today)
  * @returns New renewal date in YYYY-MM-DD format
  */
 export function calculateSmartRenewalDate(
   originalRenewalDate: string,
-  currentDate: Date = new Date()
+  currentDate: Date = new Date(),
 ): string {
   try {
     const original = new Date(originalRenewalDate);
-    
+
     // Extract month and day from original renewal date
     const originalMonth = original.getMonth(); // 0-11
     const originalDay = original.getDate(); // 1-31
-    
+
     // Get current year
     const currentYear = currentDate.getFullYear();
-    
+
     // Create new date with same month/day but next year
     let newRenewalDate = new Date(currentYear + 1, originalMonth, originalDay);
-    
+
     // If the renewal date is in the past (before today), use the year after that
     if (newRenewalDate < currentDate) {
       newRenewalDate = new Date(currentYear + 2, originalMonth, originalDay);
     }
-    
+
     // Return in YYYY-MM-DD format
     const year = newRenewalDate.getFullYear();
     const month = String(newRenewalDate.getMonth() + 1).padStart(2, "0");
     const day = String(newRenewalDate.getDate()).padStart(2, "0");
-    
+
     return `${year}-${month}-${day}`;
   } catch (error) {
     console.error("Error calculating smart renewal date:", error);

@@ -174,7 +174,8 @@ export function TransferFormManagement({
         if (newStatus === "amend-required" && statusNotes) {
           try {
             // Update localStorage for purchased companies
-            const purchasedCompaniesStr = localStorage.getItem("purchasedCompanies");
+            const purchasedCompaniesStr =
+              localStorage.getItem("purchasedCompanies");
             if (purchasedCompaniesStr) {
               const purchasedCompanies = JSON.parse(purchasedCompaniesStr);
               const updatedCompanies = purchasedCompanies.map(
@@ -203,19 +204,21 @@ export function TransferFormManagement({
                     };
                   }
                   return company;
-                }
+                },
               );
               localStorage.setItem(
                 "purchasedCompanies",
-                JSON.stringify(updatedCompanies)
+                JSON.stringify(updatedCompanies),
               );
-              console.log("[TransferFormManagement] Updated purchasedCompanies in localStorage");
+              console.log(
+                "[TransferFormManagement] Updated purchasedCompanies in localStorage",
+              );
 
               // Dispatch custom event to notify Dashboard to refresh
               window.dispatchEvent(
                 new CustomEvent("purchasedCompaniesUpdated", {
                   detail: { updatedCompanies },
-                })
+                }),
               );
             }
           } catch (error) {
