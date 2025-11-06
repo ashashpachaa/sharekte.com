@@ -19,23 +19,110 @@ export interface SocialMediaSettings {
   updatedAt: string;
 }
 
-// Platform icon mapping (using Unicode symbols for common platforms)
+// Platform icon mapping (using Unicode symbols and emojis for all major platforms)
 export const SOCIAL_MEDIA_ICONS: Record<string, string> = {
-  Twitter: "𝕏",
-  "X (Twitter)": "𝕏",
-  Facebook: "f",
-  Instagram: "📷",
-  LinkedIn: "in",
-  YouTube: "▶",
-  TikTok: "🎵",
-  GitHub: "🐙",
-  Discord: "💬",
-  Telegram: "✈",
-  WhatsApp: "💬",
-  Pinterest: "P",
-  Snapchat: "👻",
-  Reddit: "🔥",
-  Twitch: "🎮",
+  // Main Social Networks
+  "Twitter (X)": "𝕏",
+  "X": "𝕏",
+  "Facebook": "f",
+  "Instagram": "📷",
+  "LinkedIn": "in",
+  "YouTube": "▶️",
+  "TikTok": "♪",
+  "Snapchat": "👻",
+  "Pinterest": "P",
+  "Reddit": "🔥",
+
+  // Tech & Developer
+  "GitHub": "🐙",
+  "GitLab": "🦊",
+  "Dev.to": "⚡",
+  "Medium": "📝",
+  "Hashnode": "#",
+  "Stack Overflow": "🏗️",
+
+  // Chat & Messaging
+  "Discord": "💬",
+  "Telegram": "✈️",
+  "WhatsApp": "💬",
+  "Signal": "🔐",
+  "WeChat": "🐉",
+  "Viber": "📱",
+
+  // Video & Streaming
+  "Twitch": "🎮",
+  "Vimeo": "▶️",
+  "Dailymotion": "▶️",
+  "Rumble": "🎬",
+
+  // Web3 & Crypto
+  "Discord Server": "💜",
+  "Telegram Channel": "✈️",
+  "OpenSea": "����",
+
+  // Blogs & Publishing
+  "Medium": "📝",
+  "Substack": "📧",
+  "Hashnode": "#",
+  "Dev.to": "⚡",
+  "Blogspot": "📰",
+
+  // Social Networks
+  "Mastodon": "🐘",
+  "Bluesky": "🌅",
+  "Threads": "📝",
+  "BeReal": "🔵",
+  "Nextdoor": "🏘️",
+
+  // Creative Platforms
+  "Behance": "🎨",
+  "Dribbble": "🎯",
+  "ArtStation": "🖌️",
+  "DeviantArt": "🎭",
+
+  // Professional
+  "Fiverr": "💼",
+  "Upwork": "💼",
+  "Freelancer": "💼",
+
+  // Contact Methods
+  "Email": "📧",
+  "Website": "🌐",
+  "Phone": "☎️",
+  "WhatsApp Business": "💬",
+
+  // Business
+  "Yelp": "⭐",
+  "Google Business": "🔵",
+  "Apple Maps": "🗺️",
+
+  // Podcasts
+  "Spotify": "🎵",
+  "Apple Podcasts": "🎧",
+  "Podbean": "🎙️",
+  "Anchor": "🎙️",
+
+  // Video Hosting
+  "Vimeo": "▶️",
+  "Loom": "📹",
+
+  // Live Streaming
+  "Mixer": "🎮",
+  "YouTube Live": "▶️",
+  "Facebook Live": "📺",
+
+  // Payment & Donations
+  "PayPal": "🅿️",
+  "Ko-fi": "☕",
+  "Patreon": "🎁",
+  "Stripe": "💳",
+  "Buy Me A Coffee": "☕",
+
+  // Community
+  "Community": "👥",
+  "Forum": "💬",
+  "Slack": "💜",
+  "Skype": "💙",
 };
 
 // Fetch all social media links
