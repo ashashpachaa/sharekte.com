@@ -25,13 +25,35 @@ interface SocialMediaSettings {
   updatedAt: string;
 }
 
-// In-memory storage
+// Platform icons map
+const PLATFORM_ICONS: Record<string, string> = {
+  "Twitter (X)": "𝕏",
+  "Facebook": "f",
+  "Instagram": "📷",
+  "LinkedIn": "in",
+  "YouTube": "▶️",
+  "TikTok": "♪",
+  "GitHub": "🐙",
+  "Discord": "💬",
+  "Telegram": "✈️",
+  "WhatsApp": "💬",
+  "Pinterest": "P",
+  "Snapchat": "👻",
+  "Reddit": "🔥",
+  "Twitch": "🎮",
+  "Medium": "📝",
+  "Email": "📧",
+  "Website": "🌐",
+  "Phone": "☎️",
+};
+
+// In-memory storage with comprehensive demo data
 let socialMediaSettings: SocialMediaSettings = {
   id: "global-settings",
   links: [
     {
       id: "1",
-      platform: "Twitter",
+      platform: "Twitter (X)",
       icon: "𝕏",
       url: "https://twitter.com/sharekte",
       displayText: "Follow us on Twitter",
@@ -59,6 +81,39 @@ let socialMediaSettings: SocialMediaSettings = {
       displayText: "Like us on Facebook",
       isActive: true,
       order: 3,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
+    {
+      id: "4",
+      platform: "Instagram",
+      icon: "📷",
+      url: "https://instagram.com/sharekte",
+      displayText: "Follow on Instagram",
+      isActive: true,
+      order: 4,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
+    {
+      id: "5",
+      platform: "YouTube",
+      icon: "▶️",
+      url: "https://youtube.com/@sharekte",
+      displayText: "Subscribe on YouTube",
+      isActive: true,
+      order: 5,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
+    {
+      id: "6",
+      platform: "Email",
+      icon: "📧",
+      url: "mailto:hello@sharekte.com",
+      displayText: "Contact us by email",
+      isActive: true,
+      order: 6,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     },
