@@ -299,6 +299,23 @@ export default function AdminDashboard() {
             </Button>
           </div>
 
+          {/* Wallet Management */}
+          <div className="bg-card border border-border/40 rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <Wallet className="w-5 h-5" />
+              Wallet Management
+            </h3>
+            <p className="text-muted-foreground text-sm mb-4">
+              Manage user wallet balances, view transactions, and generate reports
+            </p>
+            <Button
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+              asChild
+            >
+              <Link to="/admin/wallets">Manage Wallets</Link>
+            </Button>
+          </div>
+
           {/* System Settings */}
           <div className="bg-card border border-border/40 rounded-lg p-6">
             <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
