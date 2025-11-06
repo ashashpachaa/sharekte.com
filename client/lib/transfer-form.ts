@@ -16,6 +16,30 @@ export function getAPIBaseURL(): string {
   return "";
 }
 
+export async function fetchExistingTransferForm(companyId: string): Promise<TransferFormData | null> {
+  try {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/transfer-forms?companyId=${companyId}`);
+
+    if (!response.ok) {
+      console.error("Failed to fetch transfer form:", response.statusText);
+      return null;
+    }
+
+    const data = await response.json();
+
+    // Return the first form found for this company
+    if (Array.isArray(data) && data.length > 0) {
+      return data[0];
+    }
+
+    return null;
+  } catch (error) {
+    console.error("Error fetching transfer form:", error);
+    return null;
+  }
+}
+
 export type FormStatus =
   | "under-review"
   | "amend-required"
