@@ -1,0 +1,35 @@
+[
+  {
+    "id": "wallet_1",
+    "userId": "user_1",
+    "userEmail": "john@example.com",
+    "userName": "John Doe",
+    "balance": 5000,
+    "currency": "USD",
+    "status": "active",
+    "createdAt": "2025-11-06T21:41:44.493Z",
+    "updatedAt": "2025-11-06T21:41:44.493Z"
+  },
+  {
+    "id": "wallet_2",
+    "userId": "user_2",
+    "userEmail": "sarah@example.com",
+    "userName": "Sarah Smith",
+    "balance": 3500,
+    "currency": "AED",
+    "status": "active",
+    "createdAt": "2025-11-06T21:41:44.493Z",
+    "updatedAt": "2025-11-06T21:41:44.493Z"
+  },
+  {
+    "id": "wallet_3",
+    "userId": "user_3",
+    "userEmail": "ahmed@example.com",
+    "userName": "Ahmed Hassan",
+    "balance": 0,
+    "currency": "USD",
+    "status": "frozen",
+    "createdAt": "2025-11-06T21:41:44.493Z",
+    "updatedAt": "2025-11-06T21:41:44.493Z"
+  }
+]
