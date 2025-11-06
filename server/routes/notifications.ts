@@ -201,6 +201,189 @@ function escapeHtml(text: string): string {
 }
 
 /**
+ * Send order-related emails
+ */
+export async function sendOrderEmail(options: {
+  to: string;
+  eventType: string;
+  orderId: string;
+  customerName: string;
+  companyName: string;
+  amount?: string;
+  status?: string;
+  orderDate?: string;
+}) {
+  const transport = getTransporter();
+  if (!transport) {
+    console.log(
+      `[EMAIL LOG] Order Email: ${options.eventType} - ${options.customerName} (${options.to})`,
+    );
+    return;
+  }
+
+  const subjectMap: Record<string, string> = {
+    created: "Order Confirmation - Order #${orderId}",
+    "payment-received": "Payment Received - Order #${orderId}",
+    "status-changed": "Order Status Updated - Order #${orderId}",
+    completed: "Order Complete - Order #${orderId}",
+    cancelled: "Order Cancelled - Order #${orderId}",
+  };
+
+  const subject = (subjectMap[options.eventType] || "Order Update").replace(
+    "${orderId}",
+    options.orderId,
+  );
+
+  const messageMap: Record<string, string> = {
+    created: `Your order for ${options.companyName} has been confirmed. Order ID: ${options.orderId}`,
+    "payment-received": `Payment received for your order. Order ID: ${options.orderId}`,
+    "status-changed": `Your order status has been updated to: ${options.status}. Order ID: ${options.orderId}`,
+    completed: `Your order has been completed! Order ID: ${options.orderId}`,
+    cancelled: `Your order has been cancelled. Order ID: ${options.orderId}`,
+  };
+
+  const message = messageMap[options.eventType] || "Your order has been updated.";
+
+  const mailOptions = {
+    from: FROM_EMAIL,
+    to: [options.to, ADMIN_EMAIL],
+    subject,
+    html: buildEmailTemplate(subject, message, `order-${options.eventType}`, {
+      orderId: options.orderId,
+      customerName: options.customerName,
+      companyName: options.companyName,
+      amount: options.amount || "N/A",
+      status: options.status || "N/A",
+      orderDate: options.orderDate || new Date().toLocaleDateString(),
+    }),
+    text: message,
+  };
+
+  try {
+    await transport.sendMail(mailOptions);
+    console.log(`✓ Email sent: ${options.eventType} to ${options.to} + ${ADMIN_EMAIL}`);
+  } catch (error) {
+    console.error(
+      `✗ Failed to send order email (${options.eventType}):`,
+      error instanceof Error ? error.message : error,
+    );
+  }
+}
+
+/**
+ * Send transfer form status emails
+ */
+export async function sendTransferFormEmail(options: {
+  to: string;
+  eventType: string;
+  formId: string;
+  companyName: string;
+  status: string;
+  adminNotes?: string;
+}) {
+  const transport = getTransporter();
+  if (!transport) {
+    console.log(
+      `[EMAIL LOG] Transfer Form Email: ${options.eventType} - ${options.companyName} (${options.to})`,
+    );
+    return;
+  }
+
+  const subjectMap: Record<string, string> = {
+    submitted: "Transfer Form Submitted - ${companyName}",
+    "under-review": "Transfer Form Under Review - ${companyName}",
+    "amend-required": "Amendment Required - Transfer Form for ${companyName}",
+    "confirm-application": "Action Required - Transfer Form for ${companyName}",
+    "complete-transfer": "Transfer Complete - ${companyName}",
+    cancelled: "Transfer Cancelled - ${companyName}",
+  };
+
+  let subject = (subjectMap[options.eventType] || "Transfer Form Update").replace(
+    "${companyName}",
+    options.companyName,
+  );
+
+  const messageMap: Record<string, string> = {
+    submitted: `Your transfer form for ${options.companyName} has been submitted successfully.`,
+    "under-review": `Your transfer form for ${options.companyName} is now under review.`,
+    "amend-required": `Amendments are required for your transfer form for ${options.companyName}. Please review the admin notes.`,
+    "confirm-application": `Your transfer form for ${options.companyName} requires your confirmation.`,
+    "complete-transfer": `Your transfer for ${options.companyName} has been completed successfully!`,
+    cancelled: `Your transfer form for ${options.companyName} has been cancelled.`,
+  };
+
+  let message = messageMap[options.eventType] || "Your transfer form has been updated.";
+
+  const mailOptions = {
+    from: FROM_EMAIL,
+    to: [options.to, ADMIN_EMAIL],
+    subject,
+    html: buildEmailTemplate(subject, message, `transfer-form-${options.eventType}`, {
+      formId: options.formId,
+      companyName: options.companyName,
+      status: options.status,
+      adminNotes: options.adminNotes || "None",
+    }),
+    text: message,
+  };
+
+  try {
+    await transport.sendMail(mailOptions);
+    console.log(`✓ Email sent: ${options.eventType} to ${options.to} + ${ADMIN_EMAIL}`);
+  } catch (error) {
+    console.error(
+      `✗ Failed to send transfer form email (${options.eventType}):`,
+      error instanceof Error ? error.message : error,
+    );
+  }
+}
+
+/**
+ * Send invoice email
+ */
+export async function sendInvoiceEmail(options: {
+  to: string;
+  invoiceId: string;
+  customerName: string;
+  amount: string;
+  items?: string;
+  dueDate?: string;
+}) {
+  const transport = getTransporter();
+  if (!transport) {
+    console.log(`[EMAIL LOG] Invoice Email: ${options.invoiceId} (${options.to})`);
+    return;
+  }
+
+  const subject = `Invoice ${options.invoiceId} - Sharekte`;
+  const message = `Your invoice ${options.invoiceId} for ${options.amount} is now available.`;
+
+  const mailOptions = {
+    from: FROM_EMAIL,
+    to: [options.to, ADMIN_EMAIL],
+    subject,
+    html: buildEmailTemplate(subject, message, "invoice-created", {
+      invoiceId: options.invoiceId,
+      customerName: options.customerName,
+      amount: options.amount,
+      items: options.items || "N/A",
+      dueDate: options.dueDate || "N/A",
+    }),
+    text: message,
+  };
+
+  try {
+    await transport.sendMail(mailOptions);
+    console.log(`✓ Email sent: invoice to ${options.to} + ${ADMIN_EMAIL}`);
+  } catch (error) {
+    console.error(
+      `✗ Failed to send invoice email:`,
+      error instanceof Error ? error.message : error,
+    );
+  }
+}
+
+/**
  * Get notification history
  */
 export const getNotifications: RequestHandler = async (req, res) => {
