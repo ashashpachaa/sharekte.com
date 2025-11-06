@@ -479,7 +479,13 @@ export default function Dashboard() {
           }),
         );
       } catch (error) {
-        console.error("[Dashboard] Error loading order documents:", error);
+        const errorMessage =
+          error instanceof Error ? error.message : JSON.stringify(error);
+        console.error(
+          "[Dashboard] Error loading order documents:",
+          errorMessage
+        );
+        console.error("[Dashboard] Stack:", error instanceof Error ? error.stack : "N/A");
         // Don't throw - silently fail so dashboard still works
       }
     };
