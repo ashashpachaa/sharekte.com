@@ -107,6 +107,7 @@ import {
   updateSocialMediaLinkHandler,
   deleteSocialMediaLinkHandler,
   reorderSocialMediaLinksHandler,
+  getAvailablePlatformsHandler,
 } from "./routes/social-media";
 
 export function createServer() {
