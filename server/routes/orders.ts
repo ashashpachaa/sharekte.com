@@ -931,19 +931,8 @@ export const uploadOrderDocument: RequestHandler = async (req, res) => {
           },
           body: JSON.stringify({
             fields: {
-              documents: JSON.stringify(
-                updatedOrder.documents.map((d) => ({
-                  id: d.id,
-                  name: d.name,
-                  type: d.type,
-                  size: d.size,
-                  uploadedDate: d.uploadedDate,
-                  visibility: d.visibility,
-                })),
-              ),
               Status: "completed", // Sync the automatic status change to Airtable
               "Status Changed Date": new Date().toISOString(),
-              updatedAt: new Date().toISOString(),
             },
           }),
         });
