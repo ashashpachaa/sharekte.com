@@ -187,14 +187,11 @@ export async function reorderSocialMediaLinks(
 ): Promise<boolean> {
   try {
     const apiBaseURL = getAPIBaseURL();
-    const response = await fetch(
-      `${apiBaseURL}/api/social-media/reorder`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ links }),
-      },
-    );
+    const response = await fetch(`${apiBaseURL}/api/social-media/reorder`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ links }),
+    });
 
     return response.ok;
   } catch (error) {

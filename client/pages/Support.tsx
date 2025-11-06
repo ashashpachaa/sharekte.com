@@ -5,7 +5,13 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "sonner";
 import { useSEO, getPageSEOMetadata } from "@/lib/seo";
 import {
@@ -39,7 +45,7 @@ interface Resource {
 
 export default function Support() {
   const { i18n } = useTranslation();
-  const seoMetadata = getPageSEOMetadata('support', i18n.language);
+  const seoMetadata = getPageSEOMetadata("support", i18n.language);
   useSEO(seoMetadata, i18n.language);
 
   const [formData, setFormData] = useState({
@@ -156,7 +162,7 @@ export default function Support() {
   ];
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -195,7 +201,9 @@ export default function Support() {
         throw new Error("Failed to submit support request");
       }
 
-      toast.success("Support request submitted successfully! We'll get back to you soon.");
+      toast.success(
+        "Support request submitted successfully! We'll get back to you soon.",
+      );
       setFormData({
         fullName: "",
         email: "",
@@ -224,8 +232,9 @@ export default function Support() {
                 Support Center
               </h1>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Welcome to Sharekte Support. Our team is here to help you with company
-                transfers, renewals, document authentication, and technical inquiries.
+                Welcome to Sharekte Support. Our team is here to help you with
+                company transfers, renewals, document authentication, and
+                technical inquiries.
               </p>
             </div>
           </div>
@@ -264,44 +273,47 @@ export default function Support() {
                   return (
                     category.title.toLowerCase().includes(query) ||
                     category.topics.some((topic) =>
-                      topic.toLowerCase().includes(query)
+                      topic.toLowerCase().includes(query),
                     )
                   );
                 })
                 .map((category) => (
-                <div
-                  key={category.id}
-                  className="group border border-border/40 rounded-lg p-6 hover:shadow-lg hover:border-primary/50 transition-all duration-200 cursor-pointer"
-                >
                   <div
-                    className={`w-12 h-12 bg-gradient-to-br ${category.color} rounded-lg flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform`}
+                    key={category.id}
+                    className="group border border-border/40 rounded-lg p-6 hover:shadow-lg hover:border-primary/50 transition-all duration-200 cursor-pointer"
                   >
-                    {category.icon}
+                    <div
+                      className={`w-12 h-12 bg-gradient-to-br ${category.color} rounded-lg flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform`}
+                    >
+                      {category.icon}
+                    </div>
+
+                    <h3 className="text-lg font-semibold text-foreground mb-3">
+                      {category.title}
+                    </h3>
+
+                    <ul className="space-y-2 mb-4">
+                      {category.topics.map((topic, idx) => (
+                        <li
+                          key={idx}
+                          className="text-sm text-muted-foreground flex items-start gap-2"
+                        >
+                          <ChevronRight className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                          <span>{topic}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full justify-start text-primary hover:text-primary hover:bg-primary/10"
+                    >
+                      Learn More
+                      <ChevronRight className="w-4 h-4 ml-auto" />
+                    </Button>
                   </div>
-
-                  <h3 className="text-lg font-semibold text-foreground mb-3">
-                    {category.title}
-                  </h3>
-
-                  <ul className="space-y-2 mb-4">
-                    {category.topics.map((topic, idx) => (
-                      <li key={idx} className="text-sm text-muted-foreground flex items-start gap-2">
-                        <ChevronRight className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                        <span>{topic}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="w-full justify-start text-primary hover:text-primary hover:bg-primary/10"
-                  >
-                    Learn More
-                    <ChevronRight className="w-4 h-4 ml-auto" />
-                  </Button>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
         </section>
@@ -318,7 +330,10 @@ export default function Support() {
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="space-y-2">
-                    <label htmlFor="fullName" className="text-sm font-medium text-foreground">
+                    <label
+                      htmlFor="fullName"
+                      className="text-sm font-medium text-foreground"
+                    >
                       Full Name <span className="text-destructive">*</span>
                     </label>
                     <Input
@@ -332,7 +347,10 @@ export default function Support() {
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="email" className="text-sm font-medium text-foreground">
+                    <label
+                      htmlFor="email"
+                      className="text-sm font-medium text-foreground"
+                    >
                       Email Address <span className="text-destructive">*</span>
                     </label>
                     <Input
@@ -347,7 +365,10 @@ export default function Support() {
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="companyName" className="text-sm font-medium text-foreground">
+                    <label
+                      htmlFor="companyName"
+                      className="text-sm font-medium text-foreground"
+                    >
                       Company Name / Number
                     </label>
                     <Input
@@ -360,28 +381,48 @@ export default function Support() {
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="inquiryType" className="text-sm font-medium text-foreground">
+                    <label
+                      htmlFor="inquiryType"
+                      className="text-sm font-medium text-foreground"
+                    >
                       Inquiry Type
                     </label>
-                    <Select value={formData.inquiryType} onValueChange={handleSelectChange}>
+                    <Select
+                      value={formData.inquiryType}
+                      onValueChange={handleSelectChange}
+                    >
                       <SelectTrigger id="inquiryType">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="general">General Question</SelectItem>
-                        <SelectItem value="transfers">Company Transfers</SelectItem>
+                        <SelectItem value="general">
+                          General Question
+                        </SelectItem>
+                        <SelectItem value="transfers">
+                          Company Transfers
+                        </SelectItem>
                         <SelectItem value="renewals">Renewals</SelectItem>
                         <SelectItem value="documents">Documents</SelectItem>
-                        <SelectItem value="invoices">Invoices & Orders</SelectItem>
-                        <SelectItem value="account">Account & Security</SelectItem>
-                        <SelectItem value="technical">Technical Issue</SelectItem>
+                        <SelectItem value="invoices">
+                          Invoices & Orders
+                        </SelectItem>
+                        <SelectItem value="account">
+                          Account & Security
+                        </SelectItem>
+                        <SelectItem value="technical">
+                          Technical Issue
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="message" className="text-sm font-medium text-foreground">
-                      Message / Description <span className="text-destructive">*</span>
+                    <label
+                      htmlFor="message"
+                      className="text-sm font-medium text-foreground"
+                    >
+                      Message / Description{" "}
+                      <span className="text-destructive">*</span>
                     </label>
                     <Textarea
                       id="message"
@@ -475,8 +516,9 @@ export default function Support() {
                       Response Time
                     </h3>
                     <p className="text-muted-foreground text-sm">
-                      We typically respond to support requests within 24 hours during business days.
-                      For urgent matters, please contact us via WhatsApp or email.
+                      We typically respond to support requests within 24 hours
+                      during business days. For urgent matters, please contact
+                      us via WhatsApp or email.
                     </p>
                   </div>
                 </div>
@@ -522,28 +564,28 @@ export default function Support() {
                   );
                 })
                 .map((resource, idx) => (
-                <a
-                  key={idx}
-                  href="#"
-                  className="border border-border/40 rounded-lg p-6 hover:shadow-lg hover:border-primary/50 transition-all duration-200 group"
-                >
-                  <div className="flex items-start justify-between mb-4">
-                    <FileText className="w-6 h-6 text-primary" />
-                    <span className="text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full">
-                      {resource.type}
-                    </span>
-                  </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
-                    {resource.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    {resource.description}
-                  </p>
-                  <div className="flex items-center text-primary text-sm font-medium group-hover:gap-2 transition-all">
-                    Download <ChevronRight className="w-4 h-4 ml-1" />
-                  </div>
-                </a>
-              ))}
+                  <a
+                    key={idx}
+                    href="#"
+                    className="border border-border/40 rounded-lg p-6 hover:shadow-lg hover:border-primary/50 transition-all duration-200 group"
+                  >
+                    <div className="flex items-start justify-between mb-4">
+                      <FileText className="w-6 h-6 text-primary" />
+                      <span className="text-xs font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full">
+                        {resource.type}
+                      </span>
+                    </div>
+                    <h3 className="text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
+                      {resource.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      {resource.description}
+                    </p>
+                    <div className="flex items-center text-primary text-sm font-medium group-hover:gap-2 transition-all">
+                      Download <ChevronRight className="w-4 h-4 ml-1" />
+                    </div>
+                  </a>
+                ))}
             </div>
           </div>
         </section>

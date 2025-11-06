@@ -23,6 +23,7 @@ Your website now has a complete SEO infrastructure implemented. This guide expla
 ### 1. **Core SEO Files Created**
 
 #### `index.html` - Enhanced Meta Tags
+
 - ✅ Title tags with primary keywords
 - ✅ Meta descriptions (English, Arabic, Hindi)
 - ✅ Open Graph tags for social sharing
@@ -34,6 +35,7 @@ Your website now has a complete SEO infrastructure implemented. This guide expla
 - ✅ Organization schema
 
 #### `public/robots.txt`
+
 ```
 User-agent: *
 Allow: / (public pages)
@@ -43,6 +45,7 @@ Crawl-delay: 1
 ```
 
 #### `public/sitemap.xml`
+
 - Includes all main pages
 - Language variants (en, ar, hi)
 - Proper priority levels
@@ -50,6 +53,7 @@ Crawl-delay: 1
 - Change frequency hints
 
 #### `public/manifest.json`
+
 - PWA configuration
 - App name, description, icons
 - Screenshots for Android Chrome
@@ -58,6 +62,7 @@ Crawl-delay: 1
 ### 2. **SEO Utilities Created**
 
 #### `client/lib/seo.ts` - SEO Management System
+
 ```typescript
 // Features:
 - useSEO() hook for dynamic meta tags
@@ -69,6 +74,7 @@ Crawl-delay: 1
 ```
 
 #### `server/routes/seo.ts` - Backend SEO Routes
+
 ```
 GET /robots.txt - Robots.txt file
 GET /sitemap.xml - XML sitemap
@@ -80,11 +86,13 @@ GET /api/seo/status - SEO health check
 ### 3. **Page-Specific SEO**
 
 Pages updated with SEO hooks:
+
 - ✅ `client/pages/Index.tsx` - Homepage
 - ✅ `client/pages/Companies.tsx` - Companies directory
 - ✅ `client/pages/Support.tsx` - Support & services
 
 Each page automatically:
+
 - Updates title and meta tags
 - Manages canonical URLs
 - Handles hreflang alternates
@@ -101,23 +109,25 @@ Every page automatically includes:
 
 ```html
 <title>Unique, keyword-rich title (50-60 chars)</title>
-<meta name="description" content="...">
-<meta name="keywords" content="...">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="...">
+<meta name="description" content="..." />
+<meta name="keywords" content="..." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="..." />
 ```
 
 **Language Alternates:**
+
 ```html
-<link rel="alternate" hreflang="en" href="/en/...">
-<link rel="alternate" hreflang="ar" href="/ar/...">
-<link rel="alternate" hreflang="hi" href="/hi/...">
-<link rel="alternate" hreflang="x-default" href="/...">
+<link rel="alternate" hreflang="en" href="/en/..." />
+<link rel="alternate" hreflang="ar" href="/ar/..." />
+<link rel="alternate" hreflang="hi" href="/hi/..." />
+<link rel="alternate" hreflang="x-default" href="/..." />
 ```
 
 ### 2. **Structured Data (Schema.org)**
 
 Implemented schemas:
+
 - **Organization** - Company information
 - **LocalBusiness** - Contact details, hours
 - **WebSite** - Search action capability
@@ -126,6 +136,7 @@ Implemented schemas:
 - **Product** - Company listings (ready for enhancement)
 
 Example:
+
 ```json
 {
   "@context": "https://schema.org",
@@ -142,12 +153,14 @@ Example:
 ### 3. **Multilingual SEO**
 
 **Hreflang Implementation:**
+
 - Proper language attributes on HTML tags
 - Hreflang links for language variants
 - Self-referencing canonical tags
 - x-default fallback
 
 **Language Support:**
+
 - English (en)
 - Arabic (ar) - RTL layout
 - Hindi (hi) - LTR layout
@@ -155,6 +168,7 @@ Example:
 ### 4. **Sitemap & Crawlability**
 
 **Sitemap Features:**
+
 - All important pages included
 - Language variants listed
 - Priority levels (1.0 = highest)
@@ -162,6 +176,7 @@ Example:
 - Last modification dates
 
 **Priority Levels:**
+
 - Homepage: 1.0
 - Language variants: 0.9
 - Companies directory: 0.9
@@ -172,17 +187,20 @@ Example:
 ### 5. **Robots.txt Management**
 
 **Allows:**
+
 - ✅ Public pages
 - ✅ Language variants
 - ✅ Search actions
 
 **Disallows:**
+
 - ❌ Admin pages
 - ❌ API endpoints
 - ❌ Private areas
 - ❌ Sensitive files
 
 **Crawl Optimization:**
+
 ```
 Crawl-delay: 1 (second between requests)
 Request-rate: 30/10 (pages per 10 seconds)
@@ -195,6 +213,7 @@ Request-rate: 30/10 (pages per 10 seconds)
 ### English Keywords (64 total)
 
 **General (20):**
+
 - buy ready made company
 - buy established company
 - ready made companies for sale
@@ -217,6 +236,7 @@ Request-rate: 30/10 (pages per 10 seconds)
 - open international bank account
 
 **Country-Specific (12):**
+
 - buy UK company online
 - UK ready made company
 - Sweden ready made company
@@ -231,6 +251,7 @@ Request-rate: 30/10 (pages per 10 seconds)
 - Switzerland company setup
 
 **Service-Based (8):**
+
 - apostille and legalization
 - embassy attestation service
 - financial statements for company
@@ -334,17 +355,20 @@ NODE_ENV=production
 ### Testing SEO Implementation
 
 **Validate Robots.txt:**
+
 ```bash
 curl https://shareket.com/robots.txt
 ```
 
 **Validate Sitemap:**
+
 ```bash
 curl https://shareket.com/sitemap.xml
 ```
 
 **Check Meta Tags:**
 Open dev tools → Inspect HTML head → Verify:
+
 - ✅ Title tags
 - ✅ Meta description
 - ✅ Canonical URL
@@ -352,6 +376,7 @@ Open dev tools → Inspect HTML head → Verify:
 - ✅ Structured data
 
 **Validate Structured Data:**
+
 - Google Rich Results Test: https://search.google.com/test/rich-results
 - Schema.org Validator: https://validator.schema.org/
 
@@ -387,12 +412,17 @@ Open dev tools → Inspect HTML head → Verify:
 
 ```html
 <!-- Add to <head> -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=YOUR_GA_ID"></script>
+<script
+  async
+  src="https://www.googletagmanager.com/gtag/js?id=YOUR_GA_ID"
+></script>
 <script>
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'GA_ID');
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag("js", new Date());
+  gtag("config", "GA_ID");
 </script>
 ```
 
@@ -493,6 +523,7 @@ Open dev tools → Inspect HTML head → Verify:
 "Buy Ready Made Companies Online | Sharekte - Global Company Formation"
 
 **Alternative Ideas:**
+
 - "Buy UK, Swedish & US Companies Online | Sharekte.com"
 - "Ready-Made Companies for Sale | Global Business Setup | Sharekte"
 - "Apostille Services & Ready-Made Companies | Sharekte"
@@ -503,6 +534,7 @@ Open dev tools → Inspect HTML head → Verify:
 "Buy ready-made companies online with bank accounts. Start your international business remotely. Apostille, legalization & embassy attestation services."
 
 **Alternatives:**
+
 - "Get ready-made UK, Swedish & US companies with bank accounts. Business setup without traveling. Apostille & embassy attestation included."
 - "Ready-made companies for instant business setup. Apostille services, embassy attestation, financial reports & global expansion support."
 
@@ -513,12 +545,12 @@ Open dev tools → Inspect HTML head → Verify:
 <h1>Buy Ready-Made Companies Online - Start Your Global Business Today</h1>
 <h2>Why Choose Sharekte?</h2>
 <h2>Popular Countries</h2>
-  <h3>UK Companies</h3>
-  <h3>Swedish Companies</h3>
-  <h3>German Companies</h3>
+<h3>UK Companies</h3>
+<h3>Swedish Companies</h3>
+<h3>German Companies</h3>
 <h2>Our Services</h2>
-  <h3>Apostille Services</h3>
-  <h3>Embassy Attestation</h3>
+<h3>Apostille Services</h3>
+<h3>Embassy Attestation</h3>
 
 <!-- Companies Page -->
 <h1>Buy Ready-Made Companies - Directory</h1>
@@ -536,15 +568,16 @@ Open dev tools → Inspect HTML head → Verify:
 ## Performance Tips
 
 ### Image Optimization
+
 ```html
 <!-- Use WebP with fallback -->
 <picture>
-  <source srcset="/image.webp" type="image/webp">
-  <img src="/image.jpg" alt="Descriptive text with keywords">
+  <source srcset="/image.webp" type="image/webp" />
+  <img src="/image.jpg" alt="Descriptive text with keywords" />
 </picture>
 
 <!-- Lazy loading -->
-<img loading="lazy" src="..." alt="...">
+<img loading="lazy" src="..." alt="..." />
 ```
 
 ### Core Web Vitals Optimization
@@ -569,6 +602,7 @@ Open dev tools → Inspect HTML head → Verify:
 ## Monitoring Tools
 
 ### Free Tools
+
 - **Google Search Console** - Search performance, indexing
 - **Google Analytics 4** - Website traffic, user behavior
 - **Lighthouse** - Page speed, accessibility, SEO audit
@@ -577,6 +611,7 @@ Open dev tools → Inspect HTML head → Verify:
 - **Rich Results Test** - Structured data validation
 
 ### Paid Tools (Optional)
+
 - **Semrush** - Comprehensive SEO audit
 - **Ahrefs** - Backlink analysis, competitor research
 - **Moz** - Keyword research, ranking tracking
@@ -587,25 +622,26 @@ Open dev tools → Inspect HTML head → Verify:
 
 ## Summary of SEO Implementation
 
-| Component | Status | Details |
-|-----------|--------|---------|
-| Meta Tags | ✅ Implemented | Dynamic titles, descriptions, OG tags |
-| Sitemap | ✅ Implemented | XML sitemap with all pages |
-| Robots.txt | ✅ Implemented | Optimized for search engines |
-| Structured Data | ✅ Implemented | JSON-LD schemas for rich results |
-| Multilingual | ✅ Implemented | Hreflang tags for EN, AR, HI |
-| Keywords | ✅ Implemented | 96 keywords across 3 languages |
-| Mobile Friendly | ✅ Implemented | Responsive design |
-| SSL/HTTPS | ✅ Implemented | Secure by default |
-| PWA Manifest | ✅ Implemented | App installation support |
-| Breadcrumbs | ✅ Implemented | Navigation structure |
-| Analytics Ready | ✅ Ready | Setup instructions provided |
+| Component       | Status         | Details                               |
+| --------------- | -------------- | ------------------------------------- |
+| Meta Tags       | ✅ Implemented | Dynamic titles, descriptions, OG tags |
+| Sitemap         | ✅ Implemented | XML sitemap with all pages            |
+| Robots.txt      | ✅ Implemented | Optimized for search engines          |
+| Structured Data | ✅ Implemented | JSON-LD schemas for rich results      |
+| Multilingual    | ✅ Implemented | Hreflang tags for EN, AR, HI          |
+| Keywords        | ✅ Implemented | 96 keywords across 3 languages        |
+| Mobile Friendly | ✅ Implemented | Responsive design                     |
+| SSL/HTTPS       | ✅ Implemented | Secure by default                     |
+| PWA Manifest    | ✅ Implemented | App installation support              |
+| Breadcrumbs     | ✅ Implemented | Navigation structure                  |
+| Analytics Ready | ✅ Ready       | Setup instructions provided           |
 
 ---
 
 ## Quick Reference
 
 ### Key URLs
+
 - Homepage: `https://shareket.com/`
 - Companies: `https://shareket.com/companies`
 - Support: `https://shareket.com/support`
@@ -615,11 +651,13 @@ Open dev tools → Inspect HTML head → Verify:
 - SEO Status: `https://shareket.com/api/seo/status`
 
 ### Language Variants
+
 - English: `https://shareket.com/`
 - Arabic: `https://shareket.com/ar/`
 - Hindi: `https://shareket.com/hi/`
 
 ### Admin/Monitoring
+
 - Google Search Console: https://search.google.com/search-console
 - Google Analytics: https://analytics.google.com
 - Bing Webmaster Tools: https://www.bing.com/webmasters

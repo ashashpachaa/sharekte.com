@@ -52,7 +52,7 @@ type ViewMode = "grid" | "table";
 
 export default function Companies() {
   const { i18n } = useTranslation();
-  const seoMetadata = getPageSEOMetadata('companies', i18n.language);
+  const seoMetadata = getPageSEOMetadata("companies", i18n.language);
   useSEO(seoMetadata, i18n.language);
 
   const [companies, setCompanies] = useState<CompanyData[]>([]);
@@ -65,7 +65,7 @@ export default function Companies() {
   const [sortField, setSortField] = useState<SortField>("name");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
   const [selectedCompany, setSelectedCompany] = useState<CompanyData | null>(
-    null
+    null,
   );
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -112,7 +112,7 @@ export default function Companies() {
 
       // Extract unique countries for filter
       const uniqueCountries = Array.from(
-        new Set(data.map((c) => c.country))
+        new Set(data.map((c) => c.country)),
       ).sort();
       setCountries(uniqueCountries);
     } catch (error) {
@@ -174,9 +174,7 @@ export default function Companies() {
       });
       if (response.ok) {
         const updated = await response.json();
-        setCompanies(
-          companies.map((c) => (c.id === id ? updated : c))
-        );
+        setCompanies(companies.map((c) => (c.id === id ? updated : c)));
         toast.success("Company renewed successfully");
       }
     } catch (error) {
@@ -194,9 +192,7 @@ export default function Companies() {
       });
       if (response.ok) {
         const updated = await response.json();
-        setCompanies(
-          companies.map((c) => (c.id === id ? updated : c))
-        );
+        setCompanies(companies.map((c) => (c.id === id ? updated : c)));
         toast.success("Status updated");
       }
     } catch (error) {
@@ -223,7 +219,7 @@ export default function Companies() {
         body: JSON.stringify({
           ...newCompany,
           incorporationYear: new Date(
-            newCompany.incorporationDate
+            newCompany.incorporationDate,
           ).getFullYear(),
         }),
       });
@@ -290,7 +286,9 @@ export default function Companies() {
           </div>
           <div className="bg-white p-4 rounded-lg border">
             <div className="text-xs text-gray-600 font-medium">Expired</div>
-            <div className="text-2xl font-bold text-red-600">{stats.expired}</div>
+            <div className="text-2xl font-bold text-red-600">
+              {stats.expired}
+            </div>
           </div>
           <div className="bg-white p-4 rounded-lg border">
             <div className="text-xs text-gray-600 font-medium">Available</div>
@@ -299,7 +297,9 @@ export default function Companies() {
             </div>
           </div>
           <div className="bg-white p-4 rounded-lg border">
-            <div className="text-xs text-gray-600 font-medium">Renewing Soon</div>
+            <div className="text-xs text-gray-600 font-medium">
+              Renewing Soon
+            </div>
             <div className="text-2xl font-bold text-yellow-600">
               {stats.renewingSoon}
             </div>
@@ -415,15 +415,17 @@ export default function Companies() {
                   }
                 }
                 return pageNum <= totalPages ? pageNum : null;
-              }).filter((pageNum) => pageNum !== null).map((pageNum) => (
-                <Button
-                  key={`page-${pageNum}`}
-                  variant={currentPage === pageNum ? "default" : "outline"}
-                  onClick={() => setCurrentPage(pageNum as number)}
-                >
-                  {pageNum}
-                </Button>
-              ))}
+              })
+                .filter((pageNum) => pageNum !== null)
+                .map((pageNum) => (
+                  <Button
+                    key={`page-${pageNum}`}
+                    variant={currentPage === pageNum ? "default" : "outline"}
+                    onClick={() => setCurrentPage(pageNum as number)}
+                  >
+                    {pageNum}
+                  </Button>
+                ))}
               <Button
                 variant="outline"
                 onClick={() =>
@@ -494,15 +496,20 @@ export default function Companies() {
               </div>
               <div>
                 <Label htmlFor="type">Company Type</Label>
-                <Select value={newCompany.type} onValueChange={(value: any) =>
-                  setNewCompany({ ...newCompany, type: value })
-                }>
+                <Select
+                  value={newCompany.type}
+                  onValueChange={(value: any) =>
+                    setNewCompany({ ...newCompany, type: value })
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="LTD">Limited Company (LTD)</SelectItem>
-                    <SelectItem value="LLC">Limited Liability Company (LLC)</SelectItem>
+                    <SelectItem value="LLC">
+                      Limited Liability Company (LLC)
+                    </SelectItem>
                     <SelectItem value="INC">Incorporated (INC)</SelectItem>
                     <SelectItem value="AB">Swedish Company (AB)</SelectItem>
                     <SelectItem value="FZCO">Free Zone (FZCO)</SelectItem>
@@ -510,8 +517,12 @@ export default function Companies() {
                     <SelectItem value="SARL">French Limited (SARL)</SelectItem>
                     <SelectItem value="BV">Dutch Limited (BV)</SelectItem>
                     <SelectItem value="OOO">Russian Limited (OOO)</SelectItem>
-                    <SelectItem value="Ltd Liability Partnership">Ltd Liability Partnership</SelectItem>
-                    <SelectItem value="Sole Proprietor">Sole Proprietor</SelectItem>
+                    <SelectItem value="Ltd Liability Partnership">
+                      Ltd Liability Partnership
+                    </SelectItem>
+                    <SelectItem value="Sole Proprietor">
+                      Sole Proprietor
+                    </SelectItem>
                     <SelectItem value="Other">Other</SelectItem>
                   </SelectContent>
                 </Select>
@@ -621,15 +632,10 @@ export default function Companies() {
           </div>
 
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setShowAddModal(false)}
-            >
+            <Button variant="outline" onClick={() => setShowAddModal(false)}>
               Cancel
             </Button>
-            <Button onClick={handleAddCompany}>
-              Add Company
-            </Button>
+            <Button onClick={handleAddCompany}>Add Company</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -643,7 +649,7 @@ export default function Companies() {
           onOpenChange={setShowDetailsModal}
           onSave={(updated) => {
             setCompanies(
-              companies.map((c) => (c.id === updated.id ? updated : c))
+              companies.map((c) => (c.id === updated.id ? updated : c)),
             );
             setShowDetailsModal(false);
           }}

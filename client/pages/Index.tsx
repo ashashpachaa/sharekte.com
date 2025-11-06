@@ -20,7 +20,7 @@ import {
 
 export default function Index() {
   const { t, i18n } = useTranslation();
-  const seoMetadata = getPageSEOMetadata('home', i18n.language);
+  const seoMetadata = getPageSEOMetadata("home", i18n.language);
   useSEO(seoMetadata, i18n.language);
 
   const featuredCompanies = [

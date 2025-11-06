@@ -47,10 +47,7 @@
       "form_factor": "wide"
     }
   ],
-  "categories": [
-    "business",
-    "finance"
-  ],
+  "categories": ["business", "finance"],
   "screenshots_min_width": 540,
   "share_target": {
     "action": "/share",
@@ -63,10 +60,7 @@
       "files": [
         {
           "name": "media",
-          "accept": [
-            "image/*",
-            "video/*"
-          ]
+          "accept": ["image/*", "video/*"]
         }
       ]
     }
