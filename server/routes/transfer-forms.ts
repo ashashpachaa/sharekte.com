@@ -650,6 +650,24 @@ export const createTransferForm: RequestHandler = async (req, res) => {
       );
     }
 
+    // Send transfer form submission email (async - don't wait for response)
+    (async () => {
+      try {
+        if (newForm.buyerEmail) {
+          await sendTransferFormEmail({
+            to: newForm.buyerEmail,
+            eventType: "submitted",
+            formId: newForm.formId || newForm.id || "unknown",
+            companyName: newForm.companyName || "Unknown Company",
+            status: "submitted",
+          });
+        }
+      } catch (error) {
+        console.error("Error sending transfer form submission email:", error);
+        // Don't fail the request if notification fails
+      }
+    })();
+
     res.status(201).json(newForm);
   } catch (error) {
     console.error("Error creating form:", error);
