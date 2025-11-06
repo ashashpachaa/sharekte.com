@@ -276,26 +276,6 @@ export function createEmptyForm(
   };
 }
 
-// Fetch existing transfer form by company ID (for amendments)
-export async function fetchExistingTransferForm(
-  companyId: string,
-): Promise<TransferFormData | null> {
-  try {
-    const apiBaseURL = getAPIBaseURL();
-    const response = await fetch(
-      `${apiBaseURL}/api/transfer-forms?companyId=${companyId}`,
-    );
-    if (response.ok) {
-      const data = await response.json();
-      // Return the first form (most recent)
-      return data[0] || null;
-    }
-  } catch (error) {
-    console.error("Error fetching existing transfer form:", error);
-  }
-  return null;
-}
-
 // Get amendment comments for a company
 export async function getAmendmentComments(
   companyId: string,
