@@ -11,12 +11,14 @@ All features have been implemented and demo data has been created. Follow these 
 **URL:** `http://localhost:8081/`
 
 **Login Credentials:**
+
 ```
 Email: company@domainostartup.com
 Password: Ash@shpachaa2010
 ```
 
 **What happens:**
+
 - ✅ You log in successfully
 - ✅ Demo companies are automatically created in localStorage
 - ✅ Transfer form data is initialized
@@ -27,6 +29,7 @@ Password: Ash@shpachaa2010
 ## 📊 Step 2: Navigate to Dashboard & "My Companies"
 
 After login:
+
 1. Click **"Dashboard"** from the top menu (or should be default redirect)
 2. Make sure you're in the **"My Companies"** tab
 3. You'll see 3 demo companies:
@@ -152,18 +155,21 @@ A dialog will open showing ALL status changes:
 ## 🎨 What You're Looking At
 
 ### **Amendment Alert Box (Red Section)**
+
 - **Purpose:** Immediately shows the user what needs to be fixed
 - **Content:** Most recent admin comment
 - **Styling:** Red background (#EF5350) with clear icon and heading
 - **Auto-hide:** Only appears when status = "amend-required"
 
 ### **Admin Comments Dialog**
+
 - **Purpose:** Show the full text of the most recent comment
 - **Content:** The complete comment without line-clamping
 - **Trigger:** "View Admin Comments" button
 - **Scrollable:** If the comment is very long
 
 ### **Status History Dialog**
+
 - **Purpose:** Show complete audit trail of all status changes
 - **Content:** Each status change with full details:
   - What changed (from → to status)
@@ -212,6 +218,7 @@ USER SEES:
 ### **Company: Nordic Business AB**
 
 **Basic Info:**
+
 - ID: `comp_2`
 - Number: `87654321`
 - Country: Sweden
@@ -221,26 +228,31 @@ USER SEES:
 - Renewal Date: ~240 days from now
 
 **Amendment Status:**
+
 - Status: `amend-required`
 - Requested: 3 hours ago
 
 **Comments (2 total):**
 
 **Comment #1** (Most Recent - 3 hours ago):
+
 ```
-"Please provide detailed information about all shareholders. 
-We need names, nationalities, and ownership percentages for 
+"Please provide detailed information about all shareholders.
+We need names, nationalities, and ownership percentages for
 each shareholder."
 ```
+
 - By: admin
 - Time: Jan 04, 2025, 02:30 AM
 
 **Comment #2** (2 hours ago):
+
 ```
-"Also, please update the company activities list. The current 
-description is too vague. We need specific NACE codes and 
+"Also, please update the company activities list. The current
+description is too vague. We need specific NACE codes and
 detailed business operations."
 ```
+
 - By: admin
 - Time: Jan 04, 2025, 01:30 AM
 

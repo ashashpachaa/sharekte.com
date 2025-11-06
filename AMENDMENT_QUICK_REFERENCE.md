@@ -5,16 +5,19 @@
 ### **As a User in Dashboard**
 
 **Step 1: Login to Dashboard**
+
 ```
 URL: http://localhost:8080/dashboard
 Email: Any user email (e.g., user@example.com)
 ```
 
 **Step 2: Find "My Companies" Section**
+
 - Look for the company list on the dashboard
 - Companies are displayed as cards
 
 **Step 3: Locate Company Card with Amendment Alert**
+
 ```
 ┌────────────────────────────────────────┐
 │     NORDIC BUSINESS AB                 │  ← Company Name
@@ -49,13 +52,13 @@ Email: Any user email (e.g., user@example.com)
 
 ### **Red Alert Box Contents:**
 
-| Element | Description | Example |
-|---------|-------------|---------|
-| **Icon** | ⚠️ Orange triangle warning icon | Visual indicator |
-| **Heading** | "Amendments Required" | Bold, red text |
-| **Comment** | Most recent admin comment (max 2 lines) | "Please provide detailed information..." |
-| **Timestamp** | When comment was posted | "Jan 04, 2025, 02:30 PM" |
-| **Link** | "View N amendments" (if multiple) | Click to see all amendments |
+| Element       | Description                             | Example                                  |
+| ------------- | --------------------------------------- | ---------------------------------------- |
+| **Icon**      | ⚠️ Orange triangle warning icon         | Visual indicator                         |
+| **Heading**   | "Amendments Required"                   | Bold, red text                           |
+| **Comment**   | Most recent admin comment (max 2 lines) | "Please provide detailed information..." |
+| **Timestamp** | When comment was posted                 | "Jan 04, 2025, 02:30 PM"                 |
+| **Link**      | "View N amendments" (if multiple)       | Click to see all amendments              |
 
 ---
 
@@ -99,6 +102,7 @@ A modal dialog opens:
 ```
 
 ### **What You See:**
+
 - ✅ All amendment requests numbered (#1, #2, etc.)
 - ✅ Full comment text (no character limit)
 - ✅ Complete timestamp with seconds
@@ -148,6 +152,7 @@ A modal dialog opens:
 ### **For Admin User:**
 
 **Step 1: Login to Admin Dashboard**
+
 ```
 URL: /admin/login
 Email: admin@sharekte.com
@@ -155,25 +160,29 @@ Password: Ash@shpachaa2010
 ```
 
 **Step 2: Navigate to Transfer Forms**
+
 ```
 Path: Admin Dashboard → Admin Orders page → Transfer Forms tab
 ```
 
 **Step 3: Find Form**
+
 - Look for "Nordic Business AB" or desired company
 - Click "View" button
 
 **Step 4: Change Status to "Amend Required"**
+
 ```
 Form Details Modal opens:
 ├─ Status Dropdown: Select "Amend Required"
 └─ Notes Field: Write comment
-   Example: "Please provide detailed information about all 
-            shareholders. We need names, nationalities, and 
+   Example: "Please provide detailed information about all
+            shareholders. We need names, nationalities, and
             ownership percentages for each shareholder."
 ```
 
 **Step 5: Save Changes**
+
 ```
 Click "Save" button
 → Comment automatically saved to database
@@ -190,7 +199,7 @@ Click "Save" button
 ADMIN SIDE                          USER SIDE
 ═════════════════════════════════════════════════════════
 
-1. Admin logs in                 
+1. Admin logs in
    ↓
 2. Views transfer form
    ↓
@@ -198,7 +207,7 @@ ADMIN SIDE                          USER SIDE
    "Amend Required"                  on company card
    ↓
 4. Writes comment:                → 5. Can read the comment
-   "Please provide info..."           
+   "Please provide info..."
    ↓
 5. Saves changes                  → 6. Comment persists
    ↓
@@ -220,13 +229,13 @@ ADMIN SIDE                          USER SIDE
 
 ### **Frontend Components:**
 
-| Component | Location | Purpose |
-|-----------|----------|---------|
-| **CompanyCard** | `client/components/CompanyCard.tsx` | Displays red alert with amendment |
-| **StatusHistoryTimeline** | `client/components/StatusHistoryTimeline.tsx` | Shows status change history |
-| **Dialog/Modal** | Radix UI | Amendment history modal |
-| **Alert Box** | Custom CSS | Red alert styling for amendments |
-| **Badge** | Radix UI | Status badge display |
+| Component                 | Location                                      | Purpose                           |
+| ------------------------- | --------------------------------------------- | --------------------------------- |
+| **CompanyCard**           | `client/components/CompanyCard.tsx`           | Displays red alert with amendment |
+| **StatusHistoryTimeline** | `client/components/StatusHistoryTimeline.tsx` | Shows status change history       |
+| **Dialog/Modal**          | Radix UI                                      | Amendment history modal           |
+| **Alert Box**             | Custom CSS                                    | Red alert styling for amendments  |
+| **Badge**                 | Radix UI                                      | Status badge display              |
 
 ---
 
@@ -279,9 +288,10 @@ ADMIN SIDE                          USER SIDE
 
 ## 🚀 Ready to Demo!
 
-All features are **fully implemented and working**. 
+All features are **fully implemented and working**.
 
 To see it in action:
+
 1. Login to Dashboard
 2. Look for "Nordic Business AB" in My Companies
 3. See the red amendment alert box

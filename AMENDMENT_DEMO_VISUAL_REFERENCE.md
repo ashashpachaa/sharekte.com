@@ -5,7 +5,7 @@
 ✅ **Demo Company:** Nordic Business AB  
 ✅ **Status:** Amend Required  
 ✅ **Location:** Dashboard → My Companies tab  
-✅ **What You'll See:** Red alert with amendment comments + full history  
+✅ **What You'll See:** Red alert with amendment comments + full history
 
 ---
 
@@ -73,6 +73,7 @@
 ```
 
 **This shows:**
+
 - Full text of the most recent amendment request
 - Clear orange/red background for visibility
 - Can read the complete requirements
@@ -114,6 +115,7 @@
 ```
 
 **This shows:**
+
 - All status changes in order (newest first)
 - Complete timestamp for each change
 - Full comment/reason for each change
@@ -124,15 +126,15 @@
 
 ## 🎨 Color Scheme Reference
 
-| Element | Color | Purpose |
-|---------|-------|---------|
-| Amendment Alert | **Red (#EF5350)** | Draw attention to required action |
-| Alert Icon | Red | Warning indicator |
-| Alert Text | Dark Red | Strong contrast for readability |
-| Status Badge | Red | Shows "Amend-Required" status |
-| Buttons | Gray Outline | Secondary action, not primary |
-| Comments Box | Orange/Red | Similar styling to amendment alert |
-| Timestamps | Gray | Secondary information |
+| Element         | Color             | Purpose                            |
+| --------------- | ----------------- | ---------------------------------- |
+| Amendment Alert | **Red (#EF5350)** | Draw attention to required action  |
+| Alert Icon      | Red               | Warning indicator                  |
+| Alert Text      | Dark Red          | Strong contrast for readability    |
+| Status Badge    | Red               | Shows "Amend-Required" status      |
+| Buttons         | Gray Outline      | Secondary action, not primary      |
+| Comments Box    | Orange/Red        | Similar styling to amendment alert |
+| Timestamps      | Gray              | Secondary information              |
 
 ---
 
@@ -193,6 +195,7 @@ MOBILE (1 column):
 ```
 
 **Elements:**
+
 1. **Icon** - ⚠️ Warning triangle (orange/red)
 2. **Heading** - "AMENDMENTS REQUIRED" (bold, red)
 3. **Comment** - Most recent amendment request (clamped to 2 lines)
@@ -240,6 +243,7 @@ NOW KNOWS EXACTLY WHAT TO DO
 ## 🧪 Testing Instructions
 
 **Step 1: Login**
+
 ```
 URL: http://localhost:8081
 Email: company@domainostartup.com
@@ -247,19 +251,23 @@ Password: Ash@shpachaa2010
 ```
 
 **Step 2: Navigate**
+
 - Dashboard tab → My Companies
 
 **Step 3: Find Card**
-- Look for "Nordic Business AB" 
+
+- Look for "Nordic Business AB"
 - Should be in a grid of 3 companies
 
 **Step 4: Verify Elements**
+
 - ✅ Red status badge visible
 - ✅ Red amendment alert box visible
 - ✅ Comment text readable
 - ✅ Timestamp shows date and time
 
 **Step 5: Test Buttons**
+
 - ✅ "View Admin Comments" button works
 - ✅ Comments dialog opens
 - ✅ "View Status History (2)" button works
@@ -285,6 +293,7 @@ You'll know everything is working when:
 ## 🚀 Demo is Ready!
 
 Everything has been set up. You're ready to:
+
 1. Log in
 2. Navigate to Dashboard
 3. See amendment comments in real-time
@@ -298,6 +307,7 @@ Everything has been set up. You're ready to:
 ## 📞 If Something's Not Working
 
 Check:
+
 - [ ] Dev server is running (should see "ready in..." message)
 - [ ] Logged in with correct email and password
 - [ ] In Dashboard tab, not other pages

@@ -30,8 +30,12 @@ export function initializeDemoPurchasedCompanies(userEmail: string): void {
       incorporationDate: "2019-06-20",
       incorporationYear: "2019",
       country: "Sweden",
-      purchasedDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-      renewalDate: new Date(Date.now() + 240 * 24 * 60 * 60 * 1000).toISOString(),
+      purchasedDate: new Date(
+        Date.now() - 5 * 24 * 60 * 60 * 1000,
+      ).toISOString(),
+      renewalDate: new Date(
+        Date.now() + 240 * 24 * 60 * 60 * 1000,
+      ).toISOString(),
       renewalFees: 1250,
       status: "amend-required",
       statusLabel: "Amendment Required",
@@ -57,7 +61,8 @@ export function initializeDemoPurchasedCompanies(userEmail: string): void {
           toStatus: "amend-required",
           changedDate: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
           changedBy: "admin",
-          notes: "Please provide detailed information about all shareholders. We need names, nationalities, and ownership percentages for each shareholder.",
+          notes:
+            "Please provide detailed information about all shareholders. We need names, nationalities, and ownership percentages for each shareholder.",
         },
         {
           id: "log_2",
@@ -65,13 +70,16 @@ export function initializeDemoPurchasedCompanies(userEmail: string): void {
           toStatus: "amend-required",
           changedDate: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
           changedBy: "admin",
-          notes: "Also, please update the company activities list. The current description is too vague. We need specific NACE codes and detailed business operations.",
+          notes:
+            "Also, please update the company activities list. The current description is too vague. We need specific NACE codes and detailed business operations.",
         },
       ],
       renewalHistory: [
         {
           id: "renewal_1",
-          renewalDate: new Date(Date.now() + 240 * 24 * 60 * 60 * 1000).toISOString(),
+          renewalDate: new Date(
+            Date.now() + 240 * 24 * 60 * 60 * 1000,
+          ).toISOString(),
           renewedDate: new Date().toISOString(),
           isLate: false,
           daysLate: 0,
@@ -87,8 +95,12 @@ export function initializeDemoPurchasedCompanies(userEmail: string): void {
       incorporationDate: "2020-01-15",
       incorporationYear: "2020",
       country: "UK",
-      purchasedDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-      renewalDate: new Date(Date.now() + 150 * 24 * 60 * 60 * 1000).toISOString(),
+      purchasedDate: new Date(
+        Date.now() - 30 * 24 * 60 * 60 * 1000,
+      ).toISOString(),
+      renewalDate: new Date(
+        Date.now() + 150 * 24 * 60 * 60 * 1000,
+      ).toISOString(),
       renewalFees: 800,
       status: "completed",
       statusLabel: "Active",
@@ -106,8 +118,12 @@ export function initializeDemoPurchasedCompanies(userEmail: string): void {
       incorporationDate: "2021-03-10",
       incorporationYear: "2021",
       country: "UAE",
-      purchasedDate: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-      renewalDate: new Date(Date.now() + 300 * 24 * 60 * 60 * 1000).toISOString(),
+      purchasedDate: new Date(
+        Date.now() - 10 * 24 * 60 * 60 * 1000,
+      ).toISOString(),
+      renewalDate: new Date(
+        Date.now() + 300 * 24 * 60 * 60 * 1000,
+      ).toISOString(),
       renewalFees: 1500,
       status: "pending-transfer",
       statusLabel: "Pending Transfer",

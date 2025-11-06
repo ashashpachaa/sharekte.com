@@ -81,18 +81,18 @@
 
 ```typescript
 export async function getAmendmentComments(
-  companyName: string
+  companyName: string,
 ): Promise<FormComment[]> {
   try {
     const apiUrl = getAPIBaseURL();
     const response = await fetch(
       `${apiUrl}/api/transfer-forms?companyName=${encodeURIComponent(
-        companyName
+        companyName,
       )}`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
-      }
+      },
     );
 
     if (!response.ok) return [];
@@ -105,8 +105,7 @@ export async function getAmendmentComments(
       .filter((c: FormComment) => c.isAdminOnly)
       .sort(
         (a: FormComment, b: FormComment) =>
-          new Date(b.createdAt).getTime() -
-          new Date(a.createdAt).getTime()
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       );
   } catch (error) {
     console.error("Error fetching amendment comments:", error);
@@ -285,7 +284,7 @@ export const getTransferForms: RequestHandler = async (req, res) => {
     if (companyName) {
       const searchTerm = (companyName as string).toLowerCase();
       result = result.filter((f) =>
-        f.companyName.toLowerCase().includes(searchTerm)
+        f.companyName.toLowerCase().includes(searchTerm),
       );
     }
 
@@ -324,7 +323,8 @@ export const updateFormStatus: RequestHandler = async (req, res) => {
     const { newStatus, statusNotes } = req.body;
 
     // Find form in memory or database
-    let form = inMemoryForms.find((f) => f.id === id || f.formId === id) ||
+    let form =
+      inMemoryForms.find((f) => f.id === id || f.formId === id) ||
       formsDb.find((f) => f.id === id || f.formId === id);
 
     if (!form) {
@@ -428,20 +428,20 @@ Modal opens showing all amendmentComments
 
 ### **Frontend Files**
 
-| File | Component | Purpose |
-|------|-----------|---------|
-| `client/lib/transfer-form.ts` | `getAmendmentComments()` | Fetch comments from API |
-| `client/components/CompanyCard.tsx` | `CompanyCard` | Display red alert + history |
-| `client/components/StatusHistoryTimeline.tsx` | `StatusHistoryTimeline` | Timeline of status changes |
-| `client/pages/Dashboard.tsx` | `Dashboard` | Main page with company cards |
+| File                                          | Component                | Purpose                      |
+| --------------------------------------------- | ------------------------ | ---------------------------- |
+| `client/lib/transfer-form.ts`                 | `getAmendmentComments()` | Fetch comments from API      |
+| `client/components/CompanyCard.tsx`           | `CompanyCard`            | Display red alert + history  |
+| `client/components/StatusHistoryTimeline.tsx` | `StatusHistoryTimeline`  | Timeline of status changes   |
+| `client/pages/Dashboard.tsx`                  | `Dashboard`              | Main page with company cards |
 
 ### **Backend Files**
 
-| File | Function | Purpose |
-|------|----------|---------|
-| `server/routes/transfer-forms.ts` | `getTransferForms()` | Fetch forms with comments |
-| `server/routes/transfer-forms.ts` | `updateFormStatus()` | Update status + add comment |
-| `server/index.ts` | Route registration | Register `/api/transfer-forms` |
+| File                              | Function             | Purpose                        |
+| --------------------------------- | -------------------- | ------------------------------ |
+| `server/routes/transfer-forms.ts` | `getTransferForms()` | Fetch forms with comments      |
+| `server/routes/transfer-forms.ts` | `updateFormStatus()` | Update status + add comment    |
+| `server/index.ts`                 | Route registration   | Register `/api/transfer-forms` |
 
 ---
 
@@ -450,30 +450,30 @@ Modal opens showing all amendmentComments
 ```typescript
 // Form Comment
 interface FormComment {
-  id: string;                // Unique comment ID
-  author: string;            // "admin"
-  text: string;              // Comment text
-  createdAt: string;         // ISO timestamp
-  isAdminOnly: boolean;      // Only shown to users if true
+  id: string; // Unique comment ID
+  author: string; // "admin"
+  text: string; // Comment text
+  createdAt: string; // ISO timestamp
+  isAdminOnly: boolean; // Only shown to users if true
 }
 
 // Form Status Change
 interface FormStatusChange {
-  id: string;                // Unique change ID
-  fromStatus: FormStatus;    // Previous status
-  toStatus: FormStatus;      // New status
-  changedDate: string;       // ISO timestamp
-  changedBy: string;         // "admin"
-  notes: string;             // Reason for change
+  id: string; // Unique change ID
+  fromStatus: FormStatus; // Previous status
+  toStatus: FormStatus; // New status
+  changedDate: string; // ISO timestamp
+  changedBy: string; // "admin"
+  notes: string; // Reason for change
 }
 
 // Transfer Form Data (subset)
 interface TransferFormData {
-  id: string;                // Internal ID
-  formId: string;            // User-facing ID (TF002)
-  status: FormStatus;        // Current status
-  companyName: string;       // Company name
-  comments: FormComment[];   // Array of admin comments
+  id: string; // Internal ID
+  formId: string; // User-facing ID (TF002)
+  status: FormStatus; // Current status
+  companyName: string; // Company name
+  comments: FormComment[]; // Array of admin comments
   statusHistory: FormStatusChange[]; // Array of status changes
   // ... other fields
 }
@@ -570,13 +570,13 @@ try {
 if (!form) {
   return res.status(404).json({
     error: "Form not found",
-    companyName: companyName
+    companyName: companyName,
   });
 }
 
 if (!Array.isArray(result)) {
   return res.status(400).json({
-    error: "Invalid response format"
+    error: "Invalid response format",
   });
 }
 ```

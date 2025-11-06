@@ -1,14 +1,17 @@
 # Amendment Comments & Status History - Complete Workflow Demo
 
 ## Overview
+
 This guide shows you how admin comments and status history are displayed to users when a company's transfer form is marked as "Amend Required".
 
 ---
 
 ## Demo Data Setup
+
 A demo order with amendments is already loaded. Here's what's been created:
 
 ### **Demo Company: Nordic Business AB**
+
 - **Company ID:** comp_2
 - **Company Number:** 556123-4567
 - **Country:** Sweden
@@ -50,9 +53,10 @@ When a user logs in and views "My Companies" in the Dashboard, they will see:
 ### **2. Key Elements in Amendment Alert:**
 
 #### **Alert Box (Red)**
+
 - **Icon:** ⚠️ Triangle icon
 - **Heading:** "Amendments Required" (bold red text)
-- **Content:** 
+- **Content:**
   - Shows the **most recent amendment comment** (line-clamped to 2 lines)
   - Shows the **timestamp** in readable format: "Jan 04, 2025, 02:30 PM"
   - Shows **number of amendments**: "View 2 amendments" button (if more than 1)
@@ -109,17 +113,17 @@ Status History Timeline
 ├─ CHANGE #1: Under Review → Amend Required
 │  ├─ Changed: Jan 04, 2025, 02:30 AM
 │  ├─ By: admin@sharekte.com
-│  └─ Reason: "Please provide detailed information about 
-│             all shareholders. We need names, 
-│             nationalities, and ownership percentages 
+│  └─ Reason: "Please provide detailed information about
+│             all shareholders. We need names,
+│             nationalities, and ownership percentages
 │             for each shareholder."
 │
 └─ CHANGE #2: Amend Required (Updated)
    ├─ Changed: Jan 04, 2025, 01:30 AM
    ├─ By: admin@sharekte.com
-   └─ Reason: "Also, please update the company 
-              activities list. The current description is 
-              too vague. We need specific NACE codes and 
+   └─ Reason: "Also, please update the company
+              activities list. The current description is
+              too vague. We need specific NACE codes and
               detailed business operations."
 ```
 
@@ -174,11 +178,13 @@ CompanyCard displays:
 ## API Endpoints Used
 
 ### **Get Amendment Comments**
+
 ```
 GET /api/transfer-forms?companyName={companyName}
 ```
 
 **Response:**
+
 ```json
 {
   "formId": "TF002",
@@ -264,13 +270,13 @@ GET /api/transfer-forms?companyName={companyName}
 
 ## Code Files Involved
 
-| File | Purpose |
-|------|---------|
-| `client/components/CompanyCard.tsx` | Displays amendment alert and status history |
-| `client/lib/transfer-form.ts` | Fetches amendment comments from API |
-| `server/routes/transfer-forms.ts` | Provides transfer form data with comments |
-| `client/components/StatusHistoryTimeline.tsx` | Shows timeline of status changes |
-| `client/pages/Dashboard.tsx` | Main dashboard with company cards |
+| File                                          | Purpose                                     |
+| --------------------------------------------- | ------------------------------------------- |
+| `client/components/CompanyCard.tsx`           | Displays amendment alert and status history |
+| `client/lib/transfer-form.ts`                 | Fetches amendment comments from API         |
+| `server/routes/transfer-forms.ts`             | Provides transfer form data with comments   |
+| `client/components/StatusHistoryTimeline.tsx` | Shows timeline of status changes            |
+| `client/pages/Dashboard.tsx`                  | Main dashboard with company cards           |
 
 ---
 
@@ -291,6 +297,7 @@ GET /api/transfer-forms?companyName={companyName}
    - Timestamp: Jan 04, 2025, 01:30 PM
 
 **Status History:**
+
 - Change #1: Under Review → Amend Required (3 hours ago)
 - Change #2: Amend Required status updated (2 hours ago)
 

@@ -28,7 +28,9 @@ if (users.length === 0) {
     },
   ];
   saveUsersToFile(users);
-  console.log("[init] ✓ Initialized with demo user: company@domainostartup.com");
+  console.log(
+    "[init] ✓ Initialized with demo user: company@domainostartup.com",
+  );
 }
 
 interface TokenEntry {
