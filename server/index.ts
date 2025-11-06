@@ -428,6 +428,13 @@ export function createServer() {
   app.delete("/api/coupons/:id", deleteCoupon);
   app.post("/api/coupons/apply", applyCoupon);
 
+  // Social Media Links routes
+  app.get("/api/social-media", getSocialMediaLinksHandler);
+  app.post("/api/social-media", createSocialMediaLinkHandler);
+  app.patch("/api/social-media/:id", updateSocialMediaLinkHandler);
+  app.delete("/api/social-media/:id", deleteSocialMediaLinkHandler);
+  app.post("/api/social-media/reorder", reorderSocialMediaLinksHandler);
+
   console.log("[createServer] ✅ All routes registered successfully");
 
   // Serve SPA static files and handle fallback to index.html
