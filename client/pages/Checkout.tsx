@@ -546,7 +546,7 @@ export default function Checkout() {
                   </p>
                   <p className="text-sm text-green-800 mt-1">
                     We've automatically created your account with email:{" "}
-                    <strong>{userEmail}</strong>
+                    <strong>{billingEmail}</strong>
                   </p>
                   <p className="text-sm text-green-800 mt-2">
                     You can now sign in to your dashboard to view your purchases
