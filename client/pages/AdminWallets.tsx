@@ -382,16 +382,35 @@ export default function AdminWallets() {
                               </div>
                             </div>
                           </div>
-                          <Button
-                            onClick={() => {
-                              setSelectedWallet(wallet);
-                              setShowAddFundsDialog(true);
-                            }}
-                            className="gap-2"
-                          >
-                            <Plus className="h-4 w-4" />
-                            Add Funds
-                          </Button>
+                          <div className="flex gap-2">
+                            <Button
+                              onClick={() => {
+                                setSelectedWallet(wallet);
+                                setShowAddFundsDialog(true);
+                              }}
+                              className="gap-2"
+                            >
+                              <Plus className="h-4 w-4" />
+                              Add Funds
+                            </Button>
+                            {wallet.status === "active" ? (
+                              <Button
+                                onClick={() => handleFreezeWallet(wallet)}
+                                variant="destructive"
+                                className="gap-2"
+                              >
+                                Freeze
+                              </Button>
+                            ) : (
+                              <Button
+                                onClick={() => handleUnfreezeWallet(wallet)}
+                                variant="outline"
+                                className="gap-2 border-green-500 text-green-600 hover:bg-green-50"
+                              >
+                                Unfreeze
+                              </Button>
+                            )}
+                          </div>
                         </div>
                       </div>
                     ))
