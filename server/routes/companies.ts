@@ -1024,6 +1024,7 @@ export const renewCompany: RequestHandler = async (req, res) => {
         body: JSON.stringify({
           fields: {
             Status: "active",
+            "Renewal Date": newRenewalDate,
           },
         }),
       },
