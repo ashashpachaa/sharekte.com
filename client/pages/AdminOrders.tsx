@@ -1059,6 +1059,82 @@ function OrderDetailsModal({
             </div>
           </div>
 
+          {/* Coupon & Fees Info */}
+          {(editedOrder.couponCode || editedOrder.totalFees) && (
+            <div className="border-t border-border/40 pt-6">
+              <h3 className="font-semibold text-foreground mb-4">
+                Coupon & Fees Breakdown
+              </h3>
+              <div className="bg-gray-50 dark:bg-gray-900/30 rounded-lg p-4 space-y-3">
+                {editedOrder.couponCode && (
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">
+                      Coupon Code
+                    </span>
+                    <span className="text-sm font-medium text-green-600">
+                      {editedOrder.couponCode}
+                    </span>
+                  </div>
+                )}
+
+                {editedOrder.couponDiscount && editedOrder.couponDiscount > 0 && (
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">
+                      Coupon Discount
+                    </span>
+                    <span className="text-sm font-medium text-green-600">
+                      -{editedOrder.currency} {editedOrder.couponDiscount.toFixed(2)}
+                    </span>
+                  </div>
+                )}
+
+                {editedOrder.totalFees && editedOrder.totalFees > 0 && (
+                  <>
+                    {editedOrder.appliedFees &&
+                      editedOrder.appliedFees.length > 0 && (
+                        <div className="space-y-2 pt-2 border-t border-border/40">
+                          {editedOrder.appliedFees.map((fee) => (
+                            <div
+                              key={fee.id}
+                              className="flex justify-between items-center text-xs"
+                            >
+                              <span className="text-muted-foreground">
+                                {fee.name}
+                                {fee.type === "percentage" && ` (${fee.amount}%)`}
+                              </span>
+                              <span className="font-medium text-amber-600">
+                                +{editedOrder.currency} {fee.calculatedAmount.toFixed(2)}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                    <div className="flex justify-between items-center pt-2 border-t border-border/40 font-semibold">
+                      <span className="text-sm text-muted-foreground">
+                        Total Fees
+                      </span>
+                      <span className="text-sm text-amber-600">
+                        +{editedOrder.currency} {editedOrder.totalFees.toFixed(2)}
+                      </span>
+                    </div>
+                  </>
+                )}
+
+                {editedOrder.discountedTotal && (
+                  <div className="flex justify-between items-center pt-2 border-t border-border/40">
+                    <span className="text-sm font-semibold text-foreground">
+                      Final Total
+                    </span>
+                    <span className="text-sm font-bold text-primary">
+                      {editedOrder.currency} {editedOrder.discountedTotal.toFixed(2)}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Admin Notes */}
           <div className="border-t border-border/40 pt-6">
             <h3 className="font-semibold text-foreground mb-4">Admin Notes</h3>
