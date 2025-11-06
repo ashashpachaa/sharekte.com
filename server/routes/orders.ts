@@ -425,6 +425,20 @@ export const createOrder: RequestHandler = async (req, res) => {
       );
     }
 
+    // Send order confirmation email to customer and admin
+    if (order.customerEmail) {
+      await sendOrderEmail({
+        to: order.customerEmail,
+        eventType: "created",
+        orderId: order.orderId,
+        customerName: order.customerName,
+        companyName: order.companyName,
+        amount: `${order.amount} ${order.currency}`,
+        status: order.status,
+        orderDate: new Date(order.purchaseDate).toLocaleDateString(),
+      });
+    }
+
     res.status(201).json(order);
   } catch (error) {
     console.error("Failed to create order:", error);
