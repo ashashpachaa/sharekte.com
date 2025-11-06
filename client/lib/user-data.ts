@@ -365,3 +365,45 @@ export function clearBillingInformation(): void {
   const key = getUserDataKey();
   localStorage.setItem(key, JSON.stringify(userData));
 }
+
+export function populateDemoAmendmentData(): void {
+  const userData = getUserData();
+
+  // Find companies with amend-required status and populate them with demo data
+  userData.purchasedCompanies.forEach((company) => {
+    if (company.status === "amend-required" && !company.statusHistory) {
+      // Add demo admin comments
+      company.adminComments =
+        "We need some clarifications on your company information:\n\n" +
+        "1. Please provide updated proof of address for the registered office\n" +
+        "2. Shareholder details need to be verified - please provide ID copies\n" +
+        "3. The company activities listed need to be more specific\n" +
+        "4. Please confirm the current beneficial owners\n\n" +
+        "Please review the attached requirements and submit the updated information within 5 business days.";
+
+      // Add demo status history
+      company.statusHistory = [
+        {
+          id: `status_${Date.now() - 86400000}`,
+          fromStatus: "pending-form",
+          toStatus: "under-review",
+          changedDate: new Date(Date.now() - 86400000).toISOString(),
+          changedBy: "admin@sharekte.com",
+          notes: "Form received and under review",
+        },
+        {
+          id: `status_${Date.now()}`,
+          fromStatus: "under-review",
+          toStatus: "amend-required",
+          changedDate: new Date().toISOString(),
+          changedBy: "admin@sharekte.com",
+          reason: "Additional information required",
+          notes: "We need clarifications on company information. Please review admin comments.",
+        },
+      ];
+    }
+  });
+
+  const key = getUserDataKey();
+  localStorage.setItem(key, JSON.stringify(userData));
+}
