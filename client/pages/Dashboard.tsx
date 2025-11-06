@@ -333,6 +333,11 @@ export default function Dashboard() {
         ];
   });
 
+  // Wallet state
+  const [walletBalance, setWalletBalance] = useState<number>(0);
+  const [walletCurrency, setWalletCurrency] = useState<string>("USD");
+  const [loadingWallet, setLoadingWallet] = useState(true);
+
   // Login history state
   const [loginHistory, setLoginHistory] = useState<LoginHistory[]>(() => {
     const saved = localStorage.getItem("loginHistory");
