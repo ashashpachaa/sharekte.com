@@ -868,6 +868,40 @@ export const uploadOrderDocument: RequestHandler = async (req, res) => {
       `[uploadOrderDocument] Automatically changing order status to "completed" due to document upload`,
     );
 
+    // Also update the corresponding transfer form status to "complete-transfer"
+    if (currentOrder.orderId) {
+      try {
+        // Import the transfer form functions dynamically to avoid circular imports
+        const { fetchFormsFromAirtable, updateFormStatusInAirtable } =
+          await import("../utils/airtable-sync.js");
+
+        const transferForms = await fetchFormsFromAirtable();
+        const correspondingForm = transferForms.find(
+          (f) => f.orderId === currentOrder.orderId,
+        );
+
+        if (correspondingForm) {
+          // Update transfer form status to "complete-transfer"
+          const formId = correspondingForm.formId || correspondingForm.id;
+          await updateFormStatusInAirtable(
+            formId,
+            correspondingForm.airtableId,
+            "complete-transfer",
+            new Date().toISOString(),
+          );
+          console.log(
+            `[uploadOrderDocument] ✓ Updated transfer form status to "complete-transfer"`,
+          );
+        }
+      } catch (formError) {
+        console.error(
+          "[uploadOrderDocument] Error updating transfer form status:",
+          formError,
+        );
+        // Document is still safely stored, don't fail the request
+      }
+    }
+
     // Update in-memory storage FIRST (this is our source of truth for persistence)
     const inMemIndex = inMemoryOrders.findIndex(
       (o) => o.id === orderId || o.orderId === orderId,
