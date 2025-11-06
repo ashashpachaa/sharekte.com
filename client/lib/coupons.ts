@@ -1,3 +1,5 @@
+import { getAPIBaseURL } from "./transfer-form";
+
 export interface Coupon {
   id: string;
   code: string;
@@ -22,16 +24,11 @@ export interface CouponValidationResponse {
   message?: string;
 }
 
-const getAPIBaseURL = () => {
-  // Use current origin for all deployments (Fly.io, Hostinger, localhost)
-  if (typeof window === "undefined") return "https://shareket.com";
-  return window.location.origin;
-};
-
 // Fetch all coupons
 export async function fetchCoupons(): Promise<Coupon[]> {
   try {
-    const response = await fetch(`${getAPIBaseURL()}/api/coupons`);
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/coupons`);
     if (!response.ok) throw new Error("Failed to fetch coupons");
     return response.json();
   } catch (error) {
@@ -46,7 +43,8 @@ export async function validateCoupon(
   orderTotal: number,
 ): Promise<CouponValidationResponse> {
   try {
-    const response = await fetch(`${getAPIBaseURL()}/api/coupons/validate`, {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/coupons/validate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ code, orderTotal }),
@@ -79,7 +77,8 @@ export async function createCoupon(
   coupon: Omit<Coupon, "id" | "createdAt" | "updatedAt" | "usedCount">,
 ): Promise<Coupon | null> {
   try {
-    const response = await fetch(`${getAPIBaseURL()}/api/coupons`, {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/coupons`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(coupon),
@@ -99,7 +98,8 @@ export async function updateCoupon(
   updates: Partial<Coupon>,
 ): Promise<Coupon | null> {
   try {
-    const response = await fetch(`${getAPIBaseURL()}/api/coupons/${id}`, {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/coupons/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updates),
@@ -116,7 +116,8 @@ export async function updateCoupon(
 // Delete coupon (admin)
 export async function deleteCoupon(id: string): Promise<boolean> {
   try {
-    const response = await fetch(`${getAPIBaseURL()}/api/coupons/${id}`, {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/coupons/${id}`, {
       method: "DELETE",
     });
 
