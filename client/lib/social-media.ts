@@ -29,7 +29,7 @@ export const SOCIAL_MEDIA_ICONS: Record<string, string> = {
   LinkedIn: "in",
   YouTube: "▶️",
   TikTok: "♪",
-  Snapchat: "����",
+  Snapchat: "👻",
   Pinterest: "P",
   Reddit: "🔥",
   Threads: "📝",
@@ -131,7 +131,7 @@ export async function createSocialMediaLink(
 ): Promise<SocialMediaLink | null> {
   try {
     const apiBaseURL = getAPIBaseURL();
-    const response = await fetch(`${apiBaseURL}/api/social-media-links`, {
+    const response = await fetch(`${apiBaseURL}/api/social-media`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(link),
@@ -152,7 +152,7 @@ export async function updateSocialMediaLink(
 ): Promise<SocialMediaLink | null> {
   try {
     const apiBaseURL = getAPIBaseURL();
-    const response = await fetch(`${apiBaseURL}/api/social-media-links/${id}`, {
+    const response = await fetch(`${apiBaseURL}/api/social-media/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updates),
@@ -170,7 +170,7 @@ export async function updateSocialMediaLink(
 export async function deleteSocialMediaLink(id: string): Promise<boolean> {
   try {
     const apiBaseURL = getAPIBaseURL();
-    const response = await fetch(`${apiBaseURL}/api/social-media-links/${id}`, {
+    const response = await fetch(`${apiBaseURL}/api/social-media/${id}`, {
       method: "DELETE",
     });
 
@@ -188,7 +188,7 @@ export async function reorderSocialMediaLinks(
   try {
     const apiBaseURL = getAPIBaseURL();
     const response = await fetch(
-      `${apiBaseURL}/api/social-media-links/reorder`,
+      `${apiBaseURL}/api/social-media/reorder`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
