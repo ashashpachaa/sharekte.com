@@ -149,26 +149,47 @@ export function Footer() {
           <p className="text-sm text-muted-foreground">
             © {currentYear} Sharekte. {t("common.all")} {t("common.search")}.
           </p>
-          <div className="flex items-center gap-6">
-            <a
-              href="#"
-              className="text-sm text-muted-foreground hover:text-primary transition-colors"
-            >
-              Twitter
-            </a>
-            <a
-              href="#"
-              className="text-sm text-muted-foreground hover:text-primary transition-colors"
-            >
-              LinkedIn
-            </a>
-            <a
-              href="#"
-              className="text-sm text-muted-foreground hover:text-primary transition-colors"
-            >
-              Facebook
-            </a>
-            <span className="text-muted-foreground/30">•</span>
+          <div className="flex items-center gap-6 flex-wrap">
+            {socialLinks.length > 0 ? (
+              <>
+                {socialLinks.map((link) => (
+                  <a
+                    key={link.id}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-1.5"
+                    title={link.displayText || link.platform}
+                  >
+                    {link.icon && <span className="text-base">{link.icon}</span>}
+                    {link.platform}
+                  </a>
+                ))}
+                <span className="text-muted-foreground/30">•</span>
+              </>
+            ) : (
+              <>
+                <a
+                  href="#"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Twitter
+                </a>
+                <a
+                  href="#"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  LinkedIn
+                </a>
+                <a
+                  href="#"
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Facebook
+                </a>
+                <span className="text-muted-foreground/30">•</span>
+              </>
+            )}
             <Link
               to="/secure-admin-access-7k9m2q"
               className="text-sm text-muted-foreground hover:text-primary transition-colors font-medium"
