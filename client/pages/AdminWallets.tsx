@@ -75,7 +75,7 @@ export default function AdminWallets() {
       setLoading(true);
       const filters: any = {};
       if (statusFilter !== "all") filters.status = statusFilter;
-      if (currencyFilter) filters.currency = currencyFilter;
+      if (currencyFilter && currencyFilter !== "all") filters.currency = currencyFilter;
 
       const data = await getAllWallets(filters);
       setWallets(data);
