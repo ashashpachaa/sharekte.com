@@ -784,17 +784,27 @@ export const updateFormStatus: RequestHandler = async (req, res) => {
     // Send status notification email (async - don't wait for response)
     (async () => {
       try {
-        const { sendFormStatusNotification } = await import(
-          "../utils/form-notifications"
-        );
-        await sendFormStatusNotification(
-          updated,
-          status as FormStatus,
-          notes,
-          reason,
-        );
+        // Find the customer email (could be buyerName email or from orderId relationship)
+        let customerEmail = updated.buyerEmail || updated.buyerName;
+
+        // Try to extract email if it contains one
+        if (customerEmail && !customerEmail.includes("@")) {
+          // If it's just a name, use admin email for now
+          customerEmail = process.env.ADMIN_EMAIL || "sales@sharekte.com";
+        }
+
+        if (customerEmail) {
+          await sendTransferFormEmail({
+            to: customerEmail,
+            eventType: status as any,
+            formId: updated.id || updated.formId || "unknown",
+            companyName: updated.companyName || "Unknown Company",
+            status: status,
+            adminNotes: notes || reason || undefined,
+          });
+        }
       } catch (error) {
-        console.error("Error sending notification:", error);
+        console.error("Error sending transfer form email:", error);
         // Don't fail the request if notification fails
       }
     })();
