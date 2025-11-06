@@ -153,6 +153,24 @@ export const createInvoice: RequestHandler = async (req, res) => {
       await syncInvoiceToAirtable(newInvoice);
     }
 
+    // Send invoice email (async - don't wait for response)
+    (async () => {
+      try {
+        if (invoiceData.customerEmail) {
+          await sendInvoiceEmail({
+            to: invoiceData.customerEmail,
+            invoiceId: newInvoice.id,
+            customerName: invoiceData.customerName || "Valued Customer",
+            amount: `${invoiceData.amount} ${invoiceData.currency || "USD"}`,
+            dueDate: invoiceData.dueDate || undefined,
+          });
+        }
+      } catch (error) {
+        console.error("Error sending invoice email:", error);
+        // Don't fail the request if notification fails
+      }
+    })();
+
     return res.json(newInvoice);
   } catch (error) {
     console.error("Error creating invoice:", error);
