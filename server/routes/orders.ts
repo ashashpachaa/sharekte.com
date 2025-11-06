@@ -857,11 +857,15 @@ export const uploadOrderDocument: RequestHandler = async (req, res) => {
     const updatedOrder: Order = {
       ...currentOrder,
       documents: [...(currentOrder.documents || []), document],
+      status: "completed", // Auto-complete order when documents are uploaded
       updatedAt: new Date().toISOString(),
     };
 
     console.log(
       `[uploadOrderDocument] Added document to order. Total documents: ${updatedOrder.documents.length}`,
+    );
+    console.log(
+      `[uploadOrderDocument] Automatically changing order status to "completed" due to document upload`,
     );
 
     // Update in-memory storage FIRST (this is our source of truth for persistence)
