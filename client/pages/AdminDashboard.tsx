@@ -17,6 +17,7 @@ import {
   DollarSign,
   Package,
   Share2,
+  Wallet,
 } from "lucide-react";
 
 export default function AdminDashboard() {
