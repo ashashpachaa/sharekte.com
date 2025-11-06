@@ -23,12 +23,12 @@ if (users.length === 0) {
       id: "demo_user_1",
       email: "company@domainostartup.com",
       name: "Company",
-      password: "Test123!",
+      password: "Ash@shpachaa2010",
       createdAt: new Date().toISOString(),
     },
   ];
   saveUsersToFile(users);
-  console.log("[init] ✓ Initialized with demo user");
+  console.log("[init] ✓ Initialized with demo user: company@domainostartup.com");
 }
 
 interface TokenEntry {
