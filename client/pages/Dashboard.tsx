@@ -537,6 +537,7 @@ export default function Dashboard() {
   }, []); // Run once on mount
 
   const [showTransferForm, setShowTransferForm] = useState<string | null>(null);
+  const [showAmendmentComments, setShowAmendmentComments] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     directorName: "",
     directorEmail: "",
