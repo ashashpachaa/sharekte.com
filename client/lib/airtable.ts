@@ -1,3 +1,5 @@
+import { getAPIBaseURL } from "@/lib/transfer-form";
+
 export interface Company {
   id: string;
   fields: {
@@ -27,7 +29,8 @@ export async function fetchCompanies(filters?: {
       params.append("year", String(filters.year));
     }
 
-    const url = `/api/companies?${params.toString()}`;
+    const apiBaseURL = getAPIBaseURL();
+    const url = `${apiBaseURL}/api/companies?${params.toString()}`;
     console.log("Fetching companies from:", url);
 
     const response = await fetch(url);
@@ -51,7 +54,8 @@ export async function fetchCompanies(filters?: {
 
 export async function getCountries(): Promise<string[]> {
   try {
-    const url = `/api/countries`;
+    const apiBaseURL = getAPIBaseURL();
+    const url = `${apiBaseURL}/api/countries`;
     console.log("Fetching countries from:", url);
 
     const response = await fetch(url);
@@ -75,7 +79,8 @@ export async function getCountries(): Promise<string[]> {
 
 export async function getYears(): Promise<number[]> {
   try {
-    const url = `/api/years`;
+    const apiBaseURL = getAPIBaseURL();
+    const url = `${apiBaseURL}/api/years`;
     console.log("Fetching years from:", url);
 
     const response = await fetch(url);
