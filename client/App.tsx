@@ -165,6 +165,14 @@ export default function App() {
                             </ProtectedAdminRoute>
                           }
                         />
+                        <Route
+                          path="/admin/social-media"
+                          element={
+                            <ProtectedAdminRoute>
+                              <AdminSocialMedia />
+                            </ProtectedAdminRoute>
+                          }
+                        />
                         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                         <Route path="*" element={<NotFound />} />
                       </Routes>
