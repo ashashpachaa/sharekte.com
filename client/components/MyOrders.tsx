@@ -251,6 +251,7 @@ export function MyOrders({ userEmail }: MyOrdersProps) {
             "pending-payment",
             "transfer-form-pending",
             "completed",
+            "complete-transfer",
             "refunded",
           ].map((status) => (
             <Button
