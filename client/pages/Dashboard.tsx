@@ -429,9 +429,16 @@ export default function Dashboard() {
     const loadOrderDocuments = async () => {
       try {
         const apiBaseURL = getAPIBaseURL();
-        const response = await fetch(`${apiBaseURL}/api/orders`);
+        const apiUrl = `${apiBaseURL}/api/orders`;
+        console.log(`[Dashboard] Fetching orders from: ${apiUrl}`);
+
+        const response = await fetch(apiUrl);
         if (!response.ok) {
-          console.error("[Dashboard] Failed to fetch orders:", response.status);
+          console.error(
+            "[Dashboard] Failed to fetch orders:",
+            response.status,
+            response.statusText
+          );
           return;
         }
 
