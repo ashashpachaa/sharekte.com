@@ -3,6 +3,7 @@ import { RequestHandler } from "express";
 type OrderStatus =
   | "pending"
   | "completed"
+  | "complete-transfer"
   | "failed"
   | "refunded"
   | "cancelled";
