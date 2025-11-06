@@ -224,12 +224,14 @@ export function AdminSocialLinks() {
 
                   {/* Link Info */}
                   <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="text-2xl">
-                        {link.icon || SOCIAL_MEDIA_ICONS[link.platform] || "🔗"}
-                      </span>
-                      <div>
-                        <p className="font-medium">{link.platform}</p>
+                    <div className="flex items-center gap-4 mb-2">
+                      <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20">
+                        <span className="text-4xl">
+                          {link.icon || SOCIAL_MEDIA_ICONS[link.platform] || "🔗"}
+                        </span>
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-semibold text-lg">{link.platform}</p>
                         {link.displayText && (
                           <p className="text-sm text-muted-foreground">
                             {link.displayText}
