@@ -150,6 +150,21 @@ function saveSettingsToFile(): void {
 // Load settings on startup
 loadSettingsFromFile();
 
+// Get all available platforms
+export const getAvailablePlatformsHandler: RequestHandler = (req, res) => {
+  try {
+    const platforms = Object.entries(PLATFORM_ICONS).map(([name, icon]) => ({
+      name,
+      icon,
+    }));
+    console.log("[getAvailablePlatformsHandler] ✓ Returning available platforms");
+    res.json({ platforms: platforms.sort((a, b) => a.name.localeCompare(b.name)) });
+  } catch (error) {
+    console.error("[getAvailablePlatformsHandler] Error:", error);
+    res.status(500).json({ error: "Failed to fetch available platforms" });
+  }
+};
+
 // Get all social media links
 export const getSocialMediaLinksHandler: RequestHandler = (req, res) => {
   try {
