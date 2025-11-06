@@ -116,6 +116,16 @@ import {
   schemaHandler,
   seoStatusHandler,
 } from "./routes/seo";
+import {
+  getUserWalletHandler,
+  getAllWalletsHandler,
+  addFundsHandler,
+  getTransactionsHandler,
+  freezeWalletHandler,
+  unfreezeWalletHandler,
+  deductFromWalletHandler,
+  getWalletReportHandler,
+} from "./routes/wallets";
 
 export function createServer() {
   console.log("[createServer] Initializing Express app");
