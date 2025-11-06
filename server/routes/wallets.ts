@@ -280,6 +280,41 @@ export const addFundsHandler: RequestHandler = (req, res) => {
   }
 };
 
+// Get ALL transactions across all wallets (for admin)
+export const getAllTransactionsHandler: RequestHandler = (req, res) => {
+  try {
+    let transactions = [...inMemoryTransactions];
+
+    // Apply filters
+    if (req.query.type) {
+      transactions = transactions.filter((t) => t.type === req.query.type);
+    }
+    if (req.query.startDate) {
+      const startDate = new Date(req.query.startDate as string);
+      transactions = transactions.filter(
+        (t) => new Date(t.createdAt) >= startDate,
+      );
+    }
+    if (req.query.endDate) {
+      const endDate = new Date(req.query.endDate as string);
+      transactions = transactions.filter(
+        (t) => new Date(t.createdAt) <= endDate,
+      );
+    }
+
+    // Pagination
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : 50;
+    const offset = req.query.offset ? parseInt(req.query.offset as string) : 0;
+    const paginated = transactions.slice(offset, offset + limit);
+
+    res.json(paginated);
+  } catch (error) {
+    console.error("[getAllTransactionsHandler] Error:", error);
+    res.status(500).json({ error: "Failed to get transactions" });
+  }
+};
+
+// Get transactions for specific user
 export const getTransactionsHandler: RequestHandler = (req, res) => {
   try {
     const userId = req.params.userId;
