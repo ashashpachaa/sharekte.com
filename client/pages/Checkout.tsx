@@ -391,13 +391,13 @@ export default function Checkout() {
         const baseURL = getAPIBaseURL();
         const autoPassword = Math.random().toString(36).slice(-12); // Generate random password
 
-        console.log(`[Checkout] Creating user account for ${userEmail}`);
+        console.log(`[Checkout] Creating user account for ${billingEmail}`);
 
         await fetch(`${baseURL}/api/signup`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            email: userEmail,
+            email: billingEmail,
             password: autoPassword,
             name: billingFullName || userData.fullName || "Customer",
           }),
@@ -405,15 +405,15 @@ export default function Checkout() {
           if (response.ok) {
             const result = await response.json();
             console.log(
-              `[Checkout] ✓ User account created successfully for ${userEmail}`,
+              `[Checkout] ✓ User account created successfully for ${billingEmail}`,
             );
             // Store the credentials for the success page to show to user
             localStorage.setItem(
-              `checkout_password_${userEmail}`,
+              `checkout_password_${billingEmail}`,
               autoPassword,
             );
-            localStorage.setItem(`checkout_password_email`, userEmail);
-            toast.info(`Account created! Login with email: ${userEmail}`);
+            localStorage.setItem(`checkout_password_email`, billingEmail);
+            toast.info(`Account created! Login with email: ${billingEmail}`);
           } else if (response.status === 409) {
             console.log(
               `[Checkout] User account already exists for ${userEmail}`,
