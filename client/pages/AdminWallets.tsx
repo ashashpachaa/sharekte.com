@@ -280,7 +280,7 @@ export default function AdminWallets() {
                         <SelectValue placeholder="All currencies" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">All</SelectItem>
+                        <SelectItem value="all">All Currencies</SelectItem>
                         <SelectItem value="USD">USD</SelectItem>
                         <SelectItem value="AED">AED</SelectItem>
                         <SelectItem value="GBP">GBP</SelectItem>
