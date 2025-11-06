@@ -426,6 +426,35 @@ export default function Dashboard() {
     });
   });
 
+  // Load wallet balance
+  useEffect(() => {
+    const loadWallet = async () => {
+      try {
+        setLoadingWallet(true);
+        const userEmail = userData.email || localStorage.getItem("userEmail");
+        if (!userEmail) return;
+
+        const response = await fetch(
+          `/api/wallets/${userEmail.split("@")[0]}`,
+          { method: "GET", headers: { "Content-Type": "application/json" } }
+        );
+
+        if (response.ok) {
+          const wallet = await response.json();
+          setWalletBalance(wallet.balance || 0);
+          setWalletCurrency(wallet.currency || currency);
+          console.log(`[Dashboard] Wallet balance: ${wallet.currency} ${wallet.balance}`);
+        }
+      } catch (error) {
+        console.warn("[Dashboard] Failed to load wallet:", error);
+      } finally {
+        setLoadingWallet(false);
+      }
+    };
+
+    loadWallet();
+  }, [userData.email, currency]);
+
   // Listen for purchased companies updates to refresh when form status changes
   useEffect(() => {
     const handleCompaniesUpdated = (e: Event) => {
