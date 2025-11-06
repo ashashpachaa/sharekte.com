@@ -1,4 +1,5 @@
 import { Order, type OrderStatus, type RefundStatus } from "./orders";
+import { getAPIBaseURL } from "./transfer-form";
 import { useNotificationTriggers } from "@/hooks/use-notification-triggers";
 
 export interface OrderNotification {
@@ -289,7 +290,8 @@ async function sendNotification(notification: OrderNotification) {
  */
 async function sendEmailNotification(notification: OrderNotification): Promise<boolean> {
   try {
-    const response = await fetch("/api/notifications/email", {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/notifications/email`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
