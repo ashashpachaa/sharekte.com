@@ -5,6 +5,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CompanyTable } from "@/components/CompanyTable";
 import { useMemo } from "react";
+import { useSEO, getPageSEOMetadata } from "@/lib/seo";
 import {
   ArrowRight,
   TrendingUp,
@@ -18,7 +19,9 @@ import {
 } from "lucide-react";
 
 export default function Index() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const seoMetadata = getPageSEOMetadata('home', i18n.language);
+  useSEO(seoMetadata, i18n.language);
 
   const featuredCompanies = [
     {
