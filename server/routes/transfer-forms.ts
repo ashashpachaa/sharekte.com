@@ -63,11 +63,17 @@ interface TransferFormData {
   sellerPhone?: string;
   sellerCountry?: string;
   sellerAddress?: string;
+  sellerCity?: string;
+  sellerState?: string;
+  sellerPostalCode?: string;
   buyerName?: string;
   buyerEmail?: string;
   buyerPhone?: string;
   buyerCountry?: string;
   buyerAddress?: string;
+  buyerCity?: string;
+  buyerState?: string;
+  buyerPostalCode?: string;
   directors: DirectorInfo[];
   shareholders: ShareholderInfo[];
   pscDeclaration: { hasPSC: boolean; details: string };
