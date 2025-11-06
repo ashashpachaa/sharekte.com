@@ -8,6 +8,7 @@ export type OrderStatus =
   | "amend-required"
   | "pending-transfer"
   | "completed"
+  | "complete-transfer"
   | "cancelled"
   | "refunded"
   | "disputed";
@@ -474,6 +475,7 @@ export function getStatusColor(status: OrderStatus): string {
     "amend-required": "bg-red-100 text-red-700",
     "pending-transfer": "bg-indigo-100 text-indigo-700",
     completed: "bg-green-100 text-green-700",
+    "complete-transfer": "bg-green-100 text-green-700",
     cancelled: "bg-gray-100 text-gray-700",
     refunded: "bg-cyan-100 text-cyan-700",
     disputed: "bg-rose-100 text-rose-700",
