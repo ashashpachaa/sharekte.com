@@ -17,7 +17,9 @@ function getTransporter() {
   if (transporter) return transporter;
 
   if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) {
-    console.warn("Email configuration not set - notifications will be logged only");
+    console.warn(
+      "Email configuration not set - notifications will be logged only",
+    );
     return null;
   }
 
@@ -48,7 +50,12 @@ export const sendEmailNotification: RequestHandler = async (req, res) => {
     const transporter = getTransporter();
 
     // Build HTML email
-    const htmlContent = buildEmailTemplate(subject, message, notificationType, details);
+    const htmlContent = buildEmailTemplate(
+      subject,
+      message,
+      notificationType,
+      details,
+    );
 
     // Send email
     if (transporter) {
@@ -66,7 +73,9 @@ export const sendEmailNotification: RequestHandler = async (req, res) => {
       } catch (emailError) {
         console.error("SMTP Error:", emailError);
         // Log but don't fail - we still want to track the notification
-        return res.status(500).json({ success: false, error: "Failed to send email" });
+        return res
+          .status(500)
+          .json({ success: false, error: "Failed to send email" });
       }
     } else {
       // No SMTP configured - log to console
@@ -76,7 +85,10 @@ export const sendEmailNotification: RequestHandler = async (req, res) => {
       console.log(`[NOTIFICATION] Type: ${notificationType}`);
       console.log(`[NOTIFICATION] Details:`, details);
 
-      return res.json({ success: true, message: "Notification logged (SMTP not configured)" });
+      return res.json({
+        success: true,
+        message: "Notification logged (SMTP not configured)",
+      });
     }
   } catch (error) {
     console.error("Notification error:", error);
@@ -91,7 +103,7 @@ function buildEmailTemplate(
   subject: string,
   message: string,
   notificationType: string,
-  details: Record<string, unknown>
+  details: Record<string, unknown>,
 ): string {
   const colors = {
     primary: "#2563EB",
@@ -242,7 +254,8 @@ export async function sendOrderEmail(options: {
     cancelled: `Your order has been cancelled. Order ID: ${options.orderId}`,
   };
 
-  const message = messageMap[options.eventType] || "Your order has been updated.";
+  const message =
+    messageMap[options.eventType] || "Your order has been updated.";
 
   const mailOptions = {
     from: FROM_EMAIL,
@@ -261,7 +274,9 @@ export async function sendOrderEmail(options: {
 
   try {
     await transport.sendMail(mailOptions);
-    console.log(`✓ Email sent: ${options.eventType} to ${options.to} + ${ADMIN_EMAIL}`);
+    console.log(
+      `✓ Email sent: ${options.eventType} to ${options.to} + ${ADMIN_EMAIL}`,
+    );
   } catch (error) {
     console.error(
       `✗ Failed to send order email (${options.eventType}):`,
@@ -298,10 +313,9 @@ export async function sendTransferFormEmail(options: {
     cancelled: "Transfer Cancelled - ${companyName}",
   };
 
-  let subject = (subjectMap[options.eventType] || "Transfer Form Update").replace(
-    "${companyName}",
-    options.companyName,
-  );
+  let subject = (
+    subjectMap[options.eventType] || "Transfer Form Update"
+  ).replace("${companyName}", options.companyName);
 
   const messageMap: Record<string, string> = {
     submitted: `Your transfer form for ${options.companyName} has been submitted successfully.`,
@@ -312,24 +326,32 @@ export async function sendTransferFormEmail(options: {
     cancelled: `Your transfer form for ${options.companyName} has been cancelled.`,
   };
 
-  let message = messageMap[options.eventType] || "Your transfer form has been updated.";
+  let message =
+    messageMap[options.eventType] || "Your transfer form has been updated.";
 
   const mailOptions = {
     from: FROM_EMAIL,
     to: [options.to, ADMIN_EMAIL],
     subject,
-    html: buildEmailTemplate(subject, message, `transfer-form-${options.eventType}`, {
-      formId: options.formId,
-      companyName: options.companyName,
-      status: options.status,
-      adminNotes: options.adminNotes || "None",
-    }),
+    html: buildEmailTemplate(
+      subject,
+      message,
+      `transfer-form-${options.eventType}`,
+      {
+        formId: options.formId,
+        companyName: options.companyName,
+        status: options.status,
+        adminNotes: options.adminNotes || "None",
+      },
+    ),
     text: message,
   };
 
   try {
     await transport.sendMail(mailOptions);
-    console.log(`✓ Email sent: ${options.eventType} to ${options.to} + ${ADMIN_EMAIL}`);
+    console.log(
+      `✓ Email sent: ${options.eventType} to ${options.to} + ${ADMIN_EMAIL}`,
+    );
   } catch (error) {
     console.error(
       `✗ Failed to send transfer form email (${options.eventType}):`,
@@ -351,7 +373,9 @@ export async function sendInvoiceEmail(options: {
 }) {
   const transport = getTransporter();
   if (!transport) {
-    console.log(`[EMAIL LOG] Invoice Email: ${options.invoiceId} (${options.to})`);
+    console.log(
+      `[EMAIL LOG] Invoice Email: ${options.invoiceId} (${options.to})`,
+    );
     return;
   }
 

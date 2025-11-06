@@ -28,23 +28,23 @@ interface SocialMediaSettings {
 // Platform icons map
 const PLATFORM_ICONS: Record<string, string> = {
   "Twitter (X)": "𝕏",
-  "Facebook": "f",
-  "Instagram": "📷",
-  "LinkedIn": "in",
-  "YouTube": "▶️",
-  "TikTok": "♪",
-  "GitHub": "🐙",
-  "Discord": "💬",
-  "Telegram": "✈️",
-  "WhatsApp": "💬",
-  "Pinterest": "P",
-  "Snapchat": "👻",
-  "Reddit": "🔥",
-  "Twitch": "🎮",
-  "Medium": "📝",
-  "Email": "📧",
-  "Website": "🌐",
-  "Phone": "☎️",
+  Facebook: "f",
+  Instagram: "📷",
+  LinkedIn: "in",
+  YouTube: "▶️",
+  TikTok: "♪",
+  GitHub: "🐙",
+  Discord: "💬",
+  Telegram: "✈️",
+  WhatsApp: "💬",
+  Pinterest: "P",
+  Snapchat: "👻",
+  Reddit: "🔥",
+  Twitch: "🎮",
+  Medium: "📝",
+  Email: "📧",
+  Website: "🌐",
+  Phone: "☎️",
 };
 
 // In-memory storage with comprehensive demo data
@@ -141,7 +141,10 @@ function loadSettingsFromFile(): void {
 
 function saveSettingsToFile(): void {
   try {
-    fs.writeFileSync(socialMediaFile, JSON.stringify(socialMediaSettings, null, 2));
+    fs.writeFileSync(
+      socialMediaFile,
+      JSON.stringify(socialMediaSettings, null, 2),
+    );
   } catch (error) {
     console.error("[saveSettingsToFile] Error:", error);
   }
@@ -157,8 +160,12 @@ export const getAvailablePlatformsHandler: RequestHandler = (req, res) => {
       name,
       icon,
     }));
-    console.log("[getAvailablePlatformsHandler] ✓ Returning available platforms");
-    res.json({ platforms: platforms.sort((a, b) => a.name.localeCompare(b.name)) });
+    console.log(
+      "[getAvailablePlatformsHandler] ✓ Returning available platforms",
+    );
+    res.json({
+      platforms: platforms.sort((a, b) => a.name.localeCompare(b.name)),
+    });
   } catch (error) {
     console.error("[getAvailablePlatformsHandler] Error:", error);
     res.status(500).json({ error: "Failed to fetch available platforms" });

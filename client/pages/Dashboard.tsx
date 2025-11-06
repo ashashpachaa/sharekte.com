@@ -1067,25 +1067,31 @@ export default function Dashboard() {
           </div>
 
           <div class="total-section">
-            ${
-              (() => {
-                const subtotal = invoice.items
-                  .filter(item => !item.description.includes("Discount") && item.unitPrice >= 0)
-                  .reduce((sum, item) => sum + item.total, 0);
-                const feesTotal = invoice.items
-                  .filter(item => item.description.includes("(") && item.description.includes("%"))
-                  .reduce((sum, item) => sum + item.total, 0);
-                const discount = invoice.couponDiscount || 0;
-                const total = invoice.amount;
+            ${(() => {
+              const subtotal = invoice.items
+                .filter(
+                  (item) =>
+                    !item.description.includes("Discount") &&
+                    item.unitPrice >= 0,
+                )
+                .reduce((sum, item) => sum + item.total, 0);
+              const feesTotal = invoice.items
+                .filter(
+                  (item) =>
+                    item.description.includes("(") &&
+                    item.description.includes("%"),
+                )
+                .reduce((sum, item) => sum + item.total, 0);
+              const discount = invoice.couponDiscount || 0;
+              const total = invoice.amount;
 
-                return `
+              return `
                   <div style="margin-bottom: 10px;">Subtotal: ${invoice.currency}${subtotal.toLocaleString()}</div>
                   ${feesTotal > 0 ? `<div style="margin-bottom: 5px; color: #d97706;">Applied Fees: ${invoice.currency}${feesTotal.toLocaleString()}</div>` : ""}
                   ${discount > 0 ? `<div style="margin-bottom: 10px; color: #16a34a;">Discount (${invoice.couponCode || "Coupon"}): -${invoice.currency}${discount.toLocaleString()}</div>` : ""}
                   <div class="total-row">Total: ${invoice.currency}${total.toLocaleString()}</div>
                 `;
-              })()
-            }
+            })()}
           </div>
 
           <div class="footer">
@@ -1216,36 +1222,50 @@ export default function Dashboard() {
           </table>
 
           <div class="total-section">
-            ${
-              (() => {
-                const subtotal = invoice.items
-                  .filter(item => !item.description.includes("Discount") && item.unitPrice >= 0)
-                  .reduce((sum, item) => sum + item.total, 0);
-                const feesTotal = invoice.items
-                  .filter(item => item.description.includes("(") && item.description.includes("%"))
-                  .reduce((sum, item) => sum + item.total, 0);
-                const discount = invoice.couponDiscount || 0;
-                const total = invoice.amount;
+            ${(() => {
+              const subtotal = invoice.items
+                .filter(
+                  (item) =>
+                    !item.description.includes("Discount") &&
+                    item.unitPrice >= 0,
+                )
+                .reduce((sum, item) => sum + item.total, 0);
+              const feesTotal = invoice.items
+                .filter(
+                  (item) =>
+                    item.description.includes("(") &&
+                    item.description.includes("%"),
+                )
+                .reduce((sum, item) => sum + item.total, 0);
+              const discount = invoice.couponDiscount || 0;
+              const total = invoice.amount;
 
-                return `
+              return `
                   <div class="detail-row">
                     <span>Subtotal:</span>
                     <span>${invoice.currency}${subtotal.toLocaleString()}</span>
                   </div>
-                  ${feesTotal > 0 ? `<div class="detail-row" style="color: #d97706;">
+                  ${
+                    feesTotal > 0
+                      ? `<div class="detail-row" style="color: #d97706;">
                     <span>Applied Fees:</span>
                     <span>${invoice.currency}${feesTotal.toLocaleString()}</span>
-                  </div>` : ""}
-                  ${discount > 0 ? `<div class="detail-row" style="color: #16a34a;">
+                  </div>`
+                      : ""
+                  }
+                  ${
+                    discount > 0
+                      ? `<div class="detail-row" style="color: #16a34a;">
                     <span>Discount (${invoice.couponCode || "Coupon"}):</span>
                     <span>-${invoice.currency}${discount.toLocaleString()}</span>
-                  </div>` : ""}
+                  </div>`
+                      : ""
+                  }
                   <div class="total-amount">
                     Total: ${invoice.currency}${total.toLocaleString()}
                   </div>
                 `;
-              })()
-            }
+            })()}
             <div class="status-badge status-${invoice.status}">
               ${invoice.status.toUpperCase()}
             </div>
@@ -2115,10 +2135,18 @@ export default function Dashboard() {
                         {/* Calculate subtotal from items excluding discount */}
                         {(() => {
                           const subtotal = selectedInvoice.items
-                            .filter(item => !item.description.includes("Discount") && item.unitPrice >= 0)
+                            .filter(
+                              (item) =>
+                                !item.description.includes("Discount") &&
+                                item.unitPrice >= 0,
+                            )
                             .reduce((sum, item) => sum + item.total, 0);
                           const feesTotal = selectedInvoice.items
-                            .filter(item => item.description.includes("(") && item.description.includes("%"))
+                            .filter(
+                              (item) =>
+                                item.description.includes("(") &&
+                                item.description.includes("%"),
+                            )
                             .reduce((sum, item) => sum + item.total, 0);
                           const discount = selectedInvoice.couponDiscount || 0;
                           const total = selectedInvoice.amount;
@@ -2127,9 +2155,15 @@ export default function Dashboard() {
                             <>
                               {/* Subtotal */}
                               <div className="flex justify-between text-sm">
-                                <span className="text-muted-foreground">Subtotal</span>
+                                <span className="text-muted-foreground">
+                                  Subtotal
+                                </span>
                                 <span className="font-medium">
-                                  {formatPriceWithCurrency(subtotal, currency, rates)}
+                                  {formatPriceWithCurrency(
+                                    subtotal,
+                                    currency,
+                                    rates,
+                                  )}
                                 </span>
                               </div>
 
@@ -2137,15 +2171,32 @@ export default function Dashboard() {
                               {feesTotal > 0 && (
                                 <div className="flex justify-between text-sm text-amber-600">
                                   <span>Fees</span>
-                                  <span className="font-medium">+{formatPriceWithCurrency(feesTotal, currency, rates)}</span>
+                                  <span className="font-medium">
+                                    +
+                                    {formatPriceWithCurrency(
+                                      feesTotal,
+                                      currency,
+                                      rates,
+                                    )}
+                                  </span>
                                 </div>
                               )}
 
                               {/* Coupon Discount */}
                               {discount > 0 && (
                                 <div className="flex justify-between text-sm text-green-600">
-                                  <span>Discount ({selectedInvoice.couponCode || "Coupon"})</span>
-                                  <span className="font-medium">-{formatPriceWithCurrency(discount, currency, rates)}</span>
+                                  <span>
+                                    Discount (
+                                    {selectedInvoice.couponCode || "Coupon"})
+                                  </span>
+                                  <span className="font-medium">
+                                    -
+                                    {formatPriceWithCurrency(
+                                      discount,
+                                      currency,
+                                      rates,
+                                    )}
+                                  </span>
                                 </div>
                               )}
 
@@ -2153,7 +2204,11 @@ export default function Dashboard() {
                               <div className="flex justify-between pt-2 border-t border-border/40 font-bold">
                                 <span className="text-foreground">Total</span>
                                 <span className="text-lg text-primary">
-                                  {formatPriceWithCurrency(total, currency, rates)}
+                                  {formatPriceWithCurrency(
+                                    total,
+                                    currency,
+                                    rates,
+                                  )}
                                 </span>
                               </div>
                             </>

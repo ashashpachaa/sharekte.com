@@ -430,7 +430,10 @@ export function createServer() {
   app.post("/api/coupons/apply", applyCoupon);
 
   // Social Media Links routes
-  app.get("/api/social-media/platforms/available", getAvailablePlatformsHandler);
+  app.get(
+    "/api/social-media/platforms/available",
+    getAvailablePlatformsHandler,
+  );
   app.get("/api/social-media", getSocialMediaLinksHandler);
   app.post("/api/social-media", createSocialMediaLinkHandler);
   app.patch("/api/social-media/:id", updateSocialMediaLinkHandler);

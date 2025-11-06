@@ -278,9 +278,15 @@ export default function Checkout() {
 
         // Calculate final total with coupon and fees
         const invoiceSubtotal = convertedAmount;
-        const invoiceTotalFees = feesDetails.reduce((sum, fee) => sum + fee.calculatedAmount, 0);
-        const invoiceDiscount = appliedCoupon?.valid ? appliedCoupon.discount : 0;
-        const invoiceFinalTotal = invoiceSubtotal + invoiceTotalFees - invoiceDiscount;
+        const invoiceTotalFees = feesDetails.reduce(
+          (sum, fee) => sum + fee.calculatedAmount,
+          0,
+        );
+        const invoiceDiscount = appliedCoupon?.valid
+          ? appliedCoupon.discount
+          : 0;
+        const invoiceFinalTotal =
+          invoiceSubtotal + invoiceTotalFees - invoiceDiscount;
 
         // Create invoice record
         const invoice: InvoiceData = {
@@ -305,18 +311,22 @@ export default function Checkout() {
               unitPrice: invoiceSubtotal,
               total: invoiceSubtotal,
             },
-            ...feesDetails.map(fee => ({
+            ...feesDetails.map((fee) => ({
               description: `${fee.name}${fee.type === "percentage" ? ` (${fee.amount}%)` : ""}`,
               quantity: 1,
               unitPrice: fee.calculatedAmount,
               total: fee.calculatedAmount,
             })),
-            ...(invoiceDiscount > 0 ? [{
-              description: `Discount (${appliedCoupon?.coupon?.code || "COUPON"})`,
-              quantity: 1,
-              unitPrice: -invoiceDiscount,
-              total: -invoiceDiscount,
-            }] : []),
+            ...(invoiceDiscount > 0
+              ? [
+                  {
+                    description: `Discount (${appliedCoupon?.coupon?.code || "COUPON"})`,
+                    quantity: 1,
+                    unitPrice: -invoiceDiscount,
+                    total: -invoiceDiscount,
+                  },
+                ]
+              : []),
           ],
           orderId: `order-${Date.now()}`,
           couponCode: appliedCoupon?.coupon?.code,
@@ -340,7 +350,10 @@ export default function Checkout() {
 
         // Create order in API
         const orderSubtotal = convertedAmount;
-        const orderTotalFees = feesDetails.reduce((sum, fee) => sum + fee.calculatedAmount, 0);
+        const orderTotalFees = feesDetails.reduce(
+          (sum, fee) => sum + fee.calculatedAmount,
+          0,
+        );
         const orderDiscount = appliedCoupon?.valid ? appliedCoupon.discount : 0;
         const orderFinalTotal = orderSubtotal + orderTotalFees - orderDiscount;
 

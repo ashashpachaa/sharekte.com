@@ -24,14 +24,7 @@ import {
   deleteSocialMediaLink,
   SOCIAL_MEDIA_ICONS,
 } from "@/lib/social-media";
-import {
-  Trash2,
-  Plus,
-  Edit2,
-  GripVertical,
-  Eye,
-  EyeOff,
-} from "lucide-react";
+import { Trash2, Plus, Edit2, GripVertical, Eye, EyeOff } from "lucide-react";
 
 // Get all available platforms from icons
 const AVAILABLE_PLATFORMS = Object.keys(SOCIAL_MEDIA_ICONS).sort();
@@ -118,7 +111,9 @@ export function AdminSocialLinks() {
   }
 
   async function handleDelete(id: string) {
-    if (!window.confirm("Are you sure you want to delete this social media link?")) {
+    if (
+      !window.confirm("Are you sure you want to delete this social media link?")
+    ) {
       return;
     }
 
@@ -142,7 +137,9 @@ export function AdminSocialLinks() {
   }
 
   if (loading) {
-    return <div className="text-center py-8">Loading social media links...</div>;
+    return (
+      <div className="text-center py-8">Loading social media links...</div>
+    );
   }
 
   // Show all available platforms grouped by category
@@ -159,12 +156,7 @@ export function AdminSocialLinks() {
       "Bluesky",
       "Mastodon",
     ],
-    "Video Platforms": [
-      "YouTube",
-      "TikTok",
-      "Twitch",
-      "Vimeo",
-    ],
+    "Video Platforms": ["YouTube", "TikTok", "Twitch", "Vimeo"],
     "Developer & Tech": [
       "GitHub",
       "GitLab",
@@ -173,19 +165,8 @@ export function AdminSocialLinks() {
       "Hashnode",
       "Stack Overflow",
     ],
-    "Messaging": [
-      "Discord",
-      "Telegram",
-      "WhatsApp",
-      "Signal",
-      "WeChat",
-      "Viber",
-    ],
-    "Contact": [
-      "Email",
-      "Phone",
-      "Website",
-    ],
+    Messaging: ["Discord", "Telegram", "WhatsApp", "Signal", "WeChat", "Viber"],
+    Contact: ["Email", "Phone", "Website"],
   };
 
   return (
@@ -227,7 +208,9 @@ export function AdminSocialLinks() {
                     <div className="flex items-center gap-4 mb-2">
                       <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20">
                         <span className="text-4xl">
-                          {link.icon || SOCIAL_MEDIA_ICONS[link.platform] || "🔗"}
+                          {link.icon ||
+                            SOCIAL_MEDIA_ICONS[link.platform] ||
+                            "🔗"}
                         </span>
                       </div>
                       <div className="flex-1">
@@ -240,7 +223,11 @@ export function AdminSocialLinks() {
                       </div>
                     </div>
                     <p className="text-sm text-primary break-all hover:underline">
-                      <a href={link.url} target="_blank" rel="noopener noreferrer">
+                      <a
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         {link.url}
                       </a>
                     </p>
@@ -376,19 +363,20 @@ export function AdminSocialLinks() {
             </div>
 
             {/* Custom Platform (if needed) */}
-            {!AVAILABLE_PLATFORMS.includes(formData.platform) && formData.platform && (
-              <div>
-                <Label htmlFor="customPlatform">Custom Platform Name</Label>
-                <Input
-                  id="customPlatform"
-                  placeholder="Enter custom platform name"
-                  value={formData.platform}
-                  onChange={(e) =>
-                    setFormData({ ...formData, platform: e.target.value })
-                  }
-                />
-              </div>
-            )}
+            {!AVAILABLE_PLATFORMS.includes(formData.platform) &&
+              formData.platform && (
+                <div>
+                  <Label htmlFor="customPlatform">Custom Platform Name</Label>
+                  <Input
+                    id="customPlatform"
+                    placeholder="Enter custom platform name"
+                    value={formData.platform}
+                    onChange={(e) =>
+                      setFormData({ ...formData, platform: e.target.value })
+                    }
+                  />
+                </div>
+              )}
 
             {/* Icon */}
             <div>
@@ -410,8 +398,7 @@ export function AdminSocialLinks() {
                 )}
               </div>
               <p className="text-xs text-muted-foreground mt-1">
-                {formData.platform &&
-                SOCIAL_MEDIA_ICONS[formData.platform]
+                {formData.platform && SOCIAL_MEDIA_ICONS[formData.platform]
                   ? "Using default icon for this platform. Leave empty or customize."
                   : "Enter custom emoji or text icon"}
               </p>
@@ -424,7 +411,9 @@ export function AdminSocialLinks() {
                 id="url"
                 placeholder="https://..."
                 value={formData.url}
-                onChange={(e) => setFormData({ ...formData, url: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, url: e.target.value })
+                }
               />
             </div>
 

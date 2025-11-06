@@ -23,92 +23,92 @@ export interface SocialMediaSettings {
 export const SOCIAL_MEDIA_ICONS: Record<string, string> = {
   // Main Social Networks
   "Twitter (X)": "𝕏",
-  "X": "𝕏",
-  "Facebook": "f",
-  "Instagram": "📷",
-  "LinkedIn": "in",
-  "YouTube": "▶️",
-  "TikTok": "♪",
-  "Snapchat": "👻",
-  "Pinterest": "P",
-  "Reddit": "🔥",
-  "Threads": "📝",
-  "Bluesky": "🌅",
-  "Mastodon": "🐘",
-  "BeReal": "🔵",
-  "Nextdoor": "🏘️",
+  X: "𝕏",
+  Facebook: "f",
+  Instagram: "📷",
+  LinkedIn: "in",
+  YouTube: "▶️",
+  TikTok: "♪",
+  Snapchat: "👻",
+  Pinterest: "P",
+  Reddit: "🔥",
+  Threads: "📝",
+  Bluesky: "🌅",
+  Mastodon: "🐘",
+  BeReal: "🔵",
+  Nextdoor: "🏘️",
 
   // Tech & Developer
-  "GitHub": "🐙",
-  "GitLab": "🦊",
+  GitHub: "🐙",
+  GitLab: "🦊",
   "Dev.to": "⚡",
-  "Medium": "📝",
-  "Hashnode": "#",
+  Medium: "📝",
+  Hashnode: "#",
   "Stack Overflow": "🏗️",
-  "Substack": "📧",
-  "Blogspot": "📰",
+  Substack: "📧",
+  Blogspot: "📰",
 
   // Chat & Messaging
-  "Discord": "💬",
+  Discord: "💬",
   "Discord Server": "💜",
-  "Telegram": "✈️",
+  Telegram: "✈️",
   "Telegram Channel": "✈️",
-  "WhatsApp": "💬",
+  WhatsApp: "💬",
   "WhatsApp Business": "💬",
-  "Signal": "🔐",
-  "WeChat": "🐉",
-  "Viber": "📱",
-  "Slack": "💜",
-  "Skype": "💙",
+  Signal: "🔐",
+  WeChat: "🐉",
+  Viber: "📱",
+  Slack: "💜",
+  Skype: "💙",
 
   // Video & Streaming
-  "Twitch": "🎮",
-  "Mixer": "🎮",
-  "Vimeo": "▶️",
-  "Dailymotion": "▶️",
-  "Rumble": "🎬",
-  "Loom": "📹",
+  Twitch: "🎮",
+  Mixer: "🎮",
+  Vimeo: "▶️",
+  Dailymotion: "▶️",
+  Rumble: "🎬",
+  Loom: "📹",
   "YouTube Live": "▶️",
   "Facebook Live": "📺",
 
   // Creative Platforms
-  "Behance": "🎨",
-  "Dribbble": "🎯",
-  "ArtStation": "🖌️",
-  "DeviantArt": "🎭",
+  Behance: "🎨",
+  Dribbble: "🎯",
+  ArtStation: "🖌️",
+  DeviantArt: "🎭",
 
   // Professional
-  "Fiverr": "💼",
-  "Upwork": "💼",
-  "Freelancer": "💼",
+  Fiverr: "💼",
+  Upwork: "💼",
+  Freelancer: "💼",
 
   // Contact Methods
-  "Email": "📧",
-  "Website": "🌐",
-  "Phone": "☎️",
+  Email: "📧",
+  Website: "🌐",
+  Phone: "☎️",
 
   // Business
-  "Yelp": "⭐",
+  Yelp: "⭐",
   "Google Business": "🔵",
   "Apple Maps": "🗺️",
-  "OpenSea": "🌊",
+  OpenSea: "🌊",
 
   // Podcasts
-  "Spotify": "🎵",
+  Spotify: "🎵",
   "Apple Podcasts": "🎧",
-  "Podbean": "🎙️",
-  "Anchor": "🎙️",
+  Podbean: "🎙️",
+  Anchor: "🎙️",
 
   // Payment & Donations
-  "PayPal": "🅿️",
+  PayPal: "🅿️",
   "Ko-fi": "☕",
-  "Patreon": "🎁",
-  "Stripe": "💳",
+  Patreon: "🎁",
+  Stripe: "💳",
   "Buy Me A Coffee": "☕",
 
   // Community
-  "Community": "👥",
-  "Forum": "💬",
+  Community: "👥",
+  Forum: "💬",
 };
 
 // Fetch all social media links
@@ -187,11 +187,14 @@ export async function reorderSocialMediaLinks(
 ): Promise<boolean> {
   try {
     const apiBaseURL = getAPIBaseURL();
-    const response = await fetch(`${apiBaseURL}/api/social-media-links/reorder`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ links }),
-    });
+    const response = await fetch(
+      `${apiBaseURL}/api/social-media-links/reorder`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ links }),
+      },
+    );
 
     return response.ok;
   } catch (error) {

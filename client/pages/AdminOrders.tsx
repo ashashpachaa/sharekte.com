@@ -1077,16 +1077,18 @@ function OrderDetailsModal({
                   </div>
                 )}
 
-                {editedOrder.couponDiscount && editedOrder.couponDiscount > 0 && (
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">
-                      Coupon Discount
-                    </span>
-                    <span className="text-sm font-medium text-green-600">
-                      -{editedOrder.currency} {editedOrder.couponDiscount.toFixed(2)}
-                    </span>
-                  </div>
-                )}
+                {editedOrder.couponDiscount &&
+                  editedOrder.couponDiscount > 0 && (
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">
+                        Coupon Discount
+                      </span>
+                      <span className="text-sm font-medium text-green-600">
+                        -{editedOrder.currency}{" "}
+                        {editedOrder.couponDiscount.toFixed(2)}
+                      </span>
+                    </div>
+                  )}
 
                 {editedOrder.totalFees && editedOrder.totalFees > 0 && (
                   <>
@@ -1100,10 +1102,12 @@ function OrderDetailsModal({
                             >
                               <span className="text-muted-foreground">
                                 {fee.name}
-                                {fee.type === "percentage" && ` (${fee.amount}%)`}
+                                {fee.type === "percentage" &&
+                                  ` (${fee.amount}%)`}
                               </span>
                               <span className="font-medium text-amber-600">
-                                +{editedOrder.currency} {fee.calculatedAmount.toFixed(2)}
+                                +{editedOrder.currency}{" "}
+                                {fee.calculatedAmount.toFixed(2)}
                               </span>
                             </div>
                           ))}
@@ -1115,7 +1119,8 @@ function OrderDetailsModal({
                         Total Fees
                       </span>
                       <span className="text-sm text-amber-600">
-                        +{editedOrder.currency} {editedOrder.totalFees.toFixed(2)}
+                        +{editedOrder.currency}{" "}
+                        {editedOrder.totalFees.toFixed(2)}
                       </span>
                     </div>
                   </>
@@ -1127,7 +1132,8 @@ function OrderDetailsModal({
                       Final Total
                     </span>
                     <span className="text-sm font-bold text-primary">
-                      {editedOrder.currency} {editedOrder.discountedTotal.toFixed(2)}
+                      {editedOrder.currency}{" "}
+                      {editedOrder.discountedTotal.toFixed(2)}
                     </span>
                   </div>
                 )}

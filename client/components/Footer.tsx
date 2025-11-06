@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { fetchSocialMediaLinks, type SocialMediaLink } from "@/lib/social-media";
+import {
+  fetchSocialMediaLinks,
+  type SocialMediaLink,
+} from "@/lib/social-media";
 
 export function Footer() {
   const { t } = useTranslation();
@@ -15,7 +18,9 @@ export function Footer() {
   async function loadSocialLinks() {
     try {
       const links = await fetchSocialMediaLinks();
-      setSocialLinks(links.filter((link) => link.isActive).sort((a, b) => a.order - b.order));
+      setSocialLinks(
+        links.filter((link) => link.isActive).sort((a, b) => a.order - b.order),
+      );
     } catch (error) {
       console.error("Error loading social media links:", error);
     }

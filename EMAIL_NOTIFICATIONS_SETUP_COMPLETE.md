@@ -9,6 +9,7 @@ Email notifications are now **fully configured and operational** on your Sharekt
 ## Configuration Details
 
 ### SMTP Settings
+
 - **Host**: www.sharekte.com
 - **Port**: 587 (STARTTLS)
 - **Sender Email**: noreply@sharekte.com
@@ -16,6 +17,7 @@ Email notifications are now **fully configured and operational** on your Sharekt
 - **Status**: ✅ Connected
 
 ### Environment Variables Set
+
 ```
 EMAIL_HOST=www.sharekte.com
 EMAIL_PORT=587
@@ -31,16 +33,19 @@ ADMIN_EMAIL=sales@sharekte.com
 ### 1️⃣ **Order Emails**
 
 **When emails are sent:**
+
 - ✅ Order Created - Customer gets confirmation
 - ✅ Order Status Changed - All status transitions
 - ✅ Order Completed - Final notification
 - ✅ Order Cancelled - Cancellation notice
 
 **Recipients:**
+
 - Customer email (from order form)
 - Sales team (sales@sharekte.com) - Always CC'd
 
 **Example:**
+
 ```
 To: customer@example.com, sales@sharekte.com
 Subject: Order Confirmation - Order #ORD-2025-12345
@@ -52,6 +57,7 @@ Body: Your order for [Company Name] has been confirmed...
 ### 2️⃣ **Transfer Form Emails**
 
 **When emails are sent:**
+
 - ✅ Form Submitted - Buyer confirmation
 - ✅ Status: Under Review - Notification when form reviewed
 - ✅ Status: Amendment Required - When changes needed
@@ -59,10 +65,12 @@ Body: Your order for [Company Name] has been confirmed...
 - ✅ Status Changes - All status transitions
 
 **Recipients:**
+
 - Buyer email (from transfer form)
 - Sales team (sales@sharekte.com) - Always CC'd
 
 **Example:**
+
 ```
 To: buyer@example.com, sales@sharekte.com
 Subject: Transfer Form Submitted - Company ABC Ltd
@@ -74,15 +82,18 @@ Body: Your transfer form has been submitted successfully...
 ### 3️⃣ **Invoice Emails**
 
 **When emails are sent:**
+
 - ✅ Invoice Created - Customer gets invoice
 - ✅ Invoice Paid - Payment confirmation
 - ✅ Invoice Status Changes - All status updates
 
 **Recipients:**
+
 - Customer email (from invoice)
 - Sales team (sales@sharekte.com) - Always CC'd
 
 **Example:**
+
 ```
 To: customer@example.com, sales@sharakte.com
 Subject: Invoice INV-2025-001 - Sharekte
@@ -99,15 +110,15 @@ Body: Your invoice for [Amount] is now available...
 1. Order Created (Checkout)
    ↓
    📧 Order Confirmation Email
-   
+
 2. Payment Processed
    ↓
    📧 Payment Confirmation Email
-   
+
 3. Admin Changes Order Status
    ↓
    📧 Status Update Email (to customer + admin)
-   
+
 4. Order Completed
    ↓
    📧 Order Complete Email
@@ -119,15 +130,15 @@ Body: Your invoice for [Amount] is now available...
 1. Customer Submits Form
    ↓
    📧 Submission Confirmation Email
-   
+
 2. Admin Reviews (Sets "Under Review")
    ↓
    📧 Form Under Review Email
-   
+
 3. Admin Requests Amendment
    ↓
    📧 Amendment Required Email (with admin notes)
-   
+
 4. Admin Completes Transfer
    ↓
    📧 Transfer Complete Email
@@ -139,7 +150,7 @@ Body: Your invoice for [Amount] is now available...
 1. Invoice Created
    ↓
    📧 Invoice Creation Email
-   
+
 2. Invoice Status = Paid
    ↓
    📧 Payment Received Email
@@ -150,9 +161,11 @@ Body: Your invoice for [Amount] is now available...
 ## How It Works Behind The Scenes
 
 ### 1. **Email Sending Functions**
+
 Located in: `server/routes/notifications.ts`
 
 Functions available:
+
 - `sendOrderEmail()` - Handles all order-related emails
 - `sendTransferFormEmail()` - Handles all transfer form emails
 - `sendInvoiceEmail()` - Handles all invoice emails
@@ -160,6 +173,7 @@ Functions available:
 ### 2. **Integration Points**
 
 #### Orders (`server/routes/orders.ts`)
+
 ```typescript
 // When order is created
 await sendOrderEmail({
@@ -170,7 +184,7 @@ await sendOrderEmail({
   companyName: order.companyName,
   amount: "3,670 AED",
   status: order.status,
-  orderDate: order.purchaseDate
+  orderDate: order.purchaseDate,
 });
 
 // When order status changes
@@ -178,11 +192,12 @@ await sendOrderEmail({
   to: order.customerEmail,
   eventType: "status-changed",
   orderId: order.orderId,
-  status: "completed"
+  status: "completed",
 });
 ```
 
 #### Transfer Forms (`server/routes/transfer-forms.ts`)
+
 ```typescript
 // When form is created
 await sendTransferFormEmail({
@@ -190,7 +205,7 @@ await sendTransferFormEmail({
   eventType: "submitted",
   formId: form.formId,
   companyName: form.companyName,
-  status: "submitted"
+  status: "submitted",
 });
 
 // When status changes
@@ -200,11 +215,12 @@ await sendTransferFormEmail({
   formId: form.formId,
   companyName: form.companyName,
   status: status,
-  adminNotes: notes
+  adminNotes: notes,
 });
 ```
 
 #### Invoices (`server/routes/invoices.ts`)
+
 ```typescript
 // When invoice is created
 await sendInvoiceEmail({
@@ -212,12 +228,14 @@ await sendInvoiceEmail({
   invoiceId: invoice.id,
   customerName: invoice.customerName,
   amount: "3,670 AED",
-  dueDate: invoice.dueDate
+  dueDate: invoice.dueDate,
 });
 ```
 
 ### 3. **Email Transport**
+
 Uses Nodemailer with SMTP configuration:
+
 - Automatic retry on failure
 - Error handling (doesn't block main request)
 - Async operation (fires and forgets)
@@ -228,11 +246,13 @@ Uses Nodemailer with SMTP configuration:
 ## Email Templates
 
 ### Email Header
+
 - Logo: Sharekte branding
 - Company: Sharekte
 - Accent Color: Primary blue (#004580)
 
 ### Email Structure
+
 1. **Header** - Company branding
 2. **Subject** - Relevant to event type
 3. **Body** - Event-specific message
@@ -241,12 +261,13 @@ Uses Nodemailer with SMTP configuration:
 6. **Footer** - Company contact info & unsubscribe
 
 ### Template Example
+
 ```html
 <div style="font-family: Arial, sans-serif; max-width: 600px;">
   <header style="background-color: #004580; padding: 20px; color: white;">
     <h1>Sharekte</h1>
   </header>
-  
+
   <main style="padding: 20px;">
     <h2>Order Confirmation</h2>
     <p>Your order has been confirmed!</p>
@@ -254,7 +275,7 @@ Uses Nodemailer with SMTP configuration:
     <p><strong>Company:</strong> ABC Company Ltd</p>
     <p><strong>Amount:</strong> 3,670 AED</p>
   </main>
-  
+
   <footer style="background-color: #f5f5f5; padding: 20px;">
     <p>Contact: hello@sharekte.com</p>
   </footer>
@@ -266,6 +287,7 @@ Uses Nodemailer with SMTP configuration:
 ## Testing Email Delivery
 
 ### Manual Test
+
 1. Create an order in the system
 2. Enter your test email address
 3. Check inbox for confirmation email
@@ -274,6 +296,7 @@ Uses Nodemailer with SMTP configuration:
 ### Test Different Events
 
 **Event: Order Created**
+
 ```bash
 POST /api/orders
 Body: {
@@ -284,18 +307,22 @@ Body: {
   "currency": "AED"
 }
 ```
+
 Expected: Confirmation email sent to test@example.com + sales@sharakte.com
 
 **Event: Order Status Changed**
+
 ```bash
 PATCH /api/orders/:orderId/status
 Body: {
   "status": "completed"
 }
 ```
+
 Expected: Status update email sent
 
 **Event: Transfer Form Created**
+
 ```bash
 POST /api/transfer-forms
 Body: {
@@ -304,6 +331,7 @@ Body: {
   ...
 }
 ```
+
 Expected: Submission confirmation email sent
 
 ---
@@ -313,6 +341,7 @@ Expected: Submission confirmation email sent
 ### Emails Not Sending?
 
 **Check 1: SMTP Configuration**
+
 ```bash
 # Verify environment variables are set
 echo $EMAIL_HOST
@@ -323,16 +352,19 @@ echo $ADMIN_EMAIL
 
 **Check 2: Email Logs**
 Look for console logs:
+
 ```
 ✓ Email sent: created to customer@example.com + sales@sharakte.com
 ```
 
 **Check 3: SMTP Connection**
+
 - Host: www.sharekte.com (correct)
 - Port: 587 (STARTTLS - correct)
 - Credentials: noreply@sharekte.com / Sharekte@2010
 
 **Check 4: Customer Email Field**
+
 - Make sure orders have `customerEmail` field
 - Transfer forms have `buyerEmail` field
 - Invoices have `customerEmail` field
@@ -340,16 +372,19 @@ Look for console logs:
 ### Common Issues
 
 **Issue: "Email transport not configured"**
-- Solution: Verify all EMAIL_* environment variables are set
+
+- Solution: Verify all EMAIL\_\* environment variables are set
 - Check SMTP credentials are correct
 - Ensure port 587 is open from server
 
 **Issue: "SMTP Authentication failed"**
+
 - Solution: Reset Hostinger email password
 - Verify user is `noreply@sharakte.com` (exact spelling)
 - Check for special characters in password
 
-**Issue: Emails go to spam****
+**Issue: Emails go to spam\*\***
+
 - Solution: Add sharekte.com to DNS SPF/DKIM records (Hostinger panel)
 - Use professional email domain (not Gmail/Yahoo)
 - Current setup is production-ready once DNS is configured
@@ -359,18 +394,21 @@ Look for console logs:
 ## Admin Dashboard Features
 
 ### Order Management
+
 - ✅ View order status
 - ✅ Change order status → Triggers email
 - ✅ See all status history
 - ✅ Add admin notes (included in amendment emails)
 
 ### Transfer Form Management
+
 - ✅ View form submission
 - ✅ Change form status → Triggers email
 - ✅ Request amendments → Email sent to customer
 - ✅ Add admin comments → Included in emails
 
 ### Invoice Management
+
 - ✅ Create invoices → Email sent
 - ✅ Change invoice status → Email sent if "paid"
 - ✅ Track invoice history
@@ -380,14 +418,18 @@ Look for console logs:
 ## Production Deployment
 
 ### On Hostinger VPS
+
 Email settings are already configured in environment variables. They will:
+
 1. ✅ Send to actual Hostinger email server
 2. ✅ Work with your noreply@sharakte.com account
 3. ✅ CC all emails to sales@sharakte.com
 4. ✅ Properly sign emails from noreply@sharakte.com
 
 ### Recommended DNS Setup (Optional)
+
 For better email deliverability:
+
 1. Go to Hostinger > Domains > sharekte.com > DNS
 2. Add SPF record:
    ```
@@ -401,18 +443,24 @@ For better email deliverability:
 ## Support & Maintenance
 
 ### Email Logs
+
 All email events are logged to console:
+
 - When email is sent: ✓ Email sent: [type] to [recipient]
 - When email fails: ✗ Failed to send [type] email: [error]
 
 ### Monitoring
+
 Check server logs regularly for:
+
 - Failed email deliveries
 - SMTP connection issues
 - Bounce notifications
 
 ### Updating Email Settings
+
 To change email configuration:
+
 ```bash
 # Update environment variables
 export EMAIL_HOST="new-host.com"
@@ -439,6 +487,7 @@ pm2 restart shareket
 - **Production Ready**: Works on Hostinger immediately
 
 ### Next Steps
+
 1. ✅ System is active - emails will send on all events
 2. ✅ Test with a sample order
 3. ✅ Verify emails arrive in inbox
