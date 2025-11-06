@@ -210,6 +210,13 @@ export function TransferFormManagement({
                 JSON.stringify(updatedCompanies)
               );
               console.log("[TransferFormManagement] Updated purchasedCompanies in localStorage");
+
+              // Dispatch custom event to notify Dashboard to refresh
+              window.dispatchEvent(
+                new CustomEvent("purchasedCompaniesUpdated", {
+                  detail: { updatedCompanies },
+                })
+              );
             }
           } catch (error) {
             console.error("Error updating company with comments:", error);
