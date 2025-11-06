@@ -5,7 +5,8 @@ const SMTP_HOST = process.env.EMAIL_HOST;
 const SMTP_PORT = parseInt(process.env.EMAIL_PORT || "587");
 const SMTP_USER = process.env.EMAIL_USER;
 const SMTP_PASS = process.env.EMAIL_PASSWORD;
-const FROM_EMAIL = process.env.FROM_EMAIL || "noreply@sharekte.com";
+const FROM_EMAIL = process.env.EMAIL_USER || "noreply@sharekte.com";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "sales@sharekte.com";
 
 let transporter: nodemailer.Transporter | null = null;
 
