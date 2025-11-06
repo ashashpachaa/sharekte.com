@@ -1,4 +1,5 @@
 import { RequestHandler } from "express";
+import { sendTransferFormEmail } from "./notifications";
 
 // Type definitions - copied locally to avoid importing from client code
 type FormStatus =
