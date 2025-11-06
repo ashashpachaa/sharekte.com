@@ -1006,7 +1006,8 @@ export const renewCompany: RequestHandler = async (req, res) => {
     const record = await getResponse.json();
     const fields = record.fields;
     const incorporationDate = fields["Incorporate date"] || getTodayString();
-    const newRenewalDate = calculateExpiryDate(getTodayString());
+    const currentRenewalDate = fields["Renewal Date"] || calculateExpiryDate(getTodayString());
+    const newRenewalDate = calculateSmartRenewalDate(currentRenewalDate);
 
     // Clear cache since we're updating
     serverCache = null;
