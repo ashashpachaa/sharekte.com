@@ -1154,19 +1154,66 @@ export const generatePDF: RequestHandler = async (req, res) => {
         "bytes",
       );
 
-      // Send as downloadable PDF file (user opens in browser, then prints to PDF)
-      const filename = `transfer-form-${form.formId}.pdf`;
-      res.setHeader("Content-Type", "application/pdf");
-      res.setHeader(
-        "Content-Disposition",
-        `attachment; filename="${filename}"`,
-      );
-      res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-      res.setHeader("Pragma", "no-cache");
-      res.setHeader("Expires", "0");
-      res.setHeader("Content-Length", Buffer.byteLength(htmlContent));
-      res.send(htmlContent);
-      console.log("[generatePDF] ✓ HTML sent successfully to client");
+      // Convert HTML to binary PDF
+      try {
+        const { generatePdf } = await import("html-pdf-node");
+
+        console.log("[generatePDF] Converting HTML to binary PDF...");
+
+        const options = {
+          format: "A4",
+          margin: {
+            top: "10mm",
+            right: "10mm",
+            bottom: "10mm",
+            left: "10mm",
+          },
+          printBackground: true,
+          waitUntil: "networkidle2",
+        };
+
+        const pdfBuffer = await generatePdf(
+          { content: htmlContent },
+          options
+        );
+
+        console.log(
+          "[generatePDF] ✓ PDF generated successfully, size:",
+          pdfBuffer.length,
+          "bytes",
+        );
+
+        // Send as binary PDF file
+        const filename = `transfer-form-${form.formId}.pdf`;
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader(
+          "Content-Disposition",
+          `attachment; filename="${filename}"`,
+        );
+        res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        res.setHeader("Pragma", "no-cache");
+        res.setHeader("Expires", "0");
+        res.setHeader("Content-Length", pdfBuffer.length);
+        res.send(pdfBuffer);
+        console.log("[generatePDF] ✓ Binary PDF sent successfully to client");
+      } catch (pdfConvertError) {
+        console.warn(
+          "[generatePDF] PDF conversion failed, falling back to HTML:",
+          pdfConvertError
+        );
+        // Fallback: send HTML for manual printing
+        const filename = `transfer-form-${form.formId}.html`;
+        res.setHeader("Content-Type", "text/html");
+        res.setHeader(
+          "Content-Disposition",
+          `attachment; filename="${filename}"`,
+        );
+        res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        res.send(htmlContent);
+        console.log(
+          "[generatePDF] ⚠ HTML sent as fallback (PDF conversion unavailable)"
+        );
+      }
     } catch (htmlError) {
       console.error("[generatePDF] HTML generation error:", htmlError);
       res
