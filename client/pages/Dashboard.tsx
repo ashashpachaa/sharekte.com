@@ -391,22 +391,13 @@ export default function Dashboard() {
 
       // Update renewal status based on days remaining
       const daysRemaining = calculateDaysRemaining(uc.renewalDate);
-      let currentRenewalStatus = uc.renewalStatus;
+      const newRenewalStatus = calculateRenewalStatus(uc.renewalDate);
 
-      if (currentRenewalStatus !== "cancelled" && daysRemaining <= -15) {
-        currentRenewalStatus = "cancelled";
-        updateCompanyRenewalStatus(uc.id, "cancelled");
-      } else if (
-        currentRenewalStatus !== "cancelled" &&
-        daysRemaining <= 0 &&
-        daysRemaining > -15
-      ) {
-        currentRenewalStatus = "expired";
-        updateCompanyRenewalStatus(uc.id, "expired");
-      } else if (currentRenewalStatus === "expired" && daysRemaining > 0) {
-        currentRenewalStatus = "active";
-        updateCompanyRenewalStatus(uc.id, "active");
+      // Update status if changed
+      if (newRenewalStatus !== uc.renewalStatus) {
+        updateCompanyRenewalStatus(uc.id, newRenewalStatus);
       }
+      const currentRenewalStatus = newRenewalStatus;
 
       return {
         id: uc.id,
