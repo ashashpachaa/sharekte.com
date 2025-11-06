@@ -16,6 +16,7 @@ import {
   Mail,
   DollarSign,
   Package,
+  Share2,
 } from "lucide-react";
 
 export default function AdminDashboard() {
@@ -308,6 +309,23 @@ export default function AdminDashboard() {
             </p>
             <Button variant="outline" className="w-full" asChild>
               <Link to="/admin/settings">Go to Settings</Link>
+            </Button>
+          </div>
+
+          {/* Social Media Links */}
+          <div className="bg-card border border-border/40 rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <Share2 className="w-5 h-5" />
+              Social Media Links
+            </h3>
+            <p className="text-muted-foreground text-sm mb-4">
+              Manage social media links displayed in the website footer
+            </p>
+            <Button
+              className="w-full bg-pink-600 hover:bg-pink-700 text-white"
+              asChild
+            >
+              <Link to="/admin/social-media">Manage Social Links</Link>
             </Button>
           </div>
         </div>
