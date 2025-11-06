@@ -1,4 +1,6 @@
 import { RequestHandler } from "express";
+import { sendInvoiceEmail } from "./notifications";
+
 // Type definitions - copied locally to avoid importing from client code
 type InvoiceStatus = "draft" | "sent" | "paid" | "overdue" | "cancelled";
 
