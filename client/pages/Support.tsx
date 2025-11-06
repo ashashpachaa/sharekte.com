@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -6,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
+import { useSEO, getPageSEOMetadata } from "@/lib/seo";
 import {
   Building2,
   DollarSign,
@@ -36,6 +38,10 @@ interface Resource {
 }
 
 export default function Support() {
+  const { i18n } = useTranslation();
+  const seoMetadata = getPageSEOMetadata('support', i18n.language);
+  useSEO(seoMetadata, i18n.language);
+
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
