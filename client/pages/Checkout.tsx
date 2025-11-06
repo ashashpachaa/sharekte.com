@@ -416,7 +416,7 @@ export default function Checkout() {
             toast.info(`Account created! Login with email: ${billingEmail}`);
           } else if (response.status === 409) {
             console.log(
-              `[Checkout] User account already exists for ${userEmail}`,
+              `[Checkout] User account already exists for ${billingEmail}`,
             );
           } else {
             console.warn(
