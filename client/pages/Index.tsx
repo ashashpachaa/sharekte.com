@@ -6,13 +6,7 @@ import { Footer } from "@/components/Footer";
 import { WhyBuyReadyMade } from "@/components/WhyBuyReadyMade";
 import { useMemo } from "react";
 import { useSEO, getPageSEOMetadata } from "@/lib/seo";
-import {
-  TrendingUp,
-  Zap,
-  BarChart3,
-  Globe,
-  Play,
-} from "lucide-react";
+import { TrendingUp, Zap, BarChart3, Globe, Play } from "lucide-react";
 
 // Sales Statistics Section - Motivation
 function SalesStatisticsSection({ t }: { t: (key: string) => string }) {
