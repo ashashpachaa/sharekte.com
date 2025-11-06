@@ -424,6 +424,39 @@ export default function Dashboard() {
     });
   });
 
+  // Listen for storage changes to refresh companies when form status changes
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "purchasedCompanies") {
+        console.log("[Dashboard] Detected purchasedCompanies update in localStorage");
+        const updatedCompanies = getPurchasedCompanies();
+        setPurchasedCompanies(updatedCompanies.map((uc) => ({
+          id: uc.id,
+          name: uc.name,
+          number: uc.number,
+          price: uc.price,
+          incorporationDate: uc.incorporationDate,
+          incorporationYear: uc.incorporationYear,
+          country: uc.country,
+          purchasedDate: uc.purchasedDate,
+          renewalDate: uc.renewalDate,
+          renewalFees: uc.renewalFees,
+          status: uc.status,
+          statusLabel: uc.statusLabel,
+          documents: uc.documents || [],
+          transferFormFilled: uc.transferFormFilled,
+          adminComments: uc.adminComments,
+          statusHistory: uc.statusHistory,
+          renewalStatus: uc.renewalStatus || "active",
+          renewalHistory: uc.renewalHistory || [],
+        })));
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
+
   // Load order documents and associate with companies
   useEffect(() => {
     const loadOrderDocuments = async () => {
