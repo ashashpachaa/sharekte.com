@@ -121,6 +121,7 @@ import {
   getAllWalletsHandler,
   addFundsHandler,
   getTransactionsHandler,
+  getAllTransactionsHandler,
   freezeWalletHandler,
   unfreezeWalletHandler,
   deductFromWalletHandler,
