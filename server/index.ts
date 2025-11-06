@@ -125,6 +125,19 @@ export function createServer() {
   // Middleware
   console.log("[createServer] Setting up middleware");
   app.use(cors());
+
+  // Cache-busting middleware to clear all caches
+  app.use((req, res, next) => {
+    // Prevent browser caching
+    res.set({
+      "Cache-Control": "no-cache, no-store, must-revalidate, max-age=0",
+      "Pragma": "no-cache",
+      "Expires": "0",
+      "Clear-Site-Data": '"cache", "cookies", "storage"',
+    });
+    next();
+  });
+
   app.use(express.json({ limit: "5gb" }));
   app.use(express.urlencoded({ extended: true, limit: "5gb" }));
   console.log("[createServer] Middleware setup complete");
