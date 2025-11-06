@@ -91,6 +91,8 @@ export interface InvoiceData {
     total: number;
   }>;
   orderId?: string;
+  couponCode?: string;
+  couponDiscount?: number;
 }
 
 export interface BillingInformation {
