@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { CompanyTable } from "@/components/CompanyTable";
-import { WhyBuyReadyMade } from "@/components/WhyBuyReadyMade"; // Import the new component
+import { WhyBuyReadyMade } from "@/components/WhyBuyReadyMade";
 import { useMemo } from "react";
 import { useSEO, getPageSEOMetadata } from "@/lib/seo";
 import {
