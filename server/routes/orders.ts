@@ -41,6 +41,11 @@ import {
   fetchOrdersFromAirtable,
   updateOrderStatusInAirtable,
 } from "../utils/airtable-sync";
+import {
+  sendOrderEmail,
+  sendTransferFormEmail,
+  sendInvoiceEmail,
+} from "./notifications";
 
 const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
 const AIRTABLE_BASE_ID = "app0PK34gyJDizR3Q";
