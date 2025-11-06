@@ -336,6 +336,49 @@
       "step4": "Manage",
       "step4Desc": "Access your Sharekte dashboard and scale your business portfolio"
     },
+    "whyBuy": {
+      "badge": "Why Sharekte",
+      "title": "Why Buy a Ready-Made Company?",
+      "subtitle": "Skip the startup grind. Get established businesses that generate revenue from day one with proven models and experienced teams.",
+      "time": {
+        "title": "Time Savings",
+        "description": "Skip years of development and get to profitability fast"
+      },
+      "capital": {
+        "title": "Capital Savings",
+        "description": "Avoid massive startup costs and hit the ground running"
+      },
+      "profitability": {
+        "title": "Day 1 Profitability",
+        "description": "Generate revenue from day one with established customers"
+      },
+      "lowRisk": {
+        "title": "Proven Model",
+        "description": "Buy a business with a track record and established operations"
+      },
+      "team": {
+        "title": "Ready Operations",
+        "description": "Get an experienced team and operational systems already in place"
+      },
+      "global": {
+        "title": "Global Opportunity",
+        "description": "Acquire UK, Swedish, US companies without travel or relocation"
+      },
+      "stats": {
+        "companies": "Companies",
+        "revenue": "Total Revenue",
+        "growth": "Avg Growth"
+      },
+      "cta": {
+        "title": "Ready to Buy Your First Company?",
+        "description": "Browse our curated collection of established, revenue-generating businesses. Find your next opportunity today.",
+        "options": "Choose Your Path:",
+        "browse": "Browse Companies",
+        "contact": "Get Consultation",
+        "watchDemo": "Watch Demo",
+        "trusted": "✓ Trusted by 2,500+ entrepreneurs worldwide"
+      }
+    },
     "salesSection": {
       "title": "Become an Entrepreneur Right Now",
       "soldToday": "Companies sold today",
