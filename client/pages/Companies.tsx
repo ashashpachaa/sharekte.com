@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
+import { useSEO, getPageSEOMetadata } from "@/lib/seo";
 import {
   Plus,
   Grid3x3,
@@ -49,6 +51,10 @@ import { Badge } from "@/components/ui/badge";
 type ViewMode = "grid" | "table";
 
 export default function Companies() {
+  const { i18n } = useTranslation();
+  const seoMetadata = getPageSEOMetadata('companies', i18n.language);
+  useSEO(seoMetadata, i18n.language);
+
   const [companies, setCompanies] = useState<CompanyData[]>([]);
   const [filteredCompanies, setFilteredCompanies] = useState<CompanyData[]>([]);
   const [loading, setLoading] = useState(true);
