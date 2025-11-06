@@ -573,6 +573,19 @@ export const updateOrderStatus: RequestHandler = async (req, res) => {
       );
     }
 
+    // Send status update email to customer and admin
+    if (updatedOrder.customerEmail) {
+      await sendOrderEmail({
+        to: updatedOrder.customerEmail,
+        eventType: "status-changed",
+        orderId: updatedOrder.orderId,
+        customerName: updatedOrder.customerName,
+        companyName: updatedOrder.companyName,
+        amount: `${updatedOrder.amount} ${updatedOrder.currency}`,
+        status: status,
+      });
+    }
+
     res.json(updatedOrder);
   } catch (error) {
     console.error("Failed to update order status:", error);
