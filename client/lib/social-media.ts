@@ -32,6 +32,11 @@ export const SOCIAL_MEDIA_ICONS: Record<string, string> = {
   "Snapchat": "👻",
   "Pinterest": "P",
   "Reddit": "🔥",
+  "Threads": "📝",
+  "Bluesky": "🌅",
+  "Mastodon": "🐘",
+  "BeReal": "🔵",
+  "Nextdoor": "🏘️",
 
   // Tech & Developer
   "GitHub": "🐙",
@@ -40,39 +45,31 @@ export const SOCIAL_MEDIA_ICONS: Record<string, string> = {
   "Medium": "📝",
   "Hashnode": "#",
   "Stack Overflow": "🏗️",
+  "Substack": "📧",
+  "Blogspot": "📰",
 
   // Chat & Messaging
   "Discord": "💬",
+  "Discord Server": "💜",
   "Telegram": "✈️",
+  "Telegram Channel": "✈️",
   "WhatsApp": "💬",
+  "WhatsApp Business": "💬",
   "Signal": "🔐",
   "WeChat": "🐉",
   "Viber": "📱",
+  "Slack": "💜",
+  "Skype": "💙",
 
   // Video & Streaming
   "Twitch": "🎮",
+  "Mixer": "🎮",
   "Vimeo": "▶️",
   "Dailymotion": "▶️",
   "Rumble": "🎬",
-
-  // Web3 & Crypto
-  "Discord Server": "💜",
-  "Telegram Channel": "✈️",
-  "OpenSea": "����",
-
-  // Blogs & Publishing
-  "Medium": "📝",
-  "Substack": "📧",
-  "Hashnode": "#",
-  "Dev.to": "⚡",
-  "Blogspot": "📰",
-
-  // Social Networks
-  "Mastodon": "🐘",
-  "Bluesky": "🌅",
-  "Threads": "📝",
-  "BeReal": "🔵",
-  "Nextdoor": "🏘️",
+  "Loom": "📹",
+  "YouTube Live": "▶️",
+  "Facebook Live": "📺",
 
   // Creative Platforms
   "Behance": "🎨",
@@ -89,27 +86,18 @@ export const SOCIAL_MEDIA_ICONS: Record<string, string> = {
   "Email": "📧",
   "Website": "🌐",
   "Phone": "☎️",
-  "WhatsApp Business": "💬",
 
   // Business
   "Yelp": "⭐",
   "Google Business": "🔵",
   "Apple Maps": "🗺️",
+  "OpenSea": "🌊",
 
   // Podcasts
   "Spotify": "🎵",
   "Apple Podcasts": "🎧",
   "Podbean": "🎙️",
   "Anchor": "🎙️",
-
-  // Video Hosting
-  "Vimeo": "▶️",
-  "Loom": "📹",
-
-  // Live Streaming
-  "Mixer": "🎮",
-  "YouTube Live": "▶️",
-  "Facebook Live": "📺",
 
   // Payment & Donations
   "PayPal": "🅿️",
@@ -121,8 +109,6 @@ export const SOCIAL_MEDIA_ICONS: Record<string, string> = {
   // Community
   "Community": "👥",
   "Forum": "💬",
-  "Slack": "💜",
-  "Skype": "💙",
 };
 
 // Fetch all social media links
