@@ -218,6 +218,16 @@ function initializeDemoForms() {
         totalShares: 1000,
         totalShareCapital: 100000,
         pricePerShare: 100,
+        sellerName: "Sarah Johnson",
+        sellerEmail: "sarah.johnson@example.com",
+        sellerPhone: "+44 20 7946 0958",
+        sellerCountry: "UK",
+        sellerAddress: "456 Business Park, Manchester, M3 4RB",
+        buyerName: "Ahmed Al-Rashid",
+        buyerEmail: "ahmed.rashid@example.ae",
+        buyerPhone: "+971 4 123 4567",
+        buyerCountry: "UAE",
+        buyerAddress: "Dubai, United Arab Emirates",
         shareholders: [
           {
             id: "sh_1",
