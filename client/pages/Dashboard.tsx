@@ -575,7 +575,7 @@ export default function Dashboard() {
     const syncForms = async () => {
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
 
         const apiBaseURL = getAPIBaseURL();
         const response = await fetch(`${apiBaseURL}/api/transfer-forms`, {

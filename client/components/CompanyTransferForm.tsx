@@ -778,7 +778,7 @@ export function CompanyTransferForm({
     if (!initialForm && isEditing && companyId) {
       setLoading(true);
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
 
       fetch(`/api/transfer-forms?companyId=${companyId}`, {
         signal: controller.signal,

@@ -61,7 +61,7 @@ export function MyOrders({ userEmail }: MyOrdersProps) {
         console.log("[MyOrders] Attempting to fetch from /api/orders...");
         // Simple fetch without complex options that might fail
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 10000);
+        const timeoutId = setTimeout(() => controller.abort(), 30000);
 
         const response = await fetch("/api/orders", {
           signal: controller.signal,

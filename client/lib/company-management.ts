@@ -417,7 +417,7 @@ export function sortCompanies(
 export async function fetchAllCompanies(): Promise<CompanyData[]> {
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
 
     const apiBaseURL = getAPIBaseURL();
     const response = await fetch(`${apiBaseURL}/api/companies`, {
