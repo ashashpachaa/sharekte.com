@@ -23,21 +23,25 @@ export type CompanyType =
   | "Sole Proprietor"
   | "Other";
 
-export type RefundStatus = 
-  | "not-refunded" 
-  | "partially-refunded" 
+export type RefundStatus =
+  | "not-refunded"
+  | "partially-refunded"
   | "fully-refunded";
 
-export type PaymentStatus = 
-  | "paid" 
-  | "pending" 
-  | "failed" 
-  | "refunded";
+export type PaymentStatus = "paid" | "pending" | "failed" | "refunded";
 
 export interface CompanyTag {
   id: string;
   name: string;
-  color: "blue" | "green" | "red" | "yellow" | "purple" | "pink" | "cyan" | "gray";
+  color:
+    | "blue"
+    | "green"
+    | "red"
+    | "yellow"
+    | "purple"
+    | "pink"
+    | "cyan"
+    | "gray";
 }
 
 export interface ActivityLogEntry {
@@ -173,7 +177,7 @@ export function calculateRenewalDaysLeft(renewalDate: string): number {
   const renewal = new Date(renewalDate);
   const today = new Date();
   const daysLeft = Math.floor(
-    (renewal.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+    (renewal.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
   );
   return Math.max(0, daysLeft);
 }
@@ -188,14 +192,14 @@ export function calculateExpiryDate(baseDate: string): string {
 // Get status based on dates
 export function determineStatus(
   renewalDate: string,
-  currentStatus: CompanyStatus
+  currentStatus: CompanyStatus,
 ): CompanyStatus {
   if (currentStatus === "available" || currentStatus === "pending") {
     return currentStatus;
   }
 
   const daysLeft = calculateRenewalDaysLeft(renewalDate);
-  
+
   if (daysLeft <= 0) {
     return "expired";
   }
@@ -206,7 +210,10 @@ export function determineStatus(
 }
 
 // Format currency
-export function formatPrice(price: number | string | undefined, currency: string = "USD"): string {
+export function formatPrice(
+  price: number | string | undefined,
+  currency: string = "USD",
+): string {
   if (price === undefined || price === null || price === "") {
     return "N/A";
   }
@@ -267,7 +274,7 @@ export function getRenewalCountdown(renewalDaysLeft: number): string {
 // Filter and sort companies
 export function filterCompanies(
   companies: CompanyData[],
-  filters: CompanyFilters
+  filters: CompanyFilters,
 ): CompanyData[] {
   return companies.filter((company) => {
     // Status filter
@@ -339,7 +346,7 @@ export function filterCompanies(
     if (filters.tags && filters.tags.length > 0) {
       const companyTagIds = company.tags.map((t) => t.id);
       const hasAllTags = filters.tags.every((tagId) =>
-        companyTagIds.includes(tagId)
+        companyTagIds.includes(tagId),
       );
       if (!hasAllTags) {
         return false;
@@ -363,7 +370,7 @@ export function filterCompanies(
 
 export function sortCompanies(
   companies: CompanyData[],
-  sort: CompanySort
+  sort: CompanySort,
 ): CompanyData[] {
   const sorted = [...companies];
 
@@ -429,12 +436,17 @@ export async function fetchAllCompanies(): Promise<CompanyData[]> {
     clearTimeout(timeoutId);
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ error: "Unknown error" }));
-      throw new Error(errorData.error || `Failed to fetch companies: ${response.statusText}`);
+      const errorData = await response
+        .json()
+        .catch(() => ({ error: "Unknown error" }));
+      throw new Error(
+        errorData.error || `Failed to fetch companies: ${response.statusText}`,
+      );
     }
     return await response.json();
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error occurred";
     console.error("Error fetching companies:", errorMessage);
     throw new Error(`Failed to fetch companies: ${errorMessage}`);
   }
@@ -452,7 +464,9 @@ export async function getCompany(id: string): Promise<CompanyData | null> {
   }
 }
 
-export async function createCompany(company: Omit<CompanyData, "id" | "createdAt" | "updatedAt">): Promise<CompanyData | null> {
+export async function createCompany(
+  company: Omit<CompanyData, "id" | "createdAt" | "updatedAt">,
+): Promise<CompanyData | null> {
   try {
     const apiBaseURL = getAPIBaseURL();
     const response = await fetch(`${apiBaseURL}/api/companies`, {
@@ -470,7 +484,7 @@ export async function createCompany(company: Omit<CompanyData, "id" | "createdAt
 
 export async function updateCompany(
   id: string,
-  updates: Partial<CompanyData>
+  updates: Partial<CompanyData>,
 ): Promise<CompanyData | null> {
   try {
     const apiBaseURL = getAPIBaseURL();
@@ -503,7 +517,7 @@ export async function deleteCompany(id: string): Promise<boolean> {
 export async function updateCompanyStatus(
   id: string,
   newStatus: CompanyStatus,
-  notes?: string
+  notes?: string,
 ): Promise<boolean> {
   try {
     const apiBaseURL = getAPIBaseURL();
@@ -521,7 +535,7 @@ export async function updateCompanyStatus(
 
 export async function renewCompany(
   id: string,
-  notes?: string
+  notes?: string,
 ): Promise<CompanyData | null> {
   try {
     const apiBaseURL = getAPIBaseURL();
@@ -541,15 +555,18 @@ export async function renewCompany(
 export async function requestRefund(
   id: string,
   reason: string,
-  notes?: string
+  notes?: string,
 ): Promise<boolean> {
   try {
     const apiBaseURL = getAPIBaseURL();
-    const response = await fetch(`${apiBaseURL}/api/companies/${id}/refund-request`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ reason, notes }),
-    });
+    const response = await fetch(
+      `${apiBaseURL}/api/companies/${id}/refund-request`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reason, notes }),
+      },
+    );
     return response.ok;
   } catch (error) {
     console.error("Error requesting refund:", error);
@@ -560,15 +577,18 @@ export async function requestRefund(
 export async function approveRefund(
   id: string,
   refundAmount: number,
-  notes?: string
+  notes?: string,
 ): Promise<boolean> {
   try {
     const apiBaseURL = getAPIBaseURL();
-    const response = await fetch(`${apiBaseURL}/api/companies/${id}/refund-approve`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ refundAmount, notes }),
-    });
+    const response = await fetch(
+      `${apiBaseURL}/api/companies/${id}/refund-approve`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ refundAmount, notes }),
+      },
+    );
     return response.ok;
   } catch (error) {
     console.error("Error approving refund:", error);
