@@ -287,7 +287,7 @@ export default function Checkout() {
           companyName: item.name,
           companyNumber: item.companyNumber,
           clientName: userData.fullName,
-          clientEmail: userEmail,
+          clientEmail: billingEmail,
           amount: convertedAmount,
           currency: currency,
           description: `Company Purchase - ${item.name}`,
