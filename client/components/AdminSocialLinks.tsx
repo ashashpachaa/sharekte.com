@@ -295,7 +295,7 @@ export function AdminSocialLinks() {
               <h4 className="text-sm font-medium text-muted-foreground mb-2">
                 {category}
               </h4>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
                 {platforms
                   .filter((p) => AVAILABLE_PLATFORMS.includes(p))
                   .map((platform) => (
@@ -311,13 +311,13 @@ export function AdminSocialLinks() {
                         setEditingLink(null);
                         setShowDialog(true);
                       }}
-                      className="p-2 rounded-lg border border-border hover:bg-muted transition-colors flex items-center justify-center gap-2 text-sm"
+                      className="flex flex-col items-center justify-center gap-2 p-3 rounded-xl border border-border hover:border-primary hover:bg-gradient-to-br hover:from-primary/10 hover:to-primary/5 transition-all duration-200 transform hover:scale-105 group"
                       title={`Add ${platform}`}
                     >
-                      <span className="text-lg">
+                      <span className="text-3xl group-hover:scale-125 transition-transform duration-200">
                         {SOCIAL_MEDIA_ICONS[platform] || "🔗"}
                       </span>
-                      <span className="hidden sm:inline text-xs">
+                      <span className="text-xs font-medium text-muted-foreground text-center group-hover:text-primary transition-colors">
                         {platform.length > 12
                           ? platform.substring(0, 12) + "..."
                           : platform}
