@@ -35,5 +35,17 @@
     "orderId": "order_1",
     "createdAt": "2025-11-05T21:41:44.494Z",
     "createdBy": "system"
+  },
+  {
+    "id": "txn_1762469944158",
+    "walletId": "wallet_1",
+    "type": "admin_add",
+    "amount": 100,
+    "currency": "USD",
+    "balanceBefore": 5000,
+    "balanceAfter": 5100,
+    "reason": "Admin credit",
+    "createdAt": "2025-11-06T22:59:04.158Z",
+    "createdBy": "admin@sharekte.com"
   }
 ]

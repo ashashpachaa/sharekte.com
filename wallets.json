@@ -4,11 +4,12 @@
     "userId": "user_1",
     "userEmail": "john@example.com",
     "userName": "John Doe",
-    "balance": 5000,
+    "balance": 5100,
     "currency": "USD",
     "status": "active",
     "createdAt": "2025-11-06T21:41:44.493Z",
-    "updatedAt": "2025-11-06T21:41:44.493Z"
+    "updatedAt": "2025-11-06T22:59:04.158Z",
+    "lastTransactionAt": "2025-11-06T22:59:04.158Z"
   },
   {
     "id": "wallet_2",
