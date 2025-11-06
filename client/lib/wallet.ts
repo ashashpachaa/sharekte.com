@@ -119,13 +119,16 @@ export async function getWalletTransactions(
   if (filters?.limit) params.append("limit", filters.limit.toString());
   if (filters?.offset) params.append("offset", filters.offset.toString());
 
-  const response = await fetch(
-    `${baseURL}/api/wallets/${userId}/transactions?${params}`,
-    {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    },
-  );
+  // If userId is empty, fetch all transactions (admin endpoint)
+  // Otherwise, fetch user-specific transactions
+  const endpoint = userId
+    ? `${baseURL}/api/wallets/${userId}/transactions?${params}`
+    : `${baseURL}/api/wallets/transactions?${params}`;
+
+  const response = await fetch(endpoint, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
   if (!response.ok) throw new Error("Failed to fetch transactions");
   return response.json();
 }
