@@ -220,7 +220,7 @@ function formatPriceWithCurrency(
   const fallbackSymbols: Record<string, string> = {
     USD: "$",
     GBP: "£",
-    AED: "د.إ",
+    AED: "��.إ",
     EUR: "€",
     SAR: "﷼",
   };
@@ -2075,31 +2075,54 @@ export default function Dashboard() {
                   {/* Total */}
                   <div className="border-t pt-4">
                     <div className="flex justify-end">
-                      <div className="w-48">
-                        <div className="flex justify-between mb-2">
-                          <span className="text-sm text-muted-foreground">
-                            Subtotal
-                          </span>
-                          <span className="text-sm font-medium">
-                            {formatPriceWithCurrency(
-                              selectedInvoice.amount,
-                              currency,
-                              rates,
-                            )}
-                          </span>
-                        </div>
-                        <div className="flex justify-between pt-2 border-t">
-                          <span className="font-semibold text-foreground">
-                            Total
-                          </span>
-                          <span className="text-lg font-bold text-primary">
-                            {formatPriceWithCurrency(
-                              selectedInvoice.amount,
-                              currency,
-                              rates,
-                            )}
-                          </span>
-                        </div>
+                      <div className="w-64 space-y-2">
+                        {/* Calculate subtotal from items excluding discount */}
+                        {(() => {
+                          const subtotal = selectedInvoice.items
+                            .filter(item => !item.description.includes("Discount") && item.unitPrice >= 0)
+                            .reduce((sum, item) => sum + item.total, 0);
+                          const feesTotal = selectedInvoice.items
+                            .filter(item => item.description.includes("(") && item.description.includes("%"))
+                            .reduce((sum, item) => sum + item.total, 0);
+                          const discount = selectedInvoice.couponDiscount || 0;
+                          const total = selectedInvoice.amount;
+
+                          return (
+                            <>
+                              {/* Subtotal */}
+                              <div className="flex justify-between text-sm">
+                                <span className="text-muted-foreground">Subtotal</span>
+                                <span className="font-medium">
+                                  {formatPriceWithCurrency(subtotal, currency, rates)}
+                                </span>
+                              </div>
+
+                              {/* Fees breakdown */}
+                              {feesTotal > 0 && (
+                                <div className="flex justify-between text-sm text-amber-600">
+                                  <span>Fees</span>
+                                  <span className="font-medium">+{formatPriceWithCurrency(feesTotal, currency, rates)}</span>
+                                </div>
+                              )}
+
+                              {/* Coupon Discount */}
+                              {discount > 0 && (
+                                <div className="flex justify-between text-sm text-green-600">
+                                  <span>Discount ({selectedInvoice.couponCode || "Coupon"})</span>
+                                  <span className="font-medium">-{formatPriceWithCurrency(discount, currency, rates)}</span>
+                                </div>
+                              )}
+
+                              {/* Total */}
+                              <div className="flex justify-between pt-2 border-t border-border/40 font-bold">
+                                <span className="text-foreground">Total</span>
+                                <span className="text-lg text-primary">
+                                  {formatPriceWithCurrency(total, currency, rates)}
+                                </span>
+                              </div>
+                            </>
+                          );
+                        })()}
                       </div>
                     </div>
                   </div>
