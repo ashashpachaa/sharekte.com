@@ -149,7 +149,7 @@ export function Footer() {
           <p className="text-sm text-muted-foreground">
             © {currentYear} Sharekte. {t("common.all")} {t("common.search")}.
           </p>
-          <div className="flex items-center gap-6 flex-wrap">
+          <div className="flex items-center gap-3 flex-wrap">
             {socialLinks.length > 0 ? (
               <>
                 {socialLinks.map((link) => (
@@ -158,11 +158,18 @@ export function Footer() {
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-1.5"
+                    className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-muted hover:bg-primary hover:text-primary-foreground transition-all duration-200 transform hover:scale-110 group"
                     title={link.displayText || link.platform}
                   >
-                    {link.icon && <span className="text-base">{link.icon}</span>}
-                    {link.platform}
+                    {link.icon ? (
+                      <span className="text-2xl group-hover:scale-125 transition-transform duration-200">
+                        {link.icon}
+                      </span>
+                    ) : (
+                      <span className="text-xs font-semibold text-muted-foreground group-hover:text-primary-foreground">
+                        {link.platform.substring(0, 2).toUpperCase()}
+                      </span>
+                    )}
                   </a>
                 ))}
                 <span className="text-muted-foreground/30">•</span>
@@ -171,21 +178,24 @@ export function Footer() {
               <>
                 <a
                   href="#"
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-muted hover:bg-primary hover:text-primary-foreground transition-all duration-200 transform hover:scale-110"
+                  title="Twitter"
                 >
-                  Twitter
+                  <span className="text-2xl">𝕏</span>
                 </a>
                 <a
                   href="#"
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-muted hover:bg-primary hover:text-primary-foreground transition-all duration-200 transform hover:scale-110"
+                  title="LinkedIn"
                 >
-                  LinkedIn
+                  <span className="text-2xl">in</span>
                 </a>
                 <a
                   href="#"
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  className="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-muted hover:bg-primary hover:text-primary-foreground transition-all duration-200 transform hover:scale-110"
+                  title="Facebook"
                 >
-                  Facebook
+                  <span className="text-2xl">f</span>
                 </a>
                 <span className="text-muted-foreground/30">•</span>
               </>
