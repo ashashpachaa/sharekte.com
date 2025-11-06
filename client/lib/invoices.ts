@@ -296,7 +296,8 @@ export async function getInvoice(invoiceId: string): Promise<Invoice | null> {
 
 export async function createInvoice(invoice: Omit<Invoice, "id" | "createdDate" | "lastUpdateDate" | "statusHistory">): Promise<Invoice | null> {
   try {
-    const response = await fetch("/api/invoices", {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/invoices`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(invoice),
@@ -329,7 +330,8 @@ export async function updateInvoice(invoiceId: string, updates: Partial<Invoice>
 
 export async function updateInvoiceStatus(invoiceId: string, status: InvoiceStatus, reason?: string): Promise<Invoice | null> {
   try {
-    const response = await fetch(`/api/invoices/${invoiceId}/status`, {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/invoices/${invoiceId}/status`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status, reason }),
@@ -364,7 +366,8 @@ export async function uploadInvoiceAttachment(invoiceId: string, file: File): Pr
     const formData = new FormData();
     formData.append("file", file);
 
-    const response = await fetch(`/api/invoices/${invoiceId}/attachments`, {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/invoices/${invoiceId}/attachments`, {
       method: "POST",
       body: formData,
     });
@@ -379,7 +382,8 @@ export async function uploadInvoiceAttachment(invoiceId: string, file: File): Pr
 
 export async function deleteInvoiceAttachment(invoiceId: string, attachmentId: string): Promise<boolean> {
   try {
-    const response = await fetch(`/api/invoices/${invoiceId}/attachments/${attachmentId}`, {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/invoices/${invoiceId}/attachments/${attachmentId}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
     });
@@ -394,7 +398,8 @@ export async function deleteInvoiceAttachment(invoiceId: string, attachmentId: s
 
 export async function sendInvoiceEmail(invoiceId: string): Promise<boolean> {
   try {
-    const response = await fetch(`/api/invoices/${invoiceId}/send-email`, {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/invoices/${invoiceId}/send-email`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
     });
@@ -409,7 +414,8 @@ export async function sendInvoiceEmail(invoiceId: string): Promise<boolean> {
 
 export async function downloadInvoicePDF(invoiceId: string): Promise<Blob | null> {
   try {
-    const response = await fetch(`/api/invoices/${invoiceId}/pdf`, {
+    const apiBaseURL = getAPIBaseURL();
+    const response = await fetch(`${apiBaseURL}/api/invoices/${invoiceId}/pdf`, {
       headers: { "Content-Type": "application/json" },
     });
 
