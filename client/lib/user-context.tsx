@@ -174,6 +174,16 @@ export function UserProvider({ children }: { children: ReactNode }) {
       );
       console.log("[login] userEmail:", localStorage.getItem("userEmail"));
       console.log("[login] userName:", localStorage.getItem("userName"));
+
+      // Initialize demo data for testing amendment comments
+      try {
+        const { initializeDemoPurchasedCompanies } = await import(
+          "./demo-data-initializer"
+        );
+        initializeDemoPurchasedCompanies(data.email);
+      } catch (e) {
+        console.warn("[login] Could not initialize demo data:", e);
+      }
     } catch (error) {
       if (error instanceof Error) {
         throw error;
