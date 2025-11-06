@@ -600,7 +600,7 @@ export const createTransferForm: RequestHandler = async (req, res) => {
     // Store in persistent in-memory storage
     inMemoryForms.push(newForm);
 
-    // Also save to file storage for multi-instance deployments (Fly.io load balancing)
+    // Also save to file storage for persistence across restarts
     saveFormToFile(newForm);
 
     console.log(
