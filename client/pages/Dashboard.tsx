@@ -2310,59 +2310,48 @@ export default function Dashboard() {
                                   const daysRemaining = calculateDaysRemaining(
                                     company.renewalDate,
                                   );
-                                  const isRenewalNeeded =
-                                    daysRemaining <= 15 &&
-                                    daysRemaining > -15 &&
-                                    company.renewalStatus === "active";
-                                  const isExpired =
-                                    daysRemaining <= 0 && daysRemaining > -15;
-                                  const isCancelled = daysRemaining <= -15;
+                                  const renewalStatus = calculateRenewalStatus(company.renewalDate);
+                                  const { isVisible, isEnabled } = getRenewalButtonState(company.renewalDate);
+
+                                  const handleRenewal = () => {
+                                    renewCompany(company.id);
+                                    const newRenewalDate = calculateSmartRenewalDate(company.renewalDate);
+                                    setPurchasedCompanies((prev) =>
+                                      prev.map((c) =>
+                                        c.id === company.id
+                                          ? {
+                                              ...c,
+                                              renewalDate: newRenewalDate,
+                                              renewalStatus: "active",
+                                            }
+                                          : c,
+                                      ),
+                                    );
+                                    toast.success(
+                                      `Company renewed! New renewal date: ${newRenewalDate}`,
+                                    );
+                                  };
 
                                   return (
                                     <>
-                                      {/* Renewal Alert - 15 days before */}
-                                      {isRenewalNeeded && (
-                                        <div className="p-3 bg-red-50 border border-red-200 rounded-lg space-y-2">
+                                      {/* Renewal Required - 15+ days before expiry */}
+                                      {renewalStatus === "renewal-required" && (
+                                        <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg space-y-2">
                                           <div className="flex items-start gap-2">
-                                            <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+                                            <AlertCircle className="w-4 h-4 text-yellow-600 flex-shrink-0 mt-0.5" />
                                             <div className="flex-1">
-                                              <p className="text-xs font-semibold text-red-900 mb-1">
-                                                {daysRemaining} days to renew
+                                              <p className="text-xs font-semibold text-yellow-900 mb-1">
+                                                Renewal Required - {daysRemaining} days remaining
                                               </p>
-                                              <p className="text-xs text-red-800 leading-tight">
-                                                Renew now to prevent
-                                                cancellation
+                                              <p className="text-xs text-yellow-800 leading-tight">
+                                                Renew now to maintain your company ownership
                                               </p>
                                             </div>
                                           </div>
                                           <Button
-                                            onClick={() => {
-                                              renewCompany(company.id);
-                                              setPurchasedCompanies((prev) =>
-                                                prev.map((c) =>
-                                                  c.id === company.id
-                                                    ? {
-                                                        ...c,
-                                                        renewalDate: new Date(
-                                                          Date.now() +
-                                                            365 *
-                                                              24 *
-                                                              60 *
-                                                              60 *
-                                                              1000,
-                                                        )
-                                                          .toISOString()
-                                                          .split("T")[0],
-                                                        renewalStatus: "active",
-                                                      }
-                                                    : c,
-                                                ),
-                                              );
-                                              toast.success(
-                                                `Company renewed! New renewal date set to 1 year from today`,
-                                              );
-                                            }}
-                                            className="w-full bg-red-600 hover:bg-red-700 text-white gap-2"
+                                            onClick={handleRenewal}
+                                            disabled={!isEnabled}
+                                            className="w-full bg-yellow-600 hover:bg-yellow-700 text-white gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                                           >
                                             <Zap className="w-4 h-4" />
                                             Renew Now
@@ -2370,61 +2359,35 @@ export default function Dashboard() {
                                         </div>
                                       )}
 
-                                      {/* Expired Status */}
-                                      {isExpired && (
+                                      {/* Expired - 0 to -24 days */}
+                                      {renewalStatus === "expired" && (
                                         <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg space-y-3">
                                           <div className="flex items-start gap-3">
                                             <AlertCircle className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
                                             <div className="flex-1">
                                               <p className="text-sm font-semibold text-orange-900 mb-1">
-                                                Expired -{" "}
-                                                {Math.abs(daysRemaining)} days
-                                                overdue
+                                                Expired - {Math.abs(daysRemaining)} days overdue
                                               </p>
                                               <p className="text-sm text-orange-800">
-                                                Your company ownership has
-                                                expired. Renew immediately to
-                                                prevent cancellation.
+                                                Your company ownership has expired. Renew immediately to prevent cancellation.
                                               </p>
                                             </div>
                                           </div>
-                                          <Button
-                                            onClick={() => {
-                                              renewCompany(company.id);
-                                              setPurchasedCompanies((prev) =>
-                                                prev.map((c) =>
-                                                  c.id === company.id
-                                                    ? {
-                                                        ...c,
-                                                        renewalDate: new Date(
-                                                          Date.now() +
-                                                            365 *
-                                                              24 *
-                                                              60 *
-                                                              60 *
-                                                              1000,
-                                                        )
-                                                          .toISOString()
-                                                          .split("T")[0],
-                                                        renewalStatus: "active",
-                                                      }
-                                                    : c,
-                                                ),
-                                              );
-                                              toast.success(
-                                                `Company renewed! New renewal date set to 1 year from today`,
-                                              );
-                                            }}
-                                            className="w-full bg-orange-600 hover:bg-orange-700 text-white gap-2"
-                                          >
-                                            <Zap className="w-4 h-4" />
-                                            Renew Now
-                                          </Button>
+                                          {isVisible && (
+                                            <Button
+                                              onClick={handleRenewal}
+                                              disabled={!isEnabled}
+                                              className="w-full bg-orange-600 hover:bg-orange-700 text-white gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                            >
+                                              <Zap className="w-4 h-4" />
+                                              Renew Now
+                                            </Button>
+                                          )}
                                         </div>
                                       )}
 
-                                      {/* Cancelled Status */}
-                                      {isCancelled && (
+                                      {/* Cancelled - -25 or less days */}
+                                      {renewalStatus === "cancelled" && (
                                         <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
                                           <div className="flex items-start gap-3">
                                             <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
@@ -2433,36 +2396,29 @@ export default function Dashboard() {
                                                 Ownership Cancelled
                                               </p>
                                               <p className="text-sm text-red-800">
-                                                Your company ownership has been
-                                                cancelled due to renewal
-                                                expiration. Unfortunately,
-                                                renewal is no longer available
-                                                for this company.
+                                                Your company ownership has been cancelled. Renewal is no longer available.
                                               </p>
                                             </div>
                                           </div>
                                         </div>
                                       )}
 
-                                      {/* Active Status - Show Days Remaining */}
-                                      {daysRemaining > 15 &&
-                                        company.renewalStatus === "active" && (
-                                          <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                                            <div className="flex items-start gap-3">
-                                              <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                                              <div className="flex-1">
-                                                <p className="text-sm font-semibold text-green-900">
-                                                  Active - {daysRemaining} days
-                                                  until renewal required
-                                                </p>
-                                                <p className="text-sm text-green-800">
-                                                  Your company is active and in
-                                                  good standing
-                                                </p>
-                                              </div>
+                                      {/* Active - 15+ days remaining */}
+                                      {renewalStatus === "active" && (
+                                        <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                                          <div className="flex items-start gap-3">
+                                            <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                                            <div className="flex-1">
+                                              <p className="text-sm font-semibold text-green-900">
+                                                Active - {daysRemaining} days until renewal required
+                                              </p>
+                                              <p className="text-sm text-green-800">
+                                                Your company is active and in good standing
+                                              </p>
                                             </div>
                                           </div>
-                                        )}
+                                        </div>
+                                      )}
                                     </>
                                   );
                                 })()}
