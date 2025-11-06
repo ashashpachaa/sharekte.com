@@ -1614,6 +1614,39 @@ export default function Dashboard() {
         </div>
       </section>
 
+      {/* Wallet Balance Card */}
+      {!loadingWallet && (
+        <section className="py-6 bg-gradient-to-r from-primary/5 to-primary/10 border-b border-border/40">
+          <div className="container max-w-6xl mx-auto px-4">
+            <div className="bg-card border border-primary/20 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-semibold text-muted-foreground mb-1">
+                    Wallet Balance
+                  </p>
+                  <p className="text-3xl font-bold text-primary">
+                    {walletCurrency} {walletBalance.toFixed(2)}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Use your wallet balance to pay for purchases
+                  </p>
+                </div>
+                <div className="text-right">
+                  <a
+                    href="/admin/wallets"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block text-primary hover:text-primary/80 font-semibold text-sm"
+                  >
+                    View Transactions →
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Tabs */}
       <section className="border-b border-border/40 bg-muted/30">
         <div className="container max-w-6xl mx-auto px-4">
