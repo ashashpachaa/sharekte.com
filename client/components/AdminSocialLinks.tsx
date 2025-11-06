@@ -10,6 +10,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   SocialMediaLink,
   fetchSocialMediaLinks,
   createSocialMediaLink,
@@ -25,6 +32,9 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react";
+
+// Get all available platforms from icons
+const AVAILABLE_PLATFORMS = Object.keys(SOCIAL_MEDIA_ICONS).sort();
 
 export function AdminSocialLinks() {
   const [links, setLinks] = useState<SocialMediaLink[]>([]);
