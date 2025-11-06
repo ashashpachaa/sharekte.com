@@ -58,6 +58,16 @@ interface TransferFormData {
   status: FormStatus;
   createdAt: string;
   updatedAt: string;
+  sellerName?: string;
+  sellerEmail?: string;
+  sellerPhone?: string;
+  sellerCountry?: string;
+  sellerAddress?: string;
+  buyerName?: string;
+  buyerEmail?: string;
+  buyerPhone?: string;
+  buyerCountry?: string;
+  buyerAddress?: string;
   directors: DirectorInfo[];
   shareholders: ShareholderInfo[];
   pscDeclaration: { hasPSC: boolean; details: string };
