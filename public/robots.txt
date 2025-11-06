@@ -1,14 +1,51 @@
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
+# Robots.txt for Shareket.com
+# Allow search engines to crawl all public pages
 
 User-agent: *
 Allow: /
+Allow: /companies
+Allow: /support
+Allow: /login
+Allow: /signup
+Allow: /ar/
+Allow: /hi/
+Disallow: /admin/
+Disallow: /admin-login/
+Disallow: /checkout
+Disallow: /cart
+Disallow: /dashboard/
+Disallow: /api/
+Disallow: /.env
+Disallow: /node_modules/
+
+# Specific rules for Googlebot
+User-agent: Googlebot
+Allow: /
+Allow: /companies
+Allow: /support
+
+# Sitemap location
+Sitemap: https://shareket.com/sitemap.xml
+
+# Crawl delay (in seconds)
+Crawl-delay: 1
+
+# Request rate (pages per 10 seconds)
+Request-rate: 30/10
+
+# Search engine specific rules
+User-agent: bingbot
+Crawl-delay: 1
+
+User-agent: Slurp
+Crawl-delay: 2
+
+# Block bad bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
