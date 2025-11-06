@@ -493,6 +493,24 @@ export const createTransferForm: RequestHandler = async (req, res) => {
       changeCompanyActivities,
       companyActivities,
       attachments,
+      // Seller Information
+      sellerName,
+      sellerEmail,
+      sellerPhone,
+      sellerAddress,
+      sellerCity,
+      sellerState,
+      sellerPostalCode,
+      sellerCountry,
+      // Buyer Information
+      buyerName,
+      buyerEmail,
+      buyerPhone,
+      buyerAddress,
+      buyerCity,
+      buyerState,
+      buyerPostalCode,
+      buyerCountry,
     } = req.body;
 
     if (
@@ -517,6 +535,26 @@ export const createTransferForm: RequestHandler = async (req, res) => {
       country: country || "",
       incorporationDate: incorporationDate || "",
       incorporationYear: incorporationYear || new Date().getFullYear(),
+
+      // Seller Information
+      sellerName: sellerName || "",
+      sellerEmail: sellerEmail || "",
+      sellerPhone: sellerPhone || "",
+      sellerAddress: sellerAddress || "",
+      sellerCity: sellerCity || "",
+      sellerState: sellerState || "",
+      sellerPostalCode: sellerPostalCode || "",
+      sellerCountry: sellerCountry || "",
+
+      // Buyer Information
+      buyerName: buyerName || "",
+      buyerEmail: buyerEmail || "",
+      buyerPhone: buyerPhone || "",
+      buyerAddress: buyerAddress || "",
+      buyerCity: buyerCity || "",
+      buyerState: buyerState || "",
+      buyerPostalCode: buyerPostalCode || "",
+      buyerCountry: buyerCountry || "",
 
       totalShares,
       totalShareCapital,
