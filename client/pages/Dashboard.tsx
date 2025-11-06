@@ -424,11 +424,11 @@ export default function Dashboard() {
     });
   });
 
-  // Listen for storage changes to refresh companies when form status changes
+  // Listen for purchased companies updates to refresh when form status changes
   useEffect(() => {
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === "purchasedCompanies") {
-        console.log("[Dashboard] Detected purchasedCompanies update in localStorage");
+    const handleCompaniesUpdated = (e: Event) => {
+      if (e instanceof CustomEvent) {
+        console.log("[Dashboard] Detected purchasedCompanies update from custom event");
         const updatedCompanies = getPurchasedCompanies();
         setPurchasedCompanies(updatedCompanies.map((uc) => ({
           id: uc.id,
@@ -453,8 +453,18 @@ export default function Dashboard() {
       }
     };
 
-    window.addEventListener("storage", handleStorageChange);
-    return () => window.removeEventListener("storage", handleStorageChange);
+    window.addEventListener("purchasedCompaniesUpdated", handleCompaniesUpdated);
+    // Also listen for storage changes (for when updates come from different tabs)
+    window.addEventListener("storage", (e: StorageEvent) => {
+      if (e.key === "purchasedCompanies") {
+        handleCompaniesUpdated(e);
+      }
+    });
+
+    return () => {
+      window.removeEventListener("purchasedCompaniesUpdated", handleCompaniesUpdated);
+      window.removeEventListener("storage", handleCompaniesUpdated as any);
+    };
   }, []);
 
   // Load order documents and associate with companies
