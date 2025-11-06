@@ -7,15 +7,10 @@ import { WhyBuyReadyMade } from "@/components/WhyBuyReadyMade";
 import { useMemo } from "react";
 import { useSEO, getPageSEOMetadata } from "@/lib/seo";
 import {
-  ArrowRight,
   TrendingUp,
-  Users,
   Zap,
-  Shield,
   BarChart3,
   Globe,
-  CheckCircle2,
-  TrendingDown,
   Play,
 } from "lucide-react";
 
