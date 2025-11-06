@@ -241,10 +241,23 @@ export const updateInvoiceStatus: RequestHandler = async (req, res) => {
     const invoiceIndex = invoices.findIndex((inv) => inv.id === id);
     invoices[invoiceIndex] = updated;
 
-    // Send email notification
-    if (status === "paid") {
-      await sendInvoiceEmail(updated, "paid");
-    }
+    // Send email notification (async - don't wait for response)
+    (async () => {
+      try {
+        if (updated.customerEmail && status === "paid") {
+          await sendInvoiceEmail({
+            to: updated.customerEmail,
+            invoiceId: updated.id,
+            customerName: updated.customerName || "Valued Customer",
+            amount: `${updated.amount} ${updated.currency || "USD"}`,
+            dueDate: updated.dueDate || undefined,
+          });
+        }
+      } catch (error) {
+        console.error("Error sending invoice email:", error);
+        // Don't fail the request if notification fails
+      }
+    })();
 
     // Sync to Airtable if configured
     if (AIRTABLE_API_TOKEN) {
