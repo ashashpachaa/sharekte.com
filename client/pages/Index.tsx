@@ -16,6 +16,7 @@ import {
   Globe,
   CheckCircle2,
   TrendingDown,
+  Play,
 } from "lucide-react";
 
 // Sales Statistics Section - Motivation
