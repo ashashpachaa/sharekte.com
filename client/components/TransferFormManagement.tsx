@@ -179,7 +179,11 @@ export function TransferFormManagement({
               const purchasedCompanies = JSON.parse(purchasedCompaniesStr);
               const updatedCompanies = purchasedCompanies.map(
                 (company: any) => {
-                  if (company.name === selectedForm.companyName || company.id === selectedForm.id) {
+                  // Match by company number (most reliable), then by name as fallback
+                  if (
+                    company.number === selectedForm.companyNumber ||
+                    company.name === selectedForm.companyName
+                  ) {
                     return {
                       ...company,
                       adminComments: statusNotes,
@@ -190,9 +194,10 @@ export function TransferFormManagement({
                           id: `hist-${Date.now()}`,
                           fromStatus: company.status || "under-review",
                           toStatus: "amend-required",
-                          changedDate: new Date().toISOString().split("T")[0],
+                          changedDate: new Date().toISOString(),
                           changedBy: "admin",
-                          notes: `Status changed to amend-required. ${statusNotes}`,
+                          reason: "Amendments required",
+                          notes: statusNotes,
                         },
                       ],
                     };
@@ -204,6 +209,7 @@ export function TransferFormManagement({
                 "purchasedCompanies",
                 JSON.stringify(updatedCompanies)
               );
+              console.log("[TransferFormManagement] Updated purchasedCompanies in localStorage");
             }
           } catch (error) {
             console.error("Error updating company with comments:", error);
