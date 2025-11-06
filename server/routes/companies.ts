@@ -23,6 +23,42 @@ function calculateExpiryDate(purchaseDate: string): string {
   return date.toISOString().split("T")[0];
 }
 
+/**
+ * Calculate new renewal date preserving original month/day
+ * Example: if original renewal is 21-9-2026, and renewal happens on 1-10-2026,
+ * next renewal will be 21-9-2027 (same month/day, next year)
+ */
+function calculateSmartRenewalDate(
+  originalRenewalDate: string,
+  currentDate: Date = new Date()
+): string {
+  try {
+    const original = new Date(originalRenewalDate);
+    const originalMonth = original.getMonth();
+    const originalDay = original.getDate();
+    const currentYear = currentDate.getFullYear();
+
+    let newRenewalDate = new Date(currentYear + 1, originalMonth, originalDay);
+
+    if (newRenewalDate < currentDate) {
+      newRenewalDate = new Date(currentYear + 2, originalMonth, originalDay);
+    }
+
+    const year = newRenewalDate.getFullYear();
+    const month = String(newRenewalDate.getMonth() + 1).padStart(2, "0");
+    const day = String(newRenewalDate.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  } catch (error) {
+    const next = new Date();
+    next.setFullYear(next.getFullYear() + 1);
+    const year = next.getFullYear();
+    const month = String(next.getMonth() + 1).padStart(2, "0");
+    const day = String(next.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+}
+
 function calculateRenewalDaysLeft(expiryDate: string): number {
   const today = new Date();
   const expiry = new Date(expiryDate);
