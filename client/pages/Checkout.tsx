@@ -339,6 +339,11 @@ export default function Checkout() {
         }
 
         // Create order in API
+        const orderSubtotal = convertedAmount;
+        const orderTotalFees = feesDetails.reduce((sum, fee) => sum + fee.calculatedAmount, 0);
+        const orderDiscount = appliedCoupon?.valid ? appliedCoupon.discount : 0;
+        const orderFinalTotal = orderSubtotal + orderTotalFees - orderDiscount;
+
         const newOrder = {
           id: `ord-${Date.now()}`,
           orderId: `ORD-${new Date().getFullYear()}-${String(Date.now()).slice(-5)}`,
@@ -353,7 +358,7 @@ export default function Checkout() {
           paymentMethod: "credit_card",
           paymentStatus: "completed",
           transactionId: `txn-${Date.now()}`,
-          amount: convertedAmount,
+          amount: orderFinalTotal,
           currency: currency,
           paymentDate: today,
           status: "paid",
@@ -373,7 +378,10 @@ export default function Checkout() {
           renewalDate: oneYearLater,
           renewalFees: convertedRenewalFees,
           appliedFees: feesDetails,
-          totalFees: totalFees,
+          totalFees: orderTotalFees,
+          couponCode: appliedCoupon?.coupon?.code,
+          couponDiscount: orderDiscount,
+          discountedTotal: orderFinalTotal,
           refundStatus: "none",
           documents: [],
           createdAt: today,
