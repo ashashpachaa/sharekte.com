@@ -202,42 +202,6 @@ export default function Index() {
           </div>
         </section>
 
-        {/* Featured Companies Section */}
-        <section className="py-20 md:py-28 border-t border-border/40 bg-background">
-          <div className="container max-w-6xl mx-auto px-4">
-            <div className="text-center space-y-6 mb-16">
-              <div className="inline-block">
-                <div className="text-sm font-semibold text-primary uppercase tracking-wide">
-                  {t("homepage.featuredSection.title") || "Featured on Sharekte"}
-                </div>
-              </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-foreground">
-                {t("homepage.featuredSection.title") || "Featured on Sharekte"}
-              </h2>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                {t("homepage.featuredSection.description") ||
-                  "Handpicked, profitable companies featured on Sharekte, ready for immediate acquisition"}
-              </p>
-            </div>
-
-            <CompanyTable companies={featuredCompanies} />
-
-            <div className="text-center mt-12">
-              <Button
-                size="lg"
-                variant="outline"
-                className="h-12 px-6 text-lg font-semibold rounded-lg border-primary text-primary hover:bg-primary/10 hover:text-primary-600"
-                asChild
-              >
-                <Link to="/companies">
-                  {t("homepage.featuredSection.browseAll") || "Browse All Companies"}
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </section>
-
         {/* Why Buy Ready Made Company Section */}
         <WhyBuyReadyMade />
 
