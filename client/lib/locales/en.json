@@ -299,6 +299,12 @@
       "title": "Browse Sharekte Marketplace",
       "description": "Explore Sharekte's complete marketplace of verified, profitable businesses. Filter by country and incorporation year to find your perfect match."
     },
+    "featured": {
+      "title": "Featured Companies",
+      "description": "Browse established businesses ready for acquisition",
+      "noCompanies": "No companies available at this time",
+      "browseAll": "Browse All Companies"
+    },
     "featuredSection": {
       "title": "Featured on Shareket",
       "description": "Handpicked, profitable companies featured on Sharekte, ready for immediate acquisition",
