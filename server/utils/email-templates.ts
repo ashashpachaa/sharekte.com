@@ -1164,7 +1164,7 @@ export function getEmailTemplate(type: EmailTemplateType, context: EmailContext)
             <div class="detail-grid">
               <div class="detail-item">
                 <div class="detail-label">Invoice Number</div>
-                <div class="detail-value">${ctx.invoiceNumber}</div>
+                <div class="detail-value"><a href="${APP_URL}/dashboard/invoices/${ctx.invoiceId}" style="color: ${BRAND_COLOR}; text-decoration: none;">${ctx.invoiceNumber}</a></div>
               </div>
               <div class="detail-item">
                 <div class="detail-label">Date</div>
@@ -1183,12 +1183,18 @@ export function getEmailTemplate(type: EmailTemplateType, context: EmailContext)
           <div class="button-container">
             <a href="${APP_URL}/dashboard/invoices/${ctx.invoiceId}" class="button">View Invoice</a>
           </div>
+          <p>If you have any questions, please <a href="${APP_URL}/support" style="color: ${BRAND_COLOR}; text-decoration: none; font-weight: 500;">contact our support team</a>.</p>
           <p>Best regards,<br><strong>${COMPANY_NAME} Team</strong></p>
         </div>
       `,
-        BRAND_COLOR
+        BRAND_COLOR,
+        [
+          { text: "View Invoice", url: `${APP_URL}/dashboard/invoices/${ctx.invoiceId}` },
+          { text: "Contact Support", url: `${APP_URL}/support` },
+        ],
+        getDefaultSocialLinks()
       ),
-      text: `Invoice #${ctx.invoiceNumber} is ready.`,
+      text: `Invoice #${ctx.invoiceNumber} is ready.\n\nTotal: ${ctx.currency} ${ctx.totalAmount}\n\nBest regards,\n${COMPANY_NAME} Team`,
     }),
     "welcome-onboarding": (ctx) => ({
       subject: `Getting Started with ${COMPANY_NAME}`,
