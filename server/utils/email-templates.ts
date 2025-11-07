@@ -578,7 +578,7 @@ function generateOrderStatusChangedTemplate(context: EmailContext): EmailTemplat
     html: getEmailLayout("Order Status Update", contentHtml, color, [
       { text: "View Order", url: `${APP_URL}/dashboard/orders/${context.orderId}` },
       { text: "Contact Support", url: `${APP_URL}/support` },
-    ]),
+    ], getDefaultSocialLinks()),
     text: `Order Status Updated\n\nDear ${context.customerName},\n\nYour order status has been updated to: ${context.status}\n\nOrder ID: ${context.orderId}\n\nBest regards,\n${COMPANY_NAME} Team`,
   };
 }
