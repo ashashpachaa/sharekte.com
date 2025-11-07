@@ -1103,12 +1103,18 @@ export function getEmailTemplate(type: EmailTemplateType, context: EmailContext)
           <div class="button-container">
             <a href="${APP_URL}/dashboard/documents" class="button">View Documents</a>
           </div>
+          <p>If you have any questions, please <a href="${APP_URL}/support" style="color: ${BRAND_COLOR}; text-decoration: none; font-weight: 500;">contact our support team</a>.</p>
           <p>Best regards,<br><strong>${COMPANY_NAME} Team</strong></p>
         </div>
       `,
-        SUCCESS_COLOR
+        SUCCESS_COLOR,
+        [
+          { text: "View Documents", url: `${APP_URL}/dashboard/documents` },
+          { text: "Contact Support", url: `${APP_URL}/support` },
+        ],
+        getDefaultSocialLinks()
       ),
-      text: `Document uploaded: ${ctx.documentName}`,
+      text: `Document uploaded: ${ctx.documentName}\n\nBest regards,\n${COMPANY_NAME} Team`,
     }),
     "support-ticket-created": (ctx) => ({
       subject: `Support Ticket Created: ${ctx.ticketId}`,
