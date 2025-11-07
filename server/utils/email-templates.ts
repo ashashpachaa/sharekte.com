@@ -859,7 +859,7 @@ function generateSignupConfirmationTemplate(context: EmailContext): EmailTemplat
       { text: "Log In", url: `${APP_URL}/login` },
       { text: "How It Works", url: `${APP_URL}/how-it-works` },
       { text: "Contact Support", url: `${APP_URL}/support` },
-    ]),
+    ], getDefaultSocialLinks()),
     text: `Welcome to ${COMPANY_NAME}\n\nDear ${context.userName},\n\nYour account has been created successfully.\n\nEmail: ${context.email}\n\nYou can now log in and start exploring our services.\n\nBest regards,\n${COMPANY_NAME} Team`,
   };
 }
