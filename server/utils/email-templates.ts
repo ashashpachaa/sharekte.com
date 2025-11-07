@@ -968,7 +968,7 @@ function generateTransferFormStatusTemplate(context: EmailContext): EmailTemplat
     html: getEmailLayout("Form Status Update", contentHtml, color, [
       { text: "View Form", url: `${APP_URL}/dashboard/forms/${context.formId}` },
       { text: "Contact Support", url: `${APP_URL}/support` },
-    ]),
+    ], getDefaultSocialLinks()),
     text: `Transfer Form Status Updated\n\nDear ${context.buyerName},\n\nYour form ${context.formId} status is now: ${context.status}\n\nCompany: ${context.companyName}\n\nBest regards,\n${COMPANY_NAME} Team`,
   };
 }
