@@ -40,9 +40,9 @@ interface EmailContext {
 const BRAND_COLOR = "#004580"; // Updated to match Sharekte website blue
 const BRAND_COLOR_LIGHT = "#E6F0FF";
 const BRAND_COLOR_DARK = "#003366";
-const SUCCESS_COLOR = "#10B981";
-const WARNING_COLOR = "#F59E0B";
-const DANGER_COLOR = "#EF4444";
+const SUCCESS_COLOR = "#004580"; // Updated to match website blue
+const WARNING_COLOR = "#004580"; // Updated to match website blue
+const DANGER_COLOR = "#004580"; // Updated to match website blue
 const APP_URL = process.env.APP_URL || "https://shareket.com";
 const FROM_EMAIL = process.env.FROM_EMAIL || "noreply@shareket.com";
 const SUPPORT_EMAIL = process.env.SUPPORT_EMAIL || "support@shareket.com";
