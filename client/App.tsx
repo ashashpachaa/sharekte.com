@@ -86,6 +86,15 @@ export default function App() {
                           path="/secure-admin-access-7k9m2q"
                           element={<AdminLogin />}
                         />
+                        {/* Redirect /admin to /admin/dashboard */}
+                        <Route
+                          path="/admin"
+                          element={
+                            <ProtectedAdminRoute>
+                              <AdminDashboard />
+                            </ProtectedAdminRoute>
+                          }
+                        />
                         <Route
                           path="/admin/dashboard"
                           element={
