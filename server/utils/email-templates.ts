@@ -1051,7 +1051,7 @@ export function getEmailTemplate(type: EmailTemplateType, context: EmailContext)
           <p>Dear ${ctx.buyerName},</p>
           <p>Your company transfer form has been received and is now under review.</p>
           <div class="alert alert-success">
-            <strong>Form ID: ${ctx.formId}</strong><br>
+            <strong>Form ID: <a href="${APP_URL}/dashboard/forms/${ctx.formId}" style="color: ${SUCCESS_COLOR}; text-decoration: none;">${ctx.formId}</a></strong><br>
             Status: Under Review
           </div>
           <div class="section">
@@ -1071,10 +1071,16 @@ export function getEmailTemplate(type: EmailTemplateType, context: EmailContext)
           <div class="button-container">
             <a href="${APP_URL}/dashboard/forms/${ctx.formId}" class="button">Track Form Status</a>
           </div>
+          <p>If you have any questions, please <a href="${APP_URL}/support" style="color: ${BRAND_COLOR}; text-decoration: none; font-weight: 500;">contact our support team</a>.</p>
           <p>Best regards,<br><strong>${COMPANY_NAME} Team</strong></p>
         </div>
       `,
-        SUCCESS_COLOR
+        SUCCESS_COLOR,
+        [
+          { text: "Track Form", url: `${APP_URL}/dashboard/forms/${ctx.formId}` },
+          { text: "Contact Support", url: `${APP_URL}/support` },
+        ],
+        getDefaultSocialLinks()
       ),
       text: `Your transfer form has been submitted.\n\nForm ID: ${ctx.formId}\nCompany: ${ctx.companyName}\n\nBest regards,\n${COMPANY_NAME} Team`,
     }),
