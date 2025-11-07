@@ -79,6 +79,85 @@ function SalesStatisticsSection({ t }: { t: (key: string) => string }) {
   );
 }
 
+// Featured Companies Section
+function FeaturedCompaniesSection({ t }: { t: (key: string) => string }) {
+  const [companies, setCompanies] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadCompanies = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchAllCompanies();
+        // Filter to show only active companies, limit to top companies
+        const activeCompanies = data.filter((c: any) => c.status === "active").slice(0, 10);
+        setCompanies(activeCompanies);
+      } catch (error) {
+        console.error("Error loading companies:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadCompanies();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="py-20 md:py-28 bg-muted/30">
+        <div className="container max-w-6xl mx-auto px-4">
+          <div className="text-center space-y-4">
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground">
+              {t("homepage.featured.title") || "Featured Companies"}
+            </h2>
+            <p className="text-xl text-muted-foreground">
+              Loading available companies...
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="py-20 md:py-28 bg-muted/30">
+      <div className="container max-w-6xl mx-auto px-4">
+        <div className="text-center space-y-4 mb-12">
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground">
+            {t("homepage.featured.title") || "Featured Companies"}
+          </h2>
+          <p className="text-xl text-muted-foreground">
+            {t("homepage.featured.description") || "Browse established businesses ready for acquisition"}
+          </p>
+        </div>
+
+        {companies.length > 0 ? (
+          <div className="rounded-lg border border-border/40 bg-card overflow-hidden">
+            <CompanyTable
+              companies={companies}
+              onViewDetails={() => {}}
+            />
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground text-lg">
+              {t("homepage.featured.noCompanies") || "No companies available at this time"}
+            </p>
+          </div>
+        )}
+
+        <div className="mt-8 text-center">
+          <Button size="lg" asChild className="bg-primary hover:bg-primary-600">
+            <Link to="/companies">
+              {t("homepage.featured.browseAll") || "Browse All Companies"}
+            </Link>
+          </Button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function Index() {
   const { t, i18n } = useTranslation();
   const seoMetadata = getPageSEOMetadata("home", i18n.language);
