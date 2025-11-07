@@ -972,6 +972,19 @@ function generateTransferFormStatusTemplate(context: EmailContext): EmailTemplat
 }
 
 /**
+ * Get default social media links for emails
+ */
+function getDefaultSocialLinks(): Array<{ platform: string; icon?: string; url: string }> {
+  return [
+    { platform: "Twitter", icon: "𝕏", url: "https://twitter.com/sharekte" },
+    { platform: "LinkedIn", icon: "in", url: "https://linkedin.com/company/sharekte" },
+    { platform: "Facebook", icon: "f", url: "https://facebook.com/sharekte" },
+    { platform: "Instagram", icon: "📷", url: "https://instagram.com/sharekte" },
+    { platform: "YouTube", icon: "▶️", url: "https://youtube.com/@sharekte" },
+  ];
+}
+
+/**
  * Get email template by type
  */
 export function getEmailTemplate(type: EmailTemplateType, context: EmailContext): EmailTemplate {
@@ -1070,7 +1083,7 @@ export function getEmailTemplate(type: EmailTemplateType, context: EmailContext)
         "Document Uploaded",
         `
         <div class="header">
-          <h1>📄 Document Uploaded</h1>
+          <h1>���� Document Uploaded</h1>
         </div>
         <div class="content">
           <p>Dear ${ctx.userName},</p>
