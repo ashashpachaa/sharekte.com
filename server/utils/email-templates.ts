@@ -37,9 +37,9 @@ interface EmailContext {
   [key: string]: string | number | boolean | undefined;
 }
 
-const BRAND_COLOR = "#0066CC"; // Updated to match Sharekte logo
+const BRAND_COLOR = "#004580"; // Updated to match Sharekte website blue
 const BRAND_COLOR_LIGHT = "#E6F0FF";
-const BRAND_COLOR_DARK = "#004699";
+const BRAND_COLOR_DARK = "#003366";
 const SUCCESS_COLOR = "#10B981";
 const WARNING_COLOR = "#F59E0B";
 const DANGER_COLOR = "#EF4444";
@@ -83,14 +83,24 @@ function getEmailLayout(
   title: string,
   content: string,
   headerColor: string = BRAND_COLOR,
-  footerLinks: { text: string; url: string }[] = []
+  footerLinks: { text: string; url: string }[] = [],
+  socialLinks?: Array<{ platform: string; icon?: string; url: string }>
 ): string {
   const footerLinksHtml = footerLinks
     .map(
       (link) =>
-        `<a href="${link.url}" style="color: ${BRAND_COLOR}; text-decoration: none; margin: 0 15px;">${link.text}</a>`
+        `<a href="${link.url}" style="color: ${BRAND_COLOR}; text-decoration: none; margin: 0 15px; font-weight: 500;">${link.text}</a>`
     )
     .join("");
+
+  const socialLinksHtml = socialLinks && socialLinks.length > 0
+    ? socialLinks
+        .map(
+          (link) =>
+            `<a href="${link.url}" style="display: inline-block; margin: 0 10px; text-decoration: none; color: ${BRAND_COLOR}; font-size: 16px;" title="${link.platform}">${link.icon || "🔗"}</a>`
+        )
+        .join("")
+    : "";
 
   return `
 <!DOCTYPE html>
@@ -318,9 +328,14 @@ function getEmailLayout(
             ? `<div class="footer-links">${footerLinksHtml}</div><div class="divider"></div>`
             : ""
         }
+        ${
+          socialLinksHtml
+            ? `<div style="margin-bottom: 20px; text-align: center; padding: 15px 0;">${socialLinksHtml}</div><div class="divider"></div>`
+            : ""
+        }
         <div class="footer-text">
           <p>This is an automated message. Please do not reply to this email.</p>
-          <p>For support, please visit <a href="${SUPPORT_EMAIL}" style="color: ${BRAND_COLOR};">${SUPPORT_EMAIL}</a></p>
+          <p>For support, please visit <a href="${APP_URL}/support" style="color: ${BRAND_COLOR}; text-decoration: none; font-weight: 500;">Contact Support</a> or email <a href="mailto:${SUPPORT_EMAIL}" style="color: ${BRAND_COLOR}; text-decoration: none; font-weight: 500;">${SUPPORT_EMAIL}</a></p>
           <p style="margin-top: 10px; color: #999;">© ${new Date().getFullYear()} ${COMPANY_NAME}. All rights reserved.</p>
         </div>
       </div>
