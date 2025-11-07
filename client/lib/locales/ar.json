@@ -65,7 +65,7 @@
     "myAccount": "حسابي",
     "myCompanies": "شركاتي",
     "myOrders": "طلباتي",
-    "invoices": "الفواتير",
+    "invoices": "الفوا��ير",
     "marketplace": "السوق",
     "myAccount": "حسابي",
     "paymentMethods": "طرق الدفع",
@@ -89,7 +89,7 @@
     "transferForm": "نموذج النقل",
     "fillTransferForm": "ملء نموذج النقل",
     "editTransferForm": "تعديل نموذج النقل",
-    "transferFormAmendments": "تعديل نموذج النقل (تعديلات مطلوبة)",
+    "transferFormAmendments": "تعديل نموذج النقل (تعديلات مطل��بة)",
     "companyTransferForm": "نموذج نقل الشركة",
     "fillOutTransferForm": "م��ء النموذج الشامل لنقل {{companyName}}",
     "submit": "إرسال",
@@ -180,7 +180,7 @@
     "statistics": "الإحصائيات",
     "recentOrders": "الطلبات الحديثة",
     "newUsers": "المستخدم��ن الجدد",
-    "orderId": "معرف الطلب",
+    "orderId": "معرف ��لطلب",
     "customerName": "اسم العميل",
     "amount": "المبلغ",
     "status": "الحالة",
@@ -299,6 +299,12 @@
       "title": "تصفح جميع الشركات",
       "description": "استكشف سوقنا الكامل للشركات المحققة. صفّ حسب ا��دولة وسنة التأسيس للعثور على الشركة المثالية."
     },
+    "featured": {
+      "title": "الشركات المختارة",
+      "description": "تصفح الشركات المنشأة والجاهزة للاستحواذ",
+      "noCompanies": "لا توجد شركات متاحة في الوقت الحالي",
+      "browseAll": "تصفح جميع الشركات"
+    },
     "featuredSection": {
       "title": "الشركات المختارة",
       "description": "شركات مختارة وموثوقة جاهزة للاستحواذ الفوري",
@@ -334,7 +340,7 @@
       "step3": "فاوض",
       "step3Desc": "اعمل مع مستشاريينا لإنهاء الشروط مع البائعين",
       "step4": "إدارة",
-      "step4Desc": "وصول لوحة تحكمك وتوسيع محفظتك من الشركات"
+      "step4Desc": "وصول لوحة تحكمك وتوسيع مح��ظتك من الشركات"
     },
     "whyBuy": {
       "badge": "لماذا شاركيتك",
@@ -502,7 +508,7 @@
     "message": "الرسالة",
     "send": "إرسال الرسالة",
     "faq": "الأسئلة الشائعة",
-    "resources": "الموارد",
+    "resources": "ا��موارد",
     "documentation": "التوثيق",
     "community": "منتدى المجتمع",
     "contact": "اتصل بالدعم",
