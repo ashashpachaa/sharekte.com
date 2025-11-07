@@ -722,7 +722,7 @@ function generateRefundApprovedTemplate(context: EmailContext): EmailTemplate {
     html: getEmailLayout("Refund Approved", contentHtml, SUCCESS_COLOR, [
       { text: "View Details", url: `${APP_URL}/dashboard/orders/${context.orderId}` },
       { text: "Contact Support", url: `${APP_URL}/support` },
-    ]),
+    ], getDefaultSocialLinks()),
     text: `Your refund has been approved.\n\nRefund Amount: ${context.currency} ${context.refundAmount}\nExpected: 5-7 business days\n\nBest regards,\n${COMPANY_NAME} Team`,
   };
 }
