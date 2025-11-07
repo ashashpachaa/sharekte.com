@@ -791,7 +791,8 @@ function generateRenewalReminderTemplate(context: EmailContext): EmailTemplate {
     html: getEmailLayout("Renewal Reminder", contentHtml, WARNING_COLOR, [
       { text: "Renew Company", url: `${APP_URL}/dashboard/companies/${context.companyId}/renew` },
       { text: "View Company", url: `${APP_URL}/dashboard/companies/${context.companyId}` },
-    ]),
+      { text: "Contact Support", url: `${APP_URL}/support` },
+    ], getDefaultSocialLinks()),
     text: `Renewal Reminder\n\nDear ${context.customerName},\n\nYour company ${context.companyName} renewal is due on ${context.renewalDate}.\n\nRenewal Fee: ${context.currency} ${context.renewalFee}\n\nPlease renew your company to maintain its active status.\n\nBest regards,\n${COMPANY_NAME} Team`,
   };
 }
