@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { WhyBuyReadyMade } from "@/components/WhyBuyReadyMade";
-import { useMemo } from "react";
+import { CompanyTable } from "@/components/CompanyTable";
+import { useMemo, useState, useEffect } from "react";
 import { useSEO, getPageSEOMetadata } from "@/lib/seo";
 import { TrendingUp, Zap, BarChart3, Globe, Play } from "lucide-react";
+import { fetchAllCompanies } from "@/lib/company-management";
 
 // Sales Statistics Section - Motivation
 function SalesStatisticsSection({ t }: { t: (key: string) => string }) {
