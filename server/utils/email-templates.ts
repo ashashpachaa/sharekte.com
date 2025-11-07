@@ -1227,13 +1227,19 @@ export function getEmailTemplate(type: EmailTemplateType, context: EmailContext)
           <div class="button-container">
             <a href="${APP_URL}/companies" class="button">Start Browsing</a>
           </div>
-          <p>Questions? Check out our <a href="${APP_URL}/how-it-works" style="color: ${BRAND_COLOR};">how it works</a> page or contact support.</p>
+          <p>Questions? Check out our <a href="${APP_URL}/how-it-works" style="color: ${BRAND_COLOR}; text-decoration: none;">how it works</a> page or <a href="${APP_URL}/support" style="color: ${BRAND_COLOR}; text-decoration: none;">contact support</a>.</p>
           <p>Best regards,<br><strong>${COMPANY_NAME} Team</strong></p>
         </div>
       `,
-        BRAND_COLOR
+        BRAND_COLOR,
+        [
+          { text: "Browse Companies", url: `${APP_URL}/companies` },
+          { text: "How It Works", url: `${APP_URL}/how-it-works` },
+          { text: "Contact Support", url: `${APP_URL}/support` },
+        ],
+        getDefaultSocialLinks()
       ),
-      text: `Welcome to ${COMPANY_NAME}! Start exploring our companies catalog.`,
+      text: `Welcome to ${COMPANY_NAME}! Start exploring our companies catalog.\n\nVisit: ${APP_URL}/companies\n\nBest regards,\n${COMPANY_NAME} Team`,
     }),
   };
 
