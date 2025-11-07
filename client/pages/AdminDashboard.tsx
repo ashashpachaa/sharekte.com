@@ -11,6 +11,13 @@ import {
   AlertCircle,
   Building2,
   ShoppingCart,
+  FileText,
+  Shield,
+  Mail,
+  DollarSign,
+  Package,
+  Share2,
+  Wallet,
 } from "lucide-react";
 
 export default function AdminDashboard() {
