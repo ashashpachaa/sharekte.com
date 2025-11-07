@@ -222,6 +222,9 @@ export default function Index() {
           </div>
         </section>
 
+        {/* Featured Companies Section */}
+        <FeaturedCompaniesSection t={t} />
+
         {/* Why Buy Ready Made Company Section */}
         <WhyBuyReadyMade />
 
