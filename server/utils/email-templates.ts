@@ -1128,7 +1128,7 @@ export function getEmailTemplate(type: EmailTemplateType, context: EmailContext)
           <p>Dear ${ctx.userName},</p>
           <p>Your support ticket has been created and assigned to our team.</p>
           <div class="alert alert-info">
-            <strong>Ticket ID: ${ctx.ticketId}</strong><br>
+            <strong>Ticket ID: <a href="${APP_URL}/dashboard/support/${ctx.ticketId}" style="color: ${BRAND_COLOR}; text-decoration: none;">${ctx.ticketId}</a></strong><br>
             Category: ${ctx.category}
           </div>
           <p>We'll respond to your inquiry as soon as possible.</p>
@@ -1138,9 +1138,14 @@ export function getEmailTemplate(type: EmailTemplateType, context: EmailContext)
           <p>Best regards,<br><strong>${COMPANY_NAME} Team</strong></p>
         </div>
       `,
-        BRAND_COLOR
+        BRAND_COLOR,
+        [
+          { text: "View Ticket", url: `${APP_URL}/dashboard/support/${ctx.ticketId}` },
+          { text: "Contact Support", url: `${APP_URL}/support` },
+        ],
+        getDefaultSocialLinks()
       ),
-      text: `Your support ticket has been created.\n\nTicket ID: ${ctx.ticketId}`,
+      text: `Your support ticket has been created.\n\nTicket ID: ${ctx.ticketId}\n\nBest regards,\n${COMPANY_NAME} Team`,
     }),
     "invoice-created": (ctx) => ({
       subject: `Invoice Created: ${ctx.invoiceNumber}`,
