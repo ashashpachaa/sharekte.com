@@ -413,7 +413,7 @@ function generateOrderCreatedTemplate(context: EmailContext): EmailTemplate {
     html: getEmailLayout("Order Confirmation", contentHtml, SUCCESS_COLOR, [
       { text: "View Order", url: `${APP_URL}/dashboard/orders/${context.orderId}` },
       { text: "Contact Support", url: `${APP_URL}/support` },
-    ]),
+    ], getDefaultSocialLinks()),
     text: `Order Confirmed: ${context.orderId}\n\nDear ${context.customerName},\n\nYour order has been received and confirmed.\n\nOrder ID: ${context.orderId}\nCompany: ${context.companyName}\nAmount: ${context.currency} ${context.amount}\n\nBest regards,\n${COMPANY_NAME} Team`,
   };
 }
@@ -1083,7 +1083,7 @@ export function getEmailTemplate(type: EmailTemplateType, context: EmailContext)
         "Document Uploaded",
         `
         <div class="header">
-          <h1>���� Document Uploaded</h1>
+          <h1>📄 Document Uploaded</h1>
         </div>
         <div class="content">
           <p>Dear ${ctx.userName},</p>
