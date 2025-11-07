@@ -145,7 +145,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Companies Management */}
           <div className="bg-card border border-border/40 rounded-lg p-6">
             <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
@@ -153,7 +153,7 @@ export default function AdminDashboard() {
               Companies
             </h3>
             <p className="text-muted-foreground text-sm mb-4">
-              Manage registered companies and track renewals
+              Manage registered companies, track renewals, and handle refunds
             </p>
             <Button
               className="w-full bg-blue-600 hover:bg-blue-700 text-white"
@@ -170,13 +170,64 @@ export default function AdminDashboard() {
               Orders
             </h3>
             <p className="text-muted-foreground text-sm mb-4">
-              Manage orders and transfer forms
+              Manage orders, handle refunds, and track transfer forms
             </p>
             <Button
               className="w-full bg-purple-600 hover:bg-purple-700 text-white"
               asChild
             >
               <Link to="/admin/orders">Manage Orders</Link>
+            </Button>
+          </div>
+
+          {/* Services Management */}
+          <div className="bg-card border border-border/40 rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <Package className="w-5 h-5" />
+              Services Marketplace
+            </h3>
+            <p className="text-muted-foreground text-sm mb-4">
+              Create and manage services with custom application forms
+            </p>
+            <Button
+              className="w-full bg-amber-600 hover:bg-amber-700 text-white"
+              asChild
+            >
+              <Link to="/admin/services">Manage Services</Link>
+            </Button>
+          </div>
+
+          {/* Coupons Management */}
+          <div className="bg-card border border-border/40 rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <DollarSign className="w-5 h-5" />
+              Discount Coupons
+            </h3>
+            <p className="text-muted-foreground text-sm mb-4">
+              Create and manage discount codes for promotions
+            </p>
+            <Button
+              className="w-full bg-violet-600 hover:bg-violet-700 text-white"
+              asChild
+            >
+              <Link to="/admin/coupons">Manage Coupons</Link>
+            </Button>
+          </div>
+
+          {/* Invoices Management */}
+          <div className="bg-card border border-border/40 rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <FileText className="w-5 h-5" />
+              Invoices
+            </h3>
+            <p className="text-muted-foreground text-sm mb-4">
+              Generate, manage, and send invoices to clients
+            </p>
+            <Button
+              className="w-full bg-green-600 hover:bg-green-700 text-white"
+              asChild
+            >
+              <Link to="/admin/invoices">Manage Invoices</Link>
             </Button>
           </div>
 
@@ -187,21 +238,90 @@ export default function AdminDashboard() {
               Users Management
             </h3>
             <p className="text-muted-foreground text-sm mb-4">
-              Manage user accounts and account status
+              Manage user accounts, view login history, and handle suspensions
             </p>
             <Button
-              className="w-full bg-primary hover:bg-primary/80 text-white"
+              className="w-full bg-primary hover:bg-primary-600 text-white"
               asChild
             >
               <Link to="/admin/users">Manage Users</Link>
             </Button>
           </div>
 
-          {/* Settings */}
+          {/* Roles Management */}
+          <div className="bg-card border border-border/40 rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <Shield className="w-5 h-5" />
+              Roles Management
+            </h3>
+            <p className="text-muted-foreground text-sm mb-4">
+              Create custom roles and assign permissions to users
+            </p>
+            <Button
+              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
+              asChild
+            >
+              <Link to="/admin/roles">Manage Roles</Link>
+            </Button>
+          </div>
+
+          {/* Email Templates */}
+          <div className="bg-card border border-border/40 rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <Mail className="w-5 h-5" />
+              Email Templates
+            </h3>
+            <p className="text-muted-foreground text-sm mb-4">
+              Manage and preview all system email templates
+            </p>
+            <Button
+              className="w-full bg-cyan-600 hover:bg-cyan-700 text-white"
+              asChild
+            >
+              <Link to="/admin/email-templates">Manage Templates</Link>
+            </Button>
+          </div>
+
+          {/* Fees Management */}
+          <div className="bg-card border border-border/40 rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <DollarSign className="w-5 h-5" />
+              Fees Management
+            </h3>
+            <p className="text-muted-foreground text-sm mb-4">
+              Create and manage checkout fees (taxes, service fees, etc.)
+            </p>
+            <Button
+              className="w-full bg-amber-600 hover:bg-amber-700 text-white"
+              asChild
+            >
+              <Link to="/admin/fees">Manage Fees</Link>
+            </Button>
+          </div>
+
+          {/* Wallet Management */}
+          <div className="bg-card border border-border/40 rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <Wallet className="w-5 h-5" />
+              Wallet Management
+            </h3>
+            <p className="text-muted-foreground text-sm mb-4">
+              Manage user wallet balances, view transactions, and generate
+              reports
+            </p>
+            <Button
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+              asChild
+            >
+              <Link to="/admin/wallets">Manage Wallets</Link>
+            </Button>
+          </div>
+
+          {/* System Settings */}
           <div className="bg-card border border-border/40 rounded-lg p-6">
             <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
               <Settings className="w-5 h-5" />
-              Settings
+              Admin Settings
             </h3>
             <p className="text-muted-foreground text-sm mb-4">
               Configure admin accounts and system preferences
@@ -209,6 +329,56 @@ export default function AdminDashboard() {
             <Button variant="outline" className="w-full" asChild>
               <Link to="/admin/settings">Go to Settings</Link>
             </Button>
+          </div>
+
+          {/* Social Media Links */}
+          <div className="bg-card border border-border/40 rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <Share2 className="w-5 h-5" />
+              Social Media Links
+            </h3>
+            <p className="text-muted-foreground text-sm mb-4">
+              Manage social media links displayed in the website footer
+            </p>
+            <Button
+              className="w-full bg-pink-600 hover:bg-pink-700 text-white"
+              asChild
+            >
+              <Link to="/admin/social-media">Manage Social Links</Link>
+            </Button>
+          </div>
+        </div>
+
+        {/* Recent Activity */}
+        <div className="mt-8 bg-card border border-border/40 rounded-lg p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4">
+            Quick Stats
+          </h3>
+          <div className="space-y-3 text-sm">
+            <div className="flex justify-between items-center py-2 border-b border-border/20">
+              <span className="text-muted-foreground">Total System Users</span>
+              <span className="font-semibold text-foreground">
+                {totalUsers}
+              </span>
+            </div>
+            <div className="flex justify-between items-center py-2 border-b border-border/20">
+              <span className="text-muted-foreground">Active Accounts</span>
+              <span className="font-semibold text-green-600">
+                {activeUsers}
+              </span>
+            </div>
+            <div className="flex justify-between items-center py-2 border-b border-border/20">
+              <span className="text-muted-foreground">Suspended Accounts</span>
+              <span className="font-semibold text-orange-600">
+                {suspendedUsers}
+              </span>
+            </div>
+            <div className="flex justify-between items-center py-2">
+              <span className="text-muted-foreground">Admin Role</span>
+              <span className="font-semibold text-primary capitalize">
+                Super Admin
+              </span>
+            </div>
           </div>
         </div>
       </main>
