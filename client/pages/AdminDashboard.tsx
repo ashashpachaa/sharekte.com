@@ -7,6 +7,8 @@ import {
   Users,
   Settings,
   LogOut,
+  BarChart3,
+  AlertCircle,
   Building2,
   ShoppingCart,
 } from "lucide-react";
