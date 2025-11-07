@@ -659,7 +659,7 @@ function generateOrderCompletedTemplate(context: EmailContext): EmailTemplate {
       { text: "View Company", url: `${APP_URL}/dashboard/companies/${context.companyId}` },
       { text: "Download Docs", url: `${APP_URL}/dashboard/documents` },
       { text: "Contact Support", url: `${APP_URL}/support` },
-    ]),
+    ], getDefaultSocialLinks()),
     text: `Your company transfer is complete!\n\nDear ${context.customerName},\n\nYour company ${context.companyName} is now ready for use.\n\nCompany Number: ${context.companyNumber}\nRenewal Date: ${context.renewalDate}\n\nBest regards,\n${COMPANY_NAME} Team`,
   };
 }
