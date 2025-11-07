@@ -485,7 +485,8 @@ function generateOrderPaymentReceivedTemplate(context: EmailContext): EmailTempl
     html: getEmailLayout("Payment Confirmation", contentHtml, SUCCESS_COLOR, [
       { text: "Track Order", url: `${APP_URL}/dashboard/orders/${context.orderId}` },
       { text: "View Invoice", url: `${APP_URL}/dashboard/invoices/${context.invoiceId}` },
-    ]),
+      { text: "Contact Support", url: `${APP_URL}/support` },
+    ], getDefaultSocialLinks()),
     text: `Payment Received\n\nDear ${context.customerName},\n\nYour payment has been processed successfully.\n\nAmount: ${context.currency} ${context.amount}\nTransaction ID: ${context.transactionId}\n\nBest regards,\n${COMPANY_NAME} Team`,
   };
 }
