@@ -32,5 +32,15 @@
     "status": "frozen",
     "createdAt": "2025-11-06T21:41:44.493Z",
     "updatedAt": "2025-11-06T21:41:44.493Z"
+  },
+  {
+    "id": "wallet_1762502156131",
+    "userId": "company",
+    "userEmail": "user_company@example.com",
+    "balance": 0,
+    "currency": "USD",
+    "status": "active",
+    "createdAt": "2025-11-07T07:55:56.132Z",
+    "updatedAt": "2025-11-07T07:55:56.132Z"
   }
 ]
