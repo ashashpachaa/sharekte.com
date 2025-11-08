@@ -73,13 +73,16 @@ function loadTokensFromFile(): TokenEntry {
           delete parsed[key];
         }
       });
-      console.log(`[loadTokensFromFile] ✓ Loaded tokens from file`);
+      console.log(
+        `[loadTokensFromFile] ✓ Loaded ${Object.keys(parsed).length} tokens from file`,
+      );
       saveTokensToFile(parsed);
       return parsed;
     }
   } catch (error) {
     console.error("[loadTokensFromFile] Error reading file:", error);
   }
+  console.log("[loadTokensFromFile] No tokens file found, starting with empty");
   return {};
 }
 
