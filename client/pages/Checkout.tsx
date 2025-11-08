@@ -41,7 +41,7 @@ export default function Checkout() {
   const navigate = useNavigate();
   const { formatPrice, convertPrice, currency } = useCurrency();
   const { items, clearCart, totalPrice } = useCart();
-  const { isUser, userName, userEmail } = useUser();
+  const { isUser, userName, userEmail, loading: authLoading } = useUser();
   const [loading, setLoading] = useState(false);
   const [orderCompleted, setOrderCompleted] = useState(false);
   const [authMode, setAuthMode] = useState<"signin" | "signup">("signup");
