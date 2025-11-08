@@ -897,12 +897,23 @@ export default function Checkout() {
               {/* Authentication Section */}
               <div>
                 <h2 className="text-xl font-bold text-foreground mb-4">
-                  {isAuthenticated
-                    ? "✓ Account Verified"
-                    : "Create or Sign Into Your Account"}
+                  {authLoading
+                    ? "Verifying Account..."
+                    : isAuthenticated
+                      ? "✓ Account Verified"
+                      : "Create or Sign Into Your Account"}
                 </h2>
                 <div className="bg-card border border-border/40 rounded-lg p-6 space-y-4">
-                  {isAuthenticated ? (
+                  {authLoading ? (
+                    <div className="flex items-center justify-center py-8">
+                      <div className="text-center space-y-3">
+                        <Loader className="w-8 h-8 text-primary animate-spin mx-auto" />
+                        <p className="text-muted-foreground">
+                          Checking your session...
+                        </p>
+                      </div>
+                    </div>
+                  ) : isAuthenticated ? (
                     <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-4">
                       <div className="flex items-center gap-3">
                         <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
@@ -1083,7 +1094,7 @@ export default function Checkout() {
                                 setSignupPassword(e.target.value)
                               }
                               className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                              placeholder="••••��•••"
+                              placeholder="•��••��•••"
                               required
                             />
                             <p className="text-xs text-muted-foreground mt-1">
