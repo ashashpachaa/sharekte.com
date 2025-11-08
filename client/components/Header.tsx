@@ -59,7 +59,9 @@ export function Header() {
     localStorage.removeItem("userToken");
     localStorage.removeItem("userEmail");
     localStorage.removeItem("userName");
+    setUser(null);
     setShowUserMenu(false);
+    window.dispatchEvent(new Event("userStorageChange"));
     navigate("/");
   };
 
