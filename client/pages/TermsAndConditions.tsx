@@ -114,7 +114,9 @@ export default function TermsAndConditions() {
               </p>
               <ul className="list-disc list-inside space-y-1 ml-4">
                 <li>Reclaim the company and offer it to other clients</li>
-                <li>Dispose of the company without the Client's prior consent</li>
+                <li>
+                  Dispose of the company without the Client's prior consent
+                </li>
                 <li>
                   Deny any claims or compensation from the Client after
                   expiration
@@ -137,8 +139,13 @@ export default function TermsAndConditions() {
                   5.1. Client Rights:
                 </p>
                 <ul className="list-disc list-inside space-y-1 ml-4">
-                  <li>Use the company for legal and administrative transactions only</li>
-                  <li>Access any accompanying legal or administrative services</li>
+                  <li>
+                    Use the company for legal and administrative transactions
+                    only
+                  </li>
+                  <li>
+                    Access any accompanying legal or administrative services
+                  </li>
                 </ul>
               </div>
               <div>
@@ -146,7 +153,9 @@ export default function TermsAndConditions() {
                   5.2. Client Obligations:
                 </p>
                 <ul className="list-disc list-inside space-y-1 ml-4">
-                  <li>Comply with all applicable local and international laws</li>
+                  <li>
+                    Comply with all applicable local and international laws
+                  </li>
                   <li>
                     Not alter any company records, official documents, or data
                     without written consent from the Site
@@ -192,7 +201,10 @@ export default function TermsAndConditions() {
               <ul className="list-disc list-inside space-y-1 ml-4">
                 <li>Credit/Debit cards (Visa, MasterCard, AmEx)</li>
                 <li>Bank transfers</li>
-                <li>Approved digital wallets or other payment methods integrated with the Site</li>
+                <li>
+                  Approved digital wallets or other payment methods integrated
+                  with the Site
+                </li>
               </ul>
               <p>
                 <strong>7.2</strong> All payments must be made prior to company
@@ -425,7 +437,10 @@ export default function TermsAndConditions() {
               17. Additional Provisions
             </h2>
             <ul className="list-disc list-inside space-y-2 text-muted-foreground ml-4">
-              <li>All company documents remain the property of the Site or original owner</li>
+              <li>
+                All company documents remain the property of the Site or
+                original owner
+              </li>
               <li>
                 Benefit does not grant intellectual property or permanent
                 ownership rights
@@ -434,7 +449,9 @@ export default function TermsAndConditions() {
                 Clients may not claim compensation if the company is sold or
                 reassigned after benefit expiration
               </li>
-              <li>Breaches of terms may lead to full legal action in UK courts</li>
+              <li>
+                Breaches of terms may lead to full legal action in UK courts
+              </li>
             </ul>
           </section>
 

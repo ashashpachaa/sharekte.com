@@ -66,7 +66,10 @@ export default function App() {
                         />
                         <Route path="/support" element={<Support />} />
                         <Route path="/companies" element={<Companies />} />
-                        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                        <Route
+                          path="/privacy-policy"
+                          element={<PrivacyPolicy />}
+                        />
                         <Route
                           path="/terms-and-conditions"
                           element={<TermsAndConditions />}

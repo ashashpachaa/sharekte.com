@@ -2,7 +2,6 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
 export default function PrivacyPolicy() {
-
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -22,10 +21,10 @@ export default function PrivacyPolicy() {
               Introduction
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              Sharekte ("we", "our", or "us") operates the Sharekte website
-              (the "Service"). This page informs you of our policies regarding
-              the collection, use, and disclosure of personal data when you use
-              our Service and the choices you have associated with that data.
+              Sharekte ("we", "our", or "us") operates the Sharekte website (the
+              "Service"). This page informs you of our policies regarding the
+              collection, use, and disclosure of personal data when you use our
+              Service and the choices you have associated with that data.
             </p>
           </section>
 
