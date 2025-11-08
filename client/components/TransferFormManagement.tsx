@@ -1217,7 +1217,7 @@ export function TransferFormManagement({
                       const downloadUrl = window.URL.createObjectURL(blob);
                       const link = document.createElement("a");
                       link.href = downloadUrl;
-                      link.download = `transfer-form-${selectedForm.formId}.html`;
+                      link.download = `transfer-form-${selectedForm.formId}.pdf`;
 
                       // Append, click, and remove
                       document.body.appendChild(link);
@@ -1230,7 +1230,7 @@ export function TransferFormManagement({
                       }, 200);
 
                       toast.success(
-                        "Form downloaded as HTML. Open in browser, then use Ctrl+P (Cmd+P on Mac) to print as PDF.",
+                        "Transfer form downloaded successfully as PDF with all application data and fields.",
                       );
                     } catch (error) {
                       console.error("[Transfer Form Download] Error:", error);
