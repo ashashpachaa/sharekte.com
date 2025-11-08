@@ -114,6 +114,17 @@ export function Header() {
           {/* Cart Dropdown */}
           <CartDropdown />
 
+          {/* Sign In Button - Only show when not authenticated */}
+          {!user || !user.authenticated ? (
+            <Button
+              variant="outline"
+              className="h-9 text-xs"
+              onClick={() => navigate("/checkout")}
+            >
+              {t("header.login") || "Sign In"}
+            </Button>
+          ) : null}
+
           {/* Auth Section */}
           {user && user.authenticated ? (
             <>
