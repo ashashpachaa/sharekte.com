@@ -22,7 +22,7 @@ export function Header() {
 
   // Load user from localStorage and watch for changes
   useEffect(() => {
-    const updateUser = useCallback(() => {
+    const updateUser = () => {
       const userToken = localStorage.getItem("userToken");
       const userEmailStored = localStorage.getItem("userEmail");
       const userName = localStorage.getItem("userName");
@@ -47,7 +47,7 @@ export function Header() {
         console.log("[Header] Clearing user (not all required fields present)");
         setUser(null);
       }
-    }, []);
+    };
 
     // Initial load
     updateUser();
