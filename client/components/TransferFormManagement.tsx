@@ -1242,7 +1242,7 @@ export function TransferFormManagement({
                     }
                   }}
                   className="gap-2"
-                  title="Download form as HTML - open in browser and press Ctrl+P to print as PDF"
+                  title="Download transfer form as PDF with all application fields and data"
                 >
                   <Download className="w-4 h-4" />
                   Download Form
