@@ -75,14 +75,7 @@ export default function App() {
                           element={<TermsAndConditions />}
                         />
                         <Route path="/cart" element={<Cart />} />
-                        <Route
-                          path="/checkout"
-                          element={
-                            <ProtectedRoute>
-                              <Checkout />
-                            </ProtectedRoute>
-                          }
-                        />
+                        <Route path="/checkout" element={<Checkout />} />
                         {/* Admin Login Routes - Both work */}
                         <Route path="/admin/login" element={<AdminLogin />} />
                         <Route
