@@ -1,11 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "./ui/button";
 import { CartDropdown } from "./CartDropdown";
 import { NotificationBell } from "./NotificationBell";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useCurrency } from "@/lib/currency-context";
+import { useUser } from "@/lib/user-context";
 import { Globe, LogOut, User, Menu, X } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
@@ -13,72 +14,12 @@ export function Header() {
   const { t } = useTranslation();
   const { currency, setCurrency, rates } = useCurrency();
   const navigate = useNavigate();
+  const { isUser, userName, userEmail, logout } = useUser();
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [user, setUser] = useState<{
-    authenticated: boolean;
-    email: string;
-    fullName: string;
-  } | null>(null);
-
-  // Load user from localStorage and watch for changes
-  useEffect(() => {
-    const updateUser = () => {
-      const userToken = localStorage.getItem("userToken");
-      const userEmailStored = localStorage.getItem("userEmail");
-      const userName = localStorage.getItem("userName");
-
-      console.log("[Header] updateUser called:", {
-        hasToken: !!userToken,
-        hasEmail: !!userEmailStored,
-        hasName: !!userName,
-        token: userToken ? "***" : null,
-        email: userEmailStored,
-        name: userName,
-      });
-
-      if (userToken && userEmailStored && userName) {
-        console.log("[Header] Setting authenticated user:", userName);
-        setUser({
-          authenticated: true,
-          email: userEmailStored,
-          fullName: userName,
-        });
-      } else {
-        console.log("[Header] Clearing user (not all required fields present)");
-        setUser(null);
-      }
-    };
-
-    // Initial load
-    updateUser();
-
-    // Listen for storage changes (from login in other tabs/windows)
-    const handleStorageEvent = () => {
-      console.log("[Header] storage event triggered");
-      updateUser();
-    };
-    window.addEventListener("storage", handleStorageEvent);
-
-    // Dispatch custom event when localStorage changes programmatically
-    const handleStorageChange = () => {
-      console.log("[Header] userStorageChange event triggered");
-      updateUser();
-    };
-    window.addEventListener("userStorageChange", handleStorageChange);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageEvent);
-      window.removeEventListener("userStorageChange", handleStorageChange);
-    };
-  }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("userToken");
-    localStorage.removeItem("userEmail");
-    localStorage.removeItem("userName");
-    setUser(null);
+    logout();
     setShowUserMenu(false);
-    window.dispatchEvent(new Event("userStorageChange"));
     navigate("/");
   };
 
