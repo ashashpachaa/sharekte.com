@@ -420,6 +420,7 @@ export default function Dashboard() {
         documents: uc.documents || [], // Initialize as empty array if not present
         transferFormFilled: uc.transferFormFilled,
         adminComments: uc.adminComments,
+        statusHistory: uc.statusHistory,
         renewalStatus: currentRenewalStatus,
         renewalHistory: uc.renewalHistory || [],
       };
