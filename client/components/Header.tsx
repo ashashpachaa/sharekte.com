@@ -100,7 +100,7 @@ export function Header() {
           <CartDropdown />
 
           {/* Sign In Button - Only show when not authenticated */}
-          {!user || !user.authenticated ? (
+          {!isUser ? (
             <Button
               variant="outline"
               className="h-9 text-xs"
@@ -111,7 +111,7 @@ export function Header() {
           ) : null}
 
           {/* Auth Section */}
-          {user && user.authenticated ? (
+          {isUser && userName ? (
             <>
               {/* User Menu */}
               <div className="relative group">
@@ -122,7 +122,7 @@ export function Header() {
                 >
                   <User className="w-4 h-4" />
                   <span className="text-xs hidden sm:inline">
-                    {user.fullName}
+                    {userName}
                   </span>
                 </Button>
                 <div
@@ -133,10 +133,10 @@ export function Header() {
                   <div className="p-3 space-y-2">
                     <div className="text-sm">
                       <p className="font-semibold text-foreground">
-                        {user.fullName}
+                        {userName}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        {user.email}
+                        {userEmail}
                       </p>
                     </div>
                     <div className="border-t border-border/40 pt-2">
