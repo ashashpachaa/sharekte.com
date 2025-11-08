@@ -1217,8 +1217,13 @@ function OrderDetailsModal({
               setEditedOrder(updatedOrder);
 
               // Auto-save when documents are uploaded (status automatically changes to "completed")
-              if (updatedOrder.status === "completed" && order.status !== "completed") {
-                console.log("[AdminOrders] Document uploaded - auto-saving order with status: completed");
+              if (
+                updatedOrder.status === "completed" &&
+                order.status !== "completed"
+              ) {
+                console.log(
+                  "[AdminOrders] Document uploaded - auto-saving order with status: completed",
+                );
                 try {
                   const changes: Partial<Order> = {
                     documents: updatedOrder.documents,
@@ -1226,7 +1231,9 @@ function OrderDetailsModal({
                   };
 
                   // Add to status history
-                  let updatedStatusHistory = [...(updatedOrder.statusHistory || [])];
+                  let updatedStatusHistory = [
+                    ...(updatedOrder.statusHistory || []),
+                  ];
                   const today = new Date().toISOString().split("T")[0];
                   const newHistoryEntry = {
                     id: `hist-${Date.now()}`,
@@ -1241,12 +1248,21 @@ function OrderDetailsModal({
                   changes.statusChangedDate = today;
 
                   await updateOrder(order.id, changes);
-                  console.log("[AdminOrders] ✓ Order auto-saved with status: completed");
-                  toast.success("Order automatically updated to 'completed' after document upload");
+                  console.log(
+                    "[AdminOrders] ✓ Order auto-saved with status: completed",
+                  );
+                  toast.success(
+                    "Order automatically updated to 'completed' after document upload",
+                  );
                   setHasChanges(false);
                 } catch (error) {
-                  console.error("[AdminOrders] Failed to auto-save order:", error);
-                  toast.error("Failed to auto-save order after document upload");
+                  console.error(
+                    "[AdminOrders] Failed to auto-save order:",
+                    error,
+                  );
+                  toast.error(
+                    "Failed to auto-save order after document upload",
+                  );
                 }
               }
               setHasChanges(true);
