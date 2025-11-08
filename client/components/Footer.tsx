@@ -122,20 +122,20 @@ export function Footer() {
             </h3>
             <ul className="space-y-2">
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/privacy-policy"
                   className="text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
                   {t("footer.privacy")}
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/terms-and-conditions"
                   className="text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
                   {t("footer.terms")}
-                </a>
+                </Link>
               </li>
               <li>
                 <a
