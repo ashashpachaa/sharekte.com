@@ -43,8 +43,10 @@ export function UserProvider({ children }: { children: ReactNode }) {
         try {
           console.log("[checkSession] Verifying token with /api/verify...");
           const response = await fetch("/api/verify", {
+            method: "GET",
             headers: {
               Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
             },
           });
 
@@ -52,29 +54,38 @@ export function UserProvider({ children }: { children: ReactNode }) {
             "[checkSession] /api/verify response status:",
             response.status,
           );
+
           if (response.ok) {
+            const data = await response.json();
             console.log(
-              "[checkSession] ✓ Session verified, setting user state",
+              "[checkSession] ✓ Session verified for:",
+              data.email,
             );
             setIsUser(true);
             setUserEmail(email);
-            setUserName(name);
+            setUserName(name || data.name);
             setUserToken(token);
           } else {
             // Token is invalid
+            const errorData = await response.json().catch(() => ({}));
             console.log(
-              "[checkSession] ✗ Token verification failed, clearing session",
+              "[checkSession] ✗ Token verification failed:",
+              errorData.error,
             );
             localStorage.removeItem("userToken");
             localStorage.removeItem("userEmail");
             localStorage.removeItem("userName");
           }
         } catch (err) {
-          console.error("Session verification error:", err);
+          console.error("[checkSession] Session verification error:", err);
           localStorage.removeItem("userToken");
           localStorage.removeItem("userEmail");
           localStorage.removeItem("userName");
         }
+      } else {
+        console.log(
+          "[checkSession] No token/email in localStorage, session not available",
+        );
       }
 
       setLoading(false);
