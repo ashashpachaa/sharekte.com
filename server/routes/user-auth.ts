@@ -232,28 +232,44 @@ export const verifyHandler: RequestHandler = (req, res) => {
     const token = authHeader?.replace("Bearer ", "");
 
     if (!token) {
+      console.log("[verifyHandler] No token provided in authorization header");
       return res.status(401).json({ error: "No token provided" });
     }
 
-    const tokenData = tokens[token];
+    // First check in-memory tokens
+    let tokenData = tokens[token];
+
+    // If not found in memory, reload from file (in case another process updated it)
+    if (!tokenData) {
+      console.log(
+        "[verifyHandler] Token not in memory, reloading from file...",
+      );
+      tokens = loadTokensFromFile();
+      tokenData = tokens[token];
+    }
 
     if (!tokenData) {
+      console.log("[verifyHandler] Token not found in tokens storage");
       return res.status(401).json({ error: "Invalid token" });
     }
 
     if (tokenData.expiresAt < Date.now()) {
+      console.log("[verifyHandler] Token expired");
       delete tokens[token];
       saveTokensToFile(tokens);
       return res.status(401).json({ error: "Token expired" });
     }
 
+    console.log(
+      `[verifyHandler] ✓ Token verified for ${tokenData.email}`,
+    );
     res.json({
       valid: true,
       email: tokenData.email,
       name: tokenData.name,
     });
   } catch (error) {
-    console.error("Verify error:", error);
+    console.error("[verifyHandler] Error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
