@@ -76,41 +76,37 @@ export default function Checkout() {
   const [couponLoading, setCouponLoading] = useState(false);
   const [couponError, setCouponError] = useState("");
 
-  // Check if user is already logged in on component mount
+  // Check if user is already logged in on component mount and when UserContext changes
   useEffect(() => {
-    // Check for UserContext authentication (from login page)
-    const userToken = localStorage.getItem("userToken");
-    const userEmail = localStorage.getItem("userEmail");
-    const userName = localStorage.getItem("userName");
-
     console.log("[Checkout] Checking for existing user session...");
-    console.log("[Checkout] Found userToken:", userToken ? "✓" : "✗");
-    console.log("[Checkout] Found userEmail:", userEmail ? "✓" : "✗");
-    console.log("[Checkout] Found userName:", userName ? "✓" : "✗");
+    console.log("[Checkout] UserContext isUser:", isUser);
+    console.log("[Checkout] UserContext userEmail:", userEmail ? "✓" : "✗");
+    console.log("[Checkout] UserContext userName:", userName ? "✓" : "✗");
 
-    if (userToken && userEmail && userName) {
-      console.log("[Checkout] ✓ User is authenticated, skipping sign-in form");
+    // First, check if user is authenticated via UserContext
+    if (isUser && userEmail && userName) {
+      console.log("[Checkout] ✓ User is authenticated via UserContext, skipping sign-in form");
       setIsAuthenticated(true);
       setEmail(userEmail);
       setFullName(userName);
       setSignupEmail(userEmail);
     } else {
-      // Fallback: Check for old "user" format
-      const storedUser = localStorage.getItem("user");
-      if (storedUser) {
-        try {
-          const userData = JSON.parse(storedUser);
-          if (userData.authenticated && userData.email) {
-            setIsAuthenticated(true);
-            setEmail(userData.email);
-            setFullName(userData.fullName || "");
-            setSignupEmail(userData.email);
-            setCompany(userData.company || "");
-            setWhatsappNumber(userData.whatsappNumber || "");
-          }
-        } catch (error) {
-          console.error("Error parsing stored user data:", error);
-        }
+      // Fallback: Check localStorage for UserContext keys
+      const userToken = localStorage.getItem("userToken");
+      const storedUserEmail = localStorage.getItem("userEmail");
+      const storedUserName = localStorage.getItem("userName");
+
+      console.log("[Checkout] Checking localStorage...");
+      console.log("[Checkout] Found userToken:", userToken ? "✓" : "✗");
+      console.log("[Checkout] Found userEmail:", storedUserEmail ? "✓" : "✗");
+      console.log("[Checkout] Found userName:", storedUserName ? "✓" : "✗");
+
+      if (userToken && storedUserEmail && storedUserName) {
+        console.log("[Checkout] ✓ User is authenticated via localStorage, skipping sign-in form");
+        setIsAuthenticated(true);
+        setEmail(storedUserEmail);
+        setFullName(storedUserName);
+        setSignupEmail(storedUserEmail);
       }
     }
 
@@ -126,7 +122,7 @@ export default function Checkout() {
       setExpiryDate(savedBilling.expiryDate);
       setCvv(savedBilling.cvv);
     }
-  }, []);
+  }, [isUser, userEmail, userName]);
 
   if (items.length === 0 && !orderCompleted) {
     return (
