@@ -50,17 +50,28 @@ export async function validateCoupon(
       body: JSON.stringify({ code, orderTotal }),
     });
 
-    if (!response.ok) {
-      const error = await response.json();
+    let data;
+    try {
+      data = await response.json();
+    } catch {
       return {
         valid: false,
         discount: 0,
         discountedTotal: orderTotal,
-        message: error.message || "Invalid coupon code",
+        message: "Invalid response from server",
       };
     }
 
-    return response.json();
+    if (!response.ok) {
+      return {
+        valid: false,
+        discount: 0,
+        discountedTotal: orderTotal,
+        message: data.message || "Invalid coupon code",
+      };
+    }
+
+    return data;
   } catch (error) {
     console.error("Error validating coupon:", error);
     return {
