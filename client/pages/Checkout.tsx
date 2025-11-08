@@ -76,20 +76,39 @@ export default function Checkout() {
 
   // Check if user is already logged in on component mount
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      try {
-        const userData = JSON.parse(storedUser);
-        if (userData.authenticated && userData.email) {
-          setIsAuthenticated(true);
-          setEmail(userData.email);
-          setFullName(userData.fullName || "");
-          setSignupEmail(userData.email);
-          setCompany(userData.company || "");
-          setWhatsappNumber(userData.whatsappNumber || "");
+    // Check for UserContext authentication (from login page)
+    const userToken = localStorage.getItem("userToken");
+    const userEmail = localStorage.getItem("userEmail");
+    const userName = localStorage.getItem("userName");
+
+    console.log("[Checkout] Checking for existing user session...");
+    console.log("[Checkout] Found userToken:", userToken ? "✓" : "✗");
+    console.log("[Checkout] Found userEmail:", userEmail ? "✓" : "✗");
+    console.log("[Checkout] Found userName:", userName ? "✓" : "✗");
+
+    if (userToken && userEmail && userName) {
+      console.log("[Checkout] ✓ User is authenticated, skipping sign-in form");
+      setIsAuthenticated(true);
+      setEmail(userEmail);
+      setFullName(userName);
+      setSignupEmail(userEmail);
+    } else {
+      // Fallback: Check for old "user" format
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        try {
+          const userData = JSON.parse(storedUser);
+          if (userData.authenticated && userData.email) {
+            setIsAuthenticated(true);
+            setEmail(userData.email);
+            setFullName(userData.fullName || "");
+            setSignupEmail(userData.email);
+            setCompany(userData.company || "");
+            setWhatsappNumber(userData.whatsappNumber || "");
+          }
+        } catch (error) {
+          console.error("Error parsing stored user data:", error);
         }
-      } catch (error) {
-        console.error("Error parsing stored user data:", error);
       }
     }
 
