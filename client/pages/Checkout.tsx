@@ -78,6 +78,12 @@ export default function Checkout() {
 
   // Check if user is already logged in on component mount and when UserContext changes
   useEffect(() => {
+    // Wait for UserContext to complete its session verification
+    if (authLoading) {
+      console.log("[Checkout] Waiting for UserContext session verification to complete...");
+      return;
+    }
+
     console.log("[Checkout] Checking for existing user session...");
     console.log("[Checkout] UserContext isUser:", isUser);
     console.log("[Checkout] UserContext userEmail:", userEmail ? "✓" : "✗");
@@ -122,7 +128,7 @@ export default function Checkout() {
       setExpiryDate(savedBilling.expiryDate);
       setCvv(savedBilling.cvv);
     }
-  }, [isUser, userEmail, userName]);
+  }, [authLoading, isUser, userEmail, userName]);
 
   if (items.length === 0 && !orderCompleted) {
     return (
