@@ -22,34 +22,52 @@ export function Header() {
 
   // Load user from localStorage and watch for changes
   useEffect(() => {
-    const updateUser = () => {
+    const updateUser = useCallback(() => {
       const userToken = localStorage.getItem("userToken");
       const userEmailStored = localStorage.getItem("userEmail");
       const userName = localStorage.getItem("userName");
 
+      console.log("[Header] updateUser called:", {
+        hasToken: !!userToken,
+        hasEmail: !!userEmailStored,
+        hasName: !!userName,
+        token: userToken ? "***" : null,
+        email: userEmailStored,
+        name: userName,
+      });
+
       if (userToken && userEmailStored && userName) {
+        console.log("[Header] Setting authenticated user:", userName);
         setUser({
           authenticated: true,
           email: userEmailStored,
           fullName: userName,
         });
       } else {
+        console.log("[Header] Clearing user (not all required fields present)");
         setUser(null);
       }
-    };
+    }, []);
 
     // Initial load
     updateUser();
 
     // Listen for storage changes (from login in other tabs/windows)
-    window.addEventListener("storage", updateUser);
+    const handleStorageEvent = () => {
+      console.log("[Header] storage event triggered");
+      updateUser();
+    };
+    window.addEventListener("storage", handleStorageEvent);
 
     // Dispatch custom event when localStorage changes programmatically
-    const handleStorageChange = () => updateUser();
+    const handleStorageChange = () => {
+      console.log("[Header] userStorageChange event triggered");
+      updateUser();
+    };
     window.addEventListener("userStorageChange", handleStorageChange);
 
     return () => {
-      window.removeEventListener("storage", updateUser);
+      window.removeEventListener("storage", handleStorageEvent);
       window.removeEventListener("userStorageChange", handleStorageChange);
     };
   }, []);
