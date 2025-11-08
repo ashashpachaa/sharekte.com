@@ -205,6 +205,9 @@ export function UserProvider({ children }: { children: ReactNode }) {
       localStorage.removeItem("userToken");
       localStorage.removeItem("userEmail");
       localStorage.removeItem("userName");
+
+      // Dispatch custom event to notify Header of logout
+      window.dispatchEvent(new Event("userStorageChange"));
     }
   };
 
