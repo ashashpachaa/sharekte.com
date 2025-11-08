@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "./ui/button";
 import { CartDropdown } from "./CartDropdown";
@@ -15,20 +15,45 @@ export function Header() {
   const { currency, setCurrency, rates } = useCurrency();
   const navigate = useNavigate();
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [user, setUser] = useState<{
+    authenticated: boolean;
+    email: string;
+    fullName: string;
+  } | null>(null);
 
-  // Get user from localStorage
-  const userToken = localStorage.getItem("userToken");
-  const userEmailStored = localStorage.getItem("userEmail");
-  const userName = localStorage.getItem("userName");
+  // Load user from localStorage and watch for changes
+  useEffect(() => {
+    const updateUser = () => {
+      const userToken = localStorage.getItem("userToken");
+      const userEmailStored = localStorage.getItem("userEmail");
+      const userName = localStorage.getItem("userName");
 
-  const user =
-    userToken && userEmailStored && userName
-      ? {
+      if (userToken && userEmailStored && userName) {
+        setUser({
           authenticated: true,
           email: userEmailStored,
           fullName: userName,
-        }
-      : null;
+        });
+      } else {
+        setUser(null);
+      }
+    };
+
+    // Initial load
+    updateUser();
+
+    // Listen for storage changes (from login in other tabs/windows)
+    window.addEventListener("storage", updateUser);
+
+    // Dispatch custom event when localStorage changes programmatically
+    const handleStorageChange = () => updateUser();
+    window.addEventListener("userStorageChange", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", updateUser);
+      window.removeEventListener("userStorageChange", handleStorageChange);
+    };
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("userToken");
