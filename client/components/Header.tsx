@@ -119,7 +119,7 @@ export function Header() {
             <Button
               variant="outline"
               className="h-9 text-xs"
-              onClick={() => navigate("/checkout")}
+              onClick={() => navigate("/login")}
             >
               {t("header.login") || "Sign In"}
             </Button>
