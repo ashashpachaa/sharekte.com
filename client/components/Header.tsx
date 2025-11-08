@@ -165,26 +165,7 @@ export function Header() {
                 </div>
               </div>
             </>
-          ) : (
-            <>
-              {/* Login Button */}
-              <Button
-                variant="outline"
-                className="h-9 text-xs"
-                onClick={() => navigate("/login")}
-              >
-                {t("header.login") || "Sign In"}
-              </Button>
-              {/* Signup Button */}
-              <Button
-                variant="default"
-                className="bg-primary hover:bg-primary-600 h-9 text-xs"
-                onClick={() => navigate("/signup")}
-              >
-                {t("header.signup") || "Sign Up"}
-              </Button>
-            </>
-          )}
+          ) : null}
         </div>
       </div>
     </header>
