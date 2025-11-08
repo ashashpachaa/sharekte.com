@@ -260,9 +260,7 @@ export const verifyHandler: RequestHandler = (req, res) => {
       return res.status(401).json({ error: "Token expired" });
     }
 
-    console.log(
-      `[verifyHandler] ✓ Token verified for ${tokenData.email}`,
-    );
+    console.log(`[verifyHandler] ✓ Token verified for ${tokenData.email}`);
     res.json({
       valid: true,
       email: tokenData.email,

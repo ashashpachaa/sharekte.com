@@ -80,7 +80,9 @@ export default function Checkout() {
   useEffect(() => {
     // Wait for UserContext to complete its session verification
     if (authLoading) {
-      console.log("[Checkout] Waiting for UserContext session verification to complete...");
+      console.log(
+        "[Checkout] Waiting for UserContext session verification to complete...",
+      );
       return;
     }
 
@@ -91,7 +93,9 @@ export default function Checkout() {
 
     // First, check if user is authenticated via UserContext
     if (isUser && userEmail && userName) {
-      console.log("[Checkout] ✓ User is authenticated via UserContext, skipping sign-in form");
+      console.log(
+        "[Checkout] ✓ User is authenticated via UserContext, skipping sign-in form",
+      );
       setIsAuthenticated(true);
       setEmail(userEmail);
       setFullName(userName);
@@ -108,7 +112,9 @@ export default function Checkout() {
       console.log("[Checkout] Found userName:", storedUserName ? "✓" : "✗");
 
       if (userToken && storedUserEmail && storedUserName) {
-        console.log("[Checkout] ✓ User is authenticated via localStorage, skipping sign-in form");
+        console.log(
+          "[Checkout] ✓ User is authenticated via localStorage, skipping sign-in form",
+        );
         setIsAuthenticated(true);
         setEmail(storedUserEmail);
         setFullName(storedUserName);
@@ -1135,8 +1141,7 @@ export default function Checkout() {
                         </form>
                       )}
                     </>
-                  )
-                }
+                  )}
                 </div>
               </div>
 

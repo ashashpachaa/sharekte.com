@@ -121,9 +121,7 @@ export function Header() {
                   onClick={() => setShowUserMenu(!showUserMenu)}
                 >
                   <User className="w-4 h-4" />
-                  <span className="text-xs hidden sm:inline">
-                    {userName}
-                  </span>
+                  <span className="text-xs hidden sm:inline">{userName}</span>
                 </Button>
                 <div
                   className={`absolute right-0 top-full mt-1 w-48 bg-card border border-border/40 rounded-lg shadow-lg transition-all duration-200 z-50 ${

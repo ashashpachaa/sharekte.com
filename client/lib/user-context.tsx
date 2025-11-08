@@ -57,10 +57,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
 
           if (response.ok) {
             const data = await response.json();
-            console.log(
-              "[checkSession] ✓ Session verified for:",
-              data.email,
-            );
+            console.log("[checkSession] ✓ Session verified for:", data.email);
             setIsUser(true);
             setUserEmail(email);
             setUserName(name || data.name);
