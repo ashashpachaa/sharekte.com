@@ -167,6 +167,9 @@ export function UserProvider({ children }: { children: ReactNode }) {
       localStorage.setItem("userEmail", data.email);
       localStorage.setItem("userName", data.name);
 
+      // Dispatch custom event to notify Header of login
+      window.dispatchEvent(new Event("userStorageChange"));
+
       console.log("[login] ✓ Stored in localStorage:");
       console.log(
         "[login] userToken:",
