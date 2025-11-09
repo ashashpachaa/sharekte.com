@@ -18,6 +18,8 @@ import {
   User,
   AlertCircle,
   LogIn,
+  CreditCard,
+  Wallet as WalletIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
