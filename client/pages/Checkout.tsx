@@ -142,6 +142,14 @@ export default function Checkout() {
     }
   }, [authLoading, isUser, userEmail, userName]);
 
+  // Fetch wallet balance when user is authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      const balance = getWalletBalance();
+      setWalletBalance(balance);
+    }
+  }, [isAuthenticated]);
+
   if (items.length === 0 && !orderCompleted) {
     return (
       <div className="min-h-screen flex flex-col bg-background">
