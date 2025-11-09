@@ -181,14 +181,17 @@ initializeDemoWallets();
 export const getUserWalletHandler: RequestHandler = (req, res) => {
   try {
     const userId = req.params.userId;
-    let wallet = inMemoryWallets.find((w) => w.userId === userId);
+    // Search by userId OR userEmail (in case email is passed as userId)
+    let wallet = inMemoryWallets.find(
+      (w) => w.userId === userId || w.userEmail === userId
+    );
 
     if (!wallet) {
       // Create new wallet if doesn't exist
       const newWallet: Wallet = {
         id: `wallet_${Date.now()}`,
         userId,
-        userEmail: req.body?.userEmail || `user_${userId}@example.com`,
+        userEmail: req.body?.userEmail || userId,
         userName: req.body?.userName,
         balance: 0,
         currency: req.body?.currency || "USD",
