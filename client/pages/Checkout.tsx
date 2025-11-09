@@ -145,8 +145,8 @@ export default function Checkout() {
   // Fetch wallet balance when user is authenticated
   useEffect(() => {
     if (isAuthenticated) {
-      const balance = getWalletBalance();
-      setWalletBalance(balance);
+      const wallet = getUserWallet();
+      setWalletBalance(wallet?.balance || 0);
     }
   }, [isAuthenticated]);
 
