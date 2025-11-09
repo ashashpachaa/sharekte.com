@@ -36,7 +36,7 @@ import { getEnabledFees, calculateFeeAmount } from "@/lib/fees";
 import { validateCoupon, applyCoupon } from "@/lib/coupons";
 import type { CouponValidationResponse } from "@/lib/coupons";
 import { getAPIBaseURL } from "@/lib/transfer-form";
-import { deductFromWallet, getWalletBalance } from "@/lib/wallet";
+import { deductFromWallet, getUserWallet } from "@/lib/wallet";
 
 export default function Checkout() {
   const { t } = useTranslation();
