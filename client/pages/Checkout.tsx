@@ -490,32 +490,39 @@ export default function Checkout() {
       // Wait for all order creation to complete
       await Promise.all(orderPromises);
 
-      // Deduct from wallet if it has sufficient balance
-      try {
-        const walletId = userData.id || billingEmail.split("@")[0];
-        const walletDeductResult = await deductFromWallet(
-          walletId,
-          orderFinalTotal,
-          `Payment for ${items.map((i) => i.name).join(", ")}`,
-          "",
-        );
+      // Deduct from wallet if payment method is wallet
+      if (paymentMethod === "wallet") {
+        try {
+          const walletId = userData.id || billingEmail.split("@")[0];
+          const amountToPay = appliedCoupon?.valid
+            ? appliedCoupon.discountedTotal
+            : finalTotal;
 
-        if (!walletDeductResult.success) {
+          const walletDeductResult = await deductFromWallet(
+            walletId,
+            amountToPay,
+            `Payment for ${items.map((i) => i.name).join(", ")}`,
+            "",
+          );
+
+          if (!walletDeductResult.success) {
+            console.warn(
+              "[Checkout] Wallet deduction failed (insufficient balance or wallet frozen)",
+            );
+            toast.error("Wallet payment failed. Please try again or use a different payment method.");
+          } else {
+            console.log(
+              `[Checkout] ✓ Deducted ${formatPrice(amountToPay)} from wallet`,
+            );
+            toast.success(`Payment of ${formatPrice(amountToPay)} deducted from your wallet`);
+          }
+        } catch (walletError) {
           console.warn(
-            "[Checkout] Wallet deduction failed (insufficient balance or wallet frozen)",
+            "[Checkout] Wallet deduction error:",
+            walletError,
           );
-          // Continue with order as wallet was optional
-        } else {
-          console.log(
-            `[Checkout] ✓ Deducted ${currency} ${orderFinalTotal} from wallet`,
-          );
+          toast.error("Wallet payment error. Please try again.");
         }
-      } catch (walletError) {
-        console.warn(
-          "[Checkout] Wallet deduction error (continuing with order):",
-          walletError,
-        );
-        // Continue with order even if wallet deduction fails
       }
 
       // Auto-create customer account if they don't have one
