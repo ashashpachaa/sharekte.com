@@ -1277,17 +1277,17 @@ export default function Checkout() {
                     <label className="block text-sm font-medium text-foreground mb-3">
                       Payment Method
                     </label>
-                    <div className="grid md:grid-cols-2 gap-3">
+                    <div className="flex flex-col sm:flex-row gap-3">
                       <button
                         type="button"
                         onClick={() => setPaymentMethod("card")}
-                        className={`p-4 border-2 rounded-lg flex items-center gap-3 transition ${
+                        className={`flex-1 p-4 border-2 rounded-lg flex items-center gap-3 transition ${
                           paymentMethod === "card"
                             ? "border-primary bg-primary/10"
                             : "border-border/40 hover:border-primary/50"
                         }`}
                       >
-                        <CreditCard className="w-5 h-5" />
+                        <CreditCard className="w-5 h-5 flex-shrink-0" />
                         <div className="text-left">
                           <p className="font-semibold text-foreground">
                             Debit/Credit Card
@@ -1300,13 +1300,13 @@ export default function Checkout() {
                       <button
                         type="button"
                         onClick={() => setPaymentMethod("wallet")}
-                        className={`p-4 border-2 rounded-lg flex items-center gap-3 transition ${
+                        className={`flex-1 p-4 border-2 rounded-lg flex items-center gap-3 transition ${
                           paymentMethod === "wallet"
                             ? "border-primary bg-primary/10"
                             : "border-border/40 hover:border-primary/50"
                         }`}
                       >
-                        <WalletIcon className="w-5 h-5" />
+                        <WalletIcon className="w-5 h-5 flex-shrink-0" />
                         <div className="text-left">
                           <p className="font-semibold text-foreground">
                             Wallet Balance
