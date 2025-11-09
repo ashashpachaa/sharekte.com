@@ -431,7 +431,7 @@ export default function Checkout() {
           companyId: item.id,
           companyName: item.name,
           companyNumber: item.companyNumber,
-          paymentMethod: "credit_card",
+          paymentMethod: paymentMethod === "wallet" ? "wallet" : "credit_card",
           paymentStatus: "completed",
           transactionId: `txn-${Date.now()}`,
           amount: orderFinalTotal,
