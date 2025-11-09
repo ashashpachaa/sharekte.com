@@ -1234,6 +1234,63 @@ export default function Checkout() {
                       required
                     />
                   </div>
+
+                  {/* Payment Method Selection */}
+                  <div>
+                    <label className="block text-sm font-medium text-foreground mb-3">
+                      Payment Method
+                    </label>
+                    <div className="grid md:grid-cols-2 gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setPaymentMethod("card")}
+                        className={`p-4 border-2 rounded-lg flex items-center gap-3 transition ${
+                          paymentMethod === "card"
+                            ? "border-primary bg-primary/10"
+                            : "border-border/40 hover:border-primary/50"
+                        }`}
+                      >
+                        <CreditCard className="w-5 h-5" />
+                        <div className="text-left">
+                          <p className="font-semibold text-foreground">
+                            Debit/Credit Card
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            Visa, Mastercard, etc.
+                          </p>
+                        </div>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPaymentMethod("wallet")}
+                        className={`p-4 border-2 rounded-lg flex items-center gap-3 transition ${
+                          paymentMethod === "wallet"
+                            ? "border-primary bg-primary/10"
+                            : "border-border/40 hover:border-primary/50"
+                        }`}
+                      >
+                        <WalletIcon className="w-5 h-5" />
+                        <div className="text-left">
+                          <p className="font-semibold text-foreground">
+                            Wallet Balance
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {formatPrice(walletBalance)} available
+                          </p>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card Payment Section */}
+              {paymentMethod === "card" && (
+              <div>
+                <h2 className="text-xl font-bold text-foreground mb-4">
+                  Card Details
+                </h2>
+                <div className="space-y-4 bg-card border border-border/40 rounded-lg p-6">
                   <div>
                     <label className="block text-sm font-medium text-foreground mb-2">
                       Card Number
@@ -1274,6 +1331,55 @@ export default function Checkout() {
                   </div>
                 </div>
               </div>
+              )}
+
+              {/* Wallet Payment Section */}
+              {paymentMethod === "wallet" && (
+              <div>
+                <h2 className="text-xl font-bold text-foreground mb-4">
+                  Wallet Payment
+                </h2>
+                <div className="space-y-4 bg-card border border-border/40 rounded-lg p-6">
+                  <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
+                    <p className="text-sm text-muted-foreground mb-2">Available Balance</p>
+                    <p className="text-3xl font-bold text-primary">
+                      {formatPrice(walletBalance)}
+                    </p>
+                  </div>
+                  <div className="p-4 bg-card border border-border/40 rounded-lg">
+                    <p className="text-sm text-muted-foreground mb-2">Amount to Pay</p>
+                    <p className="text-3xl font-bold text-foreground">
+                      {formatPrice(
+                        appliedCoupon?.valid
+                          ? appliedCoupon.discountedTotal
+                          : finalTotal,
+                      )}
+                    </p>
+                  </div>
+                  {walletBalance <
+                    (appliedCoupon?.valid
+                      ? appliedCoupon.discountedTotal
+                      : finalTotal) && (
+                    <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg flex items-start gap-2">
+                      <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-sm font-semibold text-destructive">Insufficient Balance</p>
+                        <p className="text-xs text-destructive/80">
+                          You need {formatPrice(
+                            (appliedCoupon?.valid
+                              ? appliedCoupon.discountedTotal
+                              : finalTotal) - walletBalance,
+                          )} more to complete this purchase.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  <p className="text-xs text-muted-foreground text-center">
+                    Your payment will be deducted from your wallet balance.
+                  </p>
+                </div>
+              </div>
+              )}
             </div>
 
             {/* Order Summary Sidebar */}
