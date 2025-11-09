@@ -145,10 +145,11 @@ export default function Checkout() {
   // Fetch wallet balance when user is authenticated
   useEffect(() => {
     const fetchWallet = async () => {
-      if (isAuthenticated && email) {
+      if (isAuthenticated && userEmail) {
         try {
           // Use email as userId for wallet lookup
-          const wallet = await getUserWallet(email);
+          console.log("[Checkout] Fetching wallet for:", userEmail);
+          const wallet = await getUserWallet(userEmail);
           setWalletBalance(wallet?.balance || 0);
           console.log("[Checkout] ✓ Wallet balance loaded:", wallet?.balance);
         } catch (error) {
@@ -158,7 +159,7 @@ export default function Checkout() {
       }
     };
     fetchWallet();
-  }, [isAuthenticated, email]);
+  }, [isAuthenticated, userEmail]);
 
   if (items.length === 0 && !orderCompleted) {
     return (
