@@ -1273,22 +1273,22 @@ export default function Checkout() {
                   </div>
 
                   {/* Payment Method Selection */}
-                  <div>
+                  <div className="w-full">
                     <label className="block text-sm font-medium text-foreground mb-3">
                       Payment Method
                     </label>
-                    <div className="flex flex-col sm:flex-row gap-3">
+                    <div className="w-full flex flex-col md:flex-row gap-3">
                       <button
                         type="button"
                         onClick={() => setPaymentMethod("card")}
-                        className={`flex-1 p-4 border-2 rounded-lg flex items-center gap-3 transition ${
+                        className={`flex-1 min-w-0 p-4 border-2 rounded-lg flex items-center gap-3 transition ${
                           paymentMethod === "card"
                             ? "border-primary bg-primary/10"
                             : "border-border/40 hover:border-primary/50"
                         }`}
                       >
                         <CreditCard className="w-5 h-5 flex-shrink-0" />
-                        <div className="text-left">
+                        <div className="text-left min-w-0">
                           <p className="font-semibold text-foreground">
                             Debit/Credit Card
                           </p>
@@ -1300,14 +1300,14 @@ export default function Checkout() {
                       <button
                         type="button"
                         onClick={() => setPaymentMethod("wallet")}
-                        className={`flex-1 p-4 border-2 rounded-lg flex items-center gap-3 transition ${
+                        className={`flex-1 min-w-0 p-4 border-2 rounded-lg flex items-center gap-3 transition ${
                           paymentMethod === "wallet"
                             ? "border-primary bg-primary/10"
                             : "border-border/40 hover:border-primary/50"
                         }`}
                       >
                         <WalletIcon className="w-5 h-5 flex-shrink-0" />
-                        <div className="text-left">
+                        <div className="text-left min-w-0">
                           <p className="font-semibold text-foreground">
                             Wallet Balance
                           </p>
