@@ -78,6 +78,10 @@ export default function Checkout() {
   const [couponLoading, setCouponLoading] = useState(false);
   const [couponError, setCouponError] = useState("");
 
+  // Payment method state
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "wallet">("card");
+  const [walletBalance, setWalletBalance] = useState(0);
+
   // Check if user is already logged in on component mount and when UserContext changes
   useEffect(() => {
     // Wait for UserContext to complete its session verification
