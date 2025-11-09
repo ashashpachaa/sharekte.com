@@ -238,6 +238,25 @@ export default function Checkout() {
       return;
     }
 
+    // Validate payment method
+    if (paymentMethod === "wallet") {
+      const amountToPay = appliedCoupon?.valid
+        ? appliedCoupon.discountedTotal
+        : finalTotal;
+      if (walletBalance < amountToPay) {
+        toast.error(
+          `Insufficient wallet balance. You need ${formatPrice(amountToPay - walletBalance)} more.`
+        );
+        return;
+      }
+    } else if (paymentMethod === "card") {
+      // Validate card information
+      if (!cardNumber || !expiryDate || !cvv) {
+        toast.error("Please fill in all card details");
+        return;
+      }
+    }
+
     setLoading(true);
     try {
       // Get user data from localStorage
