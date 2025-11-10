@@ -366,7 +366,8 @@ export function CompanyTable({
             <p className="text-gray-500">{t("table.noCompanies")}</p>
           </div>
         ) : (
-          <Table>
+          <div className="overflow-x-auto w-full">
+            <Table>
             <TableHeader>
               <TableRow className="bg-gray-50">
                 <TableHead className="font-semibold">
@@ -506,6 +507,7 @@ export function CompanyTable({
               ))}
             </TableBody>
           </Table>
+            </div>
         )}
 
         {/* Show More Button */}
