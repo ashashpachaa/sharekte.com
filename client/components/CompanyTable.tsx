@@ -246,9 +246,14 @@ export function CompanyTable({
     new Set(availableCompanies.map((c) => c.incorporationYear).filter(Boolean)),
   ).sort((a, b) => b - a);
 
-  // Display only the first `displayCount` items
-  const displayedCompanies = filteredCompanies.slice(0, displayCount);
-  const hasMoreItems = filteredCompanies.length > displayCount;
+  // Display only the first `displayCount` items if internal paging is enabled
+  // Otherwise, show all filtered companies (parent component handles pagination)
+  const displayedCompanies = disableInternalPaging
+    ? filteredCompanies
+    : filteredCompanies.slice(0, displayCount);
+  const hasMoreItems = disableInternalPaging
+    ? false
+    : filteredCompanies.length > displayCount;
 
   return (
     <>
