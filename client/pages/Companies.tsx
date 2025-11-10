@@ -127,9 +127,11 @@ export default function Companies() {
     setIsAdmin(!!adminData);
   };
 
-  // Show More pagination - display up to displayCount items
-  const paginatedCompanies = filteredCompanies.slice(0, displayCount);
-  const hasMore = displayCount < filteredCompanies.length;
+  // Pagination: calculate total pages and get companies for current page
+  const totalPages = Math.ceil(filteredCompanies.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedCompanies = filteredCompanies.slice(startIndex, endIndex);
 
   // Statistics
   const stats = getCompanyStatistics(companies);
