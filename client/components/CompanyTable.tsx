@@ -52,6 +52,7 @@ interface CompanyTableProps {
   onRenew?: (id: string) => void;
   onStatusChange?: (id: string, status: string) => void;
   isAdmin?: boolean;
+  disableInternalPaging?: boolean; // If true, don't limit to 10 items (let parent handle pagination)
 }
 
 // Cache for companies data with expiry
