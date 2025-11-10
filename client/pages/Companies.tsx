@@ -127,11 +127,9 @@ export default function Companies() {
     setIsAdmin(!!adminData);
   };
 
-  // Pagination
-  const totalPages = Math.ceil(filteredCompanies.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const paginatedCompanies = filteredCompanies.slice(startIndex, endIndex);
+  // Show More pagination - display up to displayCount items
+  const paginatedCompanies = filteredCompanies.slice(0, displayCount);
+  const hasMore = displayCount < filteredCompanies.length;
 
   // Statistics
   const stats = getCompanyStatistics(companies);
