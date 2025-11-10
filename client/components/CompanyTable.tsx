@@ -368,146 +368,146 @@ export function CompanyTable({
         ) : (
           <div className="overflow-x-auto w-full">
             <Table>
-            <TableHeader>
-              <TableRow className="bg-gray-50">
-                <TableHead className="font-semibold">
-                  {t("table.companyName")}
-                </TableHead>
-                <TableHead className="font-semibold">
-                  {t("table.country")}
-                </TableHead>
-                <TableHead className="font-semibold">
-                  {t("table.companyNumber")}
-                </TableHead>
-                <TableHead className="font-semibold">
-                  {t("table.incorporateDate")}
-                </TableHead>
-                <TableHead className="font-semibold">
-                  {t("table.incorporateYear")}
-                </TableHead>
-                <TableHead className="font-semibold">
-                  {t("table.price")}
-                </TableHead>
-                <TableHead className="font-semibold">
-                  {t("table.optionsIncluded")}
-                </TableHead>
-                <TableHead className="text-right font-semibold">
-                  {t("table.action")}
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {displayedCompanies.map((company) => (
-                <TableRow
-                  key={company.id}
-                  className="hover:bg-gray-50 transition-colors"
-                >
-                  <TableCell className="font-medium">
-                    <button
-                      onClick={() => onViewDetails?.(company)}
-                      className="text-blue-600 hover:underline"
-                    >
-                      {company.companyName}
-                    </button>
-                  </TableCell>
-                  <TableCell className="text-sm">{company.country}</TableCell>
-                  <TableCell className="text-sm text-gray-600">
-                    {company.companyNumber}
-                  </TableCell>
-                  <TableCell className="text-sm">
-                    {formatDate(company.incorporationDate)}
-                  </TableCell>
-                  <TableCell className="text-sm">
-                    {company.incorporationYear}
-                  </TableCell>
-                  <TableCell className="text-sm font-medium">
-                    {formatPriceAlreadyConverted(
-                      // If company has a different currency, we need to normalize to USD first, then convert to user's currency
-                      company.currency &&
-                        company.currency !== "USD" &&
-                        rates[company.currency as any]
-                        ? convertPrice(
-                            company.purchasePrice /
-                              (rates[company.currency as any]?.rate || 1),
-                          )
-                        : convertPrice(company.purchasePrice),
-                    )}
-                  </TableCell>
-                  <TableCell className="text-sm">
-                    {company.optionsInclude &&
-                    company.optionsInclude.length > 0 ? (
-                      <span className="text-gray-700">
-                        {company.optionsInclude.join(", ")}
-                      </span>
-                    ) : (
-                      <span className="text-gray-400">{t("table.none")}</span>
-                    )}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    {isAdmin ? (
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="sm">
-                            <MoreHorizontal className="w-4 h-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem
-                            onClick={() => onViewDetails?.(company)}
-                          >
-                            <Eye className="w-4 h-4 mr-2" />
-                            {t("table.viewDetails")}
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => onEdit?.(company)}>
-                            <Edit2 className="w-4 h-4 mr-2" />
-                            {t("table.edit")}
-                          </DropdownMenuItem>
-                          {company.status !== "expired" &&
-                            company.status !== "cancelled" && (
+              <TableHeader>
+                <TableRow className="bg-gray-50">
+                  <TableHead className="font-semibold">
+                    {t("table.companyName")}
+                  </TableHead>
+                  <TableHead className="font-semibold">
+                    {t("table.country")}
+                  </TableHead>
+                  <TableHead className="font-semibold">
+                    {t("table.companyNumber")}
+                  </TableHead>
+                  <TableHead className="font-semibold">
+                    {t("table.incorporateDate")}
+                  </TableHead>
+                  <TableHead className="font-semibold">
+                    {t("table.incorporateYear")}
+                  </TableHead>
+                  <TableHead className="font-semibold">
+                    {t("table.price")}
+                  </TableHead>
+                  <TableHead className="font-semibold">
+                    {t("table.optionsIncluded")}
+                  </TableHead>
+                  <TableHead className="text-right font-semibold">
+                    {t("table.action")}
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {displayedCompanies.map((company) => (
+                  <TableRow
+                    key={company.id}
+                    className="hover:bg-gray-50 transition-colors"
+                  >
+                    <TableCell className="font-medium">
+                      <button
+                        onClick={() => onViewDetails?.(company)}
+                        className="text-blue-600 hover:underline"
+                      >
+                        {company.companyName}
+                      </button>
+                    </TableCell>
+                    <TableCell className="text-sm">{company.country}</TableCell>
+                    <TableCell className="text-sm text-gray-600">
+                      {company.companyNumber}
+                    </TableCell>
+                    <TableCell className="text-sm">
+                      {formatDate(company.incorporationDate)}
+                    </TableCell>
+                    <TableCell className="text-sm">
+                      {company.incorporationYear}
+                    </TableCell>
+                    <TableCell className="text-sm font-medium">
+                      {formatPriceAlreadyConverted(
+                        // If company has a different currency, we need to normalize to USD first, then convert to user's currency
+                        company.currency &&
+                          company.currency !== "USD" &&
+                          rates[company.currency as any]
+                          ? convertPrice(
+                              company.purchasePrice /
+                                (rates[company.currency as any]?.rate || 1),
+                            )
+                          : convertPrice(company.purchasePrice),
+                      )}
+                    </TableCell>
+                    <TableCell className="text-sm">
+                      {company.optionsInclude &&
+                      company.optionsInclude.length > 0 ? (
+                        <span className="text-gray-700">
+                          {company.optionsInclude.join(", ")}
+                        </span>
+                      ) : (
+                        <span className="text-gray-400">{t("table.none")}</span>
+                      )}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {isAdmin ? (
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="sm">
+                              <MoreHorizontal className="w-4 h-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem
+                              onClick={() => onViewDetails?.(company)}
+                            >
+                              <Eye className="w-4 h-4 mr-2" />
+                              {t("table.viewDetails")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => onEdit?.(company)}>
+                              <Edit2 className="w-4 h-4 mr-2" />
+                              {t("table.edit")}
+                            </DropdownMenuItem>
+                            {company.status !== "expired" &&
+                              company.status !== "cancelled" && (
+                                <DropdownMenuItem
+                                  onClick={() => handleRenew(company.id)}
+                                >
+                                  <RefreshCw className="w-4 h-4 mr-2" />
+                                  {t("table.renew")}
+                                </DropdownMenuItem>
+                              )}
+                            {(company.status === "refunded" ||
+                              company.status === "cancelled") && (
                               <DropdownMenuItem
-                                onClick={() => handleRenew(company.id)}
+                                onClick={() =>
+                                  onStatusChange?.(company.id, "available")
+                                }
                               >
-                                <RefreshCw className="w-4 h-4 mr-2" />
-                                {t("table.renew")}
+                                <TrendingUp className="w-4 h-4 mr-2" />
+                                Reactivate
                               </DropdownMenuItem>
                             )}
-                          {(company.status === "refunded" ||
-                            company.status === "cancelled") && (
                             <DropdownMenuItem
-                              onClick={() =>
-                                onStatusChange?.(company.id, "available")
-                              }
+                              onClick={() => setShowDeleteDialog(company.id)}
+                              className="text-red-600"
                             >
-                              <TrendingUp className="w-4 h-4 mr-2" />
-                              Reactivate
+                              <Trash2 className="w-4 h-4 mr-2" />
+                              Delete
                             </DropdownMenuItem>
-                          )}
-                          <DropdownMenuItem
-                            onClick={() => setShowDeleteDialog(company.id)}
-                            className="text-red-600"
-                          >
-                            <Trash2 className="w-4 h-4 mr-2" />
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    ) : (
-                      <Button
-                        variant="default"
-                        size="sm"
-                        onClick={() => handleAddToCart(company)}
-                        className="gap-1"
-                      >
-                        <ShoppingCart className="w-4 h-4" />
-                        {t("table.addToCart")}
-                      </Button>
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-            </div>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      ) : (
+                        <Button
+                          variant="default"
+                          size="sm"
+                          onClick={() => handleAddToCart(company)}
+                          className="gap-1"
+                        >
+                          <ShoppingCart className="w-4 h-4" />
+                          {t("table.addToCart")}
+                        </Button>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         )}
 
         {/* Show More Button */}
