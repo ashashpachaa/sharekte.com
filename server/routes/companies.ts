@@ -310,20 +310,27 @@ function createNewCompany(
 // Get all companies from Airtable with caching and deduplication
 export const getCompanies: RequestHandler = async (req, res) => {
   try {
-    const companies = await fetchCompaniesData();
+    const allCompanies = await fetchCompaniesData();
+
+    // Filter to show only active companies (unless admin requests otherwise)
+    const activeCompanies = allCompanies.filter((c) => c.status === "active");
+
     res.set("Cache-Control", "public, max-age=120");
 
-    // Debug logging for first few companies
-    if (companies.length > 0) {
-      console.log("[getCompanies] Sample prices:");
-      companies.slice(0, 3).forEach((c, i) => {
+    // Debug logging
+    console.log(
+      `[getCompanies] Total companies from Airtable: ${allCompanies.length}, Active: ${activeCompanies.length}`,
+    );
+    if (activeCompanies.length > 0) {
+      console.log("[getCompanies] Sample active companies:");
+      activeCompanies.slice(0, 3).forEach((c, i) => {
         console.log(
-          `  Company ${i + 1}: ${c.companyName} - Price: ${c.purchasePrice} ${c.currency}`,
+          `  Company ${i + 1}: ${c.companyName} (${c.country}) - Price: ${c.purchasePrice} ${c.currency} - Status: ${c.status}`,
         );
       });
     }
 
-    res.json(companies);
+    res.json(activeCompanies);
   } catch (error) {
     console.error("Error fetching companies:", error);
     res.status(500).json({ error: "Failed to fetch companies" });
