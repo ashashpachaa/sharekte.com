@@ -260,6 +260,7 @@ export function createServer() {
   app.post("/api/companies/:id/refund-request", requestCompanyRefund);
   app.post("/api/companies/:id/refund-approve", approveCompanyRefund);
   app.post("/api/companies/:id/mark-sold", markCompanyAsSold);
+  app.post("/api/companies/cache/clear", clearCompaniesCache);
 
   // Admin Auth routes
   app.post("/api/admin/login", adminLogin);
