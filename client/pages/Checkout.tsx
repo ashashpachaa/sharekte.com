@@ -257,7 +257,7 @@ export default function Checkout() {
         : finalTotal;
       if (walletBalance < amountToPay) {
         toast.error(
-          `Insufficient wallet balance. You need ${formatPrice(amountToPay - walletBalance)} more.`
+          `Insufficient wallet balance. You need ${formatPrice(amountToPay - walletBalance)} more.`,
         );
         return;
       }
@@ -488,12 +488,19 @@ export default function Checkout() {
               "Company purchased in order",
             );
             if (statusUpdated) {
-              console.log(`[Checkout] Company status updated to "sold": ${item.name}`);
+              console.log(
+                `[Checkout] Company status updated to "sold": ${item.name}`,
+              );
             } else {
-              console.warn(`[Checkout] Failed to update company status to "sold": ${item.name}`);
+              console.warn(
+                `[Checkout] Failed to update company status to "sold": ${item.name}`,
+              );
             }
           } catch (statusError) {
-            console.warn(`[Checkout] Error updating company status:`, statusError);
+            console.warn(
+              `[Checkout] Error updating company status:`,
+              statusError,
+            );
           }
         } catch (error) {
           console.warn(`Failed to create order for ${item.name}:`, error);
@@ -537,18 +544,19 @@ export default function Checkout() {
             console.warn(
               "[Checkout] Wallet deduction failed (insufficient balance or wallet frozen)",
             );
-            toast.error("Wallet payment failed. Please try again or use a different payment method.");
+            toast.error(
+              "Wallet payment failed. Please try again or use a different payment method.",
+            );
           } else {
             console.log(
               `[Checkout] ✓ Deducted ${formatPrice(amountToPay)} from wallet`,
             );
-            toast.success(`Payment of ${formatPrice(amountToPay)} deducted from your wallet`);
+            toast.success(
+              `Payment of ${formatPrice(amountToPay)} deducted from your wallet`,
+            );
           }
         } catch (walletError) {
-          console.warn(
-            "[Checkout] Wallet deduction error:",
-            walletError,
-          );
+          console.warn("[Checkout] Wallet deduction error:", walletError);
           toast.error("Wallet payment error. Please try again.");
         }
       }
@@ -1340,99 +1348,107 @@ export default function Checkout() {
 
               {/* Card Payment Section */}
               {paymentMethod === "card" && (
-              <div>
-                <h2 className="text-xl font-bold text-foreground mb-4">
-                  Card Details
-                </h2>
-                <div className="space-y-4 bg-card border border-border/40 rounded-lg p-6">
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">
-                      Card Number
-                    </label>
-                    <input
-                      type="text"
-                      value={cardNumber}
-                      onChange={(e) => setCardNumber(e.target.value)}
-                      className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                      placeholder="4532 1234 5678 9010"
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <h2 className="text-xl font-bold text-foreground mb-4">
+                    Card Details
+                  </h2>
+                  <div className="space-y-4 bg-card border border-border/40 rounded-lg p-6">
                     <div>
                       <label className="block text-sm font-medium text-foreground mb-2">
-                        Expiry Date
+                        Card Number
                       </label>
                       <input
                         type="text"
-                        value={expiryDate}
-                        onChange={(e) => setExpiryDate(e.target.value)}
+                        value={cardNumber}
+                        onChange={(e) => setCardNumber(e.target.value)}
                         className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                        placeholder="MM/YY"
+                        placeholder="4532 1234 5678 9010"
                       />
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">
-                        CVV
-                      </label>
-                      <input
-                        type="text"
-                        value={cvv}
-                        onChange={(e) => setCvv(e.target.value)}
-                        className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-                        placeholder="123"
-                      />
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-foreground mb-2">
+                          Expiry Date
+                        </label>
+                        <input
+                          type="text"
+                          value={expiryDate}
+                          onChange={(e) => setExpiryDate(e.target.value)}
+                          className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                          placeholder="MM/YY"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-foreground mb-2">
+                          CVV
+                        </label>
+                        <input
+                          type="text"
+                          value={cvv}
+                          onChange={(e) => setCvv(e.target.value)}
+                          className="w-full px-4 py-2 border border-border/40 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                          placeholder="123"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
               )}
 
               {/* Wallet Payment Section */}
               {paymentMethod === "wallet" && (
-              <div>
-                <h2 className="text-xl font-bold text-foreground mb-4">
-                  Wallet Payment
-                </h2>
-                <div className="space-y-4 bg-card border border-border/40 rounded-lg p-6">
-                  <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
-                    <p className="text-sm text-muted-foreground mb-2">Available Balance</p>
-                    <p className="text-3xl font-bold text-primary">
-                      {formatPrice(walletBalance)}
-                    </p>
-                  </div>
-                  <div className="p-4 bg-card border border-border/40 rounded-lg">
-                    <p className="text-sm text-muted-foreground mb-2">Amount to Pay</p>
-                    <p className="text-3xl font-bold text-foreground">
-                      {formatPrice(
-                        appliedCoupon?.valid
-                          ? appliedCoupon.discountedTotal
-                          : finalTotal,
-                      )}
-                    </p>
-                  </div>
-                  {walletBalance <
-                    (appliedCoupon?.valid
-                      ? appliedCoupon.discountedTotal
-                      : finalTotal) && (
-                    <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg flex items-start gap-2">
-                      <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
-                      <div>
-                        <p className="text-sm font-semibold text-destructive">Insufficient Balance</p>
-                        <p className="text-xs text-destructive/80">
-                          You need {formatPrice(
-                            (appliedCoupon?.valid
-                              ? appliedCoupon.discountedTotal
-                              : finalTotal) - walletBalance,
-                          )} more to complete this purchase.
-                        </p>
-                      </div>
+                <div>
+                  <h2 className="text-xl font-bold text-foreground mb-4">
+                    Wallet Payment
+                  </h2>
+                  <div className="space-y-4 bg-card border border-border/40 rounded-lg p-6">
+                    <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
+                      <p className="text-sm text-muted-foreground mb-2">
+                        Available Balance
+                      </p>
+                      <p className="text-3xl font-bold text-primary">
+                        {formatPrice(walletBalance)}
+                      </p>
                     </div>
-                  )}
-                  <p className="text-xs text-muted-foreground text-center">
-                    Your payment will be deducted from your wallet balance.
-                  </p>
+                    <div className="p-4 bg-card border border-border/40 rounded-lg">
+                      <p className="text-sm text-muted-foreground mb-2">
+                        Amount to Pay
+                      </p>
+                      <p className="text-3xl font-bold text-foreground">
+                        {formatPrice(
+                          appliedCoupon?.valid
+                            ? appliedCoupon.discountedTotal
+                            : finalTotal,
+                        )}
+                      </p>
+                    </div>
+                    {walletBalance <
+                      (appliedCoupon?.valid
+                        ? appliedCoupon.discountedTotal
+                        : finalTotal) && (
+                      <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg flex items-start gap-2">
+                        <AlertCircle className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
+                        <div>
+                          <p className="text-sm font-semibold text-destructive">
+                            Insufficient Balance
+                          </p>
+                          <p className="text-xs text-destructive/80">
+                            You need{" "}
+                            {formatPrice(
+                              (appliedCoupon?.valid
+                                ? appliedCoupon.discountedTotal
+                                : finalTotal) - walletBalance,
+                            )}{" "}
+                            more to complete this purchase.
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                    <p className="text-xs text-muted-foreground text-center">
+                      Your payment will be deducted from your wallet balance.
+                    </p>
+                  </div>
                 </div>
-              </div>
               )}
             </div>
 

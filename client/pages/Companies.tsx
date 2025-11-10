@@ -323,7 +323,8 @@ export default function Companies() {
         {/* View Controls */}
         <div className="flex justify-between items-center mt-6 mb-4">
           <p className="text-sm text-gray-600">
-            Page {currentPage} of {Math.max(1, totalPages)} ({filteredCompanies.length} total companies)
+            Page {currentPage} of {Math.max(1, totalPages)} (
+            {filteredCompanies.length} total companies)
           </p>
           <div className="flex gap-2">
             <Button
@@ -425,7 +426,9 @@ export default function Companies() {
 
             <Button
               variant="outline"
-              onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+              onClick={() =>
+                setCurrentPage(Math.min(totalPages, currentPage + 1))
+              }
               disabled={currentPage === totalPages}
             >
               Next

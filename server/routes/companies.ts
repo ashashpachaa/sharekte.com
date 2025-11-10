@@ -1458,7 +1458,10 @@ export const clearCompaniesCache: RequestHandler = (req, res) => {
   try {
     serverCache = null;
     console.log("[clearCompaniesCache] ✓ Companies cache cleared");
-    res.json({ success: true, message: "Companies cache cleared successfully" });
+    res.json({
+      success: true,
+      message: "Companies cache cleared successfully",
+    });
   } catch (error) {
     console.error("Error clearing cache:", error);
     res.status(500).json({ error: "Failed to clear cache" });
