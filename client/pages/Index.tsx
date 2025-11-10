@@ -5,9 +5,9 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { WhyBuyReadyMade } from "@/components/WhyBuyReadyMade";
 import { CompanyTable } from "@/components/CompanyTable";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { useSEO, getPageSEOMetadata } from "@/lib/seo";
-import { TrendingUp, Zap, BarChart3, Globe, Play } from "lucide-react";
+import { TrendingUp, Zap, BarChart3, Globe } from "lucide-react";
 import { fetchAllCompanies } from "@/lib/company-management";
 
 // Sales Statistics Section - Motivation
