@@ -184,6 +184,11 @@ export default function Index() {
           </div>
 
           <div className="text-center px-4 max-w-4xl mx-auto">
+            <div className="inline-block mb-6">
+              <p className="text-sm md:text-base font-semibold text-primary uppercase tracking-widest">
+                {t("homepage.hero.badge") || "1st Marketplace in the world sell and buy companies worldwide"}
+              </p>
+            </div>
             <h1
               className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-foreground mb-6 leading-tight"
               data-loc="client/pages/Index.tsx:137:17"
