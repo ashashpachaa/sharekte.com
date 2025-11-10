@@ -136,13 +136,13 @@ export default function Companies() {
 
   const handleFilterChange = (newFilters: CompanyFilters) => {
     setFilters(newFilters);
-    setDisplayCount(10); // Reset to initial 10 items when filters change
+    setCurrentPage(1); // Reset to page 1 when filters change
   };
 
   const handleSortChange = (field: SortField, order: SortOrder) => {
     setSortField(field);
     setSortOrder(order);
-    setDisplayCount(10); // Reset to initial 10 items when sort changes
+    setCurrentPage(1); // Reset to page 1 when sort changes
   };
 
   const handleViewDetails = (company: CompanyData) => {
