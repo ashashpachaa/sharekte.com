@@ -134,7 +134,7 @@ function FeaturedCompaniesSection({ t }: { t: (key: string) => string }) {
 
         {companies.length > 0 ? (
           <div className="rounded-lg border border-border/40 bg-card overflow-hidden">
-            <CompanyTable companies={companies} onViewDetails={() => {}} />
+            <CompanyTable companies={companies} onViewDetails={() => {}} disableInternalPaging={true} />
           </div>
         ) : (
           <div className="text-center py-12">
