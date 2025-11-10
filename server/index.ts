@@ -38,6 +38,7 @@ import {
   requestRefund as requestCompanyRefund,
   approveRefund as approveCompanyRefund,
   markCompanyAsSold,
+  clearCompaniesCache,
 } from "./routes/companies";
 import {
   getTransferForms,
