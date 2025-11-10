@@ -479,6 +479,22 @@ export default function Checkout() {
         try {
           await createOrder(newOrder);
           console.log(`[Checkout] Order created for ${item.name}`);
+
+          // Update company status to "sold" so it doesn't appear in marketplace anymore
+          try {
+            const statusUpdated = await updateCompanyStatus(
+              item.id,
+              "sold",
+              "Company purchased in order",
+            );
+            if (statusUpdated) {
+              console.log(`[Checkout] Company status updated to "sold": ${item.name}`);
+            } else {
+              console.warn(`[Checkout] Failed to update company status to "sold": ${item.name}`);
+            }
+          } catch (statusError) {
+            console.warn(`[Checkout] Error updating company status:`, statusError);
+          }
         } catch (error) {
           console.warn(`Failed to create order for ${item.name}:`, error);
         }
