@@ -134,23 +134,44 @@ async function fetchCompaniesData(): Promise<CompanyData[]> {
 
     pendingAirtableFetch = (async () => {
       try {
-        const response = await fetch(
-          `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_ID}`,
-          {
+        let allRecords: any[] = [];
+        let offset: string | undefined;
+
+        // Fetch all records with pagination (Airtable limits to 100 per request)
+        do {
+          const url = new URL(
+            `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_ID}`,
+          );
+          if (offset) {
+            url.searchParams.append("offset", offset);
+          }
+
+          const response = await fetch(url.toString(), {
             headers: {
               Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
             },
-          },
+          });
+
+          if (!response.ok) {
+            const error = await response.text();
+            console.error("Airtable API error:", response.status, error);
+            throw new Error(`Airtable API error: ${response.status}`);
+          }
+
+          const data = await response.json();
+          allRecords = allRecords.concat(data.records);
+          offset = data.offset;
+
+          console.log(
+            `[Airtable] Fetched ${data.records.length} records, offset: ${offset || "none"}`,
+          );
+        } while (offset);
+
+        console.log(
+          `[Airtable] Total companies fetched: ${allRecords.length}`,
         );
 
-        if (!response.ok) {
-          const error = await response.text();
-          console.error("Airtable API error:", response.status, error);
-          throw new Error(`Airtable API error: ${response.status}`);
-        }
-
-        const data = await response.json();
-        const companies: CompanyData[] = data.records.map((record: any) => {
+        const companies: CompanyData[] = allRecords.map((record: any) => {
           const fields = record.fields;
           const incorporationDate =
             fields["Incorporate date"] || getTodayString();
