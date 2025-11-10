@@ -167,9 +167,7 @@ async function fetchCompaniesData(): Promise<CompanyData[]> {
           );
         } while (offset);
 
-        console.log(
-          `[Airtable] Total companies fetched: ${allRecords.length}`,
-        );
+        console.log(`[Airtable] Total companies fetched: ${allRecords.length}`);
 
         const companies: CompanyData[] = allRecords.map((record: any) => {
           const fields = record.fields;
