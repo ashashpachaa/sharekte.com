@@ -139,6 +139,7 @@ export function CompanyTable({
   onRenew,
   onStatusChange,
   isAdmin = false,
+  disableInternalPaging = false,
 }: CompanyTableProps) {
   const { t } = useTranslation();
   const { addItem } = useCart();
