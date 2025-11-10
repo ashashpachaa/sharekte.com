@@ -89,10 +89,8 @@ function FeaturedCompaniesSection({ t }: { t: (key: string) => string }) {
       try {
         setLoading(true);
         const data = await fetchAllCompanies();
-        // Filter to show only active companies, limit to top companies
-        const activeCompanies = data
-          .filter((c: any) => c.status === "active")
-          .slice(0, 10);
+        // Filter to show only active companies
+        const activeCompanies = data.filter((c: any) => c.status === "active");
         setCompanies(activeCompanies);
       } catch (error) {
         console.error("Error loading companies:", error);
@@ -146,14 +144,6 @@ function FeaturedCompaniesSection({ t }: { t: (key: string) => string }) {
             </p>
           </div>
         )}
-
-        <div className="mt-8 text-center">
-          <Button size="lg" asChild className="bg-primary hover:bg-primary-600">
-            <Link to="/companies">
-              {t("homepage.featured.browseAll") || "Browse All Companies"}
-            </Link>
-          </Button>
-        </div>
       </div>
     </section>
   );
