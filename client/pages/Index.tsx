@@ -163,6 +163,14 @@ export default function Index() {
   const seoMetadata = getPageSEOMetadata("home", i18n.language);
   useSEO(seoMetadata, i18n.language);
 
+  const featuredSectionRef = useRef<HTMLDivElement>(null);
+
+  const scrollToFeatured = () => {
+    if (featuredSectionRef.current) {
+      featuredSectionRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -202,28 +210,20 @@ export default function Index() {
               <Button
                 size="lg"
                 className="h-14 px-8 text-lg font-bold rounded-lg bg-primary hover:bg-primary-600 text-white"
-                asChild
+                onClick={scrollToFeatured}
                 data-loc="client/pages/Index.tsx:154:19"
               >
-                <Link to="/companies">
-                  <Zap className="mr-2 h-5 w-5" />
-                  {t("homepage.hero.browseButton") || "Start Browsing"}
-                </Link>
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="h-14 px-8 text-lg font-bold rounded-lg border-primary text-primary hover:bg-primary/10 hover:text-primary-600"
-              >
-                <Play className="mr-2 h-5 w-5" />
-                {t("homepage.hero.watchDemo") || "Watch Demo"}
+                <Zap className="mr-2 h-5 w-5" />
+                {t("homepage.hero.browseButton") || "Start Browsing"}
               </Button>
             </div>
           </div>
         </section>
 
         {/* Featured Companies Section */}
-        <FeaturedCompaniesSection t={t} />
+        <div ref={featuredSectionRef}>
+          <FeaturedCompaniesSection t={t} />
+        </div>
 
         {/* Why Buy Ready Made Company Section */}
         <WhyBuyReadyMade />
