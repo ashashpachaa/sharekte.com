@@ -390,49 +390,16 @@ export default function Companies() {
           />
         )}
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="mt-8 flex justify-between items-center">
-            <div className="text-sm text-gray-600">
-              Page {currentPage} of {totalPages}
-            </div>
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                disabled={currentPage === 1}
-              >
-                Previous
-              </Button>
-              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                let pageNum = i + 1;
-                if (totalPages > 5) {
-                  if (currentPage > 3) {
-                    pageNum = currentPage - 2 + i;
-                  }
-                }
-                return pageNum <= totalPages ? pageNum : null;
-              })
-                .filter((pageNum) => pageNum !== null)
-                .map((pageNum) => (
-                  <Button
-                    key={`page-${pageNum}`}
-                    variant={currentPage === pageNum ? "default" : "outline"}
-                    onClick={() => setCurrentPage(pageNum as number)}
-                  >
-                    {pageNum}
-                  </Button>
-                ))}
-              <Button
-                variant="outline"
-                onClick={() =>
-                  setCurrentPage(Math.min(totalPages, currentPage + 1))
-                }
-                disabled={currentPage === totalPages}
-              >
-                Next
-              </Button>
-            </div>
+        {/* Show More Button */}
+        {hasMore && (
+          <div className="mt-8 flex justify-center">
+            <Button
+              onClick={() => setDisplayCount(displayCount + 10)}
+              size="lg"
+              className="gap-2"
+            >
+              Show More Companies
+            </Button>
           </div>
         )}
       </main>
