@@ -100,7 +100,6 @@ export default function Companies() {
     result = sortCompanies(result, { field: sortField, order: sortOrder });
 
     setFilteredCompanies(result);
-    setCurrentPage(1);
   }, [companies, filters, sortField, sortOrder]);
 
   const loadCompanies = async () => {
