@@ -59,7 +59,8 @@ export default function Companies() {
   const [filteredCompanies, setFilteredCompanies] = useState<CompanyData[]>([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
-  const [displayCount, setDisplayCount] = useState(10); // Start with 10 items, load 10 more each time
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10); // 10 companies per page
   const [filters, setFilters] = useState<CompanyFilters>({});
   const [sortField, setSortField] = useState<SortField>("name");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
