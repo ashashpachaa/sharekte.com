@@ -1453,6 +1453,18 @@ export const markCompanyAsSold: RequestHandler = async (req, res) => {
   }
 };
 
+// Clear server cache - useful when manually changing data in Airtable
+export const clearCompaniesCache: RequestHandler = (req, res) => {
+  try {
+    serverCache = null;
+    console.log("[clearCompaniesCache] ✓ Companies cache cleared");
+    res.json({ success: true, message: "Companies cache cleared successfully" });
+  } catch (error) {
+    console.error("Error clearing cache:", error);
+    res.status(500).json({ error: "Failed to clear cache" });
+  }
+};
+
 // Helper: Sync company to Airtable (using original table and field mappings)
 async function syncCompanyToAirtable(company: CompanyData): Promise<void> {
   const AIRTABLE_API_TOKEN = process.env.AIRTABLE_API_TOKEN;
