@@ -90,7 +90,9 @@ function FeaturedCompaniesSection({ t }: { t: (key: string) => string }) {
         setLoading(true);
         const data = await fetchAllCompanies();
         // Filter to show only active companies, limit to top companies
-        const activeCompanies = data.filter((c: any) => c.status === "active").slice(0, 10);
+        const activeCompanies = data
+          .filter((c: any) => c.status === "active")
+          .slice(0, 10);
         setCompanies(activeCompanies);
       } catch (error) {
         console.error("Error loading companies:", error);
@@ -127,21 +129,20 @@ function FeaturedCompaniesSection({ t }: { t: (key: string) => string }) {
             {t("homepage.featured.title") || "Featured Companies"}
           </h2>
           <p className="text-xl text-muted-foreground">
-            {t("homepage.featured.description") || "Browse established businesses ready for acquisition"}
+            {t("homepage.featured.description") ||
+              "Browse established businesses ready for acquisition"}
           </p>
         </div>
 
         {companies.length > 0 ? (
           <div className="rounded-lg border border-border/40 bg-card overflow-hidden">
-            <CompanyTable
-              companies={companies}
-              onViewDetails={() => {}}
-            />
+            <CompanyTable companies={companies} onViewDetails={() => {}} />
           </div>
         ) : (
           <div className="text-center py-12">
             <p className="text-muted-foreground text-lg">
-              {t("homepage.featured.noCompanies") || "No companies available at this time"}
+              {t("homepage.featured.noCompanies") ||
+                "No companies available at this time"}
             </p>
           </div>
         )}
@@ -186,7 +187,8 @@ export default function Index() {
           <div className="text-center px-4 max-w-4xl mx-auto">
             <div className="inline-block mb-6">
               <p className="text-sm md:text-base font-semibold text-primary uppercase tracking-widest">
-                {t("homepage.hero.badge") || "1st Marketplace in the world sell and buy companies worldwide"}
+                {t("homepage.hero.badge") ||
+                  "1st Marketplace in the world sell and buy companies worldwide"}
               </p>
             </div>
             <h1
