@@ -393,15 +393,42 @@ export default function Companies() {
           />
         )}
 
-        {/* Show More Button */}
-        {hasMore && (
-          <div className="mt-8 flex justify-center">
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="mt-8 flex justify-center items-center gap-2">
             <Button
-              onClick={() => setDisplayCount(displayCount + 10)}
-              size="lg"
-              className="gap-2"
+              variant="outline"
+              onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+              disabled={currentPage === 1}
             >
-              Show More Companies
+              Previous
+            </Button>
+
+            {/* Page Numbers */}
+            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+              let pageNum = i + 1;
+              if (totalPages > 5 && currentPage > 3) {
+                pageNum = currentPage - 2 + i;
+              }
+              return pageNum <= totalPages ? pageNum : null;
+            })
+              .filter((pageNum) => pageNum !== null)
+              .map((pageNum) => (
+                <Button
+                  key={`page-${pageNum}`}
+                  variant={currentPage === pageNum ? "default" : "outline"}
+                  onClick={() => setCurrentPage(pageNum as number)}
+                >
+                  {pageNum}
+                </Button>
+              ))}
+
+            <Button
+              variant="outline"
+              onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+              disabled={currentPage === totalPages}
+            >
+              Next
             </Button>
           </div>
         )}
