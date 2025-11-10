@@ -319,7 +319,7 @@ export default function Companies() {
         {/* View Controls */}
         <div className="flex justify-between items-center mt-6 mb-4">
           <p className="text-sm text-gray-600">
-            Showing {Math.min(filteredCompanies.length, itemsPerPage)} of{" "}
+            Showing {Math.min(displayCount, filteredCompanies.length)} of{" "}
             {filteredCompanies.length} companies
           </p>
           <div className="flex gap-2">
