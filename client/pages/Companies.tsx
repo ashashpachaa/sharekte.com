@@ -323,8 +323,7 @@ export default function Companies() {
         {/* View Controls */}
         <div className="flex justify-between items-center mt-6 mb-4">
           <p className="text-sm text-gray-600">
-            Showing {Math.min(displayCount, filteredCompanies.length)} of{" "}
-            {filteredCompanies.length} companies
+            Page {currentPage} of {Math.max(1, totalPages)} ({filteredCompanies.length} total companies)
           </p>
           <div className="flex gap-2">
             <Button
