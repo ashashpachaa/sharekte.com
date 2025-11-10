@@ -391,6 +391,7 @@ export default function Companies() {
             onDelete={isAdmin ? handleDelete : undefined}
             onRenew={isAdmin ? handleRenew : undefined}
             isAdmin={isAdmin}
+            disableInternalPaging={true}
           />
         )}
 
