@@ -37,6 +37,7 @@ import { validateCoupon, applyCoupon } from "@/lib/coupons";
 import type { CouponValidationResponse } from "@/lib/coupons";
 import { getAPIBaseURL } from "@/lib/transfer-form";
 import { deductFromWallet, getUserWallet } from "@/lib/wallet";
+import { updateCompanyStatus } from "@/lib/company-management";
 
 export default function Checkout() {
   const { t } = useTranslation();
