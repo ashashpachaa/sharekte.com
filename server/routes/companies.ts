@@ -88,7 +88,7 @@ let serverCache: {
   data: CompanyData[];
   timestamp: number;
 } | null = null;
-const SERVER_CACHE_DURATION = 2 * 60 * 1000; // 2 minutes
+const SERVER_CACHE_DURATION = 30 * 1000; // 30 seconds - reduced for real-time Airtable changes
 
 // Pending Airtable fetch to deduplicate concurrent requests
 let pendingAirtableFetch: Promise<CompanyData[]> | null = null;
