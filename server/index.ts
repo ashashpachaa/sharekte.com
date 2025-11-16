@@ -513,8 +513,55 @@ export function createServer() {
     });
   } else {
     console.warn(
-      "[createServer] ⚠️ SPA path not found, root route will not be available",
+      "[createServer] ⚠️ SPA path not found, proxying to Vite dev server",
     );
+
+    // In development, proxy non-API requests to Vite dev server
+    const vitePort = process.env.VITE_PORT || 8083;
+    const viteUrl = `http://localhost:${vitePort}`;
+
+    app.use(async (req, res) => {
+      // Skip API routes - they're already handled
+      if (req.path.startsWith("/api")) {
+        return res.status(404).json({ error: "API route not found" });
+      }
+
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+        const response = await fetch(`${viteUrl}${req.path}`, {
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        if (response.ok) {
+          const data = await response.arrayBuffer();
+          res.set(Array.from(response.headers.entries()).reduce((acc: any, [key, val]) => {
+            acc[key] = val;
+            return acc;
+          }, {}));
+          res.send(Buffer.from(data));
+        } else {
+          // Fall back to index.html for SPA routing
+          const indexResponse = await fetch(`${viteUrl}/index.html`, {
+            signal: controller.signal,
+          });
+
+          if (indexResponse.ok) {
+            const data = await indexResponse.text();
+            res.set("Content-Type", "text/html");
+            res.send(data);
+          } else {
+            res.status(404).json({ error: "Could not reach Vite dev server" });
+          }
+        }
+      } catch (error) {
+        console.error("[createServer] Error proxying to Vite:", error);
+        res.status(503).json({ error: "Vite dev server unavailable" });
+      }
+    });
   }
 
   return app;
