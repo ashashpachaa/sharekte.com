@@ -393,7 +393,7 @@ export const getCompany: RequestHandler = async (req, res) => {
     const record = await response.json();
     const fields = record.fields;
     const incorporationDate = fields["Incorporate date"] || getTodayString();
-    const statusValue = fields["Status"] || fields["Statues "] || "active";
+    const statusValue = (String(fields["Status"] || fields["Statues "] || "active").toLowerCase().trim());
 
     // Try multiple field name variations for price field
     const priceValue =
@@ -691,7 +691,7 @@ export const updateCompany: RequestHandler = async (req, res) => {
     const record = await response.json();
     const fields = record.fields;
     const incorporationDate = fields["Incorporate date"] || getTodayString();
-    const statusValue = fields["Status"] || fields["Statues "] || "active";
+    const statusValue = (String(fields["Status"] || fields["Statues "] || "active").toLowerCase().trim());
 
     const company: CompanyData = {
       id: record.id,
