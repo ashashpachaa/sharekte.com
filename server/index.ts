@@ -517,14 +517,16 @@ export function createServer() {
     );
 
     // In development, proxy non-API requests to Vite dev server
-    // Try to find Vite by checking available ports
     let viteUrl: string | null = null;
 
     const tryVitePort = async (port: number): Promise<boolean> => {
       try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 1000);
         const response = await fetch(`http://localhost:${port}`, {
-          signal: AbortSignal.timeout(1000)
+          signal: controller.signal
         });
+        clearTimeout(timeoutId);
         return response.ok || response.status === 404;
       } catch {
         return false;
@@ -542,8 +544,8 @@ export function createServer() {
       }
     };
 
-    // Try to find Vite on startup
-    await findVitePort();
+    // Try to find Vite on startup (don't await, let it run in background)
+    findVitePort().catch(err => console.error("[createServer] Error finding Vite port:", err));
 
     app.use(async (req, res, next) => {
       // Skip API routes - they're already handled
