@@ -185,7 +185,7 @@ async function fetchCompaniesData(): Promise<CompanyData[]> {
             fields["Statues"] ||
             fields["Status"] ||
             "active";
-          const statusValue = rawStatus.toLowerCase() as CompanyStatus;
+          const statusValue = (String(rawStatus).toLowerCase().trim()) as CompanyStatus;
 
           // Try multiple field name variations for price field
           const priceValue =
