@@ -522,11 +522,12 @@ export function createServer() {
     const tryVitePort = async (port: number): Promise<boolean> => {
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 1000);
-        const response = await fetch(`http://localhost:${port}`, {
+        const timeoutId = setTimeout(() => controller.abort(), 500);
+        const response = await fetch(`http://localhost:${port}/@vite/client`, {
           signal: controller.signal
         });
         clearTimeout(timeoutId);
+        // Check for Vite client path specifically
         return response.ok || response.status === 404;
       } catch {
         return false;
@@ -534,8 +535,8 @@ export function createServer() {
     };
 
     const findVitePort = async () => {
-      // Try ports 8080-8090
-      for (let port = 8080; port <= 8090; port++) {
+      // Try ports 8080-8090 in reverse order (latest ports first)
+      for (let port = 8090; port >= 8080; port--) {
         if (await tryVitePort(port)) {
           viteUrl = `http://localhost:${port}`;
           console.log("[createServer] Found Vite dev server at port", port);
