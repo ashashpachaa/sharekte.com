@@ -517,36 +517,39 @@ export function createServer() {
     );
 
     // In development, proxy non-API requests to Vite dev server
-    let viteUrl: string | null = null;
+    let vitePortCache: number | null = null;
+    let lastCacheTime = 0;
 
-    const tryVitePort = async (port: number): Promise<boolean> => {
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 500);
-        const response = await fetch(`http://localhost:${port}/@vite/client`, {
-          signal: controller.signal
-        });
-        clearTimeout(timeoutId);
-        // Check for Vite client path specifically
-        return response.ok || response.status === 404;
-      } catch {
-        return false;
+    const findVitePort = async (): Promise<string | null> => {
+      // Use cached port if still valid (cache for 5 seconds)
+      if (vitePortCache && Date.now() - lastCacheTime < 5000) {
+        return `http://localhost:${vitePortCache}`;
       }
-    };
 
-    const findVitePort = async () => {
-      // Try ports 8080-8090 in reverse order (latest ports first)
-      for (let port = 8090; port >= 8080; port--) {
-        if (await tryVitePort(port)) {
-          viteUrl = `http://localhost:${port}`;
-          console.log("[createServer] Found Vite dev server at port", port);
-          return;
+      // Try ports 8080-8090
+      for (let port = 8080; port <= 8090; port++) {
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 300);
+          const response = await fetch(`http://localhost:${port}/@vite/client`, {
+            signal: controller.signal
+          });
+          clearTimeout(timeoutId);
+
+          // Check for Vite client path specifically
+          if (response.ok || response.status === 404) {
+            vitePortCache = port;
+            lastCacheTime = Date.now();
+            console.log("[createServer] Found Vite dev server at port", port);
+            return `http://localhost:${port}`;
+          }
+        } catch {
+          // Continue to next port
         }
       }
-    };
 
-    // Try to find Vite on startup (don't await, let it run in background)
-    findVitePort().catch(err => console.error("[createServer] Error finding Vite port:", err));
+      return null;
+    };
 
     app.use(async (req, res, next) => {
       // Skip API routes - they're already handled
@@ -554,12 +557,9 @@ export function createServer() {
         return next();
       }
 
+      const viteUrl = await findVitePort();
       if (!viteUrl) {
-        // Try to find Vite if not found yet
-        await findVitePort();
-        if (!viteUrl) {
-          return res.status(503).json({ error: "Vite dev server unavailable" });
-        }
+        return res.status(503).json({ error: "Vite dev server unavailable" });
       }
 
       try {
