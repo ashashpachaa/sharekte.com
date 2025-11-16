@@ -517,18 +517,51 @@ export function createServer() {
     );
 
     // In development, proxy non-API requests to Vite dev server
-    const vitePort = process.env.VITE_PORT || 8083;
-    const viteUrl = `http://localhost:${vitePort}`;
+    // Try to find Vite by checking available ports
+    let viteUrl: string | null = null;
 
-    app.use(async (req, res) => {
+    const tryVitePort = async (port: number): Promise<boolean> => {
+      try {
+        const response = await fetch(`http://localhost:${port}`, {
+          signal: AbortSignal.timeout(1000)
+        });
+        return response.ok || response.status === 404;
+      } catch {
+        return false;
+      }
+    };
+
+    const findVitePort = async () => {
+      // Try ports 8080-8090
+      for (let port = 8080; port <= 8090; port++) {
+        if (await tryVitePort(port)) {
+          viteUrl = `http://localhost:${port}`;
+          console.log("[createServer] Found Vite dev server at port", port);
+          return;
+        }
+      }
+    };
+
+    // Try to find Vite on startup
+    await findVitePort();
+
+    app.use(async (req, res, next) => {
       // Skip API routes - they're already handled
       if (req.path.startsWith("/api")) {
-        return res.status(404).json({ error: "API route not found" });
+        return next();
+      }
+
+      if (!viteUrl) {
+        // Try to find Vite if not found yet
+        await findVitePort();
+        if (!viteUrl) {
+          return res.status(503).json({ error: "Vite dev server unavailable" });
+        }
       }
 
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 10000);
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
 
         const response = await fetch(`${viteUrl}${req.path}`, {
           signal: controller.signal,
