@@ -146,11 +146,17 @@ async function fetchCompaniesData(): Promise<CompanyData[]> {
             url.searchParams.append("offset", offset);
           }
 
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout per request
+
           const response = await fetch(url.toString(), {
             headers: {
               Authorization: `Bearer ${AIRTABLE_API_TOKEN}`,
             },
+            signal: controller.signal,
           });
+
+          clearTimeout(timeoutId);
 
           if (!response.ok) {
             const error = await response.text();
