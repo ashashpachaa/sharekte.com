@@ -82,32 +82,50 @@ function SalesStatisticsSection({ t }: { t: (key: string) => string }) {
 // Featured Companies Section
 function FeaturedCompaniesSection({ t }: { t: (key: string) => string }) {
   const [companies, setCompanies] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  // Start loading only when section comes into view (intersection observer)
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isVisible) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [isVisible]);
 
   useEffect(() => {
+    if (!isVisible) return;
+
     const loadCompanies = async () => {
       try {
         setLoading(true);
 
-        // Create an abort controller with a 7-second timeout
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 7000);
+        // 5-second timeout for loading companies
+        const timeoutPromise = new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error("Fetch timeout")), 5000)
+        );
 
         const data = await Promise.race([
           fetchAllCompanies(),
-          new Promise((_, reject) =>
-            setTimeout(() => reject(new Error("Fetch timeout")), 7000)
-          )
+          timeoutPromise
         ]) as any[];
-
-        clearTimeout(timeoutId);
 
         // Filter to show only active companies
         const activeCompanies = data.filter((c: any) => c.status === "active");
         setCompanies(activeCompanies);
       } catch (error) {
         console.error("Error loading companies:", error);
-        // Don't show error, just show empty state
         setCompanies([]);
       } finally {
         setLoading(false);
@@ -115,27 +133,10 @@ function FeaturedCompaniesSection({ t }: { t: (key: string) => string }) {
     };
 
     loadCompanies();
-  }, []);
-
-  if (loading) {
-    return (
-      <section className="py-20 md:py-28 bg-muted/30">
-        <div className="container max-w-6xl mx-auto px-4">
-          <div className="text-center space-y-4">
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground">
-              {t("homepage.featured.title") || "Featured Companies"}
-            </h2>
-            <p className="text-xl text-muted-foreground">
-              Loading available companies...
-            </p>
-          </div>
-        </div>
-      </section>
-    );
-  }
+  }, [isVisible]);
 
   return (
-    <section className="py-20 md:py-28 bg-muted/30">
+    <section ref={sectionRef} className="py-20 md:py-28 bg-muted/30">
       <div className="container max-w-6xl mx-auto px-4">
         <div className="text-center space-y-4 mb-12">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground">
@@ -147,16 +148,28 @@ function FeaturedCompaniesSection({ t }: { t: (key: string) => string }) {
           </p>
         </div>
 
-        {companies.length > 0 ? (
-          <div className="rounded-lg border border-border/40 bg-card overflow-hidden">
-            <CompanyTable companies={companies} onViewDetails={() => {}} disableInternalPaging={true} />
-          </div>
+        {isVisible ? (
+          loading ? (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">
+                Loading available companies...
+              </p>
+            </div>
+          ) : companies.length > 0 ? (
+            <div className="rounded-lg border border-border/40 bg-card overflow-hidden">
+              <CompanyTable companies={companies} onViewDetails={() => {}} disableInternalPaging={true} />
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground text-lg">
+                {t("homepage.featured.noCompanies") ||
+                  "No companies available at this time"}
+              </p>
+            </div>
+          )
         ) : (
           <div className="text-center py-12">
-            <p className="text-muted-foreground text-lg">
-              {t("homepage.featured.noCompanies") ||
-                "No companies available at this time"}
-            </p>
+            <p className="text-muted-foreground text-sm">Companies will load when this section comes into view</p>
           </div>
         )}
       </div>
