@@ -88,12 +88,27 @@ function FeaturedCompaniesSection({ t }: { t: (key: string) => string }) {
     const loadCompanies = async () => {
       try {
         setLoading(true);
-        const data = await fetchAllCompanies();
+
+        // Create an abort controller with a 7-second timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 7000);
+
+        const data = await Promise.race([
+          fetchAllCompanies(),
+          new Promise((_, reject) =>
+            setTimeout(() => reject(new Error("Fetch timeout")), 7000)
+          )
+        ]) as any[];
+
+        clearTimeout(timeoutId);
+
         // Filter to show only active companies
         const activeCompanies = data.filter((c: any) => c.status === "active");
         setCompanies(activeCompanies);
       } catch (error) {
         console.error("Error loading companies:", error);
+        // Don't show error, just show empty state
+        setCompanies([]);
       } finally {
         setLoading(false);
       }
