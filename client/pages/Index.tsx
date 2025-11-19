@@ -111,9 +111,9 @@ function FeaturedCompaniesSection({ t }: { t: (key: string) => string }) {
       try {
         setLoading(true);
 
-        // 5-second timeout for loading companies
+        // 15-second timeout for loading companies (increased from 5s)
         const timeoutPromise = new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error("Fetch timeout")), 5000)
+          setTimeout(() => reject(new Error("Fetch timeout")), 15000)
         );
 
         const data = await Promise.race([
