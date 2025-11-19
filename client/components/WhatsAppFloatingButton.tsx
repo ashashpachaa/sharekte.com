@@ -80,17 +80,17 @@ export function WhatsAppFloatingButton() {
           </SheetHeader>
 
           <div className="mt-6 space-y-3">
-            {config.numbers.length === 1 ? (
+            {activeNumbers.length === 1 ? (
               <div>
                 <p className="text-sm text-muted-foreground mb-4">
                   Click below to chat with us on WhatsApp:
                 </p>
                 <Button
-                  onClick={() => handleWhatsAppClick(config.numbers[0].number)}
+                  onClick={() => handleWhatsAppClick(activeNumbers[0].number)}
                   className="w-full bg-green-500 hover:bg-green-600 text-white"
                 >
                   <MessageCircle className="w-4 h-4 mr-2" />
-                  {config.numbers[0].label}
+                  {activeNumbers[0].label}
                 </Button>
               </div>
             ) : (
@@ -98,7 +98,7 @@ export function WhatsAppFloatingButton() {
                 <p className="text-sm text-muted-foreground mb-4">
                   Choose a support team to chat with:
                 </p>
-                {config.numbers.map((number) => (
+                {activeNumbers.map((number) => (
                   <button
                     key={number.id}
                     onClick={() => handleWhatsAppClick(number.number)}
