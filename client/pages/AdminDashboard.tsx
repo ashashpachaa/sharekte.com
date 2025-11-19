@@ -1,10 +1,9 @@
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAdmin } from "@/lib/admin-context";
-import { getAllUsers, searchUsers } from "@/lib/user-management";
+import { getAllUsers } from "@/lib/user-management";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
 import {
   Users,
   Settings,
@@ -21,6 +20,8 @@ import {
   Share2,
   Wallet,
   MessageCircle,
+  Search,
+  X,
 } from "lucide-react";
 
 interface AdminCard {
@@ -31,6 +32,7 @@ interface AdminCard {
   link: string;
   buttonText: string;
   buttonColor: string;
+  variant?: "outline" | "default";
 }
 
 export default function AdminDashboard() {
@@ -62,7 +64,7 @@ export default function AdminDashboard() {
         description: "Manage registered companies, track renewals, and handle refunds",
         link: "/companies",
         buttonText: "Manage Companies",
-        buttonColor: "bg-blue-600 hover:bg-blue-700",
+        buttonColor: "bg-blue-600 hover:bg-blue-700 text-white",
       },
       {
         id: "orders",
@@ -71,7 +73,7 @@ export default function AdminDashboard() {
         description: "Manage orders, handle refunds, and track transfer forms",
         link: "/admin/orders",
         buttonText: "Manage Orders",
-        buttonColor: "bg-purple-600 hover:bg-purple-700",
+        buttonColor: "bg-purple-600 hover:bg-purple-700 text-white",
       },
       {
         id: "services",
@@ -80,7 +82,7 @@ export default function AdminDashboard() {
         description: "Create and manage services with custom application forms",
         link: "/admin/services",
         buttonText: "Manage Services",
-        buttonColor: "bg-amber-600 hover:bg-amber-700",
+        buttonColor: "bg-amber-600 hover:bg-amber-700 text-white",
       },
       {
         id: "coupons",
@@ -89,7 +91,7 @@ export default function AdminDashboard() {
         description: "Create and manage discount codes for promotions",
         link: "/admin/coupons",
         buttonText: "Manage Coupons",
-        buttonColor: "bg-violet-600 hover:bg-violet-700",
+        buttonColor: "bg-violet-600 hover:bg-violet-700 text-white",
       },
       {
         id: "invoices",
@@ -98,7 +100,7 @@ export default function AdminDashboard() {
         description: "Generate, manage, and send invoices to clients",
         link: "/admin/invoices",
         buttonText: "Manage Invoices",
-        buttonColor: "bg-green-600 hover:bg-green-700",
+        buttonColor: "bg-green-600 hover:bg-green-700 text-white",
       },
       {
         id: "users",
@@ -107,7 +109,7 @@ export default function AdminDashboard() {
         description: "Manage user accounts, view login history, and handle suspensions",
         link: "/admin/users",
         buttonText: "Manage Users",
-        buttonColor: "bg-primary hover:bg-primary-600",
+        buttonColor: "bg-primary hover:bg-primary-600 text-white",
       },
       {
         id: "roles",
@@ -116,7 +118,7 @@ export default function AdminDashboard() {
         description: "Create custom roles and assign permissions to users",
         link: "/admin/roles",
         buttonText: "Manage Roles",
-        buttonColor: "bg-indigo-600 hover:bg-indigo-700",
+        buttonColor: "bg-indigo-600 hover:bg-indigo-700 text-white",
       },
       {
         id: "emails",
@@ -125,7 +127,7 @@ export default function AdminDashboard() {
         description: "Manage and preview all system email templates",
         link: "/admin/email-templates",
         buttonText: "Manage Templates",
-        buttonColor: "bg-cyan-600 hover:bg-cyan-700",
+        buttonColor: "bg-cyan-600 hover:bg-cyan-700 text-white",
       },
       {
         id: "fees",
@@ -134,7 +136,7 @@ export default function AdminDashboard() {
         description: "Create and manage checkout fees (taxes, service fees, etc.)",
         link: "/admin/fees",
         buttonText: "Manage Fees",
-        buttonColor: "bg-amber-600 hover:bg-amber-700",
+        buttonColor: "bg-amber-600 hover:bg-amber-700 text-white",
       },
       {
         id: "wallets",
@@ -143,7 +145,7 @@ export default function AdminDashboard() {
         description: "Manage user wallet balances, view transactions, and generate reports",
         link: "/admin/wallets",
         buttonText: "Manage Wallets",
-        buttonColor: "bg-purple-600 hover:bg-purple-700",
+        buttonColor: "bg-purple-600 hover:bg-purple-700 text-white",
       },
       {
         id: "settings",
@@ -152,7 +154,8 @@ export default function AdminDashboard() {
         description: "Configure admin accounts and system preferences",
         link: "/admin/settings",
         buttonText: "Go to Settings",
-        buttonColor: "border-2 border-border",
+        buttonColor: "",
+        variant: "outline",
       },
       {
         id: "social",
@@ -161,7 +164,7 @@ export default function AdminDashboard() {
         description: "Manage social media links displayed in the website footer",
         link: "/admin/social-media",
         buttonText: "Manage Social Links",
-        buttonColor: "bg-pink-600 hover:bg-pink-700",
+        buttonColor: "bg-pink-600 hover:bg-pink-700 text-white",
       },
       {
         id: "whatsapp",
@@ -170,7 +173,7 @@ export default function AdminDashboard() {
         description: "Manage customer support WhatsApp numbers and initial messages",
         link: "/admin/whatsapp-support",
         buttonText: "Manage WhatsApp",
-        buttonColor: "bg-green-600 hover:bg-green-700",
+        buttonColor: "bg-green-600 hover:bg-green-700 text-white",
       },
     ],
     [],
@@ -230,7 +233,7 @@ export default function AdminDashboard() {
           </p>
 
           {/* Search Bar */}
-          <div className="relative max-w-md mb-8">
+          <div className="relative max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
               type="text"
@@ -242,146 +245,146 @@ export default function AdminDashboard() {
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
               >
-                ✕
+                <X className="w-4 h-4" />
               </button>
             )}
           </div>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-card border border-border/40 rounded-lg p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground mb-1">
-                  Total Users
-                </p>
-                <p className="text-3xl font-bold text-foreground">
-                  {totalUsers}
-                </p>
+        {/* Stats Grid - Hidden when searching */}
+        {!searchQuery && (
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div className="bg-card border border-border/40 rounded-lg p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">
+                    Total Users
+                  </p>
+                  <p className="text-3xl font-bold text-foreground">
+                    {totalUsers}
+                  </p>
+                </div>
+                <Users className="w-12 h-12 text-primary/20" />
               </div>
-              <Users className="w-12 h-12 text-primary/20" />
+            </div>
+
+            <div className="bg-card border border-border/40 rounded-lg p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">
+                    Active Users
+                  </p>
+                  <p className="text-3xl font-bold text-green-600">
+                    {activeUsers}
+                  </p>
+                </div>
+                <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                  <span className="text-green-600 font-bold">
+                    {activeUsers > 0 ? "✓" : "-"}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-card border border-border/40 rounded-lg p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">Suspended</p>
+                  <p className="text-3xl font-bold text-orange-600">
+                    {suspendedUsers}
+                  </p>
+                </div>
+                <AlertCircle className="w-12 h-12 text-orange-100" />
+              </div>
+            </div>
+
+            <div className="bg-card border border-border/40 rounded-lg p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground mb-1">System</p>
+                  <p className="text-sm text-green-600 font-semibold">
+                    Operational
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    All systems running
+                  </p>
+                </div>
+                <BarChart3 className="w-12 h-12 text-green-100" />
+              </div>
             </div>
           </div>
+        )}
 
-          <div className="bg-card border border-border/40 rounded-lg p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground mb-1">
-                  Active Users
+        {/* Admin Options Grid */}
+        {filteredCards.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {filteredCards.map((card) => (
+              <div
+                key={card.id}
+                className="bg-card border border-border/40 rounded-lg p-6 hover:shadow-md transition-shadow"
+              >
+                <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+                  {card.icon}
+                  {card.title}
+                </h3>
+                <p className="text-muted-foreground text-sm mb-4">
+                  {card.description}
                 </p>
-                <p className="text-3xl font-bold text-green-600">
-                  {activeUsers}
-                </p>
+                <Button
+                  variant={card.variant || "default"}
+                  className={`w-full ${card.buttonColor}`}
+                  asChild
+                >
+                  <Link to={card.link}>{card.buttonText}</Link>
+                </Button>
               </div>
-              <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
-                <span className="text-green-600 font-bold">
-                  {activeUsers > 0 ? "✓" : "-"}
+            ))}
+          </div>
+        ) : (
+          <div className="bg-card border border-border/40 rounded-lg p-12 text-center">
+            <p className="text-muted-foreground mb-2">No options found</p>
+            <p className="text-sm text-muted-foreground">
+              Try adjusting your search query
+            </p>
+          </div>
+        )}
+
+        {/* Quick Stats - Hidden when searching */}
+        {!searchQuery && (
+          <div className="mt-8 bg-card border border-border/40 rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-foreground mb-4">
+              Quick Stats
+            </h3>
+            <div className="space-y-3 text-sm">
+              <div className="flex justify-between items-center py-2 border-b border-border/20">
+                <span className="text-muted-foreground">Total System Users</span>
+                <span className="font-semibold text-foreground">
+                  {totalUsers}
+                </span>
+              </div>
+              <div className="flex justify-between items-center py-2 border-b border-border/20">
+                <span className="text-muted-foreground">Active Accounts</span>
+                <span className="font-semibold text-green-600">
+                  {activeUsers}
+                </span>
+              </div>
+              <div className="flex justify-between items-center py-2 border-b border-border/20">
+                <span className="text-muted-foreground">Suspended Accounts</span>
+                <span className="font-semibold text-orange-600">
+                  {suspendedUsers}
+                </span>
+              </div>
+              <div className="flex justify-between items-center py-2">
+                <span className="text-muted-foreground">Admin Role</span>
+                <span className="font-semibold text-primary capitalize">
+                  Super Admin
                 </span>
               </div>
             </div>
           </div>
-
-          <div className="bg-card border border-border/40 rounded-lg p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground mb-1">Suspended</p>
-                <p className="text-3xl font-bold text-orange-600">
-                  {suspendedUsers}
-                </p>
-              </div>
-              <AlertCircle className="w-12 h-12 text-orange-100" />
-            </div>
-          </div>
-
-          <div className="bg-card border border-border/40 rounded-lg p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground mb-1">System</p>
-                <p className="text-sm text-green-600 font-semibold">
-                  Operational
-                </p>
-                <p className="text-xs text-muted-foreground mt-1">
-                  All systems running
-                </p>
-              </div>
-              <BarChart3 className="w-12 h-12 text-green-100" />
-            </div>
-          </div>
-        </div>
-
-        {/* Admin Options Grid */}
-        <div>
-          {filteredCards.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {filteredCards.map((card) => (
-                <div
-                  key={card.id}
-                  className="bg-card border border-border/40 rounded-lg p-6 hover:shadow-md transition-shadow"
-                >
-                  <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-                    {card.icon}
-                    {card.title}
-                  </h3>
-                  <p className="text-muted-foreground text-sm mb-4">
-                    {card.description}
-                  </p>
-                  <Button
-                    className={`w-full text-white ${
-                      card.id === "settings" ? "border-2" : ""
-                    } ${card.buttonColor}`}
-                    variant={card.id === "settings" ? "outline" : "default"}
-                    asChild
-                  >
-                    <Link to={card.link}>{card.buttonText}</Link>
-                  </Button>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="bg-card border border-border/40 rounded-lg p-12 text-center">
-              <p className="text-muted-foreground mb-2">No options found</p>
-              <p className="text-sm text-muted-foreground">
-                Try adjusting your search query
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* Recent Activity */}
-        <div className="mt-8 bg-card border border-border/40 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-foreground mb-4">
-            Quick Stats
-          </h3>
-          <div className="space-y-3 text-sm">
-            <div className="flex justify-between items-center py-2 border-b border-border/20">
-              <span className="text-muted-foreground">Total System Users</span>
-              <span className="font-semibold text-foreground">
-                {totalUsers}
-              </span>
-            </div>
-            <div className="flex justify-between items-center py-2 border-b border-border/20">
-              <span className="text-muted-foreground">Active Accounts</span>
-              <span className="font-semibold text-green-600">
-                {activeUsers}
-              </span>
-            </div>
-            <div className="flex justify-between items-center py-2 border-b border-border/20">
-              <span className="text-muted-foreground">Suspended Accounts</span>
-              <span className="font-semibold text-orange-600">
-                {suspendedUsers}
-              </span>
-            </div>
-            <div className="flex justify-between items-center py-2">
-              <span className="text-muted-foreground">Admin Role</span>
-              <span className="font-semibold text-primary capitalize">
-                Super Admin
-              </span>
-            </div>
-          </div>
-        </div>
+        )}
       </main>
     </div>
   );
