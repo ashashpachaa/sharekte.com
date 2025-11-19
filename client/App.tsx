@@ -190,6 +190,14 @@ export default function App() {
                             </ProtectedAdminRoute>
                           }
                         />
+                        <Route
+                          path="/admin/whatsapp-support"
+                          element={
+                            <ProtectedAdminRoute>
+                              <AdminWhatsAppSupport />
+                            </ProtectedAdminRoute>
+                          }
+                        />
                         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                         <Route path="*" element={<NotFound />} />
                       </Routes>
