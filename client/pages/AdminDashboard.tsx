@@ -1,8 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAdmin } from "@/lib/admin-context";
 import { getAllUsers, searchUsers } from "@/lib/user-management";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 import {
   Users,
   Settings,
