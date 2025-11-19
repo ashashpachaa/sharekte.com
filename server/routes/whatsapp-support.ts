@@ -66,10 +66,9 @@ function saveConfig(config: WhatsAppSupportConfig): void {
 export const getWhatsAppConfig: RequestHandler = (req, res) => {
   try {
     const config = loadConfig();
-    const activeNumbers = config.numbers.filter((n) => n.isActive);
     res.json({
       ...config,
-      numbers: activeNumbers.sort((a, b) => a.order - b.order),
+      numbers: config.numbers.sort((a, b) => a.order - b.order),
     });
   } catch (error) {
     console.error("[WhatsApp] Error getting config:", error);
