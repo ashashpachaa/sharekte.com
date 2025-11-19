@@ -498,6 +498,14 @@ export function createServer() {
   app.patch("/api/wallets/:userId/unfreeze", unfreezeWalletHandler);
   app.post("/api/wallets/:userId/deduct", deductFromWalletHandler);
 
+  // WhatsApp Support routes
+  app.get("/api/whatsapp/config", getWhatsAppConfig);
+  app.get("/api/whatsapp/numbers", getAllWhatsAppNumbers);
+  app.post("/api/whatsapp/numbers", addWhatsAppNumber);
+  app.patch("/api/whatsapp/numbers/:id", updateWhatsAppNumber);
+  app.delete("/api/whatsapp/numbers/:id", deleteWhatsAppNumber);
+  app.patch("/api/whatsapp/message", updateWhatsAppMessage);
+
   console.log("[createServer] ✅ All routes registered successfully");
 
   // Serve SPA static files and handle fallback to index.html
