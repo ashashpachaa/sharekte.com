@@ -53,6 +53,7 @@ export default function App() {
                     <Toaster />
                     <Sonner />
                     <BrowserRouter>
+                      <WhatsAppFloatingButton />
                       <Routes>
                         <Route path="/" element={<Index />} />
                         <Route path="/login" element={<Login />} />
