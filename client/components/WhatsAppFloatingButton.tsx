@@ -50,7 +50,10 @@ export function WhatsAppFloatingButton() {
     setIsOpen(false);
   };
 
-  if (loading || !config || config.numbers.length === 0) {
+  // Filter to show only active numbers
+  const activeNumbers = config?.numbers.filter((n) => n.isActive) || [];
+
+  if (loading || !config || activeNumbers.length === 0) {
     return null;
   }
 
