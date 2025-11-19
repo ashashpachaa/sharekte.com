@@ -36,6 +36,7 @@ import TermsAndConditions from "./pages/TermsAndConditions";
 import NotFound from "./pages/NotFound";
 import { ProtectedAdminRoute } from "./components/ProtectedAdminRoute";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { WhatsAppFloatingButton } from "./components/WhatsAppFloatingButton";
 
 const queryClient = new QueryClient();
 
