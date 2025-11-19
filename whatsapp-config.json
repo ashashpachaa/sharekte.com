@@ -1,0 +1,26 @@
+{
+  "id": "default",
+  "numbers": [
+    {
+      "id": "1",
+      "number": "+971501234567",
+      "label": "Sales Support",
+      "isActive": true,
+      "order": 1,
+      "createdAt": "2025-11-19T21:11:29.644Z",
+      "updatedAt": "2025-11-19T21:11:29.644Z"
+    },
+    {
+      "id": "1763586689644",
+      "number": "+97150505494",
+      "label": "Partner support",
+      "isActive": true,
+      "order": 2,
+      "createdAt": "2025-11-19T21:11:29.644Z",
+      "updatedAt": "2025-11-19T21:11:29.644Z"
+    }
+  ],
+  "initialMessage": "Hello! How can we help you today?",
+  "createdAt": "2025-11-19T21:11:29.644Z",
+  "updatedAt": "2025-11-19T21:11:37.033Z"
+}
