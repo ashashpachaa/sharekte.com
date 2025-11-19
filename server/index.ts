@@ -530,9 +530,12 @@ export function createServer() {
         try {
           const controller = new AbortController();
           const timeoutId = setTimeout(() => controller.abort(), 300);
-          const response = await fetch(`http://localhost:${port}/@vite/client`, {
-            signal: controller.signal
-          });
+          const response = await fetch(
+            `http://localhost:${port}/@vite/client`,
+            {
+              signal: controller.signal,
+            },
+          );
           clearTimeout(timeoutId);
 
           // Check for Vite client path specifically
@@ -573,10 +576,15 @@ export function createServer() {
 
         if (response.ok) {
           const data = await response.arrayBuffer();
-          res.set(Array.from(response.headers.entries()).reduce((acc: any, [key, val]) => {
-            acc[key] = val;
-            return acc;
-          }, {}));
+          res.set(
+            Array.from(response.headers.entries()).reduce(
+              (acc: any, [key, val]) => {
+                acc[key] = val;
+                return acc;
+              },
+              {},
+            ),
+          );
           res.send(Buffer.from(data));
         } else {
           // Fall back to index.html for SPA routing
