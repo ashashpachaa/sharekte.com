@@ -23,9 +23,20 @@ import {
   MessageCircle,
 } from "lucide-react";
 
+interface AdminCard {
+  id: string;
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  link: string;
+  buttonText: string;
+  buttonColor: string;
+}
+
 export default function AdminDashboard() {
   const { adminEmail, isAdmin, logout } = useAdmin();
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     if (!isAdmin) {
@@ -41,6 +52,140 @@ export default function AdminDashboard() {
     (u) => u.accountStatus === "suspended",
   ).length;
   const totalUsers = allUsers.length;
+
+  const adminCards: AdminCard[] = useMemo(
+    () => [
+      {
+        id: "companies",
+        icon: <Building2 className="w-5 h-5" />,
+        title: "Companies",
+        description: "Manage registered companies, track renewals, and handle refunds",
+        link: "/companies",
+        buttonText: "Manage Companies",
+        buttonColor: "bg-blue-600 hover:bg-blue-700",
+      },
+      {
+        id: "orders",
+        icon: <ShoppingCart className="w-5 h-5" />,
+        title: "Orders",
+        description: "Manage orders, handle refunds, and track transfer forms",
+        link: "/admin/orders",
+        buttonText: "Manage Orders",
+        buttonColor: "bg-purple-600 hover:bg-purple-700",
+      },
+      {
+        id: "services",
+        icon: <Package className="w-5 h-5" />,
+        title: "Services Marketplace",
+        description: "Create and manage services with custom application forms",
+        link: "/admin/services",
+        buttonText: "Manage Services",
+        buttonColor: "bg-amber-600 hover:bg-amber-700",
+      },
+      {
+        id: "coupons",
+        icon: <DollarSign className="w-5 h-5" />,
+        title: "Discount Coupons",
+        description: "Create and manage discount codes for promotions",
+        link: "/admin/coupons",
+        buttonText: "Manage Coupons",
+        buttonColor: "bg-violet-600 hover:bg-violet-700",
+      },
+      {
+        id: "invoices",
+        icon: <FileText className="w-5 h-5" />,
+        title: "Invoices",
+        description: "Generate, manage, and send invoices to clients",
+        link: "/admin/invoices",
+        buttonText: "Manage Invoices",
+        buttonColor: "bg-green-600 hover:bg-green-700",
+      },
+      {
+        id: "users",
+        icon: <Users className="w-5 h-5" />,
+        title: "Users Management",
+        description: "Manage user accounts, view login history, and handle suspensions",
+        link: "/admin/users",
+        buttonText: "Manage Users",
+        buttonColor: "bg-primary hover:bg-primary-600",
+      },
+      {
+        id: "roles",
+        icon: <Shield className="w-5 h-5" />,
+        title: "Roles Management",
+        description: "Create custom roles and assign permissions to users",
+        link: "/admin/roles",
+        buttonText: "Manage Roles",
+        buttonColor: "bg-indigo-600 hover:bg-indigo-700",
+      },
+      {
+        id: "emails",
+        icon: <Mail className="w-5 h-5" />,
+        title: "Email Templates",
+        description: "Manage and preview all system email templates",
+        link: "/admin/email-templates",
+        buttonText: "Manage Templates",
+        buttonColor: "bg-cyan-600 hover:bg-cyan-700",
+      },
+      {
+        id: "fees",
+        icon: <DollarSign className="w-5 h-5" />,
+        title: "Fees Management",
+        description: "Create and manage checkout fees (taxes, service fees, etc.)",
+        link: "/admin/fees",
+        buttonText: "Manage Fees",
+        buttonColor: "bg-amber-600 hover:bg-amber-700",
+      },
+      {
+        id: "wallets",
+        icon: <Wallet className="w-5 h-5" />,
+        title: "Wallet Management",
+        description: "Manage user wallet balances, view transactions, and generate reports",
+        link: "/admin/wallets",
+        buttonText: "Manage Wallets",
+        buttonColor: "bg-purple-600 hover:bg-purple-700",
+      },
+      {
+        id: "settings",
+        icon: <Settings className="w-5 h-5" />,
+        title: "Admin Settings",
+        description: "Configure admin accounts and system preferences",
+        link: "/admin/settings",
+        buttonText: "Go to Settings",
+        buttonColor: "border-2 border-border",
+      },
+      {
+        id: "social",
+        icon: <Share2 className="w-5 h-5" />,
+        title: "Social Media Links",
+        description: "Manage social media links displayed in the website footer",
+        link: "/admin/social-media",
+        buttonText: "Manage Social Links",
+        buttonColor: "bg-pink-600 hover:bg-pink-700",
+      },
+      {
+        id: "whatsapp",
+        icon: <MessageCircle className="w-5 h-5" />,
+        title: "WhatsApp Support",
+        description: "Manage customer support WhatsApp numbers and initial messages",
+        link: "/admin/whatsapp-support",
+        buttonText: "Manage WhatsApp",
+        buttonColor: "bg-green-600 hover:bg-green-700",
+      },
+    ],
+    [],
+  );
+
+  const filteredCards = useMemo(() => {
+    if (!searchQuery.trim()) return adminCards;
+
+    const query = searchQuery.toLowerCase();
+    return adminCards.filter(
+      (card) =>
+        card.title.toLowerCase().includes(query) ||
+        card.description.toLowerCase().includes(query),
+    );
+  }, [searchQuery, adminCards]);
 
   const handleLogout = async () => {
     await logout();
