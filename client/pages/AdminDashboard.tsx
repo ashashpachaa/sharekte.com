@@ -18,6 +18,7 @@ import {
   Package,
   Share2,
   Wallet,
+  MessageCircle,
 } from "lucide-react";
 
 export default function AdminDashboard() {
