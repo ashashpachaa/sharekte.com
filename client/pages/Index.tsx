@@ -94,7 +94,7 @@ function FeaturedCompaniesSection({ t }: { t: (key: string) => string }) {
           setIsVisible(true);
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     if (sectionRef.current) {
@@ -113,13 +113,13 @@ function FeaturedCompaniesSection({ t }: { t: (key: string) => string }) {
 
         // 15-second timeout for loading companies (increased from 5s)
         const timeoutPromise = new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error("Fetch timeout")), 15000)
+          setTimeout(() => reject(new Error("Fetch timeout")), 15000),
         );
 
-        const data = await Promise.race([
+        const data = (await Promise.race([
           fetchAllCompanies(),
-          timeoutPromise
-        ]) as any[];
+          timeoutPromise,
+        ])) as any[];
 
         // Filter to show only active companies
         const activeCompanies = data.filter((c: any) => c.status === "active");
@@ -157,7 +157,11 @@ function FeaturedCompaniesSection({ t }: { t: (key: string) => string }) {
             </div>
           ) : companies.length > 0 ? (
             <div className="rounded-lg border border-border/40 bg-card overflow-hidden">
-              <CompanyTable companies={companies} onViewDetails={() => {}} disableInternalPaging={true} />
+              <CompanyTable
+                companies={companies}
+                onViewDetails={() => {}}
+                disableInternalPaging={true}
+              />
             </div>
           ) : (
             <div className="text-center py-12">
@@ -169,7 +173,9 @@ function FeaturedCompaniesSection({ t }: { t: (key: string) => string }) {
           )
         ) : (
           <div className="text-center py-12">
-            <p className="text-muted-foreground text-sm">Companies will load when this section comes into view</p>
+            <p className="text-muted-foreground text-sm">
+              Companies will load when this section comes into view
+            </p>
           </div>
         )}
       </div>
