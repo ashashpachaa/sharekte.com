@@ -275,8 +275,8 @@ export default function AdminWhatsAppSupport() {
           <DialogHeader>
             <DialogTitle>Add Support Number</DialogTitle>
             <DialogDescription>
-              Add a WhatsApp support number. Use the international format
-              (e.g., +971501234567)
+              Add a WhatsApp support number. Use the international format (e.g.,
+              +971501234567)
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
@@ -294,10 +294,7 @@ export default function AdminWhatsAppSupport() {
             />
           </div>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setIsAddDialogOpen(false)}
-            >
+            <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
               Cancel
             </Button>
             <Button

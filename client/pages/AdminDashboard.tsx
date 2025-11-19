@@ -61,7 +61,8 @@ export default function AdminDashboard() {
         id: "companies",
         icon: <Building2 className="w-5 h-5" />,
         title: "Companies",
-        description: "Manage registered companies, track renewals, and handle refunds",
+        description:
+          "Manage registered companies, track renewals, and handle refunds",
         link: "/companies",
         buttonText: "Manage Companies",
         buttonColor: "bg-blue-600 hover:bg-blue-700 text-white",
@@ -106,7 +107,8 @@ export default function AdminDashboard() {
         id: "users",
         icon: <Users className="w-5 h-5" />,
         title: "Users Management",
-        description: "Manage user accounts, view login history, and handle suspensions",
+        description:
+          "Manage user accounts, view login history, and handle suspensions",
         link: "/admin/users",
         buttonText: "Manage Users",
         buttonColor: "bg-primary hover:bg-primary-600 text-white",
@@ -133,7 +135,8 @@ export default function AdminDashboard() {
         id: "fees",
         icon: <DollarSign className="w-5 h-5" />,
         title: "Fees Management",
-        description: "Create and manage checkout fees (taxes, service fees, etc.)",
+        description:
+          "Create and manage checkout fees (taxes, service fees, etc.)",
         link: "/admin/fees",
         buttonText: "Manage Fees",
         buttonColor: "bg-amber-600 hover:bg-amber-700 text-white",
@@ -142,7 +145,8 @@ export default function AdminDashboard() {
         id: "wallets",
         icon: <Wallet className="w-5 h-5" />,
         title: "Wallet Management",
-        description: "Manage user wallet balances, view transactions, and generate reports",
+        description:
+          "Manage user wallet balances, view transactions, and generate reports",
         link: "/admin/wallets",
         buttonText: "Manage Wallets",
         buttonColor: "bg-purple-600 hover:bg-purple-700 text-white",
@@ -161,7 +165,8 @@ export default function AdminDashboard() {
         id: "social",
         icon: <Share2 className="w-5 h-5" />,
         title: "Social Media Links",
-        description: "Manage social media links displayed in the website footer",
+        description:
+          "Manage social media links displayed in the website footer",
         link: "/admin/social-media",
         buttonText: "Manage Social Links",
         buttonColor: "bg-pink-600 hover:bg-pink-700 text-white",
@@ -170,7 +175,8 @@ export default function AdminDashboard() {
         id: "whatsapp",
         icon: <MessageCircle className="w-5 h-5" />,
         title: "WhatsApp Support",
-        description: "Manage customer support WhatsApp numbers and initial messages",
+        description:
+          "Manage customer support WhatsApp numbers and initial messages",
         link: "/admin/whatsapp-support",
         buttonText: "Manage WhatsApp",
         buttonColor: "bg-green-600 hover:bg-green-700 text-white",
@@ -291,7 +297,9 @@ export default function AdminDashboard() {
             <div className="bg-card border border-border/40 rounded-lg p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Suspended</p>
+                  <p className="text-sm text-muted-foreground mb-1">
+                    Suspended
+                  </p>
                   <p className="text-3xl font-bold text-orange-600">
                     {suspendedUsers}
                   </p>
@@ -359,7 +367,9 @@ export default function AdminDashboard() {
             </h3>
             <div className="space-y-3 text-sm">
               <div className="flex justify-between items-center py-2 border-b border-border/20">
-                <span className="text-muted-foreground">Total System Users</span>
+                <span className="text-muted-foreground">
+                  Total System Users
+                </span>
                 <span className="font-semibold text-foreground">
                   {totalUsers}
                 </span>
@@ -371,7 +381,9 @@ export default function AdminDashboard() {
                 </span>
               </div>
               <div className="flex justify-between items-center py-2 border-b border-border/20">
-                <span className="text-muted-foreground">Suspended Accounts</span>
+                <span className="text-muted-foreground">
+                  Suspended Accounts
+                </span>
                 <span className="font-semibold text-orange-600">
                   {suspendedUsers}
                 </span>
