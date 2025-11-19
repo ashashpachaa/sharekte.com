@@ -128,6 +128,14 @@ import {
   deductFromWalletHandler,
   getWalletReportHandler,
 } from "./routes/wallets";
+import {
+  getWhatsAppConfig,
+  getAllWhatsAppNumbers,
+  addWhatsAppNumber,
+  updateWhatsAppNumber,
+  deleteWhatsAppNumber,
+  updateWhatsAppMessage,
+} from "./routes/whatsapp-support";
 
 export function createServer() {
   console.log("[createServer] Initializing Express app");
