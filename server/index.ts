@@ -145,7 +145,6 @@ export function createServer() {
       "Cache-Control": "no-cache, no-store, must-revalidate, max-age=0",
       Pragma: "no-cache",
       Expires: "0",
-      "Clear-Site-Data": '"cache", "cookies", "storage"',
     });
     next();
   });
