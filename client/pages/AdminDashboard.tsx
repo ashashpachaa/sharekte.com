@@ -312,226 +312,42 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Companies Management */}
-          <div className="bg-card border border-border/40 rounded-lg p-6">
-            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Building2 className="w-5 h-5" />
-              Companies
-            </h3>
-            <p className="text-muted-foreground text-sm mb-4">
-              Manage registered companies, track renewals, and handle refunds
-            </p>
-            <Button
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-              asChild
-            >
-              <Link to="/companies">Manage Companies</Link>
-            </Button>
-          </div>
-
-          {/* Orders Management */}
-          <div className="bg-card border border-border/40 rounded-lg p-6">
-            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <ShoppingCart className="w-5 h-5" />
-              Orders
-            </h3>
-            <p className="text-muted-foreground text-sm mb-4">
-              Manage orders, handle refunds, and track transfer forms
-            </p>
-            <Button
-              className="w-full bg-purple-600 hover:bg-purple-700 text-white"
-              asChild
-            >
-              <Link to="/admin/orders">Manage Orders</Link>
-            </Button>
-          </div>
-
-          {/* Services Management */}
-          <div className="bg-card border border-border/40 rounded-lg p-6">
-            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Package className="w-5 h-5" />
-              Services Marketplace
-            </h3>
-            <p className="text-muted-foreground text-sm mb-4">
-              Create and manage services with custom application forms
-            </p>
-            <Button
-              className="w-full bg-amber-600 hover:bg-amber-700 text-white"
-              asChild
-            >
-              <Link to="/admin/services">Manage Services</Link>
-            </Button>
-          </div>
-
-          {/* Coupons Management */}
-          <div className="bg-card border border-border/40 rounded-lg p-6">
-            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <DollarSign className="w-5 h-5" />
-              Discount Coupons
-            </h3>
-            <p className="text-muted-foreground text-sm mb-4">
-              Create and manage discount codes for promotions
-            </p>
-            <Button
-              className="w-full bg-violet-600 hover:bg-violet-700 text-white"
-              asChild
-            >
-              <Link to="/admin/coupons">Manage Coupons</Link>
-            </Button>
-          </div>
-
-          {/* Invoices Management */}
-          <div className="bg-card border border-border/40 rounded-lg p-6">
-            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <FileText className="w-5 h-5" />
-              Invoices
-            </h3>
-            <p className="text-muted-foreground text-sm mb-4">
-              Generate, manage, and send invoices to clients
-            </p>
-            <Button
-              className="w-full bg-green-600 hover:bg-green-700 text-white"
-              asChild
-            >
-              <Link to="/admin/invoices">Manage Invoices</Link>
-            </Button>
-          </div>
-
-          {/* Users Management */}
-          <div className="bg-card border border-border/40 rounded-lg p-6">
-            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Users className="w-5 h-5" />
-              Users Management
-            </h3>
-            <p className="text-muted-foreground text-sm mb-4">
-              Manage user accounts, view login history, and handle suspensions
-            </p>
-            <Button
-              className="w-full bg-primary hover:bg-primary-600 text-white"
-              asChild
-            >
-              <Link to="/admin/users">Manage Users</Link>
-            </Button>
-          </div>
-
-          {/* Roles Management */}
-          <div className="bg-card border border-border/40 rounded-lg p-6">
-            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Shield className="w-5 h-5" />
-              Roles Management
-            </h3>
-            <p className="text-muted-foreground text-sm mb-4">
-              Create custom roles and assign permissions to users
-            </p>
-            <Button
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
-              asChild
-            >
-              <Link to="/admin/roles">Manage Roles</Link>
-            </Button>
-          </div>
-
-          {/* Email Templates */}
-          <div className="bg-card border border-border/40 rounded-lg p-6">
-            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Mail className="w-5 h-5" />
-              Email Templates
-            </h3>
-            <p className="text-muted-foreground text-sm mb-4">
-              Manage and preview all system email templates
-            </p>
-            <Button
-              className="w-full bg-cyan-600 hover:bg-cyan-700 text-white"
-              asChild
-            >
-              <Link to="/admin/email-templates">Manage Templates</Link>
-            </Button>
-          </div>
-
-          {/* Fees Management */}
-          <div className="bg-card border border-border/40 rounded-lg p-6">
-            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <DollarSign className="w-5 h-5" />
-              Fees Management
-            </h3>
-            <p className="text-muted-foreground text-sm mb-4">
-              Create and manage checkout fees (taxes, service fees, etc.)
-            </p>
-            <Button
-              className="w-full bg-amber-600 hover:bg-amber-700 text-white"
-              asChild
-            >
-              <Link to="/admin/fees">Manage Fees</Link>
-            </Button>
-          </div>
-
-          {/* Wallet Management */}
-          <div className="bg-card border border-border/40 rounded-lg p-6">
-            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Wallet className="w-5 h-5" />
-              Wallet Management
-            </h3>
-            <p className="text-muted-foreground text-sm mb-4">
-              Manage user wallet balances, view transactions, and generate
-              reports
-            </p>
-            <Button
-              className="w-full bg-purple-600 hover:bg-purple-700 text-white"
-              asChild
-            >
-              <Link to="/admin/wallets">Manage Wallets</Link>
-            </Button>
-          </div>
-
-          {/* System Settings */}
-          <div className="bg-card border border-border/40 rounded-lg p-6">
-            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Settings className="w-5 h-5" />
-              Admin Settings
-            </h3>
-            <p className="text-muted-foreground text-sm mb-4">
-              Configure admin accounts and system preferences
-            </p>
-            <Button variant="outline" className="w-full" asChild>
-              <Link to="/admin/settings">Go to Settings</Link>
-            </Button>
-          </div>
-
-          {/* Social Media Links */}
-          <div className="bg-card border border-border/40 rounded-lg p-6">
-            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Share2 className="w-5 h-5" />
-              Social Media Links
-            </h3>
-            <p className="text-muted-foreground text-sm mb-4">
-              Manage social media links displayed in the website footer
-            </p>
-            <Button
-              className="w-full bg-pink-600 hover:bg-pink-700 text-white"
-              asChild
-            >
-              <Link to="/admin/social-media">Manage Social Links</Link>
-            </Button>
-          </div>
-
-          {/* WhatsApp Support */}
-          <div className="bg-card border border-border/40 rounded-lg p-6">
-            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
-              <MessageCircle className="w-5 h-5" />
-              WhatsApp Support
-            </h3>
-            <p className="text-muted-foreground text-sm mb-4">
-              Manage customer support WhatsApp numbers and initial messages
-            </p>
-            <Button
-              className="w-full bg-green-600 hover:bg-green-700 text-white"
-              asChild
-            >
-              <Link to="/admin/whatsapp-support">Manage WhatsApp</Link>
-            </Button>
-          </div>
+        {/* Admin Options Grid */}
+        <div>
+          {filteredCards.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {filteredCards.map((card) => (
+                <div
+                  key={card.id}
+                  className="bg-card border border-border/40 rounded-lg p-6 hover:shadow-md transition-shadow"
+                >
+                  <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+                    {card.icon}
+                    {card.title}
+                  </h3>
+                  <p className="text-muted-foreground text-sm mb-4">
+                    {card.description}
+                  </p>
+                  <Button
+                    className={`w-full text-white ${
+                      card.id === "settings" ? "border-2" : ""
+                    } ${card.buttonColor}`}
+                    variant={card.id === "settings" ? "outline" : "default"}
+                    asChild
+                  >
+                    <Link to={card.link}>{card.buttonText}</Link>
+                  </Button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="bg-card border border-border/40 rounded-lg p-12 text-center">
+              <p className="text-muted-foreground mb-2">No options found</p>
+              <p className="text-sm text-muted-foreground">
+                Try adjusting your search query
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Recent Activity */}
