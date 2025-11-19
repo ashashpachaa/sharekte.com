@@ -348,6 +348,23 @@ export default function AdminDashboard() {
               <Link to="/admin/social-media">Manage Social Links</Link>
             </Button>
           </div>
+
+          {/* WhatsApp Support */}
+          <div className="bg-card border border-border/40 rounded-lg p-6">
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <MessageCircle className="w-5 h-5" />
+              WhatsApp Support
+            </h3>
+            <p className="text-muted-foreground text-sm mb-4">
+              Manage customer support WhatsApp numbers and initial messages
+            </p>
+            <Button
+              className="w-full bg-green-600 hover:bg-green-700 text-white"
+              asChild
+            >
+              <Link to="/admin/whatsapp-support">Manage WhatsApp</Link>
+            </Button>
+          </div>
         </div>
 
         {/* Recent Activity */}
