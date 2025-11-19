@@ -31,6 +31,7 @@ import AdminRoles from "./pages/AdminRoles";
 import { AdminFees } from "./pages/AdminFees";
 import AdminSocialMedia from "./pages/AdminSocialMedia";
 import AdminWallets from "./pages/AdminWallets";
+import AdminWhatsAppSupport from "./pages/AdminWhatsAppSupport";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import NotFound from "./pages/NotFound";
