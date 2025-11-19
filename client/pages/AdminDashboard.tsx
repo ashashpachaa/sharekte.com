@@ -225,9 +225,29 @@ export default function AdminDashboard() {
           <h2 className="text-3xl font-bold text-foreground mb-2">
             Welcome back, Admin!
           </h2>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground mb-6">
             Manage users, monitor system health, and handle administrative tasks
           </p>
+
+          {/* Search Bar */}
+          <div className="relative max-w-md mb-8">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Search options..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 py-2 h-10"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              >
+                ✕
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Stats Grid */}
