@@ -983,6 +983,76 @@ export default function Support() {
         </section>
       </main>
 
+      {/* Topic Details Modal */}
+      <Dialog open={!!selectedTopic} onOpenChange={() => setSelectedTopic(null)}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">
+              {selectedTopic?.topic}
+            </DialogTitle>
+            <DialogDescription className="text-base mt-2">
+              Detailed information about this topic
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            {selectedTopic?.content.map((paragraph, idx) => (
+              <p key={idx} className="text-sm text-foreground leading-relaxed">
+                {paragraph}
+              </p>
+            ))}
+            {selectedTopic?.faqs && selectedTopic.faqs.length > 0 && (
+              <div className="mt-6 pt-6 border-t border-border/40">
+                <h4 className="font-semibold text-foreground mb-4">
+                  Frequently Asked Questions
+                </h4>
+                <div className="space-y-4">
+                  {selectedTopic.faqs.map((faq, idx) => (
+                    <div key={idx}>
+                      <p className="font-medium text-foreground mb-2">
+                        {faq.question}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {faq.answer}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Resource Details Modal */}
+      <Dialog
+        open={!!selectedResource}
+        onOpenChange={() => setSelectedResource(null)}
+      >
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">
+              {selectedResource?.title}
+            </DialogTitle>
+            <DialogDescription className="text-base mt-2">
+              {selectedResource?.description}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            {selectedResource?.content?.map((paragraph, idx) => (
+              <p key={idx} className="text-sm text-foreground leading-relaxed">
+                {paragraph}
+              </p>
+            ))}
+            <div className="mt-6 pt-6 border-t border-border/40">
+              <Button className="w-full bg-primary hover:bg-primary-600 gap-2">
+                <Download className="w-4 h-4" />
+                Download {selectedResource?.type}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <Footer />
     </div>
   );
