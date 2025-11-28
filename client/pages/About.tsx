@@ -61,9 +61,8 @@ export default function About() {
                 </h3>
                 <p className="text-muted-foreground leading-relaxed">
                   To democratize business ownership by providing a secure,
-                  transparent, and professional platform where entrepreneurs
-                  can confidently buy and sell established businesses
-                  worldwide.
+                  transparent, and professional platform where entrepreneurs can
+                  confidently buy and sell established businesses worldwide.
                 </p>
               </div>
 
