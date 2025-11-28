@@ -400,6 +400,64 @@
       "button": "Start Your Sharekte Journey"
     }
   },
+  "features": {
+    "badge": "Why Choose Us",
+    "title": "Professional Features Built for Success",
+    "subtitle": "We provide everything you need to buy or sell established businesses with confidence, security, and professional support at every step",
+    "verified": {
+      "title": "Verified Sellers & Buyers",
+      "description": "All participants are thoroughly verified to ensure trust and credibility in every transaction"
+    },
+    "secure": {
+      "title": "Secure Transactions",
+      "description": "Advanced encryption and escrow services protect your investment and ensure safe transactions"
+    },
+    "global": {
+      "title": "Global Marketplace",
+      "description": "Buy and sell established businesses worldwide with support for multiple currencies and payment methods"
+    },
+    "support": {
+      "title": "24/7 Professional Support",
+      "description": "Direct WhatsApp support, expert consultations, and dedicated account managers for every deal"
+    },
+    "legal": {
+      "title": "Legal Documentation",
+      "description": "Automated transfer forms, legal compliance, and professional documentation for all transactions"
+    },
+    "fast": {
+      "title": "Fast & Efficient Process",
+      "description": "Complete business transfers in days, not months, with streamlined workflows and automated processes"
+    },
+    "analytics": {
+      "title": "Advanced Analytics",
+      "description": "Real-time dashboards, performance metrics, and business insights for informed decisions"
+    },
+    "trusted": {
+      "title": "Industry Trusted",
+      "description": "Thousands of successful transactions with verified businesses generating real revenue"
+    },
+    "escrow": {
+      "title": "Transparent Escrow Service",
+      "description": "Protected fund handling ensures both parties feel secure throughout the transaction"
+    },
+    "verified_business": {
+      "title": "Revenue-Verified Businesses",
+      "description": "All businesses are verified for active operations and genuine revenue streams"
+    },
+    "consultation": {
+      "title": "Expert Consultation",
+      "description": "Free consultations with business experts to guide you through the entire acquisition process"
+    },
+    "handover": {
+      "title": "Complete Handover Support",
+      "description": "Full transition support from purchase to operational handover ensures business continuity"
+    },
+    "cta": {
+      "text": "Join thousands of successful entrepreneurs who have found their ideal business",
+      "browse": "Start Browsing Businesses",
+      "contact": "Get Professional Consultation"
+    }
+  },
   "table": {
     "companyName": "Company Name",
     "country": "Country",
