@@ -26,16 +26,14 @@ export function FeaturesSection() {
   const features: Feature[] = [
     {
       icon: <Shield className="w-8 h-8" />,
-      title:
-        t("features.verified.title") || "Verified Sellers & Buyers",
+      title: t("features.verified.title") || "Verified Sellers & Buyers",
       description:
         t("features.verified.description") ||
         "All participants are thoroughly verified to ensure trust and credibility in every transaction",
     },
     {
       icon: <Lock className="w-8 h-8" />,
-      title:
-        t("features.secure.title") || "Secure Transactions",
+      title: t("features.secure.title") || "Secure Transactions",
       description:
         t("features.secure.description") ||
         "Advanced encryption and escrow services protect your investment and ensure safe transactions",
@@ -49,48 +47,42 @@ export function FeaturesSection() {
     },
     {
       icon: <Headphones className="w-8 h-8" />,
-      title:
-        t("features.support.title") || "24/7 Professional Support",
+      title: t("features.support.title") || "24/7 Professional Support",
       description:
         t("features.support.description") ||
         "Direct WhatsApp support, expert consultations, and dedicated account managers for every deal",
     },
     {
       icon: <FileCheck className="w-8 h-8" />,
-      title:
-        t("features.legal.title") || "Legal Documentation",
+      title: t("features.legal.title") || "Legal Documentation",
       description:
         t("features.legal.description") ||
         "Automated transfer forms, legal compliance, and professional documentation for all transactions",
     },
     {
       icon: <Zap className="w-8 h-8" />,
-      title:
-        t("features.fast.title") || "Fast & Efficient Process",
+      title: t("features.fast.title") || "Fast & Efficient Process",
       description:
         t("features.fast.description") ||
         "Complete business transfers in days, not months, with streamlined workflows and automated processes",
     },
     {
       icon: <TrendingUp className="w-8 h-8" />,
-      title:
-        t("features.analytics.title") || "Advanced Analytics",
+      title: t("features.analytics.title") || "Advanced Analytics",
       description:
         t("features.analytics.description") ||
         "Real-time dashboards, performance metrics, and business insights for informed decisions",
     },
     {
       icon: <Award className="w-8 h-8" />,
-      title:
-        t("features.trusted.title") || "Industry Trusted",
+      title: t("features.trusted.title") || "Industry Trusted",
       description:
         t("features.trusted.description") ||
         "Thousands of successful transactions with verified businesses generating real revenue",
     },
     {
       icon: <Clock className="w-8 h-8" />,
-      title:
-        t("features.escrow.title") || "Transparent Escrow Service",
+      title: t("features.escrow.title") || "Transparent Escrow Service",
       description:
         t("features.escrow.description") ||
         "Protected fund handling ensures both parties feel secure throughout the transaction",
@@ -105,16 +97,14 @@ export function FeaturesSection() {
     },
     {
       icon: <Users className="w-8 h-8" />,
-      title:
-        t("features.consultation.title") || "Expert Consultation",
+      title: t("features.consultation.title") || "Expert Consultation",
       description:
         t("features.consultation.description") ||
         "Free consultations with business experts to guide you through the entire acquisition process",
     },
     {
       icon: <Briefcase className="w-8 h-8" />,
-      title:
-        t("features.handover.title") || "Complete Handover Support",
+      title: t("features.handover.title") || "Complete Handover Support",
       description:
         t("features.handover.description") ||
         "Full transition support from purchase to operational handover ensures business continuity",
@@ -122,7 +112,10 @@ export function FeaturesSection() {
   ];
 
   return (
-    <section id="features" className="py-24 md:py-32 bg-gradient-to-b from-background via-primary/2 to-background">
+    <section
+      id="features"
+      className="py-24 md:py-32 bg-gradient-to-b from-background via-primary/2 to-background"
+    >
       <div className="container max-w-7xl mx-auto px-4">
         {/* Section Header */}
         <div className="text-center space-y-6 mb-20">
@@ -132,8 +125,7 @@ export function FeaturesSection() {
             </p>
           </div>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground">
-            {t("features.title") ||
-              "Professional Features Built for Success"}
+            {t("features.title") || "Professional Features Built for Success"}
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             {t("features.subtitle") ||
