@@ -167,11 +167,13 @@ export default function Support() {
       faqs: [
         {
           question: "What if I make a mistake on the form?",
-          answer: "Submit a corrected form with a note explaining the changes. Our support team will assist in processing amendments.",
+          answer:
+            "Submit a corrected form with a note explaining the changes. Our support team will assist in processing amendments.",
         },
         {
           question: "How long does the transfer process take?",
-          answer: "Typically 7-14 business days after submission of all required documents.",
+          answer:
+            "Typically 7-14 business days after submission of all required documents.",
         },
       ],
     },
@@ -683,7 +685,9 @@ export default function Support() {
                           }}
                         >
                           <ChevronRight className="w-4 h-4 text-primary mt-0.5 flex-shrink-0 group-hover:translate-x-0.5 transition-transform" />
-                          <span className="group-hover:underline">{topicName}</span>
+                          <span className="group-hover:underline">
+                            {topicName}
+                          </span>
                         </li>
                       ))}
                     </ul>
@@ -984,7 +988,10 @@ export default function Support() {
       </main>
 
       {/* Topic Details Modal */}
-      <Dialog open={!!selectedTopic} onOpenChange={() => setSelectedTopic(null)}>
+      <Dialog
+        open={!!selectedTopic}
+        onOpenChange={() => setSelectedTopic(null)}
+      >
         <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-2xl">
