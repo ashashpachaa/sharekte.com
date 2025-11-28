@@ -1,8 +1,13 @@
 import { RequestHandler } from "express";
 
-// Admin credentials (in production, this should be in a database with hashed passwords)
-const ADMIN_EMAIL = "admin@sharekte.com";
-const ADMIN_PASSWORD = "Ash@shpachaa2010";
+// Admin credentials from environment variables (MUST be set in production)
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@sharekte.com";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "ChangeMe@2025";
+
+// Log warning if using default credentials
+if (process.env.NODE_ENV === "production" && (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD)) {
+  console.warn("[WARNING] Using default admin credentials. Set ADMIN_EMAIL and ADMIN_PASSWORD environment variables in production.");
+}
 
 // Simple JWT-like token generation (in production, use proper JWT)
 function generateToken(email: string): string {

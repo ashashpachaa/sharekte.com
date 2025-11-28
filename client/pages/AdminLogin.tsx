@@ -105,16 +105,6 @@ export default function AdminLogin() {
             </Button>
           </form>
 
-          {/* Demo Credentials Info */}
-          <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-sm text-blue-900 font-medium mb-2">
-              Demo Admin Credentials:
-            </p>
-            <div className="text-xs text-blue-800 space-y-1 font-mono">
-              <p>Email: admin@sharekte.com</p>
-              <p>Password: Ash@shpachaa2010</p>
-            </div>
-          </div>
         </div>
 
         {/* Footer */}
