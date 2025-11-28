@@ -196,27 +196,6 @@ export default function Index() {
     }
   };
 
-  // Handle hash navigation for anchor links
-  useEffect(() => {
-    const handleHashNavigation = () => {
-      const hash = window.location.hash.substring(1);
-      if (hash) {
-        setTimeout(() => {
-          const element = document.getElementById(hash);
-          if (element) {
-            element.scrollIntoView({ behavior: "smooth" });
-          }
-        }, 100);
-      }
-    };
-
-    handleHashNavigation();
-    window.addEventListener("hashchange", handleHashNavigation);
-    return () => {
-      window.removeEventListener("hashchange", handleHashNavigation);
-    };
-  }, []);
-
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
