@@ -12,8 +12,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { useSEO, getPageSEOMetadata } from "@/lib/seo";
+import { useState } from "react";
 import {
   Building2,
   DollarSign,
@@ -27,6 +35,7 @@ import {
   Loader2,
   Search,
   X as CloseIcon,
+  Download,
 } from "lucide-react";
 
 interface SupportCategory {
@@ -37,10 +46,19 @@ interface SupportCategory {
   color: string;
 }
 
+interface TopicDetail {
+  categoryId: string;
+  topic: string;
+  content: string[];
+  faqs?: Array<{ question: string; answer: string }>;
+}
+
 interface Resource {
   title: string;
   description: string;
   type: string;
+  content?: string[];
+  downloadUrl?: string;
 }
 
 export default function Support() {
