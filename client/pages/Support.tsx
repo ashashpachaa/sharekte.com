@@ -954,10 +954,10 @@ export default function Support() {
                   );
                 })
                 .map((resource, idx) => (
-                  <a
+                  <button
                     key={idx}
-                    href="#"
-                    className="border border-border/40 rounded-lg p-6 hover:shadow-lg hover:border-primary/50 transition-all duration-200 group"
+                    onClick={() => setSelectedResource(resource)}
+                    className="border border-border/40 rounded-lg p-6 hover:shadow-lg hover:border-primary/50 transition-all duration-200 group text-left"
                   >
                     <div className="flex items-start justify-between mb-4">
                       <FileText className="w-6 h-6 text-primary" />
@@ -972,9 +972,11 @@ export default function Support() {
                       {resource.description}
                     </p>
                     <div className="flex items-center text-primary text-sm font-medium group-hover:gap-2 transition-all">
-                      Download <ChevronRight className="w-4 h-4 ml-1" />
+                      <Download className="w-4 h-4" />
+                      View Details
+                      <ChevronRight className="w-4 h-4 ml-auto" />
                     </div>
-                  </a>
+                  </button>
                 ))}
             </div>
           </div>
