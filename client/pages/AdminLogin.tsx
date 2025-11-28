@@ -104,7 +104,6 @@ export default function AdminLogin() {
               {loading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
-
         </div>
 
         {/* Footer */}

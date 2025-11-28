@@ -31,10 +31,7 @@ if (users.length === 0 && process.env.ENABLE_DEMO_USER === "true") {
     },
   ];
   saveUsersToFile(users);
-  console.log(
-    "[init] ✓ Initialized with demo user:",
-    demoEmail,
-  );
+  console.log("[init] ✓ Initialized with demo user:", demoEmail);
 }
 
 interface TokenEntry {

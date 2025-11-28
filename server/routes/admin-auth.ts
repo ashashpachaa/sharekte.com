@@ -5,8 +5,13 @@ const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@sharekte.com";
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "ChangeMe@2025";
 
 // Log warning if using default credentials
-if (process.env.NODE_ENV === "production" && (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD)) {
-  console.warn("[WARNING] Using default admin credentials. Set ADMIN_EMAIL and ADMIN_PASSWORD environment variables in production.");
+if (
+  process.env.NODE_ENV === "production" &&
+  (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD)
+) {
+  console.warn(
+    "[WARNING] Using default admin credentials. Set ADMIN_EMAIL and ADMIN_PASSWORD environment variables in production.",
+  );
 }
 
 // Simple JWT-like token generation (in production, use proper JWT)
