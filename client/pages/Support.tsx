@@ -669,13 +669,21 @@ export default function Support() {
                     </h3>
 
                     <ul className="space-y-2 mb-4">
-                      {category.topics.map((topic, idx) => (
+                      {category.topics.map((topicName, idx) => (
                         <li
                           key={idx}
-                          className="text-sm text-muted-foreground flex items-start gap-2"
+                          className="text-sm text-muted-foreground flex items-start gap-2 cursor-pointer group hover:text-primary transition-colors"
+                          onClick={() => {
+                            const topic = topicDetails.find(
+                              (t) =>
+                                t.categoryId === category.id &&
+                                t.topic === topicName,
+                            );
+                            if (topic) setSelectedTopic(topic);
+                          }}
                         >
-                          <ChevronRight className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                          <span>{topic}</span>
+                          <ChevronRight className="w-4 h-4 text-primary mt-0.5 flex-shrink-0 group-hover:translate-x-0.5 transition-transform" />
+                          <span className="group-hover:underline">{topicName}</span>
                         </li>
                       ))}
                     </ul>
@@ -683,14 +691,12 @@ export default function Support() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="w-full justify-start text-primary hover:text-primary hover:bg-primary/10"
+                      className="w-full justify-start text-primary hover:text-primary hover:bg-primary/10 mt-2"
                       onClick={() => {
-                        const topic = topicDetails.find(
-                          (t) =>
-                            t.categoryId === category.id &&
-                            t.topic === topic_name,
+                        const firstTopic = topicDetails.find(
+                          (t) => t.categoryId === category.id,
                         );
-                        if (topic) setSelectedTopic(topic);
+                        if (firstTopic) setSelectedTopic(firstTopic);
                       }}
                     >
                       Learn More
