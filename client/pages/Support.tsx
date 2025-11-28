@@ -684,6 +684,14 @@ export default function Support() {
                       variant="ghost"
                       size="sm"
                       className="w-full justify-start text-primary hover:text-primary hover:bg-primary/10"
+                      onClick={() => {
+                        const topic = topicDetails.find(
+                          (t) =>
+                            t.categoryId === category.id &&
+                            t.topic === topic_name,
+                        );
+                        if (topic) setSelectedTopic(topic);
+                      }}
                     >
                       Learn More
                       <ChevronRight className="w-4 h-4 ml-auto" />
