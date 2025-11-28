@@ -69,6 +69,7 @@ export default function App() {
                           }
                         />
                         <Route path="/support" element={<Support />} />
+                        <Route path="/about" element={<About />} />
                         <Route path="/companies" element={<Companies />} />
                         <Route
                           path="/privacy-policy"
