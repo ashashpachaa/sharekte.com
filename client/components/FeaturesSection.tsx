@@ -122,7 +122,7 @@ export function FeaturesSection() {
   ];
 
   return (
-    <section className="py-24 md:py-32 bg-gradient-to-b from-background via-primary/2 to-background">
+    <section id="features" className="py-24 md:py-32 bg-gradient-to-b from-background via-primary/2 to-background">
       <div className="container max-w-7xl mx-auto px-4">
         {/* Section Header */}
         <div className="text-center space-y-6 mb-20">
