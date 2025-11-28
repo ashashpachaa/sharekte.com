@@ -257,6 +257,9 @@ export default function Index() {
           <FeaturedCompaniesSection t={t} />
         </div>
 
+        {/* Professional Features Section */}
+        <FeaturesSection />
+
         {/* Why Buy Ready Made Company Section */}
         <WhyBuyReadyMade />
 
