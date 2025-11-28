@@ -34,6 +34,7 @@ import AdminWallets from "./pages/AdminWallets";
 import AdminWhatsAppSupport from "./pages/AdminWhatsAppSupport";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsAndConditions from "./pages/TermsAndConditions";
+import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 import { ProtectedAdminRoute } from "./components/ProtectedAdminRoute";
 import { ProtectedRoute } from "./components/ProtectedRoute";
