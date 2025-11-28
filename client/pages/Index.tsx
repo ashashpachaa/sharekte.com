@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { WhyBuyReadyMade } from "@/components/WhyBuyReadyMade";
-import { FeaturesSection } from "@/components/FeaturesSection";
 import { CompanyTable } from "@/components/CompanyTable";
 import { useMemo, useState, useEffect, useRef } from "react";
 import { useSEO, getPageSEOMetadata } from "@/lib/seo";
@@ -277,9 +276,6 @@ export default function Index() {
         <div ref={featuredSectionRef}>
           <FeaturedCompaniesSection t={t} />
         </div>
-
-        {/* Professional Features Section */}
-        <FeaturesSection />
 
         {/* Why Buy Ready Made Company Section */}
         <WhyBuyReadyMade />
