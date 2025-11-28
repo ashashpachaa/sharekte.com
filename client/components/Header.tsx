@@ -46,6 +46,18 @@ export function Header() {
           >
             {t("header.home")}
           </Link>
+          <a
+            href="#features"
+            className="text-foreground hover:text-primary transition-colors truncate"
+          >
+            Features
+          </a>
+          <Link
+            to="/about"
+            className="text-foreground hover:text-primary transition-colors truncate"
+          >
+            About Us
+          </Link>
           <Link
             to="/support"
             className="text-foreground hover:text-primary transition-colors truncate"
