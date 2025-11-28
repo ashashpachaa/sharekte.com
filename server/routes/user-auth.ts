@@ -16,20 +16,24 @@ const TOKENS_FILE = path.join(process.cwd(), "tokens.json");
 
 let users: User[] = loadUsersFromFile();
 
-// Initialize with demo user if no users exist
-if (users.length === 0) {
+// Initialize with demo user if no users exist and demo mode is enabled
+if (users.length === 0 && process.env.ENABLE_DEMO_USER === "true") {
+  const demoEmail = process.env.DEMO_USER_EMAIL || "company@domainostartup.com";
+  const demoPassword = process.env.DEMO_USER_PASSWORD || "DemoPassword@2025";
+
   users = [
     {
       id: "demo_user_1",
-      email: "company@domainostartup.com",
+      email: demoEmail,
       name: "Company",
-      password: "Ash@shpachaa2010",
+      password: demoPassword,
       createdAt: new Date().toISOString(),
     },
   ];
   saveUsersToFile(users);
   console.log(
-    "[init] ✓ Initialized with demo user: company@domainostartup.com",
+    "[init] ✓ Initialized with demo user:",
+    demoEmail,
   );
 }
 
