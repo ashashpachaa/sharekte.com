@@ -617,5 +617,138 @@
     "all": "All",
     "none": "None",
     "other": "Other"
+  },
+  "support": {
+    "title": "Support Center",
+    "subtitle": "Welcome to Sharekte Support. Our team is here to help you with company transfers, renewals, document authentication, and technical inquiries.",
+    "browseTopics": "Browse Help Topics",
+    "helpfulResources": "Helpful Resources",
+    "learnMore": "Learn More",
+    "viewDetails": "View Details",
+    "download": "Download",
+    "topics": {
+      "transfers": {
+        "title": "Company Transfers & Ownership",
+        "fillForm": {
+          "title": "How to fill out the transfer form",
+          "content": "The transfer form is the official document required to change company ownership. Follow these steps: 1. Download the transfer form from our Resources section, 2. Enter the current owner's details accurately, 3. Fill in the new owner's information, 4. Provide company number and incorporation date, 5. Ensure all signatures are witnessed, 6. Submit with required supporting documents. Tips: Double-check spelling of names, ensure dates are in correct format, keep copies for your records."
+        },
+        "statuses": {
+          "title": "Understanding company statuses",
+          "content": "Companies have different statuses based on their legal standing: Active - Company is in good standing and operating normally, Dormant - Company exists but has no business activity, Strike Off - Company is being removed from register (irreversible), Dissolved - Company no longer exists legally, In Liquidation - Company is being wound down. Your company status affects transfer eligibility and fees. Active companies are easiest to transfer."
+        },
+        "documents": {
+          "title": "Required documents for ownership transfer",
+          "content": "To complete an ownership transfer, you'll need: Transfer Form (signed and witnessed), ID verification of both buyer and seller, Company incorporation certificate, Confirmation statement (latest accounts), Directors' and shareholders' consent, Proof of address (for both parties), Articles of Association or similar documents. All documents must be certified copies or officially notarized."
+        }
+      },
+      "payments": {
+        "title": "Payments & Renewals",
+        "renew": {
+          "title": "How to renew your company",
+          "content": "Company renewal ensures your business remains active and compliant: 1. Log into your Sharekte account dashboard, 2. Navigate to 'My Companies' section, 3. Select the company you want to renew, 4. Click 'Renew Company' button, 5. Review the renewal fees and terms, 6. Complete payment through our secure checkout, 7. Receive confirmation and updated documentation. Renewal is required annually to maintain active status."
+        },
+        "fees": {
+          "title": "Understanding renewal fees",
+          "content": "Renewal fees cover filing, administration, and regulatory compliance: Base renewal fee £150-300 depending on company type, Express renewal (24-48 hours) Additional £50 fee, Document fees £20-50 per additional document, Apostille/POA services £40-80 per document, Multi-year renewal discounts available, Payment can be made via credit card, bank transfer, or PayPal."
+        },
+        "refunds": {
+          "title": "Refunds & cancellation policy",
+          "content": "Our refund policy ensures fair treatment: Cancellations within 7 days - Full refund minus £20 processing fee, After 7 days - 50% refund if work hasn't started, After work begins - Non-refundable, Service credits available as alternative to refunds, Contact support@sharekte.com to request refunds with order number."
+        }
+      },
+      "documents": {
+        "title": "Documents & Apostille",
+        "apostille": {
+          "title": "How to request Apostille or POA",
+          "content": "Apostille and Power of Attorney documents are used internationally: Apostille - Certificate authenticating the origin of documents, POA - Legal authorization to act on behalf of someone else. To request: 1. Select 'Request Apostille/POA' from your dashboard, 2. Choose document type and required copies, 3. Verify recipient country and requirements, 4. Complete payment (£40-80 per document), 5. Submit through our system, 6. Receive authenticated documents via courier (5-7 business days)"
+        },
+        "delivery": {
+          "title": "Delivery time for documents",
+          "content": "Standard delivery timeline: Standard Processing 7-10 business days, Express Processing 3-5 business days (£50 extra), Next Day Delivery Available in UK only (£75 extra), International Courier 10-15 business days. Processing begins after payment and document submission. You'll receive tracking information via email."
+        },
+        "certified": {
+          "title": "Certified copies and notarizations",
+          "content": "Certified copies are legally accepted reproductions of originals: What we certify - Company documents, incorporation certificates, accounts. Notarization - Official verification by authorized notary. £20-30 per certified copy. Requirements - Original document, identification, payment. All certified copies include our official seal and certificate of authenticity."
+        }
+      },
+      "invoices": {
+        "title": "Invoices & Orders",
+        "download": {
+          "title": "How to download invoices",
+          "content": "Access your invoices anytime from the dashboard: 1. Log into your Sharekte account, 2. Go to 'Invoices & Billing' section, 3. View all transactions and invoices, 4. Click 'Download' or 'View PDF' for any invoice, 5. Invoices can be downloaded in PDF format, 6. Keep for your accounting records. Invoices are available for download within 2 hours of payment."
+        },
+        "status": {
+          "title": "Checking order status",
+          "content": "Track your orders in real-time: 1. Visit your dashboard 'Active Orders' section, 2. View detailed timeline of each order, 3. See current status and next steps, 4. Receive email notifications for status changes. Status types - Pending, Processing, Completed, On Hold, Cancelled. Estimated completion dates are provided at order creation."
+        },
+        "edit": {
+          "title": "Editing order details before submission",
+          "content": "You can edit order details while in 'Pending' status: 1. Find the order in your dashboard, 2. Click 'Edit' if status is 'Pending', 3. Modify required information, 4. Review changes before submitting. Once submitted to processing, edits require contacting support. Some details cannot be changed after payment."
+        }
+      },
+      "account": {
+        "title": "Account & Security",
+        "updateDetails": {
+          "title": "Updating personal details",
+          "content": "Keep your account information current: 1. Click your profile icon in top right, 2. Select 'Account Settings', 3. Update name, email, phone number, 4. Change address information, 5. Verify changes via email confirmation, 6. Save changes. Changes take effect immediately for new orders."
+        },
+        "resetPassword": {
+          "title": "Resetting password",
+          "content": "Secure password reset process: 1. Go to login page and click 'Forgot Password', 2. Enter your email address, 3. Check your email for reset link (expires in 1 hour), 4. Click the link and create new password, 5. Must be at least 8 characters with uppercase, lowercase, and number, 6. Login with new password. For security, never share your password with anyone."
+        },
+        "security": {
+          "title": "Login security and two-factor authentication",
+          "content": "Protect your account with two-factor authentication (2FA): 1. Go to Security Settings in Account, 2. Enable 'Two-Factor Authentication', 3. Choose authentication method SMS or Authenticator App, 4. Verify by entering code, 5. Save backup codes in secure location. With 2FA enabled - Login with password + verification code. Highly recommended for accounts with payment methods."
+        }
+      },
+      "faqs": {
+        "title": "General FAQs",
+        "rightOfUse": {
+          "title": "What is Right of Use?",
+          "content": "Right of Use (RoU) is an accounting concept for assets and leases: Applies to assets under IFRS 16 and ASC 842 standards, Companies must recognize lease assets on balance sheet, Affects financial reporting and creditor requirements, Primarily important for larger companies and financial institutions. Consult your accountant for specific requirements."
+        },
+        "shareholders": {
+          "title": "Can I change shareholders later?",
+          "content": "Yes, shareholders can be changed at any time: File Form SH01 (Notification of change in shareholders), Requires consent of existing shareholders, New shareholder must be identified (individual or corporate), Processing fee £30-50, Takes 1-2 weeks after submission. Required annual accounts must be up to date."
+        },
+        "noRenew": {
+          "title": "What happens if I don't renew?",
+          "content": "Non-renewal has serious consequences: First 3 months - Company enters 'Overdue' status, Next 6 months - Company can be struck off register, After strike-off - Company legally dissolved, Cannot trade or operate once struck off, Reactivation costs more and requires additional documents. Avoid these issues by renewing annually."
+        }
+      }
+    },
+    "resources": {
+      "transferGuide": {
+        "title": "Company Transfer Form Guide",
+        "description": "Complete guide for filling out the transfer form",
+        "content": "This comprehensive guide covers every step of the company transfer process. Sections included: Introduction to company transfers, Step-by-step form completion instructions, Document requirements checklist, Common mistakes to avoid, Timeline and costs, FAQ section. Download this guide to keep for reference during your transfer."
+      },
+      "apostilleGuide": {
+        "title": "Apostille & POA Explanation",
+        "description": "Understanding Apostille and Power of Attorney documents",
+        "content": "Essential reading for international transactions. What is an Apostille? Certification under Hague Convention, Accepted in 190+ countries, Proves document authenticity. What is Power of Attorney (POA)? Legal authorization to act on someone's behalf, Can be limited or general, Internationally recognized with Apostille. When you need them: International business transactions, Property purchases abroad, Legal proceedings outside UK."
+      },
+      "amlKyc": {
+        "title": "AML / KYC Policy",
+        "description": "Anti-Money Laundering and Know Your Customer policies",
+        "content": "Our commitment to financial compliance and security. AML (Anti-Money Laundering): Prevents financial crimes and fraud, Identifies suspicious transactions, Cooperation with authorities. KYC (Know Your Customer): Verify customer identity, Assess beneficial ownership, Understand customer's business. What we require: Government-issued ID, Proof of address, Source of funds verification, Beneficial owner identification. Your data is protected under GDPR."
+      },
+      "refundPolicy": {
+        "title": "Refund Policy",
+        "description": "Our refund and cancellation terms",
+        "content": "Clear refund terms for all services. Refund eligibility: Within 7 days - Full refund minus £20 fee, 7-14 days - 50% refund if no work started, After work begins - Non-refundable. How to request: Contact support@sharekte.com, Provide order number and reason, Response within 2 business days. Service credits: Alternative to refunds, Can be used for future orders, No expiration date."
+      },
+      "termsConditions": {
+        "title": "Terms & Conditions",
+        "description": "Legal terms and conditions for using Sharekte",
+        "content": "Complete legal framework for Sharekte services. Service scope: Company transfer facilitation, Document authentication services, Marketplace for buying/selling companies. User responsibilities: Accurate information provision, Compliance with local laws, Payment of fees. Liability limitations: We act as facilitators, not legal advisors, Users conduct due diligence independently, Maximum liability limited to fees paid. Payment and fees: Non-refundable upon service delivery, Additional fees may apply."
+      },
+      "privacyPolicy": {
+        "title": "Privacy Policy",
+        "description": "How we protect and handle your data",
+        "content": "Your privacy is our priority. Data we collect: Personal identification information, Company and business details, Payment and transaction information, Communication records. How we use your data: Process transactions, Improve our services, Send important notifications, Comply with legal obligations. Your rights: Access your data anytime, Request corrections, Data portability, Right to deletion (subject to legal holds). Security measures: SSL/TLS encryption, Regular security audits, GDPR compliant."
+      }
+    }
   }
 }
