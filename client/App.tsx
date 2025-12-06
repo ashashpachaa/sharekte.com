@@ -71,153 +71,155 @@ export default function App() {
                     <Sonner />
                     <BrowserRouter>
                       <WhatsAppFloatingButton />
-                      <Routes>
-                        <Route path="/" element={<Index />} />
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/signup" element={<Signup />} />
-                        <Route
-                          path="/dashboard"
-                          element={
-                            <ProtectedRoute>
-                              <Dashboard />
-                            </ProtectedRoute>
-                          }
-                        />
-                        <Route path="/support" element={<Support />} />
-                        <Route path="/about" element={<About />} />
-                        <Route path="/companies" element={<Companies />} />
-                        <Route
-                          path="/privacy-policy"
-                          element={<PrivacyPolicy />}
-                        />
-                        <Route
-                          path="/terms-and-conditions"
-                          element={<TermsAndConditions />}
-                        />
-                        <Route path="/cart" element={<Cart />} />
-                        <Route path="/checkout" element={<Checkout />} />
-                        {/* Admin Login Routes - Both work */}
-                        <Route path="/admin/login" element={<AdminLogin />} />
-                        <Route
-                          path="/secure-admin-access-7k9m2q"
-                          element={<AdminLogin />}
-                        />
-                        {/* Redirect /admin to /admin/dashboard */}
-                        <Route
-                          path="/admin"
-                          element={
-                            <ProtectedAdminRoute>
-                              <AdminDashboard />
-                            </ProtectedAdminRoute>
-                          }
-                        />
-                        <Route
-                          path="/admin/dashboard"
-                          element={
-                            <ProtectedAdminRoute>
-                              <AdminDashboard />
-                            </ProtectedAdminRoute>
-                          }
-                        />
-                        <Route
-                          path="/admin/users"
-                          element={
-                            <ProtectedAdminRoute>
-                              <AdminUsers />
-                            </ProtectedAdminRoute>
-                          }
-                        />
-                        <Route
-                          path="/admin/orders"
-                          element={
-                            <ProtectedAdminRoute>
-                              <AdminOrders />
-                            </ProtectedAdminRoute>
-                          }
-                        />
-                        <Route
-                          path="/admin/services"
-                          element={
-                            <ProtectedAdminRoute>
-                              <AdminServices />
-                            </ProtectedAdminRoute>
-                          }
-                        />
-                        <Route
-                          path="/admin/coupons"
-                          element={
-                            <ProtectedAdminRoute>
-                              <AdminCoupons />
-                            </ProtectedAdminRoute>
-                          }
-                        />
-                        <Route
-                          path="/admin/invoices"
-                          element={
-                            <ProtectedAdminRoute>
-                              <AdminInvoices />
-                            </ProtectedAdminRoute>
-                          }
-                        />
-                        <Route
-                          path="/admin/settings"
-                          element={
-                            <ProtectedAdminRoute>
-                              <AdminSettings />
-                            </ProtectedAdminRoute>
-                          }
-                        />
-                        <Route
-                          path="/admin/email-templates"
-                          element={
-                            <ProtectedAdminRoute>
-                              <AdminEmailTemplates />
-                            </ProtectedAdminRoute>
-                          }
-                        />
-                        <Route
-                          path="/admin/roles"
-                          element={
-                            <ProtectedAdminRoute>
-                              <AdminRoles />
-                            </ProtectedAdminRoute>
-                          }
-                        />
-                        <Route
-                          path="/admin/fees"
-                          element={
-                            <ProtectedAdminRoute>
-                              <AdminFees />
-                            </ProtectedAdminRoute>
-                          }
-                        />
-                        <Route
-                          path="/admin/social-media"
-                          element={
-                            <ProtectedAdminRoute>
-                              <AdminSocialMedia />
-                            </ProtectedAdminRoute>
-                          }
-                        />
-                        <Route
-                          path="/admin/wallets"
-                          element={
-                            <ProtectedAdminRoute>
-                              <AdminWallets />
-                            </ProtectedAdminRoute>
-                          }
-                        />
-                        <Route
-                          path="/admin/whatsapp-support"
-                          element={
-                            <ProtectedAdminRoute>
-                              <AdminWhatsAppSupport />
-                            </ProtectedAdminRoute>
-                          }
-                        />
-                        {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                        <Route path="*" element={<NotFound />} />
-                      </Routes>
+                      <Suspense fallback={<LoadingFallback />}>
+                        <Routes>
+                          <Route path="/" element={<Index />} />
+                          <Route path="/login" element={<Login />} />
+                          <Route path="/signup" element={<Signup />} />
+                          <Route
+                            path="/dashboard"
+                            element={
+                              <ProtectedRoute>
+                                <Dashboard />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route path="/support" element={<Support />} />
+                          <Route path="/about" element={<About />} />
+                          <Route path="/companies" element={<Companies />} />
+                          <Route
+                            path="/privacy-policy"
+                            element={<PrivacyPolicy />}
+                          />
+                          <Route
+                            path="/terms-and-conditions"
+                            element={<TermsAndConditions />}
+                          />
+                          <Route path="/cart" element={<Cart />} />
+                          <Route path="/checkout" element={<Checkout />} />
+                          {/* Admin Login Routes - Both work */}
+                          <Route path="/admin/login" element={<AdminLogin />} />
+                          <Route
+                            path="/secure-admin-access-7k9m2q"
+                            element={<AdminLogin />}
+                          />
+                          {/* Redirect /admin to /admin/dashboard */}
+                          <Route
+                            path="/admin"
+                            element={
+                              <ProtectedAdminRoute>
+                                <AdminDashboard />
+                              </ProtectedAdminRoute>
+                            }
+                          />
+                          <Route
+                            path="/admin/dashboard"
+                            element={
+                              <ProtectedAdminRoute>
+                                <AdminDashboard />
+                              </ProtectedAdminRoute>
+                            }
+                          />
+                          <Route
+                            path="/admin/users"
+                            element={
+                              <ProtectedAdminRoute>
+                                <AdminUsers />
+                              </ProtectedAdminRoute>
+                            }
+                          />
+                          <Route
+                            path="/admin/orders"
+                            element={
+                              <ProtectedAdminRoute>
+                                <AdminOrders />
+                              </ProtectedAdminRoute>
+                            }
+                          />
+                          <Route
+                            path="/admin/services"
+                            element={
+                              <ProtectedAdminRoute>
+                                <AdminServices />
+                              </ProtectedAdminRoute>
+                            }
+                          />
+                          <Route
+                            path="/admin/coupons"
+                            element={
+                              <ProtectedAdminRoute>
+                                <AdminCoupons />
+                              </ProtectedAdminRoute>
+                            }
+                          />
+                          <Route
+                            path="/admin/invoices"
+                            element={
+                              <ProtectedAdminRoute>
+                                <AdminInvoices />
+                              </ProtectedAdminRoute>
+                            }
+                          />
+                          <Route
+                            path="/admin/settings"
+                            element={
+                              <ProtectedAdminRoute>
+                                <AdminSettings />
+                              </ProtectedAdminRoute>
+                            }
+                          />
+                          <Route
+                            path="/admin/email-templates"
+                            element={
+                              <ProtectedAdminRoute>
+                                <AdminEmailTemplates />
+                              </ProtectedAdminRoute>
+                            }
+                          />
+                          <Route
+                            path="/admin/roles"
+                            element={
+                              <ProtectedAdminRoute>
+                                <AdminRoles />
+                              </ProtectedAdminRoute>
+                            }
+                          />
+                          <Route
+                            path="/admin/fees"
+                            element={
+                              <ProtectedAdminRoute>
+                                <AdminFees />
+                              </ProtectedAdminRoute>
+                            }
+                          />
+                          <Route
+                            path="/admin/social-media"
+                            element={
+                              <ProtectedAdminRoute>
+                                <AdminSocialMedia />
+                              </ProtectedAdminRoute>
+                            }
+                          />
+                          <Route
+                            path="/admin/wallets"
+                            element={
+                              <ProtectedAdminRoute>
+                                <AdminWallets />
+                              </ProtectedAdminRoute>
+                            }
+                          />
+                          <Route
+                            path="/admin/whatsapp-support"
+                            element={
+                              <ProtectedAdminRoute>
+                                <AdminWhatsAppSupport />
+                              </ProtectedAdminRoute>
+                            }
+                          />
+                          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                          <Route path="*" element={<NotFound />} />
+                        </Routes>
+                      </Suspense>
                     </BrowserRouter>
                   </CartProvider>
                 </NotificationsProvider>
