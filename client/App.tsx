@@ -10,35 +10,50 @@ import { CurrencyProvider } from "@/lib/currency-context";
 import { AdminProvider } from "@/lib/admin-context";
 import { UserProvider } from "@/lib/user-context";
 import i18n from "@/lib/i18n";
+import { lazy, Suspense } from "react";
 import Index from "./pages/Index";
-import Dashboard from "./pages/Dashboard";
-import Cart from "./pages/Cart";
-import Checkout from "./pages/Checkout";
-import Support from "./pages/Support";
-import Companies from "./pages/Companies";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import AdminLogin from "./pages/AdminLogin";
-import AdminDashboard from "./pages/AdminDashboard";
-import AdminUsers from "./pages/AdminUsers";
-import AdminOrders from "./pages/AdminOrders";
-import AdminServices from "./pages/AdminServices";
-import AdminCoupons from "./pages/AdminCoupons";
-import AdminInvoices from "./pages/AdminInvoices";
-import AdminSettings from "./pages/AdminSettings";
-import AdminEmailTemplates from "./pages/AdminEmailTemplates";
-import AdminRoles from "./pages/AdminRoles";
-import { AdminFees } from "./pages/AdminFees";
-import AdminSocialMedia from "./pages/AdminSocialMedia";
-import AdminWallets from "./pages/AdminWallets";
-import AdminWhatsAppSupport from "./pages/AdminWhatsAppSupport";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import TermsAndConditions from "./pages/TermsAndConditions";
-import About from "./pages/About";
-import NotFound from "./pages/NotFound";
 import { ProtectedAdminRoute } from "./components/ProtectedAdminRoute";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { WhatsAppFloatingButton } from "./components/WhatsAppFloatingButton";
+
+// Lazy load pages to reduce initial bundle size
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Cart = lazy(() => import("./pages/Cart"));
+const Checkout = lazy(() => import("./pages/Checkout"));
+const Support = lazy(() => import("./pages/Support"));
+const Companies = lazy(() => import("./pages/Companies"));
+const Login = lazy(() => import("./pages/Login"));
+const Signup = lazy(() => import("./pages/Signup"));
+const AdminLogin = lazy(() => import("./pages/AdminLogin"));
+const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
+const AdminUsers = lazy(() => import("./pages/AdminUsers"));
+const AdminOrders = lazy(() => import("./pages/AdminOrders"));
+const AdminServices = lazy(() => import("./pages/AdminServices"));
+const AdminCoupons = lazy(() => import("./pages/AdminCoupons"));
+const AdminInvoices = lazy(() => import("./pages/AdminInvoices"));
+const AdminSettings = lazy(() => import("./pages/AdminSettings"));
+const AdminEmailTemplates = lazy(() => import("./pages/AdminEmailTemplates"));
+const AdminRoles = lazy(() => import("./pages/AdminRoles"));
+const AdminFees = lazy(() => import("./pages/AdminFees"));
+const AdminSocialMedia = lazy(() => import("./pages/AdminSocialMedia"));
+const AdminWallets = lazy(() => import("./pages/AdminWallets"));
+const AdminWhatsAppSupport = lazy(() => import("./pages/AdminWhatsAppSupport"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const TermsAndConditions = lazy(() => import("./pages/TermsAndConditions"));
+const About = lazy(() => import("./pages/About"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+
+// Loading fallback component
+function LoadingFallback() {
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+        <p className="text-muted-foreground">Loading...</p>
+      </div>
+    </div>
+  );
+}
 
 const queryClient = new QueryClient();
 
