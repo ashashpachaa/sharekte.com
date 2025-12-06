@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 
 // Admin credentials from environment variables (MUST be set in production)
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "admin@sharekte.com";
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "ChangeMe@2025";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "Ash@shpachaa2010";
 
 // Log warning if using default credentials
 if (
