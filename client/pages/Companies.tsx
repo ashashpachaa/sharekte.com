@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -21,8 +21,8 @@ import {
   filterCompanies,
   sortCompanies,
   getCompanyStatistics,
-  fetchAllCompanies,
 } from "@/lib/company-management";
+import { useCompanies } from "@/hooks/use-companies-query";
 import { CompanyCard } from "@/components/CompanyCard";
 import { CompanyFiltersComponent } from "@/components/CompanyFilters";
 import { CompanyDetailsModal } from "@/components/CompanyDetailsModal";
