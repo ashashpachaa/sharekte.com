@@ -81,8 +81,6 @@ const SalesStatisticsSection = memo(function SalesStatisticsSection({ t }: { t: 
 
 // Featured Companies Section
 const FeaturedCompaniesSection = memo(function FeaturedCompaniesSection({ t }: { t: (key: string) => string }) {
-  const [companies, setCompanies] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 
@@ -104,36 +102,8 @@ const FeaturedCompaniesSection = memo(function FeaturedCompaniesSection({ t }: {
     return () => observer.disconnect();
   }, [isVisible]);
 
-  useEffect(() => {
-    if (!isVisible) return;
-
-    const loadCompanies = async () => {
-      try {
-        setLoading(true);
-
-        // 15-second timeout for loading companies (increased from 5s)
-        const timeoutPromise = new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error("Fetch timeout")), 15000),
-        );
-
-        const data = (await Promise.race([
-          fetchAllCompanies(),
-          timeoutPromise,
-        ])) as any[];
-
-        // Filter to show only active companies
-        const activeCompanies = data.filter((c: any) => c.status === "active");
-        setCompanies(activeCompanies);
-      } catch (error) {
-        console.error("Error loading companies:", error);
-        setCompanies([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadCompanies();
-  }, [isVisible]);
+  // Use optimized React Query hook for company data fetching with caching
+  const { companies, isLoading } = useActiveCompanies(isVisible);
 
   return (
     <section ref={sectionRef} className="py-20 md:py-28 bg-muted/30">
