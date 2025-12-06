@@ -82,14 +82,21 @@ export default function Companies() {
     clientEmail: "",
   });
 
-  // Load companies on mount
+  // Use optimized React Query hook for company data fetching with caching
+  const { data: companies = [] } = useCompanies();
+
+  // Check admin status on mount
   useEffect(() => {
-    loadCompanies();
     checkAdminStatus();
   }, []);
 
-  // Apply filters and sorting whenever they change
+  // Extract unique countries for filter and apply filters/sorting
   useEffect(() => {
+    const uniqueCountries = Array.from(
+      new Set(companies.map((c) => c.country)),
+    ).sort();
+    setCountries(uniqueCountries);
+
     let result = [...companies];
 
     // Apply filters
