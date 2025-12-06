@@ -8,7 +8,7 @@ import { CompanyTable } from "@/components/CompanyTable";
 import { useMemo, useState, useEffect, useRef, useCallback, memo } from "react";
 import { useSEO, getPageSEOMetadata } from "@/lib/seo";
 import { TrendingUp, Zap, BarChart3, Globe } from "lucide-react";
-import { fetchAllCompanies } from "@/lib/company-management";
+import { useActiveCompanies } from "@/hooks/use-companies-query";
 
 // Sales Statistics Section - Motivation
 const SalesStatisticsSection = memo(function SalesStatisticsSection({ t }: { t: (key: string) => string }) {
