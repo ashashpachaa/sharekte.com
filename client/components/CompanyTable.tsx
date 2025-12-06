@@ -131,7 +131,7 @@ async function fetchCompaniesWithRetry(): Promise<CompanyData[]> {
   return pendingFetch;
 }
 
-export function CompanyTable({
+export const CompanyTable = memo(function CompanyTable({
   companies = [],
   onViewDetails,
   onEdit,
@@ -563,4 +563,4 @@ export function CompanyTable({
       </Dialog>
     </>
   );
-}
+});
