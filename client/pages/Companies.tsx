@@ -55,9 +55,7 @@ export default function Companies() {
   const seoMetadata = getPageSEOMetadata("companies", i18n.language);
   useSEO(seoMetadata, i18n.language);
 
-  const [companies, setCompanies] = useState<CompanyData[]>([]);
   const [filteredCompanies, setFilteredCompanies] = useState<CompanyData[]>([]);
-  const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10); // 10 companies per page
