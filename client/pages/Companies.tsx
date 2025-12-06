@@ -122,55 +122,52 @@ export default function Companies() {
   // Statistics
   const stats = getCompanyStatistics(companies);
 
-  const handleFilterChange = (newFilters: CompanyFilters) => {
+  const handleFilterChange = useCallback((newFilters: CompanyFilters) => {
     setFilters(newFilters);
-    setCurrentPage(1); // Reset to page 1 when filters change
-  };
+    setCurrentPage(1);
+  }, []);
 
-  const handleSortChange = (field: SortField, order: SortOrder) => {
+  const handleSortChange = useCallback((field: SortField, order: SortOrder) => {
     setSortField(field);
     setSortOrder(order);
-    setCurrentPage(1); // Reset to page 1 when sort changes
-  };
+    setCurrentPage(1);
+  }, []);
 
-  const handleViewDetails = (company: CompanyData) => {
+  const handleViewDetails = useCallback((company: CompanyData) => {
     setSelectedCompany(company);
     setShowDetailsModal(true);
-  };
+  }, []);
 
-  const handleEdit = (company: CompanyData) => {
+  const handleEdit = useCallback((company: CompanyData) => {
     setSelectedCompany(company);
     setShowDetailsModal(true);
-  };
+  }, []);
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = useCallback(async (id: string) => {
     try {
       await fetch(`/api/companies/${id}`, { method: "DELETE" });
-      setCompanies(companies.filter((c) => c.id !== id));
       toast.success("Company deleted");
     } catch (error) {
       console.error("Delete failed:", error);
       toast.error("Failed to delete company");
     }
-  };
+  }, []);
 
-  const handleRenew = async (id: string) => {
+  const handleRenew = useCallback(async (id: string) => {
     try {
       const response = await fetch(`/api/companies/${id}/renew`, {
         method: "POST",
       });
       if (response.ok) {
-        const updated = await response.json();
-        setCompanies(companies.map((c) => (c.id === id ? updated : c)));
         toast.success("Company renewed successfully");
       }
     } catch (error) {
       console.error("Renewal failed:", error);
       toast.error("Failed to renew company");
     }
-  };
+  }, []);
 
-  const handleStatusChange = async (id: string, newStatus: string) => {
+  const handleStatusChange = useCallback(async (id: string, newStatus: string) => {
     try {
       const response = await fetch(`/api/companies/${id}/status`, {
         method: "PATCH",
@@ -178,15 +175,13 @@ export default function Companies() {
         body: JSON.stringify({ status: newStatus }),
       });
       if (response.ok) {
-        const updated = await response.json();
-        setCompanies(companies.map((c) => (c.id === id ? updated : c)));
         toast.success("Status updated");
       }
     } catch (error) {
       console.error("Status update failed:", error);
       toast.error("Failed to update status");
     }
-  };
+  }, []);
 
   const handleAddCompany = async () => {
     if (
