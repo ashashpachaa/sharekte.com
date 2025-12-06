@@ -54,7 +54,7 @@ interface CompanyCardProps {
   isAdmin?: boolean;
 }
 
-export function CompanyCard({
+export const CompanyCard = memo(function CompanyCard({
   company,
   onEdit,
   onDelete,
@@ -101,20 +101,34 @@ export function CompanyCard({
   const recentAmendment =
     amendmentComments.length > 0 ? amendmentComments[0] : null;
 
-  const handleDelete = () => {
+  const handleDelete = useCallback(() => {
     if (onDelete) {
       onDelete(company.id);
       setShowDeleteDialog(false);
       toast.success("Company deleted successfully");
     }
-  };
+  }, [onDelete, company.id]);
 
-  const handleRenew = () => {
+  const handleRenew = useCallback(() => {
     if (onRenew) {
       onRenew(company.id);
       toast.success("Company renewal processed");
     }
-  };
+  }, [onRenew, company.id]);
+
+  const handleStatusChange = useCallback(() => {
+    if (onStatusChange) {
+      onStatusChange(company.id, "available");
+    }
+  }, [onStatusChange, company.id]);
+
+  const handleViewDetails = useCallback(() => {
+    onViewDetails?.(company);
+  }, [onViewDetails, company]);
+
+  const handleEdit = useCallback(() => {
+    onEdit?.(company);
+  }, [onEdit, company])
 
   return (
     <>
@@ -527,4 +541,4 @@ export function CompanyCard({
       </Dialog>
     </>
   );
-}
+});
