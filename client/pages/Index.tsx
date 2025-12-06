@@ -5,13 +5,13 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { WhyBuyReadyMade } from "@/components/WhyBuyReadyMade";
 import { CompanyTable } from "@/components/CompanyTable";
-import { useMemo, useState, useEffect, useRef } from "react";
+import { useMemo, useState, useEffect, useRef, useCallback, memo } from "react";
 import { useSEO, getPageSEOMetadata } from "@/lib/seo";
 import { TrendingUp, Zap, BarChart3, Globe } from "lucide-react";
 import { fetchAllCompanies } from "@/lib/company-management";
 
 // Sales Statistics Section - Motivation
-function SalesStatisticsSection({ t }: { t: (key: string) => string }) {
+const SalesStatisticsSection = memo(function SalesStatisticsSection({ t }: { t: (key: string) => string }) {
   const stats = useMemo(() => {
     const today = Math.floor(Math.random() * 45) + 5; // 5-50
     const month = Math.floor(Math.random() * 450) + 50; // 50-500
@@ -77,10 +77,10 @@ function SalesStatisticsSection({ t }: { t: (key: string) => string }) {
       </div>
     </section>
   );
-}
+});
 
 // Featured Companies Section
-function FeaturedCompaniesSection({ t }: { t: (key: string) => string }) {
+const FeaturedCompaniesSection = memo(function FeaturedCompaniesSection({ t }: { t: (key: string) => string }) {
   const [companies, setCompanies] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -181,20 +181,20 @@ function FeaturedCompaniesSection({ t }: { t: (key: string) => string }) {
       </div>
     </section>
   );
-}
+});
 
-export default function Index() {
+const Index = memo(function Index() {
   const { t, i18n } = useTranslation();
   const seoMetadata = getPageSEOMetadata("home", i18n.language);
   useSEO(seoMetadata, i18n.language);
 
   const featuredSectionRef = useRef<HTMLDivElement>(null);
 
-  const scrollToFeatured = () => {
+  const scrollToFeatured = useCallback(() => {
     if (featuredSectionRef.current) {
       featuredSectionRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  };
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -265,4 +265,6 @@ export default function Index() {
       <Footer />
     </div>
   );
-}
+});
+
+export default Index;
