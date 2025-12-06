@@ -265,6 +265,8 @@ export default function About() {
                   src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=600&fit=crop"
                   alt="Team building"
                   className="w-full rounded-lg object-cover"
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
               <div className="space-y-6">
