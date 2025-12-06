@@ -108,29 +108,10 @@ export default function Companies() {
     setFilteredCompanies(result);
   }, [companies, filters, sortField, sortOrder]);
 
-  const loadCompanies = async () => {
-    setLoading(true);
-    try {
-      const data = await fetchAllCompanies();
-      setCompanies(data);
-
-      // Extract unique countries for filter
-      const uniqueCountries = Array.from(
-        new Set(data.map((c) => c.country)),
-      ).sort();
-      setCountries(uniqueCountries);
-    } catch (error) {
-      console.error("Failed to load companies:", error);
-      toast.error("Failed to load companies");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const checkAdminStatus = () => {
+  const checkAdminStatus = useCallback(() => {
     const adminData = localStorage.getItem("admin");
     setIsAdmin(!!adminData);
-  };
+  }, []);
 
   // Pagination: calculate total pages and get companies for current page
   const totalPages = Math.ceil(filteredCompanies.length / itemsPerPage);
