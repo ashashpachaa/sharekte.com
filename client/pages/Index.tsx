@@ -119,7 +119,7 @@ const FeaturedCompaniesSection = memo(function FeaturedCompaniesSection({ t }: {
         </div>
 
         {isVisible ? (
-          loading ? (
+          isLoading ? (
             <div className="text-center py-12">
               <p className="text-muted-foreground">
                 Loading available companies...
