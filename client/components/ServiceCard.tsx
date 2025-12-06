@@ -58,6 +58,8 @@ export function ServiceCard({
               src={service.imageUrl}
               alt={service.name}
               className="w-full h-full object-cover"
+              loading="lazy"
+              decoding="async"
             />
           </div>
         )}
