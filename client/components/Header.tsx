@@ -186,6 +186,8 @@ export const Header = memo(function Header() {
             src="https://cdn.builder.io/api/v1/image/assets%2F752b1abf9cc241c993361e9dcaee5153%2F708a794c15c645db8aef3926ec307c64?format=webp&width=800"
             alt="Sharekte"
             className="h-full object-contain"
+            loading="lazy"
+            decoding="async"
           />
         </Link>
 
