@@ -11,7 +11,11 @@ import { TrendingUp, Zap, BarChart3, Globe } from "lucide-react";
 import { useActiveCompanies } from "@/hooks/use-companies-query";
 
 // Sales Statistics Section - Motivation
-const SalesStatisticsSection = memo(function SalesStatisticsSection({ t }: { t: (key: string) => string }) {
+const SalesStatisticsSection = memo(function SalesStatisticsSection({
+  t,
+}: {
+  t: (key: string) => string;
+}) {
   const stats = useMemo(() => {
     const today = Math.floor(Math.random() * 45) + 5; // 5-50
     const month = Math.floor(Math.random() * 450) + 50; // 50-500
@@ -80,7 +84,11 @@ const SalesStatisticsSection = memo(function SalesStatisticsSection({ t }: { t: 
 });
 
 // Featured Companies Section
-const FeaturedCompaniesSection = memo(function FeaturedCompaniesSection({ t }: { t: (key: string) => string }) {
+const FeaturedCompaniesSection = memo(function FeaturedCompaniesSection({
+  t,
+}: {
+  t: (key: string) => string;
+}) {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
 

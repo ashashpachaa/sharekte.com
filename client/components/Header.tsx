@@ -13,9 +13,12 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 // Memoized currency selector component
 const CurrencySelector = memo(function CurrencySelector() {
   const { currency, setCurrency, rates } = useCurrency();
-  const handleCurrencyChange = useCallback((code: string) => {
-    setCurrency(code as any);
-  }, [setCurrency]);
+  const handleCurrencyChange = useCallback(
+    (code: string) => {
+      setCurrency(code as any);
+    },
+    [setCurrency],
+  );
 
   return (
     <div className="relative group">
@@ -36,9 +39,7 @@ const CurrencySelector = memo(function CurrencySelector() {
               }`}
             >
               <span className="font-medium">{rate.symbol}</span>
-              <span className="ml-2 text-muted-foreground">
-                {rate.name}
-              </span>
+              <span className="ml-2 text-muted-foreground">{rate.name}</span>
             </button>
           ))}
         </div>
@@ -94,12 +95,8 @@ const UserMenu = memo(function UserMenu() {
       >
         <div className="p-3 space-y-2">
           <div className="text-sm">
-            <p className="font-semibold text-foreground">
-              {userName}
-            </p>
-            <p className="text-xs text-muted-foreground">
-              {userEmail}
-            </p>
+            <p className="font-semibold text-foreground">{userName}</p>
+            <p className="text-xs text-muted-foreground">{userEmail}</p>
           </div>
           <div className="border-t border-border/40 pt-2">
             <button

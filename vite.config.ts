@@ -32,7 +32,11 @@ export default defineConfig({
       output: {
         manualChunks: {
           "vendor-react": ["react", "react-dom", "react-router-dom"],
-          "vendor-ui": ["@radix-ui/react-dialog", "@radix-ui/react-tabs", "@radix-ui/react-dropdown-menu"],
+          "vendor-ui": [
+            "@radix-ui/react-dialog",
+            "@radix-ui/react-tabs",
+            "@radix-ui/react-dropdown-menu",
+          ],
           "vendor-utils": ["i18next", "react-i18next", "sonner", "date-fns"],
           "vendor-charts": ["recharts"],
         },

@@ -167,21 +167,24 @@ export default function Companies() {
     }
   }, []);
 
-  const handleStatusChange = useCallback(async (id: string, newStatus: string) => {
-    try {
-      const response = await fetch(`/api/companies/${id}/status`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: newStatus }),
-      });
-      if (response.ok) {
-        toast.success("Status updated");
+  const handleStatusChange = useCallback(
+    async (id: string, newStatus: string) => {
+      try {
+        const response = await fetch(`/api/companies/${id}/status`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status: newStatus }),
+        });
+        if (response.ok) {
+          toast.success("Status updated");
+        }
+      } catch (error) {
+        console.error("Status update failed:", error);
+        toast.error("Failed to update status");
       }
-    } catch (error) {
-      console.error("Status update failed:", error);
-      toast.error("Failed to update status");
-    }
-  }, []);
+    },
+    [],
+  );
 
   const handleAddCompany = async () => {
     if (

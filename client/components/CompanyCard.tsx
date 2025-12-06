@@ -128,7 +128,7 @@ export const CompanyCard = memo(function CompanyCard({
 
   const handleEdit = useCallback(() => {
     onEdit?.(company);
-  }, [onEdit, company])
+  }, [onEdit, company]);
 
   return (
     <>

@@ -39,9 +39,7 @@ export function ServiceCard({
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const convertedPrice =
-    service.currency !== "USD"
-      ? convertPrice(service.price)
-      : service.price;
+    service.currency !== "USD" ? convertPrice(service.price) : service.price;
 
   const handleAddToCart = () => {
     if (onAddToCart) {
@@ -147,7 +145,10 @@ export function ServiceCard({
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setShowDeleteDialog(false)}
+            >
               Cancel
             </Button>
             <Button
