@@ -626,10 +626,7 @@ export default function Companies() {
           isAdmin={isAdmin}
           open={showDetailsModal}
           onOpenChange={setShowDetailsModal}
-          onSave={(updated) => {
-            setCompanies(
-              companies.map((c) => (c.id === updated.id ? updated : c)),
-            );
+          onSave={() => {
             setShowDetailsModal(false);
           }}
         />
